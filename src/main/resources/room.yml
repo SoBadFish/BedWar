@@ -1,0 +1,25 @@
+world: ""
+roomMoney: "default"
+gameTime: 1200
+times:
+  bedbreak: 120
+waitTime: 120
+ui: auto
+entity:
+  team: 15
+  item: 15
+max-player-waitTime: 20
+minPlayerSize: 4
+maxPlayerSize: 16
+teamSpawn: {}
+itemSpawn: {}
+waitPosition: ""
+roomStartMessage:
+  - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
+  - "&f起床战争"
+  - "&e"
+  - "&e保护你的床并摧毁敌人的床。收集铜锭，金锭，钻石和绿宝石"
+  - "&e来升级，使自身和队伍变得更强"
+  - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
+
+

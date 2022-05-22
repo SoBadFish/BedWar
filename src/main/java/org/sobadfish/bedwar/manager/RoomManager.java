@@ -1,0 +1,872 @@
+package org.sobadfish.bedwar.manager;
+
+import cn.nukkit.Player;
+import cn.nukkit.Server;
+import cn.nukkit.block.*;
+import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.EntityHuman;
+import cn.nukkit.entity.item.EntityPrimedTNT;
+import cn.nukkit.event.EventHandler;
+import cn.nukkit.event.EventPriority;
+import cn.nukkit.event.Listener;
+import cn.nukkit.event.block.BlockBreakEvent;
+import cn.nukkit.event.block.BlockBurnEvent;
+import cn.nukkit.event.block.BlockPlaceEvent;
+import cn.nukkit.event.entity.*;
+import cn.nukkit.event.inventory.InventoryPickupItemEvent;
+import cn.nukkit.event.inventory.InventoryTransactionEvent;
+import cn.nukkit.event.level.ChunkUnloadEvent;
+import cn.nukkit.event.level.WeatherChangeEvent;
+import cn.nukkit.event.player.*;
+import cn.nukkit.form.element.ElementButton;
+import cn.nukkit.form.element.ElementButtonImageData;
+import cn.nukkit.form.response.FormResponseSimple;
+import cn.nukkit.form.window.FormWindowSimple;
+import cn.nukkit.inventory.Inventory;
+import cn.nukkit.inventory.PlayerInventory;
+import cn.nukkit.inventory.transaction.InventoryTransaction;
+import cn.nukkit.inventory.transaction.action.InventoryAction;
+import cn.nukkit.item.Item;
+import cn.nukkit.level.Level;
+import cn.nukkit.level.Sound;
+import cn.nukkit.utils.TextFormat;
+import org.sobadfish.bedwar.BedWarMain;
+import org.sobadfish.bedwar.command.BedWarCommand;
+import org.sobadfish.bedwar.event.GameRoomStartEvent;
+import org.sobadfish.bedwar.event.PlayerJoinRoomEvent;
+import org.sobadfish.bedwar.event.PlayerQuitRoomEvent;
+import org.sobadfish.bedwar.event.TeamSuccessEvent;
+import org.sobadfish.bedwar.item.ItemIDSunName;
+import org.sobadfish.bedwar.item.button.RoomQuitItem;
+import org.sobadfish.bedwar.item.button.TeamChoseItem;
+import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
+import org.sobadfish.bedwar.item.nbt.DieBow;
+import org.sobadfish.bedwar.item.nbt.INbtItem;
+import org.sobadfish.bedwar.panel.ChestInventoryPanel;
+import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
+import org.sobadfish.bedwar.panel.from.BedWarFrom;
+import org.sobadfish.bedwar.panel.from.ShopFrom;
+import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
+import org.sobadfish.bedwar.panel.items.BasePlayPanelItemInstance;
+import org.sobadfish.bedwar.panel.items.NbtDefaultItem;
+import org.sobadfish.bedwar.player.PlayerInfo;
+import org.sobadfish.bedwar.player.team.TeamInfo;
+import org.sobadfish.bedwar.room.GameRoom;
+import org.sobadfish.bedwar.room.GameRoom.GameType;
+import org.sobadfish.bedwar.room.config.GameRoomConfig;
+import org.sobadfish.bedwar.entity.ShopVillage;
+import org.sobadfish.bedwar.thread.BaseTimerRunnable;
+import org.sobadfish.bedwar.tools.Utils;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author SoBadFish
+ * 2022/1/2
+ */
+public class RoomManager implements Listener {
+
+    public LinkedHashMap<String,String> playerJoin = new LinkedHashMap<>();
+
+    private RoomManager(Map<String, GameRoomConfig> roomConfig){
+        this.roomConfig = roomConfig;
+    }
+
+    private GameRoom getGameRoomByLevel(Level level){
+        for(GameRoom room : rooms.values()){
+            if(room.getRoomConfig().worldInfo.getGameWorld().getFolderName().equalsIgnoreCase(level.getFolderName())){
+                return room;
+            }
+        }
+        return null;
+    }
+
+    public PlayerInfo getPlayerInfo(Player player){
+        //TODO 获取游戏中的玩家
+        if(playerJoin.containsKey(player.getName())) {
+            String roomName = playerJoin.get(player.getName());
+            if (!"".equalsIgnoreCase(roomName)) {
+                if (rooms.containsKey(roomName)) {
+                    return rooms.get(roomName).getPlayerInfo(player);
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public static RoomManager initGameRoomConfig(File file){
+        Map<String, GameRoomConfig> map = new LinkedHashMap<>();
+        if(file.isDirectory()){
+            File[] dirNameList = file.listFiles();
+            if(dirNameList != null && dirNameList.length > 0) {
+                for (File nameFile : dirNameList) {
+                    if(nameFile.isDirectory()){
+                        String roomName = nameFile.getName();
+                        GameRoomConfig roomConfig = GameRoomConfig.getGameRoomConfigByFile(roomName,nameFile);
+                        if(roomConfig != null){
+                            BedWarMain.sendMessageToConsole("&a加载房间 "+roomName+" 完成");
+                            map.put(roomName,roomConfig);
+                        }else{
+                            BedWarMain.sendMessageToConsole("&c加载房间 "+roomName+" 失败");
+                        }
+                    }
+                }
+            }
+        }
+        return new RoomManager(map);
+    }
+
+    public boolean joinRoom(PlayerInfo player,String roomName){
+        if (BedWarMain.getRoomManager().hasRoom(roomName)) {
+            if (!BedWarMain.getRoomManager().hasGameRoom(roomName)) {
+                BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomName));
+            }
+            if (!BedWarMain.getRoomManager().getRoom(roomName).joinPlayerInfo(player,true)) {
+                player.sendForceMessage("&c无法加入房间");
+            }else{
+                return true;
+            }
+
+
+        } else {
+            player.sendForceMessage("&c不存在 &r" + roomName + " &c房间");
+
+        }
+        return false;
+    }
+
+//    public void joinRobot(Player cmdPlayer,String roomName,int count){
+//        Skin skin = BedWarMain.skin;
+//
+//        ThreadManager.addThread(() -> {
+//            GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
+//            for (int i = 0; i < count; i++) {
+//                if (room.getType() == GameRoom.GameType.END || room.getType() == GameRoom.GameType.START) {
+//                    break;
+//                }
+//                RobotPlayer player = new RobotPlayer("测试" + i + "号机器人", cmdPlayer.chunk, Entity.getDefaultNBT(cmdPlayer.getPosition())
+//                        .putCompound("Skin", new CompoundTag()
+//                                .putByteArray("Data", skin.getSkinData().data)
+//                                .putString("ModelId", skin.getSkinId())));
+//
+//                PlayerInfo playerInfo = new PlayerInfo(player);
+//                player.setPlayerInfo(playerInfo);
+//                player.spawnToAll();
+//
+//                room.joinPlayerInfo(playerInfo,true);
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//    }
+
+
+    private Map<String, GameRoomConfig> roomConfig;
+
+    public Map<String, GameRoom> getRooms() {
+        return rooms;
+    }
+
+    private Map<String, GameRoom> rooms = new LinkedHashMap<>();
+
+    public boolean hasRoom(String room){
+        return roomConfig.containsKey(room);
+    }
+
+    public boolean hasGameRoom(String room){
+        return rooms.containsKey(room);
+    }
+
+    public void enableRoom(GameRoomConfig config){
+        rooms.put(config.getName(),GameRoom.enableRoom(config));
+    }
+
+    public GameRoomConfig getRoomConfig(String name){
+        return roomConfig.getOrDefault(name,null);
+    }
+
+    public List<GameRoomConfig> getRoomConfigs(){
+        return new ArrayList<>(roomConfig.values());
+    }
+
+    public GameRoom getRoom(String name){
+        return rooms.getOrDefault(name,null);
+    }
+
+    public void disEnableRoom(String name){
+        if(rooms.containsKey(name)){
+            rooms.get(name).onDisable();
+
+        }
+    }
+
+
+    @EventHandler
+    public void onTeamSuccess(TeamSuccessEvent event){
+        event.getTeamInfo().sendTitle("&e&l胜利!",5);
+        event.getRoom().sendTipMessage("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        event.getRoom().sendTipMessage(Utils.getCentontString("&b游戏结束",43));
+        event.getRoom().sendTipMessage("");
+        for(PlayerInfo playerInfo: event.getTeamInfo().getLivePlayer()){
+            event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀： - "+(playerInfo.getKillCount()+playerInfo.getEndKillCount())+" 破坏床数: - "+playerInfo.getBedBreakCount(),43 ));
+        }
+        event.getRoom().sendTipMessage("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        ThreadManager.addThread(new BaseTimerRunnable(5) {
+
+            @Override
+            public void onRun() {
+                for(PlayerInfo playerInfo: event.getTeamInfo().getLivePlayer()){
+                    Utils.spawnFirework(playerInfo.getPosition());
+                }
+            }
+
+            @Override
+            protected void callback() {}
+        });
+        event.getRoom().sendMessage("&a恭喜 "+event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()+" &a 获得了胜利!");
+    }
+
+    //事件响应
+
+    @EventHandler
+    public void onQuit(PlayerQuitRoomEvent event){
+        PlayerInfo info = event.getPlayerInfo();
+        ((Player)info.getPlayer()).setFoodEnabled(false);
+
+    }
+
+    /**
+     * 阻止区块卸载 如果区块卸载会出现如下问题
+     *
+     * 1. 还原房间部分方块无法还原
+     * 2. 导致后台循环报错空指针异常
+     * */
+    @EventHandler
+    public void onChunkUnload(ChunkUnloadEvent event){
+        GameRoom room = getGameRoomByLevel(event.getLevel());
+        if(room != null && !room.isGc){
+            event.setCancelled();
+
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoinRoom(PlayerJoinRoomEvent event){
+        PlayerInfo info = event.getPlayerInfo();
+        GameRoom gameRoom = event.getRoom();
+        if (BedWarMain.getRoomManager().playerJoin.containsKey(info.getPlayer().getName())) {
+            String roomName = BedWarMain.getRoomManager().playerJoin.get(info.getPlayer().getName());
+            if (roomName.equalsIgnoreCase(event.getRoom().getRoomConfig().name) && gameRoom.getPlayerInfos().contains(info)) {
+                if(event.isSend()) {
+                    info.sendForceMessage("&c你已经在这个房间内了");
+                }
+                event.setCancelled();
+                return;
+            }
+            if (BedWarMain.getRoomManager().hasGameRoom(roomName)) {
+                GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
+                if (room.getType() != GameRoom.GameType.END && room.getPlayerInfos().contains(info)) {
+                    if (room.getPlayerInfo((Player) info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.DEATH ||
+                            room.getPlayerInfo((Player) info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.LEAVE) {
+                        if(event.isSend()) {
+                            info.sendForceMessage("&c你已经在游戏房间内了");
+                        }
+                        event.setCancelled();
+
+                    }
+                }
+            }
+        }
+        if(gameRoom.getType() != GameRoom.GameType.WAIT){
+            if(event.isSend()) {
+                info.sendForceMessage("&c游戏已经开始了");
+            }
+            event.setCancelled();
+            return;
+        }
+        if(gameRoom.getPlayerInfos().size() == gameRoom.getRoomConfig().getMaxPlayerSize()){
+            if(event.isSend()) {
+                info.sendForceMessage("&c房间满了");
+            }
+            event.setCancelled();
+        }
+        if(info.getPlayer() instanceof Player) {
+            ((Player) info.getPlayer()).setFoodEnabled(false);
+            ((Player) info.getPlayer()).setGamemode(2);
+        }
+
+    }
+
+
+    @EventHandler
+    public void onQuitRoom(PlayerQuitRoomEvent event){
+        GameRoom room = event.getRoom();
+        room.sendMessage("&c玩家 "+event.getPlayerInfo().getPlayer().getName()+" 离开了游戏");
+    }
+
+    /**
+     * 游戏地图的爆炸保护
+     * */
+
+    @EventHandler
+    public void onEntityExplodeEvent(EntityExplodeEvent event){
+        Level level = event.getPosition().getLevel();
+        GameRoom room = getGameRoomByLevel(level);
+        if(room != null) {
+            ArrayList<Block> blocks = new ArrayList<>(event.getBlockList());
+            for (Block block : event.getBlockList()) {
+                if (!room.worldInfo.getPlaceBlock().contains(block)) {
+                    blocks.remove(block);
+
+                }else{
+                    room.worldInfo.getPlaceBlock().remove(block);
+                }
+            }
+            event.setBlockList(blocks);
+        }
+    }
+    @EventHandler
+    public void onPlaceBlock(BlockPlaceEvent event){
+        Level level = event.getBlock().level;
+
+        Block block = event.getBlock();
+        Item item = event.getItem();
+        if(item.hasCompoundTag() && (item.getNamedTag().contains("quitItem")
+                || item.getNamedTag().contains("choseTeam"))){
+            event.setCancelled();
+            return;
+        }
+        GameRoom room = getGameRoomByLevel(level);
+        if(room != null){
+
+            if(item.getId() == 65 && !room.getWorldInfo().getPlaceBlock().contains(event.getBlockAgainst())) {
+                event.setCancelled();
+                return;
+            }else{
+                if (block instanceof BlockTNT) {
+                    event.setCancelled();
+                    ((BlockTNT) block).prime(40);
+                    Item i2 = item.clone();
+                    i2.setCount(1);
+                    event.getPlayer().getInventory().removeItem(i2);
+                    return;
+                }
+
+            }
+            ThreadManager.addThread(() -> room.worldInfo.onChangeBlock(block,true));
+        }
+
+
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onChat(PlayerChatEvent event){
+        Player player = event.getPlayer();
+        GameRoom room = getGameRoomByLevel(player.getLevel());
+        if(room != null){
+            PlayerInfo info = room.getPlayerInfo(player);
+            if(info != null){
+                String msg = event.getMessage();
+                TeamInfo teamInfo = info.getTeamInfo();
+                if(teamInfo != null){
+                    if(info.isDeath()){
+                        room.sendMessageOnDeath(info+"&7(死亡) &r>> "+msg);
+                    }else {
+                        teamInfo.sendMessage(teamInfo.getTeamConfig().getNameColor() + "[队伍]&7 " + info.getPlayer().getName() + " &f>>&r " + msg);
+                    }
+                }else{
+                    room.sendMessage(info+" &f>>&r "+msg);
+                }
+                event.setCancelled();
+            }
+        }
+    }
+
+
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event){
+        Level level = event.getBlock().level;
+        Block block = event.getBlock();
+        Player player = event.getPlayer();
+        GameRoom room = getGameRoomByLevel(level);
+        if(room != null){
+            PlayerInfo info = room.getPlayerInfo(player);
+            if(info == null){
+                if(!player.isOp()) {
+                    player.sendMessage("你不能破坏此方块");
+                    event.setCancelled();
+                }
+            }else{
+                if(block instanceof BlockBed){
+                    event.setDrops(new Item[0]);
+                }
+                event.setCancelled(room.toBreakBlock(info,block));
+            }
+        }
+
+    }
+
+
+
+
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event){
+        //TODO 断线重连 上线
+        Player player = event.getPlayer();
+        if(playerJoin.containsKey(player.getName())){
+            String room = playerJoin.get(player.getName());
+            if(hasGameRoom(room)){
+                GameRoom room1 = getRoom(room);
+                if(room1.getType() != GameRoom.GameType.END){
+                    PlayerInfo info = room1.getPlayerInfo(player);
+                    if(info != null){
+                        info.setLeave(false);
+                        if(room1.getType() == GameRoom.GameType.WAIT){
+                            player.teleport(room1.getWorldInfo().getConfig().getWaitPosition());
+                        }else{
+                            info.death(null);
+                        }
+                    }else{
+                        reset(player);
+                    }
+
+                }else{
+                    reset(player);
+                }
+            }else{
+                //TODO 无房间回到出生点
+               reset(player);
+            }
+        }
+        player.setFoodEnabled(false);
+        player.setGamemode(2);
+    }
+
+    private void reset(Player player){
+        playerJoin.remove(player.getName());
+        player.setHealth(player.getMaxHealth());
+        player.getInventory().clearAll();
+        player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+    }
+
+    @EventHandler
+    public void onGameStartEvent(GameRoomStartEvent event){
+        GameRoom room = event.getRoom();
+        for(String s: room.getRoomConfig().gameStartMessage){
+            room.sendTipMessage(Utils.getCentontString(s,43));
+        }
+    }
+
+
+    /**
+     * 将拾取的物品转换为经验
+     * @param event
+     */
+    @EventHandler
+    public void onItemPickUp(InventoryPickupItemEvent event){
+        Inventory inventory = event.getInventory();
+        if(inventory instanceof PlayerInventory){
+            EntityHuman entityHuman = (EntityHuman) inventory.getHolder();
+            if(entityHuman instanceof Player){
+                Player player = (Player) entityHuman;
+                GameRoom room = getGameRoomByLevel(entityHuman.level);
+        
+                double exp = 0.0;
+                if(room != null && room.getType() == GameType.START){
+                    PlayerInfo playerInfo = room.getPlayerInfo(player);
+                    if(playerInfo != null){
+                        if(room.getRoomConfig().isExp()){
+                            for (MoneyItemInfoConfig config : room.getRoomConfig().moneyItem.getItemInfoConfigs()) {
+                                if(config.getItem().equals(event.getItem().getItem(), true, true)){
+                                    exp += event.getItem().getItem().count * config.getExp();
+                                    break;
+                                }
+                            }
+                            event.setCancelled();
+                            event.getItem().close();
+                            playerInfo.addExp((int)Math.floor(exp));
+                        
+                        }
+                    }
+                    
+                }
+            }
+            
+
+        }
+        
+    }
+
+    @EventHandler
+    public void onEntityClick(PlayerInteractEntityEvent event){
+        Player player = event.getPlayer();
+        if(event.getEntity() instanceof ShopVillage){
+            event.setCancelled();
+            PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
+            ((ShopVillage) event.getEntity()).onClick(info);
+        }
+
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockBurn(BlockBurnEvent event){
+        Block block = event.getBlock();
+        for(GameRoomConfig gameRoomConfig: BedWarMain.getRoomManager().roomConfig.values()){
+            if(gameRoomConfig.worldInfo.getGameWorld().
+                    getFolderName().equalsIgnoreCase(block.getLevel().getFolderName())){
+                event.setCancelled();
+                return;
+            }
+        }
+
+    }
+
+    @EventHandler
+    public void onLevelTransfer(EntityLevelChangeEvent event){
+        Entity entity = event.getEntity();
+        GameRoom room = getGameRoomByLevel(event.getTarget());
+        if(room != null){
+            if(room.getType() == GameRoom.GameType.START){
+                event.setCancelled();
+                BedWarMain.sendMessageToObject("&c你无法进入该地图",entity);
+            }
+        }
+
+    }
+    @EventHandler(ignoreCancelled = true)
+    public void onWeatherChange(WeatherChangeEvent event){
+        for(GameRoomConfig gameRoomConfig: BedWarMain.getRoomManager().roomConfig.values()){
+            if(gameRoomConfig.worldInfo.getGameWorld().
+                    getFolderName().equalsIgnoreCase(event.getLevel().getFolderName())){
+                event.setCancelled();
+                return;
+            }
+        }
+    }
+
+
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event){
+        if(event.getEntity() instanceof ShopVillage) {
+            if(event instanceof EntityDamageByEntityEvent){
+                Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
+                if(entity instanceof Player) {
+                    if(entity.distance(event.getEntity()) <= 4 && event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK){
+                        PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo((Player) entity);
+                        ((ShopVillage) event.getEntity()).onClick(info);
+                    }
+
+                }
+            }
+            event.setCancelled();
+            return;
+        }
+        if(event.getEntity() instanceof Player){
+            GameRoom room = getGameRoomByLevel(event.getEntity().level);
+            if(room != null){
+                PlayerInfo playerInfo = room.getPlayerInfo((EntityHuman) event.getEntity());
+                if(room.getType() == GameRoom.GameType.WAIT){
+                    event.setCancelled();
+                    return;
+                }
+                if(playerInfo == null){
+                    event.setCancelled();
+                    return;
+                }
+                if(playerInfo.getPlayerType() == PlayerInfo.PlayerType.WAIT){
+                    event.setCancelled();
+                    return;
+                }
+                if(event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){
+                    if(event instanceof EntityDamageByEntityEvent){
+                        Entity damagers = (((EntityDamageByEntityEvent) event).getDamager());
+                        if(damagers instanceof Player){
+                            PlayerInfo playerInfo1 = BedWarMain.getRoomManager().getPlayerInfo((Player) damagers);
+                            if(playerInfo1 != null){
+                                playerInfo1.addSound(Sound.RANDOM_ORB);
+                                double h = event.getEntity().getHealth() - event.getFinalDamage();
+                                if(h < 0){
+                                    h = 0;
+                                }
+                                playerInfo1.sendTip("&e目标: &c❤"+String.format("%.1f",h));
+                            }
+
+                        }
+                    }
+                }
+                if(event instanceof EntityDamageByEntityEvent){
+                    //TODO 免受TNT爆炸伤害
+                    Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
+                    if(entity instanceof EntityPrimedTNT){
+                        event.setDamage(2);
+                    }
+                    //TODO 阻止队伍PVP
+                    if(entity instanceof Player){
+                        PlayerInfo damageInfo = room.getPlayerInfo((Player) entity);
+
+                        if( damageInfo != null){
+                            TeamInfo t1 = playerInfo.getTeamInfo();
+                            TeamInfo t2 = damageInfo.getTeamInfo();
+                            if(t1 != null && t2 != null){
+                                if(t1.getTeamConfig().getName().equalsIgnoreCase(t2.getTeamConfig().getName())){
+                                    event.setCancelled();
+                                    return;
+                                }
+                            }
+                            playerInfo.setDamageByInfo(damageInfo);
+                        }else{
+                            event.setCancelled();
+                        }
+                    }
+
+                }
+                if(event.getCause() == EntityDamageEvent.DamageCause.VOID){
+                    event.setCancelled();
+                    playerInfo.death(event);
+                }
+                if(event.getFinalDamage() + 1 > playerInfo.getPlayer().getHealth()){
+                    event.setCancelled();
+                    playerInfo.death(event);
+                    for (EntityDamageEvent.DamageModifier modifier : EntityDamageEvent.DamageModifier.values()) {
+                        event.setDamage(0, modifier);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event){
+        //TODO 断线重连 - 离线状态下
+        Player player = event.getPlayer();
+        if(playerJoin.containsKey(player.getName())){
+            String roomName = playerJoin.get(player.getName());
+            GameRoom room = getRoom(roomName);
+            if(room != null){
+                if(room.getType() != GameRoom.GameType.START ){
+                    PlayerInfo info = room.getPlayerInfo(player);
+                    if(info != null){
+                        room.quitPlayerInfo(info);
+                    }
+
+                }else{
+                    PlayerInfo info = room.getPlayerInfo(player);
+                    if(info != null){
+                        player.getInventory().clearAll();
+                        info.setLeave(true);
+                    }
+                }
+            }
+        }
+    }
+
+    public static final double BOW_MAX = 2.7;
+    //2.7就可以触发
+    @EventHandler
+    public void onBow(EntityShootBowEvent event){
+        if(event.getForce() >= BOW_MAX) {
+            Entity entity = event.getEntity();
+            if (entity instanceof Player) {
+                Player player = (Player) entity;
+                if (playerJoin.containsKey(player.getName())) {
+                    String roomName = playerJoin.get(player.getName());
+                    GameRoom room = getRoom(roomName);
+                    if (room != null) {
+                        Item item = event.getBow();
+                        if (item.hasCompoundTag() && item.getNamedTag().contains(NbtDefaultItem.TAG)) {
+                            String name = item.getNamedTag().getString(NbtDefaultItem.TAG);
+                            if (room.getRoomConfig().nbtItemInfo.items.containsKey(name)) {
+                                INbtItem iNbtItem = room.getRoomConfig().nbtItemInfo.items.get(name).name;
+                                if(iNbtItem instanceof DieBow){
+                                    event.getProjectile().close();
+                                    ((DieBow) iNbtItem).onSend(player);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event){
+        Player player = event.getPlayer();
+        if(event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+            Item item = event.getItem();
+            if(event.getBlock() instanceof BlockCraftingTable){
+                if(BedWarMain.getRoomManager().getPlayerInfo(event.getPlayer()) != null){
+                    event.setCancelled();
+                    return;
+                }
+            }
+            if (item.hasCompoundTag() && item.getNamedTag().contains(NbtDefaultItem.TAG)) {
+                String name = item.getNamedTag().getString(NbtDefaultItem.TAG);
+                if (playerJoin.containsKey(player.getName())) {
+                    String roomName = playerJoin.get(player.getName());
+                    GameRoom room = getRoom(roomName);
+                    if (room != null) {
+                        if(event.getBlock() instanceof BlockChest){
+                            if(!room.getClickChest().contains((BlockChest) event.getBlock())) {
+                                room.getClickChest().add((BlockChest) event.getBlock());
+
+                            }
+                            return;
+
+                        }
+                        Item r = item.clone();
+                        r.setCount(1);
+                        if (room.getRoomConfig().nbtItemInfo.items.containsKey(name)) {
+                            INbtItem iNbtItem = room.getRoomConfig().nbtItemInfo.items.get(name).name;
+                            if(iNbtItem.onClick(r, player)){
+                                event.setCancelled();
+                            }
+
+
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    @EventHandler
+    public void onPlayerItemHeldEvent(PlayerItemHeldEvent event){
+        Player player = event.getPlayer();
+        if(playerJoin.containsKey(player.getName())){
+            String roomName = playerJoin.get(player.getName());
+            GameRoom room = getRoom(roomName);
+            if(room != null){
+                Item item = event.getItem();
+                if(item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem")){
+                    player.getInventory().setHeldItemSlot(0);
+                    if(!RoomQuitItem.clickAgain.contains(player)){
+                        RoomQuitItem.clickAgain.add(player);
+                        player.sendTip("请再点击一次");
+                        return;
+                    }
+                    RoomQuitItem.clickAgain.remove(player);
+                    if(room.quitPlayerInfo(room.getPlayerInfo(player))){
+                        player.sendMessage("你成功离开房间 "+roomName);
+                    }
+                }
+                if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
+                    player.getInventory().setHeldItemSlot(0);
+                    if(!TeamChoseItem.clickAgain.contains(player)){
+                        TeamChoseItem.clickAgain.add(player);
+                        player.sendTip("请再点击一次");
+                        return;
+                    }
+                    FormWindowSimple simple = new FormWindowSimple("请选择队伍","");
+                    for(TeamInfo teamInfoConfig: room.getTeamInfos()){
+                        Item wool = teamInfoConfig.getTeamConfig().getTeamConfig().getBlockWoolColor();
+                        simple.addButton(new ElementButton(TextFormat.colorize('&',teamInfoConfig.toString()+" &r"+teamInfoConfig.getTeamPlayers().size()+" / "+(room.getRoomConfig().getMaxPlayerSize() / room.getTeamInfos().size())),
+                                new ElementButtonImageData("path",
+                                        ItemIDSunName.getIDByPath(wool.getId(),wool.getDamage()))));
+                    }
+                    player.showFormWindow(simple,102);
+                    TeamChoseItem.clickAgain.remove(player);
+
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onFrom(PlayerFormRespondedEvent event){
+        if(event.wasClosed()){
+            DisPlayWindowsFrom.SHOP.remove(event.getPlayer().getName());
+            BedWarCommand.FROM.remove(event.getPlayer().getName());
+            return;
+        }
+        Player player = event.getPlayer();
+        if(BedWarCommand.FROM.containsKey(player.getName())){
+            BedWarFrom simple = BedWarCommand.FROM.get(player.getName());
+            if(simple.getId() == event.getFormID()) {
+                if (event.getResponse() instanceof FormResponseSimple) {
+                    BaseIButtom button = simple.getBaseIButtoms().get(((FormResponseSimple) event.getResponse())
+                            .getClickedButtonId());
+                    button.onClick(player);
+                }
+                return;
+
+            }else{
+                BedWarCommand.FROM.remove(player.getName());
+            }
+
+        }
+
+        int fromId = 102;
+        if(event.getFormID() == fromId && event.getResponse() instanceof FormResponseSimple){
+            PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
+            if(info != null){
+                TeamInfo teamInfo = info.getGameRoom().getTeamInfos().get(((FormResponseSimple) event.getResponse())
+                        .getClickedButtonId());
+                if(!teamInfo.join(info)){
+                    info.sendMessage("&c你已经加入了 "+teamInfo.toString());
+                }else{
+                    info.sendMessage("&a加入了&r"+teamInfo.toString()+" &a成功");
+                }
+            }
+            return;
+        }
+
+        if(DisPlayWindowsFrom.SHOP.containsKey(player.getName())){
+            if(BedWarMain.getRoomManager().getPlayerInfo(player) != null) {
+                ShopFrom shopFrom = DisPlayWindowsFrom.SHOP.get(player.getName());
+                if (event.getResponse() instanceof FormResponseSimple) {
+                    if (((FormResponseSimple) event.getResponse())
+                            .getClickedButtonId() == shopFrom.getShopButtons().size()) {
+                        if (shopFrom.getLastFrom() != null) {
+                            shopFrom.getLastFrom().disPlay(shopFrom.getLastFrom().getTitle(), false);
+                        }
+
+                        return;
+                    }
+                    shopFrom.getShopButtons().get(((FormResponseSimple) event.getResponse())
+                            .getClickedButtonId()).getItemInstance().onClickButton(player, shopFrom);
+
+                }
+            }else{
+                DisPlayWindowsFrom.SHOP.remove(player.getName());
+            }
+        }
+    }
+
+    @EventHandler
+    public void onItemChange(InventoryTransactionEvent event) {
+        InventoryTransaction transaction = event.getTransaction();
+        for (InventoryAction action : transaction.getActions()) {
+            for (Inventory inventory : transaction.getInventories()) {
+
+                if (inventory instanceof ChestInventoryPanel) {
+                    event.setCancelled();
+                    Item i = action.getSourceItem();
+                    if(i.hasCompoundTag() && i.getNamedTag().contains("index")){
+                        int index = i.getNamedTag().getInt("index");
+                        BasePlayPanelItemInstance item = ((ChestInventoryPanel) inventory).getPanel().getOrDefault(index,null);
+                        Player player = ((ChestInventoryPanel) inventory).getPlayer();
+                        if(item != null){
+                            ((ChestInventoryPanel) inventory).clickSolt = index;
+                            item.onClick((ChestInventoryPanel) inventory,player);
+                            ((ChestInventoryPanel) inventory).update();
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+}

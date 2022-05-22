@@ -1,0 +1,22 @@
+title: "&f[&a起床战争&f]"
+
+# 是否保存玩家背包
+save-playerInventory:  true
+
+# 商店界面
+# auto 自动适配
+# packet 强制GUI菜单
+# ui 强制箱子界面
+shop-ui: auto
+
+
+
+game-logo: "&l&cB&6e&ed&aW&ba&9r"
+
+join-menu:
+  cw:
+    buttonImg:
+      type: "path"
+      path: "textures/ui/icon_recipe_item"
+    rooms:
+      - 测试房间
