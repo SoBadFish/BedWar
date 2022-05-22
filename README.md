@@ -1,4 +1,6 @@
-
+<a href="https://github.com/Sobadfish/BedWar/releases/latest" alt="Latest release">
+    <img src="https://img.shields.io/github/v/release/Sobadfish/BedWar?include_prereleases" alt="Latest release">
+</a>
 <div align="center">
 <img  src="./img/bed.png"></img>
 </div>
