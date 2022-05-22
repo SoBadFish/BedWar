@@ -1,11 +1,5 @@
 
-
-
-
-
-
-![bedlogo.png](./img/bedlogo.png)
-
+<img align="center" src="https://www.minebbs.com/attachments/bedlogo-png.29123/" size="30%"></img>
 
 
 # <div align="center"><font size=12 color='BlueViolet'>B</font><font size = 6 color="DeepSkyBlue">e</font><font size=12 color='Red'>d</font><font size=12 color='Yellow'>W</font><font size = 6 color="Chartreuse">a</font><font size=12 color='Green'>r</font>     <font size=12 color='BlueViolet'>起</font><font size = 6 color="DeepSkyBlue">床</font><font size=12 color='Red'>战</font><font size=6 color='Yellow'>争</font> </div>
@@ -20,11 +14,11 @@
 
 ------
 
-游戏模式:
-**- 经验模式**
-**- 物品兑换模式
+游戏模式:  
+ 1. **经验模式**  
+ 2. **物品兑换模式**  
 
-使用介绍:**
+**使用介绍:**  
 **一、插件启动**
 
 1. 将本插件拖动到 plugins文件夹
