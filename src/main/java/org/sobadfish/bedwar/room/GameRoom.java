@@ -25,13 +25,13 @@ import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.shop.ShopInfo;
+import org.sobadfish.bedwar.thread.BaseTimerRunnable;
 import org.sobadfish.bedwar.thread.ProtectVillageThread;
 import org.sobadfish.bedwar.thread.RoomLoadThread;
 import org.sobadfish.bedwar.thread.WorldInfoLoadThread;
 import org.sobadfish.bedwar.world.WorldInfo;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -166,7 +166,23 @@ public class GameRoom {
     }
     private void onEnd(){
         if(loadTime == -1){
-            loadTime = 5;
+            loadTime = 10;
+            //房间结束后的执行逻辑
+            if(getRoomConfig().isAutomaticNextRound){
+                sendMessage("&75 &e秒后自动进行下一局");
+                for(PlayerInfo playerInfo: getInRoomPlayers()){
+                    ThreadManager.addThread(new BaseTimerRunnable(5) {
+                        @Override
+                        protected void callback() {
+                            if(BedWarMain.getMenuRoomManager().joinRandomRoom(new PlayerInfo(playerInfo.getPlayer()),null)){
+                                quitPlayerInfo(playerInfo,false);
+                            }
+
+                        }
+                    });
+                }
+            }
+
         }
 
         if(loadTime == 0){
@@ -209,14 +225,16 @@ public class GameRoom {
                 }
             }
             if (getLiveTeam().size() == 1) {
-                getLiveTeam().get(0).echoSuccess();
+                TeamInfo teamInfo = getLiveTeam().get(0);
+                teamInfo.echoVictory();
+
+
                 type = GameType.END;
                 worldInfo.setClose(true);
 
                 loadTime = 5;
             }
         }else{
-
 
             TeamInfo successInfo = null;
             ArrayList<TeamInfo> teamInfos = getLiveTeam();
@@ -232,7 +250,7 @@ public class GameRoom {
                     info.onUpdate();
 
                 }
-                successInfo.echoSuccess();
+                successInfo.echoVictory();
 
             }
             //TODO 当时间结束的一些逻辑
@@ -315,12 +333,24 @@ public class GameRoom {
         return t;
     }
     /**
-     * 还在游戏内的玩家
+     * 还在游戏内的存活玩家
      * */
     public ArrayList<PlayerInfo> getLivePlayers(){
         ArrayList<PlayerInfo> t = new ArrayList<>();
         for(PlayerInfo playerInfo: playerInfos){
             if(playerInfo.isLive()){
+                t.add(playerInfo);
+            }
+        }
+        return t;
+    }
+    /**
+     * 还在游戏内的玩家
+     * */
+    public ArrayList<PlayerInfo> getInRoomPlayers(){
+        ArrayList<PlayerInfo> t = new ArrayList<>();
+        for(PlayerInfo playerInfo: playerInfos){
+            if(playerInfo.isInRoom()){
                 t.add(playerInfo);
             }
         }
@@ -460,10 +490,8 @@ public class GameRoom {
     /**
      * 玩家离开游戏
      * */
-    public boolean quitPlayerInfo(PlayerInfo info){
+    public boolean quitPlayerInfo(PlayerInfo info,boolean teleport){
         if(info.getPlayer() instanceof Player) {
-
-
             if (playerInfos.contains(info)) {
                 if(((Player) info.getPlayer()).isOnline()) {
                     BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
@@ -471,9 +499,12 @@ public class GameRoom {
                 info.setLeave(true);
 
                 PlayerQuitRoomEvent event = new PlayerQuitRoomEvent(info,this,BedWarMain.getBedWarMain());
-                Server.getInstance().getPluginManager().callEvent(event);
                 info.cancel();
-                info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+                if(teleport) {
+                    event.setPerformCommand(false);
+                    info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+                }
+                Server.getInstance().getPluginManager().callEvent(event);
             } else {
                 if(((Player) info.getPlayer()).isOnline()) {
                     BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
@@ -631,7 +662,7 @@ public class GameRoom {
         for(PlayerInfo info: playerInfos){
             info.clear();
             if(info.getPlayer() instanceof Player) {
-                quitPlayerInfo(info);
+                quitPlayerInfo(info,true);
             }
 
             if(info.getTeamInfo() != null) {

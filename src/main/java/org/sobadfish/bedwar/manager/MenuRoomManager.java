@@ -72,7 +72,6 @@ public class MenuRoomManager {
     public synchronized boolean joinRandomRoom(PlayerInfo info,String name){
         PlayerHasChoseRoomManager roomManager = new PlayerHasChoseRoomManager(info);
         if(lock.contains(roomManager)){
-
             lock.remove(roomManager);
             return false;
         }else{
@@ -88,6 +87,7 @@ public class MenuRoomManager {
                 name = names.get(names.indexOf(name));
             }
         }
+
         while (true){
             if(!lock.contains(roomManager)){
                 info.sendForceTitle("匹配终止!");
@@ -95,7 +95,7 @@ public class MenuRoomManager {
             }
             if(name == null) {
                 if (names.size() == 0) {
-                    info.sendForceMessage("&c暂时没有合适的房间");
+//                    info.sendForceMessage("&c暂时没有合适的房间");
                     break;
                 }
                 name = names.get(0);

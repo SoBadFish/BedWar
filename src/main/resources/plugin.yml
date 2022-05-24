@@ -1,6 +1,6 @@
 name: BedWar
 main: org.sobadfish.bedwar.BedWarMain
-version: 1.3.8
+version: 1.3.9
 api:
   - 1.0.11
   - 3.0.0

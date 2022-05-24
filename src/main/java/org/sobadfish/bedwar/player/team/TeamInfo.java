@@ -9,17 +9,16 @@ import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.event.PlayerChoseTeamEvent;
-import org.sobadfish.bedwar.event.TeamSuccessEvent;
+import org.sobadfish.bedwar.event.TeamDefeatEvent;
+import org.sobadfish.bedwar.event.TeamVictoryEvent;
 import org.sobadfish.bedwar.item.team.TeamEffectInfo;
 import org.sobadfish.bedwar.item.team.TeamTrap;
 import org.sobadfish.bedwar.player.PlayerInfo;
 
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.GameRoom;
-import org.sobadfish.bedwar.tools.Utils;
 
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author SoBadFish
@@ -119,6 +118,16 @@ public class TeamInfo {
                 playerInfo.sendForceMessage(msg));
     }
 
+    public ArrayList<PlayerInfo> getInRoomPlayer(){
+        ArrayList<PlayerInfo> playerInfos = new ArrayList<>();
+        for(PlayerInfo playerInfo: getTeamPlayers()){
+            if(playerInfo.isInRoom()){
+                playerInfos.add(playerInfo);
+            }
+        }
+        return playerInfos;
+    }
+
     public ArrayList<PlayerInfo> getLivePlayer(){
         ArrayList<PlayerInfo> playerInfos = new ArrayList<>();
         for(PlayerInfo playerInfo: getTeamPlayers()){
@@ -129,9 +138,16 @@ public class TeamInfo {
         return playerInfos;
     }
 
-    public void echoSuccess(){
+    public void echoVictory(){
         //TODO 当队伍胜利
-        TeamSuccessEvent event = new TeamSuccessEvent(this,room,BedWarMain.getBedWarMain());
+        TeamVictoryEvent event = new TeamVictoryEvent(this,room,BedWarMain.getBedWarMain());
+        Server.getInstance().getPluginManager().callEvent(event);
+
+    }
+
+    public void echoDefeat(){
+        //TODO 当队伍失败
+        TeamDefeatEvent event = new TeamDefeatEvent(this,room,BedWarMain.getBedWarMain());
         Server.getInstance().getPluginManager().callEvent(event);
 
     }
@@ -204,6 +220,7 @@ public class TeamInfo {
         if(d == getTeamPlayers().size()){
             //被淘汰了
             room.sendMessage("&r团灭 > "+toString()+"&c已被淘汰!");
+            echoDefeat();
             stop = true;
         }
     }

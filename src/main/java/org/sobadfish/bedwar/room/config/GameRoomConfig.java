@@ -110,6 +110,31 @@ public class GameRoomConfig implements Cloneable{
     public int itemShopEntityId = 15;
 
     /**
+     * 禁用指令
+     * */
+    public ArrayList<String> banCommand = new ArrayList<>();
+
+    /**
+     * 退出房间执行指令
+     * */
+    public ArrayList<String> quitRoomCommand = new ArrayList<>();
+
+    /**
+     * 是否开始下一局
+     * */
+    public boolean isAutomaticNextRound = true;
+
+    /**
+     * 玩家胜利执行命令
+     * */
+    public ArrayList<String> victoryCommand = new ArrayList<>();
+
+    /**
+     * 玩家失败执行命令
+     * */
+    public ArrayList<String> defeatCommand = new ArrayList<>();
+
+    /**
      * 游戏开始的一些介绍
      * */
     public ArrayList<String> gameStartMessage = new ArrayList<>();
@@ -318,6 +343,11 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.teamShopEntityId = room.getInt("entity.team",15);
                 roomConfig.itemShopEntityId = room.getInt("entity.item",15);
                 roomConfig.bedBreak = room.getInt("times.bedbreak",120);
+                roomConfig.banCommand = new ArrayList<>(room.getStringList("ban-command"));
+                roomConfig.isAutomaticNextRound = room.getBoolean("AutomaticNextRound",true);
+                roomConfig.quitRoomCommand = new ArrayList<>(room.getStringList("QuitRoom"));
+                roomConfig.victoryCommand = new ArrayList<>(room.getStringList("victoryCmd"));
+                roomConfig.defeatCommand = new ArrayList<>(room.getStringList("defeatCmd"));
                 if(room.exists("roomStartMessage")){
                     roomConfig.gameStartMessage = new ArrayList<>(room.getStringList("roomStartMessage"));
                 }else{
@@ -385,6 +415,11 @@ public class GameRoomConfig implements Cloneable{
         }
         config.set("itemSpawn",itemSpawn);
         config.set("waitPosition",WorldInfoConfig.positionToString(worldInfo.getWaitPosition()));
+        config.set("ban-command",banCommand);
+        config.set("QuitRoom",quitRoomCommand);
+        config.set("AutomaticNextRound",isAutomaticNextRound);
+        config.set("victoryCmd",victoryCommand);
+        config.set("defeatCmd",defeatCommand);
         config.set("roomStartMessage",gameStartMessage);
         config.save();
     }

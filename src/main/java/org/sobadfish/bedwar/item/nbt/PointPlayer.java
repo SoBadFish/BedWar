@@ -7,6 +7,8 @@ import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 
+import java.util.*;
+
 /**
  * 指向玩家
  * @author SoBadFish
@@ -26,13 +28,19 @@ public class PointPlayer implements INbtItem{
         }
         GameRoom room = info.getGameRoom();
         PlayerInfo target = null;
-        for(TeamInfo teamInfo : room.getLiveTeam()){
-            if(!teamInfo.equals(info.getTeamInfo())){
-                target = teamInfo.getLivePlayer().get(0);
+        LinkedHashMap<PlayerInfo,Double> dis = new LinkedHashMap<>();
+        for(PlayerInfo info1: room.getLivePlayers()){
+            if(!info1.getTeamInfo().equals(info.getTeamInfo())){
+                dis.put(info1,player.distance(info1.getPlayer()));
             }
+
         }
+        List<Map.Entry<PlayerInfo, Double>> list = new ArrayList<>(dis.entrySet());
+        list.sort(Comparator.comparingInt(o -> o.getValue().intValue()));
+        target = list.get(0).getKey();
+
         if(target != null){
-            info.sendTip("&a找到"+target+"\n"+"&c距离: &r"+String.format("%.2f",info.getPlayer().distance(target.getPlayer()))+" 米");
+            info.sendTip("&a找到"+target+"\n"+"&c距离: &r"+String.format("%.2f",list.get(0).getValue())+" 米");
 
         }
         return true;

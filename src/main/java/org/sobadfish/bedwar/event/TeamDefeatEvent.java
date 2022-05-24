@@ -6,13 +6,13 @@ import org.sobadfish.bedwar.room.GameRoom;
 
 /**
  * @author SoBadFish
- * 2022/1/15
+ * 2022/5/24
  */
-public class TeamSuccessEvent extends GameRoomEvent{
+public class TeamDefeatEvent extends GameRoomEvent {
 
     private TeamInfo teamInfo;
 
-    public TeamSuccessEvent(TeamInfo teamInfo,GameRoom room, Plugin plugin) {
+    public TeamDefeatEvent(TeamInfo teamInfo, GameRoom room, Plugin plugin) {
         super(room, plugin);
         this.teamInfo = teamInfo;
     }

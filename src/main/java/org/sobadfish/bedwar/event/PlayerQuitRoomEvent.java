@@ -10,7 +10,17 @@ import org.sobadfish.bedwar.room.GameRoom;
  */
 public class PlayerQuitRoomEvent extends PlayerRoomInfoEvent {
 
+    public boolean performCommand = true;
+
     public PlayerQuitRoomEvent(PlayerInfo playerInfo, GameRoom room, Plugin plugin) {
         super(playerInfo, room, plugin);
+    }
+
+    public void setPerformCommand(boolean performCommand) {
+        this.performCommand = performCommand;
+    }
+
+    public boolean isPerformCommand() {
+        return performCommand;
     }
 }

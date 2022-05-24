@@ -51,7 +51,7 @@ public class PlayerInfo {
 
     private int endKillCount = 0;
 
-    private final EntityHuman player;
+    private EntityHuman player;
 
     private PlayerType playerType;
 
@@ -91,6 +91,10 @@ public class PlayerInfo {
         this.player = player;
     }
 
+
+    public void setPlayer(EntityHuman player){
+        this.player = player;
+    }
 
 
     public EntityHuman getPlayer() {
@@ -349,6 +353,10 @@ public class PlayerInfo {
         }
     }
 
+    public boolean isInRoom(){
+        return !cancel && !isLeave;
+    }
+
     public boolean isLive(){
         return !cancel && !isLeave && playerType != PlayerType.DEATH;
     }
@@ -542,7 +550,11 @@ public class PlayerInfo {
 
     public void death(EntityDamageEvent event){
         player.setHealth(player.getMaxHealth());
+        if(player instanceof Player){
+            ((Player) player).removeAllWindows();
+        }
         player.getInventory().clearAll();
+
 
         if(teamInfo.isBadExists()){
             playerType = PlayerType.WAIT_DEATH;

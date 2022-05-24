@@ -3,6 +3,7 @@ package org.sobadfish.bedwar.manager;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.*;
+import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.entity.item.EntityPrimedTNT;
@@ -13,6 +14,7 @@ import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockBurnEvent;
 import cn.nukkit.event.block.BlockPlaceEvent;
 import cn.nukkit.event.entity.*;
+import cn.nukkit.event.inventory.CraftItemEvent;
 import cn.nukkit.event.inventory.InventoryPickupItemEvent;
 import cn.nukkit.event.inventory.InventoryTransactionEvent;
 import cn.nukkit.event.level.ChunkUnloadEvent;
@@ -32,10 +34,7 @@ import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.command.BedWarCommand;
-import org.sobadfish.bedwar.event.GameRoomStartEvent;
-import org.sobadfish.bedwar.event.PlayerJoinRoomEvent;
-import org.sobadfish.bedwar.event.PlayerQuitRoomEvent;
-import org.sobadfish.bedwar.event.TeamSuccessEvent;
+import org.sobadfish.bedwar.event.*;
 import org.sobadfish.bedwar.item.ItemIDSunName;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
 import org.sobadfish.bedwar.item.button.TeamChoseItem;
@@ -208,17 +207,55 @@ public class RoomManager implements Listener {
         }
     }
 
+    @EventHandler
+    public void onTeamDefeat(TeamDefeatEvent event){
+        for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
+            event.getRoom().getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
+            if(event.getRoom().getRoomConfig().isAutomaticNextRound){
+                info.sendMessage("&75 &e秒后自动进行下一局");
+                ThreadManager.addThread(new BaseTimerRunnable(5) {
+                    @Override
+                    protected void callback() {
+                        if(BedWarMain.getMenuRoomManager().joinRandomRoom(new PlayerInfo(info.getPlayer()),null)){
+                            event.getRoom().quitPlayerInfo(info,false);
+                        }
+//                        quitPlayerInfo(playerInfo,false);
+
+                    }
+                });
+
+            }
+
+        }
+    }
 
     @EventHandler
-    public void onTeamSuccess(TeamSuccessEvent event){
+    public void onExecuteCommand(PlayerCommandPreprocessEvent event){
+        Level level = event.getPlayer().getLevel();
+        GameRoom room = getGameRoomByLevel(level);
+        if(room != null) {
+            for(String cmd: room.getRoomConfig().banCommand){
+                if(event.getMessage().contains(cmd)){
+                    event.setCancelled();
+                }
+            }
+        }
+    }
+
+
+    @EventHandler
+    public void onTeamVictory(TeamVictoryEvent event){
         event.getTeamInfo().sendTitle("&e&l胜利!",5);
         event.getRoom().sendTipMessage("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
         event.getRoom().sendTipMessage(Utils.getCentontString("&b游戏结束",43));
         event.getRoom().sendTipMessage("");
-        for(PlayerInfo playerInfo: event.getTeamInfo().getLivePlayer()){
+        for(PlayerInfo playerInfo: event.getTeamInfo().getInRoomPlayer()){
             event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀： - "+(playerInfo.getKillCount()+playerInfo.getEndKillCount())+" 破坏床数: - "+playerInfo.getBedBreakCount(),43 ));
         }
         event.getRoom().sendTipMessage("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
+            event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
+        }
         ThreadManager.addThread(new BaseTimerRunnable(5) {
 
             @Override
@@ -232,15 +269,19 @@ public class RoomManager implements Listener {
             protected void callback() {}
         });
         event.getRoom().sendMessage("&a恭喜 "+event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()+" &a 获得了胜利!");
+
     }
 
     //事件响应
-
     @EventHandler
-    public void onQuit(PlayerQuitRoomEvent event){
-        PlayerInfo info = event.getPlayerInfo();
-        ((Player)info.getPlayer()).setFoodEnabled(false);
-
+    public void onQuitRoom(PlayerQuitRoomEvent event){
+        if(event.performCommand){
+            PlayerInfo info = event.getPlayerInfo();
+            ((Player)info.getPlayer()).setFoodEnabled(false);
+            event.getRoom().getRoomConfig().banCommand.forEach(cmd -> Server.getInstance().dispatchCommand(new ConsoleCommandSender(), cmd.replace("@p", info.getName())));
+            GameRoom room = event.getRoom();
+            room.sendMessage("&c玩家 "+event.getPlayerInfo().getPlayer().getName()+" 离开了游戏");
+        }
     }
 
     /**
@@ -304,13 +345,19 @@ public class RoomManager implements Listener {
         }
 
     }
-
-
     @EventHandler
-    public void onQuitRoom(PlayerQuitRoomEvent event){
-        GameRoom room = event.getRoom();
-        room.sendMessage("&c玩家 "+event.getPlayerInfo().getPlayer().getName()+" 离开了游戏");
+    public void onCraft(CraftItemEvent event){
+        Player player = event.getPlayer();
+        GameRoom room = getGameRoomByLevel(player.getLevel());
+        if(room != null) {
+            PlayerInfo info = room.getPlayerInfo(player);
+            if (info != null) {
+                event.setCancelled();
+            }
+        }
     }
+
+
 
     /**
      * 游戏地图的爆炸保护
@@ -419,16 +466,20 @@ public class RoomManager implements Listener {
 
 
 
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
         //TODO 断线重连 上线
         Player player = event.getPlayer();
         if(playerJoin.containsKey(player.getName())){
+            player.setFoodEnabled(false);
+            player.setGamemode(2);
             String room = playerJoin.get(player.getName());
             if(hasGameRoom(room)){
                 GameRoom room1 = getRoom(room);
-                if(room1.getType() != GameRoom.GameType.END){
+                if(room1.getType() != GameRoom.GameType.END && !room1.close ){
                     PlayerInfo info = room1.getPlayerInfo(player);
+                    info.setPlayer(player);
                     if(info != null){
                         info.setLeave(false);
                         if(room1.getType() == GameRoom.GameType.WAIT){
@@ -448,14 +499,13 @@ public class RoomManager implements Listener {
                reset(player);
             }
         }
-        player.setFoodEnabled(false);
-        player.setGamemode(2);
     }
 
     private void reset(Player player){
         playerJoin.remove(player.getName());
         player.setHealth(player.getMaxHealth());
         player.getInventory().clearAll();
+        player.getEnderChestInventory().clearAll();
         player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
     }
 
@@ -657,7 +707,7 @@ public class RoomManager implements Listener {
                 if(room.getType() != GameRoom.GameType.START ){
                     PlayerInfo info = room.getPlayerInfo(player);
                     if(info != null){
-                        room.quitPlayerInfo(info);
+                        room.quitPlayerInfo(info,true);
                     }
 
                 }else{
@@ -758,7 +808,7 @@ public class RoomManager implements Listener {
                         return;
                     }
                     RoomQuitItem.clickAgain.remove(player);
-                    if(room.quitPlayerInfo(room.getPlayerInfo(player))){
+                    if(room.quitPlayerInfo(room.getPlayerInfo(player),true)){
                         player.sendMessage("你成功离开房间 "+roomName);
                     }
                 }

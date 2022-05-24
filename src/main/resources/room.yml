@@ -14,6 +14,11 @@ maxPlayerSize: 16
 teamSpawn: {}
 itemSpawn: {}
 waitPosition: ""
+ban-command: []
+QuitRoom: []
+AutomaticNextRound: true
+victoryCmd: []
+defeatCmd: []
 roomStartMessage:
   - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
   - "&f起床战争"

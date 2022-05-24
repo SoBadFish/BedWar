@@ -1,8 +1,10 @@
 package org.sobadfish.bedwar.command;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
@@ -78,8 +80,9 @@ public class BedWarCommand extends Command {
                         PlayerInfo player = BedWarMain.getRoomManager().getPlayerInfo((Player) commandSender);
                         if (player != null) {
                             GameRoom room = player.getGameRoom();
-                            if (room.quitPlayerInfo(player)) {
+                            if (room.quitPlayerInfo(player,true)) {
                                 playerInfo.sendForceMessage("&a你成功离开房间: &r" + room.getRoomConfig().getName());
+                                room.getRoomConfig().banCommand.forEach(cmd-> Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",player.getName())));
                             }
                         }
                         break;
