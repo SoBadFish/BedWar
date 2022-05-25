@@ -19,6 +19,7 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.event.*;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
 import org.sobadfish.bedwar.item.button.TeamChoseItem;
+import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
@@ -501,7 +502,6 @@ public class GameRoom {
                 PlayerQuitRoomEvent event = new PlayerQuitRoomEvent(info,this,BedWarMain.getBedWarMain());
                 info.cancel();
                 if(teleport) {
-                    event.setPerformCommand(false);
                     info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
                 }
                 Server.getInstance().getPluginManager().callEvent(event);
@@ -693,6 +693,10 @@ public class GameRoom {
         //TODO 从列表中移除
         BedWarMain.getRoomManager().getRooms().remove(roomConfig.getName());
         BedWarMain.sendMessageToConsole("&r释放房间 "+roomConfig.getName());
+        if(RoomManager.toPathWorld(roomConfig)){
+            BedWarMain.sendMessageToConsole("&a"+roomConfig.getName()+" 地图已还原");
+        }
+
         isGc = true;
         System.gc();
     }

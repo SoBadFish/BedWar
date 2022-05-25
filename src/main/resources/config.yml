@@ -1,5 +1,7 @@
 title: "&f[&a起床战争&f]"
 
+scoreboard-title: "&f[&a起床战争&f]"
+
 # 是否保存玩家背包
 save-playerInventory:  true
 

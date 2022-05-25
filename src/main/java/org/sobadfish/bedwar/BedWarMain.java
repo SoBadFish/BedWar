@@ -1,6 +1,7 @@
 package org.sobadfish.bedwar;
 
 
+import cn.nukkit.Nukkit;
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
@@ -72,7 +73,9 @@ public class BedWarMain extends PluginBase {
             }
         }
 
+
         roomManager = RoomManager.initGameRoomConfig(mainFileDir);
+
         sendMessageToConsole("&a房间数据全部加载完成");
         this.getServer().getPluginManager().registerEvents(roomManager,this);
         if(getConfig().getAll().size() == 0) {
@@ -98,6 +101,10 @@ public class BedWarMain extends PluginBase {
 
     public static String getTitle(){
         return TextFormat.colorize('&',bedWarMain.getConfig().getString("title"));
+    }
+
+    public static String getScoreBoardTitle(){
+        return TextFormat.colorize('&',bedWarMain.getConfig().getString("scoreboard-title","&f[&a起床战争&f]"));
     }
 
     public static void sendTipMessageToObject(String msg,Object o){
@@ -183,6 +190,13 @@ public class BedWarMain extends PluginBase {
             ver = true;
 
         } catch (ClassNotFoundException | NoSuchFieldException ignore) { }
+        try {
+            Class c = Class.forName("cn.nukkit.Nukkit");
+            c.getField("NUKKIT").get(c).toString().equalsIgnoreCase("Nukkit PetteriM1 Edition");
+            ver = true;
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException ignore) {
+        }
+
         AbstractFakeInventory.IS_PM1E = ver;
         if(ver){
             sendMessageToConsole("&e当前核心为 Nukkit PM1E");

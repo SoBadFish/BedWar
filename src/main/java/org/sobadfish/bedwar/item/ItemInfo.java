@@ -93,6 +93,7 @@ public class ItemInfo {
         if(tick == itemInfoConfig.getSpawnTick()){
             tick = 0;
             itemInfoConfig.getPositions().forEach(position ->{
+
                 ArrayList<EntityItem> entityItems = new ArrayList<>();
                 for(Entity entity : position.getLevel().getChunkEntities(position.getChunkX(),position.getChunkZ()).values()){
                     if(entity instanceof EntityItem){

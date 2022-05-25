@@ -110,14 +110,62 @@ public class RoomManager implements Listener {
                         if(roomConfig != null){
                             BedWarMain.sendMessageToConsole("&a加载房间 "+roomName+" 完成");
                             map.put(roomName,roomConfig);
+                            ////备份地图
+                            File world = new File(nameFile+"/world/"+roomConfig.worldInfo.getGameWorld().getFolderName());
+                            if(world.exists() && world.isDirectory()){
+
+                                if(toPathWorld(roomConfig)){
+                                    BedWarMain.sendMessageToConsole("&a地图 &e"+roomConfig.worldInfo.getGameWorld().getFolderName()+" &a初始化完成");
+                                }else{
+                                    BedWarMain.sendMessageToConsole("&c地图 &e"+roomConfig.worldInfo.getGameWorld().getFolderName()+" &ac初始化失败,无法完成房间的加载");
+                                    map.remove(roomName);
+                                }
+                            }else{
+                                if(toBackUpWorld(roomConfig)){
+                                    BedWarMain.sendMessageToConsole("&a备份地图 &e"+roomConfig.worldInfo.getGameWorld().getFolderName()+" &a完成");
+                                }else{
+                                    BedWarMain.sendMessageToConsole("&c备份地图 &e"+roomConfig.worldInfo.getGameWorld().getFolderName()+" &c失败");
+                                }
+                            }
                         }else{
                             BedWarMain.sendMessageToConsole("&c加载房间 "+roomName+" 失败");
+
                         }
                     }
                 }
             }
         }
         return new RoomManager(map);
+    }
+
+    public static boolean toBackUpWorld(GameRoomConfig roomConfig){
+        File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+roomConfig.getName());
+        File world = new File(nameFile+"/world/"+roomConfig.worldInfo.getGameWorld().getFolderName());
+        if(!world.exists()){
+            world.mkdirs();
+        }
+
+        //
+        return Utils.copyFiles(new File(Server.getInstance().getFilePath() + "/worlds/" + roomConfig.worldInfo.getGameWorld().getFolderName()), world);
+    }
+
+
+    public static boolean toPathWorld(GameRoomConfig roomConfig){
+        File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+roomConfig.getName());
+        File world = new File(nameFile+"/world/"+roomConfig.worldInfo.getGameWorld().getFolderName());
+        if(world.isDirectory() && world.exists()){
+            File[] files = world.listFiles();
+            if(files != null && files.length > 0){
+                Utils.toDelete(new File(Server.getInstance().getFilePath()+"/worlds/"+roomConfig.worldInfo.getGameWorld().getFolderName()));
+                Utils.copyFiles(world,new File(Server.getInstance().getFilePath()+"/worlds/"+roomConfig.worldInfo.getGameWorld().getFolderName()));
+                return Server.getInstance().loadLevel(roomConfig.worldInfo.getGameWorld().getFolderName());
+            }
+
+        }
+        return false;
+        //载入地图 删掉之前的地图文件
+
+
     }
 
     public boolean joinRoom(PlayerInfo player,String roomName){
@@ -257,14 +305,12 @@ public class RoomManager implements Listener {
             event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
         }
         ThreadManager.addThread(new BaseTimerRunnable(5) {
-
             @Override
             public void onRun() {
                 for(PlayerInfo playerInfo: event.getTeamInfo().getLivePlayer()){
                     Utils.spawnFirework(playerInfo.getPosition());
                 }
             }
-
             @Override
             protected void callback() {}
         });
@@ -277,9 +323,12 @@ public class RoomManager implements Listener {
     public void onQuitRoom(PlayerQuitRoomEvent event){
         if(event.performCommand){
             PlayerInfo info = event.getPlayerInfo();
-            ((Player)info.getPlayer()).setFoodEnabled(false);
-            event.getRoom().getRoomConfig().banCommand.forEach(cmd -> Server.getInstance().dispatchCommand(new ConsoleCommandSender(), cmd.replace("@p", info.getName())));
             GameRoom room = event.getRoom();
+            if(info.getPlayer() instanceof Player){
+                ((Player)info.getPlayer()).setFoodEnabled(false);
+                room.getRoomConfig().quitRoomCommand.forEach(cmd-> Server.getInstance().dispatchCommand(((Player)info.getPlayer()),cmd));
+            }
+
             room.sendMessage("&c玩家 "+event.getPlayerInfo().getPlayer().getName()+" 离开了游戏");
         }
     }
@@ -606,7 +655,7 @@ public class RoomManager implements Listener {
 
 
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event){
         if(event.getEntity() instanceof ShopVillage) {
             if(event instanceof EntityDamageByEntityEvent){
@@ -750,6 +799,8 @@ public class RoomManager implements Listener {
         }
     }
 
+
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event){
         Player player = event.getPlayer();
@@ -761,19 +812,30 @@ public class RoomManager implements Listener {
                     return;
                 }
             }
-            if (item.hasCompoundTag() && item.getNamedTag().contains(NbtDefaultItem.TAG)) {
-                String name = item.getNamedTag().getString(NbtDefaultItem.TAG);
-                if (playerJoin.containsKey(player.getName())) {
-                    String roomName = playerJoin.get(player.getName());
-                    GameRoom room = getRoom(roomName);
-                    if (room != null) {
+            if (playerJoin.containsKey(player.getName())) {
+                String roomName = playerJoin.get(player.getName());
+                GameRoom room = getRoom(roomName);
+                if (room != null) {
+                    if(item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem")){
+                        if (quitRoomItem(player, roomName, room)) {
+                            event.setCancelled();
+                            return;
+                        }
+                    }
+                    if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
+                        if (choseteamItem(player, room)) {
+                            event.setCancelled();
+                            return;
+                        }
+                    }
+                    if (item.hasCompoundTag() && item.getNamedTag().contains(NbtDefaultItem.TAG)) {
+                        String name = item.getNamedTag().getString(NbtDefaultItem.TAG);
+
                         if(event.getBlock() instanceof BlockChest){
                             if(!room.getClickChest().contains((BlockChest) event.getBlock())) {
                                 room.getClickChest().add((BlockChest) event.getBlock());
-
                             }
                             return;
-
                         }
                         Item r = item.clone();
                         r.setCount(1);
@@ -782,14 +844,59 @@ public class RoomManager implements Listener {
                             if(iNbtItem.onClick(r, player)){
                                 event.setCancelled();
                             }
-
-
                         }
                     }
+
                 }
             }
         }
 
+    }
+
+    private boolean choseteamItem(Player player, GameRoom room) {
+        if(!TeamChoseItem.clickAgain.contains(player)){
+            TeamChoseItem.clickAgain.add(player);
+            player.sendTip("请再点击一次");
+            return true;
+        }
+        FormWindowSimple simple = new FormWindowSimple("请选择队伍","");
+        for(TeamInfo teamInfoConfig: room.getTeamInfos()){
+            Item wool = teamInfoConfig.getTeamConfig().getTeamConfig().getBlockWoolColor();
+            simple.addButton(new ElementButton(TextFormat.colorize('&',teamInfoConfig.toString()+" &r"+teamInfoConfig.getTeamPlayers().size()+" / "+(room.getRoomConfig().getMaxPlayerSize() / room.getTeamInfos().size())),
+                    new ElementButtonImageData("path",
+                            ItemIDSunName.getIDByPath(wool.getId(),wool.getDamage()))));
+        }
+        player.showFormWindow(simple,102);
+        TeamChoseItem.clickAgain.remove(player);
+        return false;
+    }
+
+    private boolean quitRoomItem(Player player, String roomName, GameRoom room) {
+        if(!RoomQuitItem.clickAgain.contains(player)){
+            RoomQuitItem.clickAgain.add(player);
+            player.sendTip("请再点击一次");
+            return true;
+        }
+        RoomQuitItem.clickAgain.remove(player);
+        if(room.quitPlayerInfo(room.getPlayerInfo(player),true)){
+            player.sendMessage("你成功离开房间 "+roomName);
+        }
+        return false;
+    }
+
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event){
+        Player player = event.getPlayer();
+        if(playerJoin.containsKey(player.getName())) {
+            String roomName = playerJoin.get(player.getName());
+            GameRoom room = getRoom(roomName);
+            if (room != null) {
+                Item item = event.getItem();
+                if (item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem") || item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")) {
+                    event.setCancelled();
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -802,32 +909,11 @@ public class RoomManager implements Listener {
                 Item item = event.getItem();
                 if(item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem")){
                     player.getInventory().setHeldItemSlot(0);
-                    if(!RoomQuitItem.clickAgain.contains(player)){
-                        RoomQuitItem.clickAgain.add(player);
-                        player.sendTip("请再点击一次");
-                        return;
-                    }
-                    RoomQuitItem.clickAgain.remove(player);
-                    if(room.quitPlayerInfo(room.getPlayerInfo(player),true)){
-                        player.sendMessage("你成功离开房间 "+roomName);
-                    }
+                    if (quitRoomItem(player, roomName, room)) return;
                 }
                 if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
                     player.getInventory().setHeldItemSlot(0);
-                    if(!TeamChoseItem.clickAgain.contains(player)){
-                        TeamChoseItem.clickAgain.add(player);
-                        player.sendTip("请再点击一次");
-                        return;
-                    }
-                    FormWindowSimple simple = new FormWindowSimple("请选择队伍","");
-                    for(TeamInfo teamInfoConfig: room.getTeamInfos()){
-                        Item wool = teamInfoConfig.getTeamConfig().getTeamConfig().getBlockWoolColor();
-                        simple.addButton(new ElementButton(TextFormat.colorize('&',teamInfoConfig.toString()+" &r"+teamInfoConfig.getTeamPlayers().size()+" / "+(room.getRoomConfig().getMaxPlayerSize() / room.getTeamInfos().size())),
-                                new ElementButtonImageData("path",
-                                        ItemIDSunName.getIDByPath(wool.getId(),wool.getDamage()))));
-                    }
-                    player.showFormWindow(simple,102);
-                    TeamChoseItem.clickAgain.remove(player);
+                    if (choseteamItem(player, room)) return;
 
                 }
             }

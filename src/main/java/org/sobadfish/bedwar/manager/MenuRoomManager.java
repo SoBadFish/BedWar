@@ -7,6 +7,7 @@ import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.WorldRoom;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
+import org.sobadfish.bedwar.thread.BaseTimerRunnable;
 import org.sobadfish.bedwar.tools.Utils;
 
 import java.util.ArrayList;
@@ -87,15 +88,33 @@ public class MenuRoomManager {
                 name = names.get(names.indexOf(name));
             }
         }
-
-        while (true){
-            if(!lock.contains(roomManager)){
+        while (true) {
+            if(roomManager.cancel){
+                return false;
+            }
+            //10秒找不到就关闭
+            ThreadManager.addThread(new BaseTimerRunnable(10) {
+                @Override
+                protected void callback() {
+                    info.sendForceMessage("&c暂时没有合适的房间");
+                    roomManager.cancel = true;
+                }
+            });
+            if (!lock.contains(roomManager)) {
                 info.sendForceTitle("匹配终止!");
                 return false;
             }
-            if(name == null) {
+            if (name == null) {
+                for (GameRoom gameRoom : BedWarMain.getRoomManager().getRooms().values()) {
+                    if (gameRoom.getType() == GameRoom.GameType.WAIT) {
+                        if (gameRoom.joinPlayerInfo(info, false)) {
+                            lock.remove(roomManager);
+                            return true;
+                        }
+                    }
+                }
                 if (names.size() == 0) {
-//                    info.sendForceMessage("&c暂时没有合适的房间");
+                    info.sendForceMessage("&c暂时没有合适的房间");
                     break;
                 }
                 name = names.get(0);
@@ -111,48 +130,81 @@ public class MenuRoomManager {
                         roomManager.add(name);
                     }
                 }
-            }
-            WorldRoom worldRoom = BedWarMain.getMenuRoomManager().getRoom(name);
-            ArrayList<GameRoomConfig> roomConfigs = worldRoom.getRoomConfigs();
-            if(roomConfigs.size() > 0){
-                GameRoomConfig roomConfig = roomConfigs.get(0);
-                if(roomConfigs.size() > 1){
-                    roomConfig = roomConfigs.get(Utils.rand(0, roomConfigs.size() - 1));
-                    if(roomManager.hasRoomName(roomConfig)){
-                        if(input == null && roomManager.getRoomName().size() == roomConfigs.size()){
-                            info.sendForceMessage("&c暂时没有合适的房间");
-                            break;
+
+                WorldRoom worldRoom = BedWarMain.getMenuRoomManager().getRoom(name);
+                ArrayList<GameRoomConfig> roomConfigs = worldRoom.getRoomConfigs();
+                if (roomConfigs.size() > 0) {
+                    GameRoomConfig roomConfig = roomConfigs.get(0);
+                    if (roomConfigs.size() > 1) {
+                        roomConfig = roomConfigs.get(Utils.rand(0, roomConfigs.size() - 1));
+                        if (roomManager.hasRoomName(roomConfig)) {
+                            if (input == null && roomManager.getRoomName().size() == roomConfigs.size()) {
+                                info.sendForceMessage("&c暂时没有合适的房间");
+                                break;
+                            }
+                            continue;
+                        } else {
+                            roomManager.addRoom(roomConfig);
                         }
-                        continue;
-                    }else{
-                        roomManager.addRoom(roomConfig);
                     }
-                }
-                if(BedWarMain.getRoomManager().hasGameRoom(roomConfig.name)){
-                    GameRoom fg = BedWarMain.getRoomManager().getRoom(roomConfig.name);
-                    if(fg.joinPlayerInfo(info,false)){
-                        lock.remove(roomManager);
-                        return true;
-                    }
-                }else{
-                    BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomConfig.name));
-                    if(BedWarMain.getRoomManager().getRoom(roomConfig.name).joinPlayerInfo(info,true)){
+                    if (BedWarMain.getRoomManager().hasGameRoom(roomConfig.name)) {
+                        GameRoom fg = BedWarMain.getRoomManager().getRoom(roomConfig.name);
+                        if (fg.joinPlayerInfo(info, false)) {
+                            lock.remove(roomManager);
+                            return true;
+                        }
+                    } else {
+                        return startGameRoom(info, roomManager, roomConfig);
 
-                        lock.remove(roomManager);
-                        return true;
-                    }else{
-                        lock.remove(roomManager);
-                        return false;
                     }
-
+                } else {
+                    info.sendForceMessage("&c暂时没有合适的房间");
+                    break;
                 }
             }else{
-                info.sendForceMessage("&c暂时没有合适的房间");
-                break;
+                if(BedWarMain.getMenuRoomManager().worldRoomLinkedHashMap.containsKey(name)){
+                    WorldRoom worldRoom = BedWarMain.getMenuRoomManager().getRoom(name);
+                    for(GameRoomConfig roomConfig: worldRoom.getRoomConfigs()){
+                        GameRoom room = BedWarMain.getRoomManager().getRoom(roomConfig.name);
+                        if(room != null && room.getType() == GameRoom.GameType.WAIT){
+                            if (room.joinPlayerInfo(info, false)) {
+                                lock.remove(roomManager);
+                                return true;
+                            }
+                        }else if(room != null){
+                            roomManager.addRoom(roomConfig);
+                        }
+                    }
+                    for(GameRoomConfig roomConfig: worldRoom.getRoomConfigs()){
+                        if(roomManager.hasRoomName(roomConfig)){
+                            continue;
+                        }
+                        return startGameRoom(info, roomManager, roomConfig);
+                    }
+
+
+
+                }else{
+                    name = null;
+                }
+
+
             }
         }
         lock.remove(roomManager);
         return false;
+
+    }
+
+    private boolean startGameRoom(PlayerInfo info, PlayerHasChoseRoomManager roomManager, GameRoomConfig roomConfig) {
+        BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomConfig.name));
+        if (BedWarMain.getRoomManager().getRoom(roomConfig.name).joinPlayerInfo(info, true)) {
+            lock.remove(roomManager);
+            return true;
+        } else {
+            lock.remove(roomManager);
+            return false;
+        }
     }
 
     public LinkedHashMap<String, WorldRoom> getWorldRoomLinkedHashMap() {

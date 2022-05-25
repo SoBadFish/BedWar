@@ -535,7 +535,7 @@ public class PlayerInfo {
         if(playerType != PlayerType.LEAVE){
             //TODO 计分板的一些内容
 
-            ScoreBoardMessage boardMessage = new ScoreBoardMessage(BedWarMain.getTitle());
+            ScoreBoardMessage boardMessage = new ScoreBoardMessage(BedWarMain.getScoreBoardTitle());
             boardMessage.setLore(getLore(playerType == PlayerType.WAIT));
             sendScore(boardMessage);
         }else{

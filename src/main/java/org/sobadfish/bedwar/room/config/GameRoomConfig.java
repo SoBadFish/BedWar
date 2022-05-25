@@ -305,6 +305,7 @@ public class GameRoomConfig implements Cloneable{
                 if(!new File(file+"/room.yml").exists()){
                     BedWarMain.sendMessageToConsole("&e检测到未完成房间模板");
                     Utils.toDelete(file);
+                    BedWarMain.sendMessageToConsole("&a成功清除未完成的房间模板");
                     return null;
                 }
                 Config room = new Config(file+"/room.yml",Config.YAML);

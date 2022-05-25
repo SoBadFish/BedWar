@@ -13,6 +13,8 @@ public class PlayerHasChoseRoomManager {
 
     private PlayerInfo playerInfo;
 
+    public boolean cancel = false;
+
     private ArrayList<String> strings = new ArrayList<>();
 
     private ArrayList<GameRoomConfig> roomName = new ArrayList<>();

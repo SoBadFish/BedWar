@@ -1,6 +1,7 @@
 package org.sobadfish.bedwar.tools;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityFirework;
 import cn.nukkit.item.ItemFirework;
@@ -12,9 +13,11 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
+import cn.nukkit.scheduler.AsyncTask;
 import cn.nukkit.utils.DyeColor;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.baselib.BaseEntity;
+import org.sobadfish.bedwar.manager.ThreadManager;
 
 
 import java.io.*;
@@ -97,20 +100,13 @@ public class Utils {
                     toDelete(file1);
                 } else {
                     String name = file1.getName();
-                    if (!file1.delete()) {
-                        BedWarMain.sendMessageToConsole(file1.getName() + "文件删除失败");
-                    } else {
-                        BedWarMain.sendMessageToConsole("成功删除" + name);
-                    }
+                    file1.delete();
                 }
             }
         }
         String name = file.getName();
-        if (!file.delete()) {
-            BedWarMain.sendMessageToConsole(file.getName() + "文件删除失败");
-        } else {
-            BedWarMain.sendMessageToConsole("成功删除" + name);
-        }
+        file.delete();
+
     }
 
     /**
@@ -223,6 +219,110 @@ public class Utils {
         return sb2.toString();
 
     }
+    /**
+     * 复制文件
+     * */
+    public static boolean copyFiles(File old,File target){
+        File[] files = old.listFiles();
+        try {
+            ThreadManager.addThread(new AsyncTask() {
+                @Override
+                public void onRun() {
+                    if(files != null){
+                        for (File value : files) {
+                            if (value.isFile()) {
+                                // 复制文件
+                                try {
+                                    File file1 = new File(target +"/" + value.getName());
+                                    if(!file1.exists()){
+                                        file1.createNewFile();
+                                    }
+                                    copyFile(value, file1);
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            if (value.isDirectory()) {
+                                // 复制目录
+                                String sourceDir = old+"/" + File.separator + value.getName();
+                                String targetDir = target+"/"+ File.separator + value.getName();
+                                try {
+                                    copyDirectiory(sourceDir, targetDir);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                    }
+                }
+            });
+        }catch (Exception e){
+            return false;
+        }
+
+        return true;
+    }
+
+    private static void copyFile(File sourceFile,File targetFile)
+            throws IOException{
+        // 新建文件输入流并对它进行缓冲
+        FileInputStream input = new FileInputStream(sourceFile);
+        BufferedInputStream inBuff=new BufferedInputStream(input);
+
+        // 新建文件输出流并对它进行缓冲
+        FileOutputStream output = new FileOutputStream(targetFile);
+        BufferedOutputStream outBuff=new BufferedOutputStream(output);
+
+        // 缓冲数组
+        byte[] b = new byte[1024 * 5];
+        int len;
+        while ((len =inBuff.read(b)) != -1) {
+            outBuff.write(b, 0, len);
+        }
+        // 刷新此缓冲的输出流
+        outBuff.flush();
+
+        //关闭流
+        inBuff.close();
+        outBuff.close();
+        output.close();
+        input.close();
+    }
+    /**复制文件夹   */
+    private static void copyDirectiory(String sourceDir, String targetDir)
+            throws IOException {
+        // 新建目标目录
+        File file = new File(targetDir);
+        if(!file.mkdirs()){
+            Server.getInstance().getLogger().error("新建"+targetDir+"失败");
+        }
+        // 获取源文件夹当前下的文件或目录
+        File[] files = (new File(sourceDir)).listFiles();
+        if(files != null){
+            for (File value : files) {
+                if (value.isFile()) {
+                    // 源文件
+                    // 目标文件
+                    File targetFile = new
+                            File(new File(targetDir).getAbsolutePath()
+                            + File.separator + value.getName());
+                    copyFile(value, targetFile);
+
+                }
+                if (value.isDirectory()) {
+                    // 准备复制的源文件夹
+                    String dir1 = sourceDir + "/" + value.getName();
+                    // 准备复制的目标文件夹
+                    String dir2 = targetDir + "/" + value.getName();
+                    copyDirectiory(dir1, dir2);
+                }
+            }
+        }
+
+    }
+
 
 
 }
