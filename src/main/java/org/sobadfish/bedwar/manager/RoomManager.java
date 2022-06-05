@@ -294,13 +294,14 @@ public class RoomManager implements Listener {
     @EventHandler
     public void onTeamVictory(TeamVictoryEvent event){
         event.getTeamInfo().sendTitle("&e&l胜利!",5);
-        event.getRoom().sendTipMessage("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-        event.getRoom().sendTipMessage(Utils.getCentontString("&b游戏结束",43));
+        String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■";
+        event.getRoom().sendTipMessage("&a"+line);
+        event.getRoom().sendTipMessage(Utils.getCentontString("&b游戏结束",line.length()));
         event.getRoom().sendTipMessage("");
         for(PlayerInfo playerInfo: event.getTeamInfo().getInRoomPlayer()){
-            event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀： - "+(playerInfo.getKillCount()+playerInfo.getEndKillCount())+" 破坏床数: - "+playerInfo.getBedBreakCount(),43 ));
+            event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀： - "+(playerInfo.getKillCount()+playerInfo.getEndKillCount())+" 破坏床数: - "+playerInfo.getBedBreakCount(),line.length()));
         }
-        event.getRoom().sendTipMessage("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        event.getRoom().sendTipMessage("&a"+line);
         for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
             event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
         }
@@ -442,7 +443,6 @@ public class RoomManager implements Listener {
         }
         GameRoom room = getGameRoomByLevel(level);
         if(room != null){
-
             if(item.getId() == 65 && !room.getWorldInfo().getPlaceBlock().contains(event.getBlockAgainst())) {
                 event.setCancelled();
                 return;
@@ -457,7 +457,7 @@ public class RoomManager implements Listener {
                 }
 
             }
-            ThreadManager.addThread(() -> room.worldInfo.onChangeBlock(block,true));
+            room.worldInfo.onChangeBlock(block,true);
         }
 
 
@@ -528,8 +528,8 @@ public class RoomManager implements Listener {
                 GameRoom room1 = getRoom(room);
                 if(room1.getType() != GameRoom.GameType.END && !room1.close ){
                     PlayerInfo info = room1.getPlayerInfo(player);
-                    info.setPlayer(player);
                     if(info != null){
+                        info.setPlayer(player);
                         info.setLeave(false);
                         if(room1.getType() == GameRoom.GameType.WAIT){
                             player.teleport(room1.getWorldInfo().getConfig().getWaitPosition());
@@ -561,15 +561,16 @@ public class RoomManager implements Listener {
     @EventHandler
     public void onGameStartEvent(GameRoomStartEvent event){
         GameRoom room = event.getRoom();
+        String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■";
         for(String s: room.getRoomConfig().gameStartMessage){
-            room.sendTipMessage(Utils.getCentontString(s,43));
+            room.sendTipMessage(Utils.getCentontString(s,line.length()));
         }
     }
 
 
     /**
      * 将拾取的物品转换为经验
-     * @param event
+     * @param event 事件
      */
     @EventHandler
     public void onItemPickUp(InventoryPickupItemEvent event){

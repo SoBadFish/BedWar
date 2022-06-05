@@ -23,7 +23,10 @@ public class TeamShopInfoConfig extends ShopInfoConfig{
         ArrayList<BasePlayPanelItemInstance> arrayList = new ArrayList<>();
         //TODO 构建商店信息
         for(Map map1: map){
-            arrayList.add(TeamItem.build(s,map1));
+            TeamItem teamItem = TeamItem.build(s,map1);
+            if(teamItem != null){
+                arrayList.add(teamItem);
+            }
         }
         return new TeamShopInfoConfig(arrayList);
     }

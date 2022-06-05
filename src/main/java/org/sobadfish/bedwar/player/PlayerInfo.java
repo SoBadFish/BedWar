@@ -36,9 +36,8 @@ import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.thread.BaseTimerRunnable;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author SoBadFish
@@ -409,8 +408,9 @@ public class PlayerInfo {
      * 取消
      * */
     public void cancel(){
-        cancel = true;
+
         leave();
+        cancel = true;
         disable = true;
         getGameRoom().getPlayerInfos().remove(this);
     }
@@ -459,13 +459,13 @@ public class PlayerInfo {
         if(levelName == null){
             levelName = player.getLevel().getFolderName();
         }
-        lore.add("地图: &a"+levelName);
-        lore.add("玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize());
-        if(gameRoom.getLoadTime() != -1){
-            lore.add("剩余时间: &e"+formatTime(gameRoom.getLoadTime()));
-        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        lore.add("&7"+format.format(new Date()));
+        lore.add("游戏模式: &a"+levelName);
+
         lore.add(" ");
         if(isWait){
+            lore.add("玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize());
             lore.add("等待中....");
             lore.add("   ");
             lore.add(BedWarMain.getBedWarMain().getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
@@ -484,7 +484,14 @@ public class PlayerInfo {
             lore.add("最终击杀数: &a"+endKillCount);
             lore.add("破坏床数: &a"+bedBreakCount);
             lore.add("     ");
-            lore.add(BedWarMain.getBedWarMain().getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
+            Object obj = BedWarMain.getBedWarMain().getConfig().get("game-logo");
+            if(obj instanceof List){
+                lore.addAll(BedWarMain.getBedWarMain().getConfig().getStringList("game-logo"));
+            }else if(obj instanceof String){
+                lore.add(BedWarMain.getBedWarMain().getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
+            }
+
+
         }
         return lore;
     }
@@ -552,8 +559,11 @@ public class PlayerInfo {
         player.setHealth(player.getMaxHealth());
         if(player instanceof Player){
             ((Player) player).removeAllWindows();
+            ((Player) player).getUIInventory().clearAll();
         }
         player.getInventory().clearAll();
+        player.getOffhandInventory().clearAll();
+
 
 
         if(teamInfo.isBadExists()){
@@ -653,6 +663,7 @@ public class PlayerInfo {
             if(((Player) player).isOnline()){
                 player.setNameTag(player.getName());
                 player.getInventory().clearAll();
+                ((Player) player).sendExperience(0);
                 if(inventory != null && eInventory != null){
                     player.getInventory().setContents(inventory.getContents());
                     player.getEnderChestInventory().setContents(eInventory.getContents());

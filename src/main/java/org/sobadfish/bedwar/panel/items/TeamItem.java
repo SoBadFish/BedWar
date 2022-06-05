@@ -20,6 +20,7 @@ import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -82,7 +83,7 @@ public class TeamItem extends BasePlayPanelItemInstance {
         boolean u;
         int rc = 1;
         String errorMessage = moneyItem + "不足";
-        if (!moneyItem.equalsIgnoreCase("exp")) {
+        if (!"exp".equalsIgnoreCase(moneyItem)) {
             MoneyItemInfoConfig oInfo = room.getRoomConfig().moneyItem.get(moneyItem);
             rc = (int) oInfo.getExp();
         }
@@ -129,10 +130,23 @@ public class TeamItem extends BasePlayPanelItemInstance {
         } else if ("effects".equalsIgnoreCase(s)) {
             Effect effect = Effect.getEffect(Integer.parseInt(map.get("id").toString()));
             return new TeamItem(new TeamEffect(effect, maxLevel), item, moneyName, count);
-        } else {
+        } else if("trap".equalsIgnoreCase(s)){
             return new TeamItem(new TeamTrap(maxLevel), item, moneyName, count);
+        }else if("up".equalsIgnoreCase(s)){
+            return new TeamItem(new TeamUp(maxLevel,getObjectArrayListToIntArray((List)map.get("times")),map.get("item").toString()), item, moneyName, count);
         }
+        return null;
 
+    }
+
+    private static int[] getObjectArrayListToIntArray(List list){
+        int[] array = new int[list.size()];
+        for (int i =0;i< list.size();i++) {
+            if(list.get(i) instanceof Integer){
+                array[i] = (int) list.get(i);
+            }
+        }
+        return array;
     }
 
     private int getTeamInfoLevel(PlayerInfo info) {

@@ -13,7 +13,8 @@ shop-ui: auto
 
 
 
-game-logo: "&l&cB&6e&ed&aW&ba&9r"
+game-logo:
+  - "&l&cB&6e&ed&aW&ba&9r"
 
 join-menu:
   cw:

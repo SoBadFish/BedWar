@@ -38,6 +38,7 @@ public class ShopItemInfo {
         if("teamShop".equalsIgnoreCase(shopName)){
             shopInfoConfigs.add(TeamShopInfoConfig.build("effects",config.getMapList("effects")));
             shopInfoConfigs.add(TeamShopInfoConfig.build("enchants",config.getMapList("enchants")));
+            shopInfoConfigs.add(TeamShopInfoConfig.build("up",config.getMapList("up")));
             shopInfoConfigs.add(TeamShopInfoConfig.build("trap",config.getMapList("trap")));
         }else{
             for(String s: config.getKeys()){
