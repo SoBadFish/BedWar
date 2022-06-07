@@ -486,7 +486,9 @@ public class PlayerInfo {
             lore.add("     ");
             Object obj = BedWarMain.getBedWarMain().getConfig().get("game-logo");
             if(obj instanceof List){
-                lore.addAll(BedWarMain.getBedWarMain().getConfig().getStringList("game-logo"));
+                for(Object s : (List)obj){
+                    lore.add(s.toString());
+                }
             }else if(obj instanceof String){
                 lore.add(BedWarMain.getBedWarMain().getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
             }

@@ -310,6 +310,10 @@ public class GameRoomConfig implements Cloneable{
                 }
                 Config room = new Config(file+"/room.yml",Config.YAML);
                 WorldInfoConfig worldInfoConfig = WorldInfoConfig.getInstance(itemInfo,room);
+                if(worldInfoConfig == null){
+                    BedWarMain.sendMessageToConsole("&c未成功加载 &a"+name+"&c 的游戏地图");
+                    return null;
+                }
                 int time = room.getInt("gameTime");
                 int waitTime = room.getInt("waitTime");
                 int maxWaitTime = room.getInt("max-player-waitTime");

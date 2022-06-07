@@ -79,6 +79,9 @@ public class WorldInfoConfig {
             Server.getInstance().loadLevel(config.getString("world"));
             gameWorld = Server.getInstance().getLevelByName(config.getString("world"));
         }
+        if(gameWorld == null){
+            return null;
+        }
         Position waitPosition = getPositionByString(config.getString("waitPosition"));
         ArrayList<ItemInfoConfig> itemInfoConfigs = new ArrayList<>();
         Map mItemSpawn = (Map) config.get("itemSpawn");

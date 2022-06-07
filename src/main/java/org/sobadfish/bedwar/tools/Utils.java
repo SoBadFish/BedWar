@@ -245,8 +245,8 @@ public class Utils {
                             }
                             if (value.isDirectory()) {
                                 // 复制目录
-                                String sourceDir = old+"/" + File.separator + value.getName();
-                                String targetDir = target+"/"+ File.separator + value.getName();
+                                String sourceDir = old+"\\" + File.separator + value.getName();
+                                String targetDir = target+"\\"+ File.separator + value.getName();
                                 try {
                                     copyDirectiory(sourceDir, targetDir);
                                 } catch (IOException e) {
@@ -313,9 +313,9 @@ public class Utils {
                 }
                 if (value.isDirectory()) {
                     // 准备复制的源文件夹
-                    String dir1 = sourceDir + "/" + value.getName();
+                    String dir1 = sourceDir + "\\" + value.getName();
                     // 准备复制的目标文件夹
-                    String dir2 = targetDir + "/" + value.getName();
+                    String dir2 = targetDir + "\\" + value.getName();
                     copyDirectiory(dir1, dir2);
                 }
             }
