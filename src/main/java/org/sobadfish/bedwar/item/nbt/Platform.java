@@ -45,8 +45,9 @@ public class Platform implements INbtItem {
         }
         for(Map.Entry<Position,Block> block: spawn.entrySet()){
             if(block.getKey().getLevelBlock().getId() == 0) {
-                block.getKey().getLevel().setBlock(block.getKey(), block.getValue(), true, true);
-                info.getGameRoom().worldInfo.onChangeBlock(block.getKey().getLevelBlock(),true);
+                if(info.getGameRoom().worldInfo.onChangeBlock(block.getKey().getLevelBlock(),true)){
+                    block.getKey().getLevel().setBlock(block.getKey(), block.getValue(), true, true);
+                }
             }
 
         }

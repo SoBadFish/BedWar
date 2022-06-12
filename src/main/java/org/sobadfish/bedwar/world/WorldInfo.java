@@ -3,6 +3,7 @@ package org.sobadfish.bedwar.world;
 import cn.nukkit.block.Block;
 import org.sobadfish.bedwar.item.ItemInfo;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
+import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
@@ -33,12 +34,18 @@ public class WorldInfo {
         }
     }
 
-    public void onChangeBlock(Block block,boolean isPlace){
+    public boolean onChangeBlock(Block block,boolean isPlace){
+        for(TeamInfo info:room.getTeamInfos()){
+            if(block.distance(info.getTeamConfig().getSpawnPosition()) < 5){
+                return false;
+            }
+        }
         if(isPlace){
             placeBlock.add(block);
         }else{
             placeBlock.remove(block);
         }
+        return true;
     }
 
     public ArrayList<Block> getPlaceBlock() {

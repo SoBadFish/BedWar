@@ -457,7 +457,13 @@ public class RoomManager implements Listener {
                 }
 
             }
-            room.worldInfo.onChangeBlock(block,true);
+            if(!room.worldInfo.onChangeBlock(block,true)){
+                PlayerInfo info = room.getPlayerInfo(event.getPlayer());
+                if(info != null){
+                    info.sendMessage("&c你不能在这里放置方块");
+                }
+                event.setCancelled();
+            }
         }
 
 
@@ -580,7 +586,6 @@ public class RoomManager implements Listener {
             if(entityHuman instanceof Player){
                 Player player = (Player) entityHuman;
                 GameRoom room = getGameRoomByLevel(entityHuman.level);
-        
                 double exp = 0.0;
                 if(room != null && room.getType() == GameType.START){
                     PlayerInfo playerInfo = room.getPlayerInfo(player);
@@ -592,19 +597,16 @@ public class RoomManager implements Listener {
                                     break;
                                 }
                             }
-                            event.setCancelled();
-                            event.getItem().close();
-                            playerInfo.addExp((int)Math.floor(exp));
-                        
+                            if(exp > 0){
+                                event.setCancelled();
+                                event.getItem().close();
+                                playerInfo.addExp((int)Math.floor(exp));
+                            }
                         }
                     }
-                    
                 }
             }
-            
-
         }
-        
     }
 
     @EventHandler

@@ -26,8 +26,9 @@ public class BlockBreakRunnable extends BaseTimerRunnable {
     @Override
     protected void callback() {
         for(Position block: blocks){
-            block.getLevel().setBlock(block,new BlockAir());
-            room.worldInfo.onChangeBlock(block.getLevelBlock(),false);
+            if(room.worldInfo.onChangeBlock(block.getLevelBlock(),false)){
+                block.getLevel().setBlock(block,new BlockAir());
+            }
         }
     }
 }
