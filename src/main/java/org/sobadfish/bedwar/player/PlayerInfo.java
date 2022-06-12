@@ -138,9 +138,9 @@ public class PlayerInfo {
 
     public enum PlayerType{
         /**
-         * WAIT: 等待 START: 开始 DEATH: 死亡 WAIT_DEATH:等待复活 LEAVE: 离开
+         * WAIT: 等待 START: 开始 DEATH: 死亡 WAIT_DEATH:等待复活 LEAVE: 离开 WATCH 观察
          * */
-        WAIT,START,DEATH,WAIT_DEATH,LEAVE
+        WAIT,START,DEATH,WAIT_DEATH,LEAVE,WATCH
     }
 
     public Level getLevel(){
@@ -468,15 +468,15 @@ public class PlayerInfo {
             lore.add("玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize());
             lore.add("等待中....");
             lore.add("   ");
-            lore.add(BedWarMain.getBedWarMain().getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
+
         }else{
             for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
                 if(teamInfo.isBadExists() && teamInfo.isLoading()){
-                    lore.add("◎ "+teamInfo.toString()+":&r    &a√ "+(getTeamInfo().equals(teamInfo)?"&7(我)":""));
+                    lore.add("◎ "+teamInfo.toString()+":&r    &a✔ "+(getTeamInfo().equals(teamInfo)?"&7(我)":""));
                 }else if(!teamInfo.isBadExists() && teamInfo.isLoading()){
                     lore.add("◎ "+teamInfo.toString()+": &r   &c"+teamInfo.getLivePlayer().size()+" "+(getTeamInfo().equals(teamInfo)?"&7(我)":""));
                 }else{
-                    lore.add("◎ "+teamInfo.toString()+": &r   &c× "+(getTeamInfo().equals(teamInfo)?"&7(我)":""));
+                    lore.add("◎ "+teamInfo.toString()+": &r   &c✘ "+(getTeamInfo().equals(teamInfo)?"&7(我)":""));
                 }
             }
             lore.add("   ");
@@ -484,16 +484,14 @@ public class PlayerInfo {
             lore.add("最终击杀数: &a"+endKillCount);
             lore.add("破坏床数: &a"+bedBreakCount);
             lore.add("     ");
-            Object obj = BedWarMain.getBedWarMain().getConfig().get("game-logo");
-            if(obj instanceof List){
-                for(Object s : (List)obj){
-                    lore.add(s.toString());
-                }
-            }else if(obj instanceof String){
-                lore.add(BedWarMain.getBedWarMain().getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
+        }
+        Object obj = BedWarMain.getBedWarMain().getConfig().get("game-logo");
+        if(obj instanceof List){
+            for(Object s : (List)obj){
+                lore.add(s.toString());
             }
-
-
+        }else if(obj instanceof String){
+            lore.add(BedWarMain.getBedWarMain().getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
         }
         return lore;
     }
@@ -722,14 +720,20 @@ public class PlayerInfo {
     public void clear(){
         if(player instanceof Player){
             if(((Player) player).isOnline()) {
+                ((Player) player).setExperience(0);
+                ((Player) player).getUIInventory().clearAll();
                 player.getEnderChestInventory().clearAll();
                 player.getInventory().clearAll();
+                ((Player) player).getFoodData().reset();
             }
         }
 
     }
 
     public void putEffect(ArrayList<TeamEffectInfo> effects){
+        if(player instanceof Player && !((Player) player).isOnline()){
+            return;
+        }
         for(TeamEffectInfo effect : effects){
             if(effect.getEffect() instanceof TeamEffect){
                 player.addEffect(((TeamEffect) effect.getEffect()).getEffect().setDuration(80).setAmplifier(effect.getLevel()));

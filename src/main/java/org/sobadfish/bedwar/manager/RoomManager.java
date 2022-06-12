@@ -377,6 +377,10 @@ public class RoomManager implements Listener {
             }
         }
         if(gameRoom.getType() != GameRoom.GameType.WAIT){
+//            if(GameType.END != gameRoom.getType()){
+//                //TODO 或许还能旁观
+//
+//            }
             if(event.isSend()) {
                 info.sendForceMessage("&c游戏已经开始了");
             }
@@ -477,16 +481,21 @@ public class RoomManager implements Listener {
             PlayerInfo info = room.getPlayerInfo(player);
             if(info != null){
                 String msg = event.getMessage();
-                TeamInfo teamInfo = info.getTeamInfo();
-                if(teamInfo != null){
-                    if(info.isDeath()){
-                        room.sendMessageOnDeath(info+"&7(死亡) &r>> "+msg);
-                    }else {
-                        teamInfo.sendMessage(teamInfo.getTeamConfig().getNameColor() + "[队伍]&7 " + info.getPlayer().getName() + " &f>>&r " + msg);
-                    }
+                if(msg.startsWith("@") || msg.startsWith("!")){
+                    info.getGameRoom().sendFaceMessage("&l&7(全体消息)&r "+info+"&r >> "+msg.substring(1));
                 }else{
-                    room.sendMessage(info+" &f>>&r "+msg);
+                    TeamInfo teamInfo = info.getTeamInfo();
+                    if(teamInfo != null){
+                        if(info.isDeath()){
+                            room.sendMessageOnDeath(info+"&7(死亡) &r>> "+msg);
+                        }else {
+                            teamInfo.sendMessage(teamInfo.getTeamConfig().getNameColor() + "[队伍]&7 " + info.getPlayer().getName() + " &f>>&r " + msg);
+                        }
+                    }else{
+                        room.sendMessage(info+" &f>>&r "+msg);
+                    }
                 }
+
                 event.setCancelled();
             }
         }

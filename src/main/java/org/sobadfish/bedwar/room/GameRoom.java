@@ -450,6 +450,16 @@ public class GameRoom {
         int t =  (int) Math.round(playerInfos.size() / (double)getRoomConfig().getTeamConfigs().size());
         PlayerInfo listener;
         LinkedList<PlayerInfo> noTeam = getNoTeamPlayers();
+        // TODO 检测是否一个队伍里有太多的人 拆掉多余的人
+        for (TeamInfo manager: teamInfos){
+            if(manager.getTeamPlayers().size() > t){
+                int size = t - manager.getTeamPlayers().size();
+                for(int i = 0;i < size;i++){
+                    PlayerInfo info = manager.getTeamPlayers().remove(manager.getTeamPlayers().size()-1);
+                    noTeam.add(info);
+                }
+            }
+        }
         while(noTeam.size() > 0){
             for (TeamInfo manager: teamInfos){
                 if(manager.getTeamPlayers().size() == 0

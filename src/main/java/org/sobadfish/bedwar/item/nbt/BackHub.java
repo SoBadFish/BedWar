@@ -24,6 +24,13 @@ public class BackHub implements INbtItem{
         info.sendMessage("10秒后传送至出生点");
         ThreadManager.addThread(new BaseTimerRunnable(10) {
             @Override
+            public void onRun() {
+                if(info.isDeath()){
+                    this.cancel();
+                }
+            }
+
+            @Override
             protected void callback() {
                 PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
                 info.sendMessage("已传送到出生点");
