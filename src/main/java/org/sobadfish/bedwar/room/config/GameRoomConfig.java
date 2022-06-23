@@ -86,10 +86,19 @@ public class GameRoomConfig implements Cloneable{
     public BedWarMain.UiType uiType;
 
     /**
+     * 自定义火球击退距离
+     * */
+    public float fireballKnockBack = 0.6f;
+
+    /**
      * 床自毁时间
      * */
     public int bedBreak = 120;
 
+    /**
+     * 等待大厅拉回坐标
+     * */
+    public int callbackY = 17;
 
     /**
      * 房间游戏货币类型
@@ -344,9 +353,12 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.setMoneyItem(itemInfo);
                 roomConfig.gameRoomMoney = room.getString("roomMoney","default");
                 roomConfig.setNbtItemInfo(nbtItemInfo);
+
                 roomConfig.uiType = Utils.loadUiTypeByName(room.getString("ui","auto"));
                 roomConfig.teamShopEntityId = room.getInt("entity.team",15);
                 roomConfig.itemShopEntityId = room.getInt("entity.item",15);
+                roomConfig.callbackY = room.getInt("callbackY",17);
+                roomConfig.fireballKnockBack = (float) room.getDouble("fireballKnockBack",0.6f);
                 roomConfig.bedBreak = room.getInt("times.bedbreak",120);
                 roomConfig.banCommand = new ArrayList<>(room.getStringList("ban-command"));
                 roomConfig.isAutomaticNextRound = room.getBoolean("AutomaticNextRound",true);
@@ -402,6 +414,8 @@ public class GameRoomConfig implements Cloneable{
         config.set("world",worldInfo.getGameWorld().getFolderName());
         config.set("roomMoney", gameRoomMoney);
         config.set("gameTime",time);
+
+        config.set("callbackY",callbackY);
         config.set("entity.team",teamShopEntityId);
         config.set("entity.item",itemShopEntityId);
         config.set("waitTime",waitTime);

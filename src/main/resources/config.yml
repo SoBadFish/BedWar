@@ -11,8 +11,6 @@ save-playerInventory:  true
 # ui 强制箱子界面
 shop-ui: auto
 
-
-
 game-logo:
   - "&l&cB&6e&ed&aW&ba&9r"
 

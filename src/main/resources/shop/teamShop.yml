@@ -25,27 +25,7 @@ enchants:
     disPlay: "278:0"
     maxLevel: 3
     money: "钻石x5"
-up:
-  - id: 0
-    name: "铜升级"
-    maxLevel: 3
-    disPlay: "69:0"
-    money: "钻石x2"
-    item: "铜锭"
-    times:
-      - 10
-      - 10
-      - 10
-  - id: 0
-    name: "金升级"
-    maxLevel: 3
-    disPlay: "69:0"
-    money: "钻石x2"
-    item: "金锭"
-    times:
-      - 10
-      - 10
-      - 10
+
 trap:
   - id: 0
     name: "陷阱"

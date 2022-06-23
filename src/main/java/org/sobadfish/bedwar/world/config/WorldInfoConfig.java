@@ -107,23 +107,35 @@ public class WorldInfoConfig {
 
     public static Position getPositionByString(String str){
         String[] pos = str.split(":");
+        Level level = Server.getInstance().getLevelByName(pos[3]);
+        if(level == null){
+            if(Server.getInstance().loadLevel(pos[3])){
+                level = Server.getInstance().getLevelByName(pos[3]);
+            }
+        }
         return new Position(
                 Integer.parseInt(pos[0]),
                 Integer.parseInt(pos[1]),
                 Integer.parseInt(pos[2]),
-                Server.getInstance().getLevelByName(pos[3])
+                level
 
         );
 
     }
     public static Location getLocationByString(String str){
         String[] pos = str.split(":");
+        Level level = Server.getInstance().getLevelByName(pos[3]);
+        if(level == null){
+            if(Server.getInstance().loadLevel(pos[3])){
+                level = Server.getInstance().getLevelByName(pos[3]);
+            }
+        }
         return new Location(
                 Integer.parseInt(pos[0]),
                 Integer.parseInt(pos[1]),
                 Integer.parseInt(pos[2]),
                 Double.parseDouble(pos[4]),
-                0, Server.getInstance().getLevelByName(pos[3])
+                0, level
 
         );
 

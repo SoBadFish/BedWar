@@ -7,4 +7,18 @@ eventLists:
   - type: "time"
     display: "钻石生成点 III 级"
     item: "钻石"
+    eventTime: 330
     time: 30
+  - type: "time"
+    display: "绿宝石生成点 II 级"
+    item: "绿宝石"
+    eventTime: 330
+    time: 30
+  - type: "time"
+    display: "钻石生成点 III 级"
+    item: "绿宝石"
+    eventTime: 330
+    time: 30
+  - type: "break"
+    display: "床破坏"
+    eventTime: 330

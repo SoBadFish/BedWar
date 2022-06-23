@@ -447,7 +447,8 @@ public class GameRoom {
      * 分配玩家
      * */
     private boolean allotOfAverage(){
-        int t =  (int) Math.round(playerInfos.size() / (double)getRoomConfig().getTeamConfigs().size());
+
+        int t =  (int) Math.ceil(playerInfos.size() / (double)getRoomConfig().getTeamConfigs().size());
         PlayerInfo listener;
         LinkedList<PlayerInfo> noTeam = getNoTeamPlayers();
         // TODO 检测是否一个队伍里有太多的人 拆掉多余的人
@@ -505,6 +506,7 @@ public class GameRoom {
         if(info.getPlayer() instanceof Player) {
             if (playerInfos.contains(info)) {
                 if(((Player) info.getPlayer()).isOnline()) {
+                    ((Player) info.getPlayer()).setExperience(0);
                     BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
                 }
                 info.setLeave(true);
@@ -590,6 +592,8 @@ public class GameRoom {
         if(info1 != null) {
             Block block = info1.getTeamConfig().getBedPosition().getLevelBlock();
             if (block instanceof BlockBed) {
+
+
                 if (info.getTeamInfo().getTeamConfig().equals(info1.getTeamConfig())) {
                     info.sendMessage("&c你不能破坏自己的床");
                     return false;

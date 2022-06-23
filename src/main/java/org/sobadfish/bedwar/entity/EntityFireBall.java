@@ -116,6 +116,7 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
         this.server.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             Explosion explosion = new Explosion(this, event.getForce(), master.getPlayer());
+
             if (event.isBlockBreaking()) {
                 explosion.explodeA();
             }

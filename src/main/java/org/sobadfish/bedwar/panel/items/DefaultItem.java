@@ -138,13 +138,17 @@ public class DefaultItem extends BasePlayPanelItemInstance {
             if (u) {
                 if(getItem() instanceof ItemArmor){
                     if(getItem().isHelmet() && player.getInventory().getArmorItem(0).getId() != 0) {
+                        info.getArmor().put(0,getItem());
                         player.getInventory().setArmorItem(0,getItem());
                     }else if(getItem().isChestplate() && player.getInventory().getArmorItem(1).getId() != 0){
                         player.getInventory().setArmorItem(1,getItem());
+                        info.getArmor().put(1,getItem());
                     }else if(getItem().isLeggings() && player.getInventory().getArmorItem(2).getId() != 0){
                         player.getInventory().setArmorItem(2,getItem());
+                        info.getArmor().put(2,getItem());
                     }else if(getItem() .isBoots() && player.getInventory().getArmorItem(3).getId() != 0){
                         player.getInventory().setArmorItem(3,getItem());
+                        info.getArmor().put(3,getItem());
                     }else{
                         player.getInventory().addItem(getItem());
                     }

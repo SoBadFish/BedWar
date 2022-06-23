@@ -29,6 +29,8 @@ public class ItemInfo {
 
     private ItemInfoConfig itemInfoConfig;
 
+    private int resetTick = -1;
+
 
     public ItemInfo(ItemInfoConfig config){
         this.itemInfoConfig = config;
@@ -42,6 +44,14 @@ public class ItemInfo {
             }
         }
         return count;
+    }
+
+    public void setResetTick(int resetTick) {
+        this.resetTick = resetTick;
+    }
+
+    public int getResetTick() {
+        return resetTick;
     }
 
     public int getTick() {
@@ -90,7 +100,7 @@ public class ItemInfo {
     }
 
     public void toUpdate(){
-        if(tick == itemInfoConfig.getSpawnTick()){
+        if(resetTick > 0 && tick == resetTick || tick == itemInfoConfig.getSpawnTick()){
             tick = 0;
             itemInfoConfig.getPositions().forEach(position ->{
 

@@ -533,6 +533,10 @@ public class PlayerInfo {
             player.setNameTag(TextFormat.colorize('&',"&7["+teamInfo.toString()+"&7] "+teamInfo.getTeamConfig().getNameColor()+player.getName()+" \n&c❤&7"+String.format("%.1f",player.getHealth())));
 
 
+        }else if(playerType == PlayerType.WAIT){
+            if(getGameRoom().getRoomConfig().getWorldInfo().getWaitPosition().getY() - player.getY() > getGameRoom().getRoomConfig().callbackY){
+                player.teleport(getGameRoom().getRoomConfig().getWorldInfo().getWaitPosition());
+            }
         }
         try{
             Class.forName("de.theamychan.scoreboard.api.ScoreboardAPI");
@@ -698,6 +702,7 @@ public class PlayerInfo {
         player.getInventory().clearAll();
         this.exp = 0;
         
+        player.teleport(teamInfo.getTeamConfig().getSpawnPosition().level.getSafeSpawn());
         player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
         if (getPlayer() instanceof Player) {
             ((Player) getPlayer()).setGamemode(0);
@@ -708,9 +713,16 @@ public class PlayerInfo {
         }
         //TODO 初始装备
         for (Map.Entry<Integer, Item> entry : armor.entrySet()) {
-            ItemColorArmor colorArmor = (ItemColorArmor) entry.getValue();
-            colorArmor.setColor(getTeamInfo().getTeamConfig().getRgb());
-            player.getInventory().setArmorItem(entry.getKey(), colorArmor);
+            Item item;
+            if(entry.getValue() instanceof ItemColorArmor){
+                ItemColorArmor colorArmor = (ItemColorArmor) entry.getValue();
+                colorArmor.setColor(getTeamInfo().getTeamConfig().getRgb());
+                item = colorArmor;
+            }else{
+                item = entry.getValue();
+            }
+
+            player.getInventory().setArmorItem(entry.getKey(), item);
         }
         player.getInventory().addItem(new ItemSwordWood());
         playerType = PlayerType.START;

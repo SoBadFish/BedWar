@@ -34,6 +34,7 @@ import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.command.BedWarCommand;
+import org.sobadfish.bedwar.entity.EntityFireBall;
 import org.sobadfish.bedwar.event.*;
 import org.sobadfish.bedwar.item.ItemIDSunName;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
@@ -111,7 +112,7 @@ public class RoomManager implements Listener {
                             BedWarMain.sendMessageToConsole("&a加载房间 "+roomName+" 完成");
                             map.put(roomName,roomConfig);
                             ////备份地图
-                            File world = new File(nameFile+"/world/"+roomConfig.worldInfo.getGameWorld().getFolderName());
+                            File world = new File(nameFile+File.separator+"world"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName());
                             if(world.exists() && world.isDirectory()){
 
                                 if(toPathWorld(roomConfig)){
@@ -139,25 +140,25 @@ public class RoomManager implements Listener {
     }
 
     public static boolean toBackUpWorld(GameRoomConfig roomConfig){
-        File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+roomConfig.getName());
-        File world = new File(nameFile+"/world/"+roomConfig.worldInfo.getGameWorld().getFolderName());
+        File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+File.separator+"rooms"+File.separator+roomConfig.getName());
+        File world = new File(nameFile+File.separator+"world"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName());
         if(!world.exists()){
             world.mkdirs();
         }
 
         //
-        return Utils.copyFiles(new File(Server.getInstance().getFilePath() + "/worlds/" + roomConfig.worldInfo.getGameWorld().getFolderName()), world);
+        return Utils.copyFiles(new File(Server.getInstance().getFilePath()+File.separator + "worlds" +File.separator+ roomConfig.worldInfo.getGameWorld().getFolderName()), world);
     }
 
 
     public static boolean toPathWorld(GameRoomConfig roomConfig){
-        File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+roomConfig.getName());
-        File world = new File(nameFile+"/world/"+roomConfig.worldInfo.getGameWorld().getFolderName());
+        File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+File.separator+"rooms"+File.separator+roomConfig.getName());
+        File world = new File(nameFile+File.separator+"world"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName());
         if(world.isDirectory() && world.exists()){
             File[] files = world.listFiles();
             if(files != null && files.length > 0){
-                Utils.toDelete(new File(Server.getInstance().getFilePath()+"/worlds/"+roomConfig.worldInfo.getGameWorld().getFolderName()));
-                Utils.copyFiles(world,new File(Server.getInstance().getFilePath()+"/worlds/"+roomConfig.worldInfo.getGameWorld().getFolderName()));
+                Utils.toDelete(new File(Server.getInstance().getFilePath()+File.separator+"worlds"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName()));
+                Utils.copyFiles(world,new File(Server.getInstance().getFilePath()+File.separator+"worlds"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName()));
                 return Server.getInstance().loadLevel(roomConfig.worldInfo.getGameWorld().getFolderName());
             }
 
@@ -698,6 +699,11 @@ public class RoomManager implements Listener {
                 if(playerInfo.getPlayerType() == PlayerInfo.PlayerType.WAIT){
                     event.setCancelled();
                     return;
+                }
+                if(event instanceof EntityDamageByEntityEvent){
+                    if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityFireBall){
+                        ((EntityDamageByEntityEvent) event).setKnockBack(room.getRoomConfig().fireballKnockBack);
+                    }
                 }
                 if(event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){
                     if(event instanceof EntityDamageByEntityEvent){
