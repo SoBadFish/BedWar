@@ -235,7 +235,10 @@ public class Utils {
                                 try {
                                     File file1 = new File(target +File.separator + value.getName());
                                     if(!file1.exists()){
-                                        file1.createNewFile();
+                                        try{
+                                            file1.createNewFile();
+                                        }catch (Exception ignore){}
+
                                     }
                                     copyFile(value, file1);
 
@@ -295,8 +298,10 @@ public class Utils {
             throws IOException {
         // 新建目标目录
         File file = new File(targetDir);
-        if(!file.mkdirs()){
-            Server.getInstance().getLogger().error("新建"+targetDir+"失败");
+        if(!file.exists()) {
+            if (!file.mkdirs()) {
+                Server.getInstance().getLogger().error("新建" + targetDir + "失败");
+            }
         }
         // 获取源文件夹当前下的文件或目录
         File[] files = (new File(sourceDir)).listFiles();

@@ -85,7 +85,7 @@ public class RoomManager implements Listener {
         return null;
     }
 
-    public PlayerInfo getPlayerInfo(Player player){
+    public PlayerInfo getPlayerInfo(EntityHuman player){
         //TODO 获取游戏中的玩家
         if(playerJoin.containsKey(player.getName())) {
             String roomName = playerJoin.get(player.getName());
@@ -649,6 +649,13 @@ public class RoomManager implements Listener {
         GameRoom room = getGameRoomByLevel(event.getTarget());
         if(room != null){
             if(room.getType() == GameRoom.GameType.START){
+                //防止错杀玩家
+                if(entity instanceof EntityHuman){
+                    if(room.getPlayerInfo((EntityHuman) entity) != null){
+                        return;
+                    }
+                }
+
                 event.setCancelled();
                 BedWarMain.sendMessageToObject("&c你无法进入该地图",entity);
             }
@@ -685,74 +692,76 @@ public class RoomManager implements Listener {
             return;
         }
         if(event.getEntity() instanceof Player){
-            GameRoom room = getGameRoomByLevel(event.getEntity().level);
-            if(room != null){
-                PlayerInfo playerInfo = room.getPlayerInfo((EntityHuman) event.getEntity());
-                if(room.getType() == GameRoom.GameType.WAIT){
+            PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
+            if(playerInfo != null) {
+                GameRoom room = playerInfo.getGameRoom();
+                if (room.getType() == GameRoom.GameType.WAIT) {
                     event.setCancelled();
                     return;
                 }
-                if(playerInfo == null){
+//                    if (playerInfo == null) {
+//                        event.setCancelled();
+//                        return;
+//                    }
+
+                //会重复
+                if (playerInfo.getPlayerType() == PlayerInfo.PlayerType.WAIT) {
                     event.setCancelled();
                     return;
                 }
-                if(playerInfo.getPlayerType() == PlayerInfo.PlayerType.WAIT){
-                    event.setCancelled();
-                    return;
-                }
-                if(event instanceof EntityDamageByEntityEvent){
-                    if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityFireBall){
+                if (event instanceof EntityDamageByEntityEvent) {
+                    if (((EntityDamageByEntityEvent) event).getDamager() instanceof EntityFireBall) {
                         ((EntityDamageByEntityEvent) event).setKnockBack(room.getRoomConfig().fireballKnockBack);
                     }
                 }
-                if(event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){
-                    if(event instanceof EntityDamageByEntityEvent){
+                if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
+                    if (event instanceof EntityDamageByEntityEvent) {
                         Entity damagers = (((EntityDamageByEntityEvent) event).getDamager());
-                        if(damagers instanceof Player){
+                        if (damagers instanceof Player) {
                             PlayerInfo playerInfo1 = BedWarMain.getRoomManager().getPlayerInfo((Player) damagers);
-                            if(playerInfo1 != null){
+                            if (playerInfo1 != null) {
                                 playerInfo1.addSound(Sound.RANDOM_ORB);
                                 double h = event.getEntity().getHealth() - event.getFinalDamage();
-                                if(h < 0){
+                                if (h < 0) {
                                     h = 0;
                                 }
-                                playerInfo1.sendTip("&e目标: &c❤"+String.format("%.1f",h));
+                                playerInfo1.sendTip("&e目标: &c❤" + String.format("%.1f", h));
                             }
 
                         }
                     }
                 }
-                if(event instanceof EntityDamageByEntityEvent){
+                if (event instanceof EntityDamageByEntityEvent) {
                     //TODO 免受TNT爆炸伤害
                     Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
-                    if(entity instanceof EntityPrimedTNT){
+                    if (entity instanceof EntityPrimedTNT) {
                         event.setDamage(2);
                     }
                     //TODO 阻止队伍PVP
-                    if(entity instanceof Player){
+                    if (entity instanceof Player) {
                         PlayerInfo damageInfo = room.getPlayerInfo((Player) entity);
 
-                        if( damageInfo != null){
+                        if (damageInfo != null) {
                             TeamInfo t1 = playerInfo.getTeamInfo();
                             TeamInfo t2 = damageInfo.getTeamInfo();
-                            if(t1 != null && t2 != null){
-                                if(t1.getTeamConfig().getName().equalsIgnoreCase(t2.getTeamConfig().getName())){
+                            if (t1 != null && t2 != null) {
+                                if (t1.getTeamConfig().getName().equalsIgnoreCase(t2.getTeamConfig().getName())) {
                                     event.setCancelled();
                                     return;
                                 }
                             }
                             playerInfo.setDamageByInfo(damageInfo);
-                        }else{
+                        } else {
                             event.setCancelled();
                         }
                     }
 
                 }
-                if(event.getCause() == EntityDamageEvent.DamageCause.VOID){
+                if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
                     event.setCancelled();
                     playerInfo.death(event);
                 }
-                if(event.getFinalDamage() + 1 > playerInfo.getPlayer().getHealth()){
+                if (event.getFinalDamage() + 1 > playerInfo.getPlayer().getHealth()) {
                     event.setCancelled();
                     playerInfo.death(event);
                     for (EntityDamageEvent.DamageModifier modifier : EntityDamageEvent.DamageModifier.values()) {

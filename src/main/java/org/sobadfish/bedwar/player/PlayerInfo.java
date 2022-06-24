@@ -702,7 +702,7 @@ public class PlayerInfo {
         player.getInventory().clearAll();
         this.exp = 0;
         
-        player.teleport(teamInfo.getTeamConfig().getSpawnPosition().level.getSafeSpawn());
+        player.teleport(gameRoom.getRoomConfig().worldInfo.getGameWorld().getSpawnLocation());
         player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
         if (getPlayer() instanceof Player) {
             ((Player) getPlayer()).setGamemode(0);
