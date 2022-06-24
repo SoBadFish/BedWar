@@ -77,6 +77,10 @@ public class RoomManager implements Listener {
     }
 
     private GameRoom getGameRoomByLevel(Level level){
+//        if(getPlayerInfo(player) != null){
+//            return getPlayerInfo(player).getGameRoom();
+//        }
+//        return null;
         for(GameRoom room : rooms.values()){
             if(room.getRoomConfig().worldInfo.getGameWorld().getFolderName().equalsIgnoreCase(level.getFolderName())){
                 return room;
@@ -157,7 +161,7 @@ public class RoomManager implements Listener {
         if(world.isDirectory() && world.exists()){
             File[] files = world.listFiles();
             if(files != null && files.length > 0){
-                Utils.toDelete(new File(Server.getInstance().getFilePath()+File.separator+"worlds"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName()));
+//                Utils.toDelete(new File(Server.getInstance().getFilePath()+File.separator+"worlds"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName()));
                 Utils.copyFiles(world,new File(Server.getInstance().getFilePath()+File.separator+"worlds"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName()));
                 return Server.getInstance().loadLevel(roomConfig.worldInfo.getGameWorld().getFolderName());
             }
@@ -280,15 +284,18 @@ public class RoomManager implements Listener {
 
     @EventHandler
     public void onExecuteCommand(PlayerCommandPreprocessEvent event){
-        Level level = event.getPlayer().getLevel();
-        GameRoom room = getGameRoomByLevel(level);
-        if(room != null) {
-            for(String cmd: room.getRoomConfig().banCommand){
-                if(event.getMessage().contains(cmd)){
-                    event.setCancelled();
+        PlayerInfo info = getPlayerInfo(event.getPlayer());
+        if(info != null){
+            GameRoom room = info.getGameRoom();
+            if(room != null) {
+                for(String cmd: room.getRoomConfig().banCommand){
+                    if(event.getMessage().contains(cmd)){
+                        event.setCancelled();
+                    }
                 }
             }
         }
+
     }
 
 
@@ -326,6 +333,7 @@ public class RoomManager implements Listener {
         if(event.performCommand){
             PlayerInfo info = event.getPlayerInfo();
             GameRoom room = event.getRoom();
+            info.clear();
             if(info.getPlayer() instanceof Player){
                 ((Player)info.getPlayer()).setFoodEnabled(false);
                 room.getRoomConfig().quitRoomCommand.forEach(cmd-> Server.getInstance().dispatchCommand(((Player)info.getPlayer()),cmd));
@@ -476,11 +484,12 @@ public class RoomManager implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(PlayerChatEvent event){
-        Player player = event.getPlayer();
-        GameRoom room = getGameRoomByLevel(player.getLevel());
-        if(room != null){
-            PlayerInfo info = room.getPlayerInfo(player);
-            if(info != null){
+//        Player player = event.getPlayer();
+//        GameRoom room = getGameRoomByLevel(player.getLevel());
+        PlayerInfo info = getPlayerInfo(event.getPlayer());
+        if(info != null){
+            GameRoom room = info.getGameRoom();
+            if(room != null){
                 String msg = event.getMessage();
                 if(msg.startsWith("@") || msg.startsWith("!")){
                     info.getGameRoom().sendFaceMessage("&l&7(全体消息)&r "+info+"&r >> "+msg.substring(1));

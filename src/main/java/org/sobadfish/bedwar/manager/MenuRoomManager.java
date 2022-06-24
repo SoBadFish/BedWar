@@ -96,6 +96,10 @@ public class MenuRoomManager {
             ThreadManager.addThread(new BaseTimerRunnable(10) {
                 @Override
                 protected void callback() {
+                    if(!lock.contains(roomManager)){
+                        roomManager.cancel = true;
+                        return;
+                    }
                     info.sendForceMessage("&c暂时没有合适的房间");
                     roomManager.cancel = true;
                 }

@@ -164,6 +164,13 @@ public class GameRoom {
             default:break;
         }
 
+        //移除编外人员
+        for(PlayerInfo info: getInRoomPlayers()){
+            if(!BedWarMain.getRoomManager().playerJoin.containsKey(info.getPlayer().getName())){
+                playerInfos.remove(info);
+            }
+        }
+
     }
     private void onEnd(){
         if(loadTime == -1){
@@ -505,18 +512,21 @@ public class GameRoom {
     public boolean quitPlayerInfo(PlayerInfo info,boolean teleport){
         if(info.getPlayer() instanceof Player) {
             if (playerInfos.contains(info)) {
-                if(((Player) info.getPlayer()).isOnline()) {
-                    ((Player) info.getPlayer()).setExperience(0);
-                    BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
-                }
+
                 info.setLeave(true);
+
 
                 PlayerQuitRoomEvent event = new PlayerQuitRoomEvent(info,this,BedWarMain.getBedWarMain());
                 info.cancel();
                 if(teleport) {
                     info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
                 }
+
                 Server.getInstance().getPluginManager().callEvent(event);
+                ((Player) info.getPlayer()).setExperience(0,0);
+                if(((Player) info.getPlayer()).isOnline()) {
+                    BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
+                }
             } else {
                 if(((Player) info.getPlayer()).isOnline()) {
                     BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());

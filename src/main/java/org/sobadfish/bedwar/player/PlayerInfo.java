@@ -457,7 +457,7 @@ public class PlayerInfo {
         lore.add("");
         String levelName = BedWarMain.getMenuRoomManager().getNameByRoom(gameRoom.getRoomConfig());
         if(levelName == null){
-            levelName = player.getLevel().getFolderName();
+            levelName = " -- ";
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         lore.add("&7"+format.format(new Date()));
@@ -732,7 +732,7 @@ public class PlayerInfo {
     public void clear(){
         if(player instanceof Player){
             if(((Player) player).isOnline()) {
-                ((Player) player).setExperience(0);
+                ((Player) player).setExperience(0,0);
                 ((Player) player).getUIInventory().clearAll();
                 player.getEnderChestInventory().clearAll();
                 player.getInventory().clearAll();
