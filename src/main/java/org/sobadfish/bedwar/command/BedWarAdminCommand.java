@@ -74,6 +74,10 @@ public class BedWarAdminCommand extends Command {
             return true;
         }
         if (strings.length == 0) {
+            if(!commandSender.isPlayer()){
+                commandSender.sendMessage("请不要在控制台执行");
+                return false;
+            }
             return createRoom(commandSender);
         }
         switch (strings[0]){
@@ -124,12 +128,10 @@ public class BedWarAdminCommand extends Command {
                 }
                 break;
             case "cancel":
-                if(create.containsKey(commandSender.getName())){
-                    create.remove(commandSender.getName());
-                }
+                create.remove(commandSender.getName());
                 BedWarMain.sendMessageToObject("成功终止房间的创建，残留文件将在重启服务器后自动删除", commandSender);
                 // commandSender.sendMessage(TextFormat.colorize('&', "&d"));
-                
+
                 break;
 
             default:break;

@@ -25,6 +25,12 @@ import java.io.File;
 import java.util.LinkedHashMap;
 
 /**
+ *   ____           ___          __
+ *  |  _ \         | \ \        / /
+ *  | |_) | ___  __| |\ \  /\  / /_ _ _ __
+ *  |  _ < / _ \/ _` | \ \/  \/ / _` | '__|
+ *  | |_) |  __/ (_| |  \  /\  / (_| | |
+ *  |____/ \___|\__,_|   \/  \/ \__,_|_|
  * @author SoBadFish
  */
 public class BedWarMain extends PluginBase {
@@ -43,7 +49,13 @@ public class BedWarMain extends PluginBase {
         bedWarMain = this;
         //  TODO 初始化文件
         checkServer();
-
+        this.getLogger().info(TextFormat.colorize('&',"&b   ____           ___          __"));
+        this.getLogger().info(TextFormat.colorize('&',"&b  |  _ \\         | \\ \\        / /"));
+        this.getLogger().info(TextFormat.colorize('&',"&b  | |_) | ___  __| |\\ \\  /\\  / /_ _ _ __"));
+        this.getLogger().info(TextFormat.colorize('&',"&b  |  _ < / _ \\/ _` | \\ \\/  \\/ / _` | '__|"));
+        this.getLogger().info(TextFormat.colorize('&',"&b  | |_) |  __/ (_| |  \\  /\\  / (_| | |"));
+        this.getLogger().info(TextFormat.colorize('&',"&b  |____/ \\___|\\__,_|   \\/  \\/ \\__,_|_|"));
+        this.getLogger().info(TextFormat.colorize('&',"&b"));
         this.getLogger().info(TextFormat.colorize('&',"&e正在加载BedWar 起床战争插件 本版本为&av"+this.getDescription().getVersion()+"&e 开源版本"));
         this.getLogger().info(TextFormat.colorize('&',"&c插件作者:&b sobadfish(某吃瓜咸鱼) &aQQ：&e1586235767"));
         this.getLogger().info(TextFormat.colorize('&',"&c本插件为原创插件 部分源代码出处已标明原作者"));
