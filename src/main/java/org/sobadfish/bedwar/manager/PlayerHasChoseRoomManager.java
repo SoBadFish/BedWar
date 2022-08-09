@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class PlayerHasChoseRoomManager {
 
-    private PlayerInfo playerInfo;
+    private RandomJoinManager.IPlayerInfo playerInfo;
 
     public boolean cancel = false;
 
@@ -19,7 +19,7 @@ public class PlayerHasChoseRoomManager {
 
     private ArrayList<GameRoomConfig> roomName = new ArrayList<>();
 
-    public PlayerHasChoseRoomManager(PlayerInfo info){
+    public PlayerHasChoseRoomManager(RandomJoinManager.IPlayerInfo info){
         this.playerInfo = info;
     }
 

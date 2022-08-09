@@ -161,7 +161,6 @@ public class RoomManager implements Listener {
         if(world.isDirectory() && world.exists()){
             File[] files = world.listFiles();
             if(files != null && files.length > 0){
-//                Utils.toDelete(new File(Server.getInstance().getFilePath()+File.separator+"worlds"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName()));
                 Utils.copyFiles(world,new File(Server.getInstance().getFilePath()+File.separator+"worlds"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName()));
                 return Server.getInstance().loadLevel(roomConfig.worldInfo.getGameWorld().getFolderName());
             }
@@ -191,34 +190,6 @@ public class RoomManager implements Listener {
         }
         return false;
     }
-
-//    public void joinRobot(Player cmdPlayer,String roomName,int count){
-//        Skin skin = BedWarMain.skin;
-//
-//        ThreadManager.addThread(() -> {
-//            GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
-//            for (int i = 0; i < count; i++) {
-//                if (room.getType() == GameRoom.GameType.END || room.getType() == GameRoom.GameType.START) {
-//                    break;
-//                }
-//                RobotPlayer player = new RobotPlayer("测试" + i + "号机器人", cmdPlayer.chunk, Entity.getDefaultNBT(cmdPlayer.getPosition())
-//                        .putCompound("Skin", new CompoundTag()
-//                                .putByteArray("Data", skin.getSkinData().data)
-//                                .putString("ModelId", skin.getSkinId())));
-//
-//                PlayerInfo playerInfo = new PlayerInfo(player);
-//                player.setPlayerInfo(playerInfo);
-//                player.spawnToAll();
-//
-//                room.joinPlayerInfo(playerInfo,true);
-//                try {
-//                    Thread.sleep(100);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//    }
 
 
     private Map<String, GameRoomConfig> roomConfig;
@@ -262,6 +233,7 @@ public class RoomManager implements Listener {
 
     @EventHandler
     public void onTeamDefeat(TeamDefeatEvent event){
+
         for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
             event.getRoom().getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
             if(event.getRoom().getRoomConfig().isAutomaticNextRound){
@@ -269,7 +241,7 @@ public class RoomManager implements Listener {
                 ThreadManager.addThread(new BaseTimerRunnable(5) {
                     @Override
                     protected void callback() {
-                        if(BedWarMain.getMenuRoomManager().joinRandomRoom(new PlayerInfo(info.getPlayer()),null)){
+                        if(RandomJoinManager.newInstance().join(new PlayerInfo(info.getPlayer()),null)){
                             event.getRoom().quitPlayerInfo(info,false);
                         }
 //                        quitPlayerInfo(playerInfo,false);
@@ -316,6 +288,9 @@ public class RoomManager implements Listener {
         ThreadManager.addThread(new BaseTimerRunnable(5) {
             @Override
             public void onRun() {
+                if(event.getTeamInfo() == null){
+                    return;
+                }
                 for(PlayerInfo playerInfo: event.getTeamInfo().getLivePlayer()){
                     Utils.spawnFirework(playerInfo.getPosition());
                 }

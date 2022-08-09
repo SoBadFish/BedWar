@@ -11,6 +11,7 @@ import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.utils.TextFormat;
 import cn.nukkit.utils.Utils;
 import org.sobadfish.bedwar.BedWarMain;
+import org.sobadfish.bedwar.manager.RandomJoinManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
@@ -45,10 +46,10 @@ public class BedWarCommand extends Command {
                     @Override
                     public void onClick(Player player) {
                         ThreadManager.addThread(() -> {
-                            if(BedWarMain.getMenuRoomManager().joinRandomRoom(info,null)){
-                                info.sendForceTitle("&a匹配完成");
+                            if(RandomJoinManager.newInstance().join(info,null)){
+                                info.sendForceTitle("&进入匹配队列");
                             }else{
-                                info.sendForceTitle("&c请重新匹配..");
+                                info.sendForceTitle("&c无法进入匹配队列..");
                             }
                             FROM.remove(player.getName());
 
@@ -111,17 +112,17 @@ public class BedWarCommand extends Command {
 
                             PlayerInfo info = new PlayerInfo((Player)commandSender);
                             ThreadManager.addThread(() -> {
-                                if(BedWarMain.getMenuRoomManager().joinRandomRoom(info,null)){
-                                    info.sendForceTitle("&a匹配完成");
+                                if(RandomJoinManager.newInstance().join(info,null)){
+                                    info.sendForceTitle("&a进入匹配队列");
                                 }else{
-                                    info.sendForceTitle("&c请重新匹配..");
+                                    info.sendForceTitle("&c无法进入匹配队列..");
                                 }
-                              
+
                             });
                         }else{
                             commandSender.sendMessage("请在控制台执行");
                         }
-                        
+
                         break;
                         default:break;
                 }
@@ -140,10 +141,10 @@ public class BedWarCommand extends Command {
         simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
             @Override
             public void onClick(Player player) {
-                if(!BedWarMain.getMenuRoomManager().joinRandomRoom(info,name)){
-                    info.sendForceTitle("&c请重新匹配..");
+                if(RandomJoinManager.newInstance().join(info,name)){
+                    info.sendForceTitle("&a进入匹配队列..");
                 }else{
-                    info.sendForceTitle("&a匹配完成");
+                    info.sendForceTitle("&c无法进入匹配队列");
                 }
                 FROM.remove(player.getName());
 

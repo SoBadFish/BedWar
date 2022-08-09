@@ -19,6 +19,7 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.event.*;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
 import org.sobadfish.bedwar.item.button.TeamChoseItem;
+import org.sobadfish.bedwar.manager.RandomJoinManager;
 import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
@@ -182,7 +183,7 @@ public class GameRoom {
                     ThreadManager.addThread(new BaseTimerRunnable(5) {
                         @Override
                         protected void callback() {
-                            if(BedWarMain.getMenuRoomManager().joinRandomRoom(new PlayerInfo(playerInfo.getPlayer()),null)){
+                            if(RandomJoinManager.newInstance().join(new PlayerInfo(playerInfo.getPlayer()),null)){
                                 quitPlayerInfo(playerInfo,false);
                             }
 
@@ -543,7 +544,7 @@ public class GameRoom {
         return true;
     }
 
-    
+
     public PlayerInfo getPlayerInfo(EntityHuman player){
         if(playerInfos.contains(new PlayerInfo(player))){
             return playerInfos.get(playerInfos.indexOf(new PlayerInfo(player)));

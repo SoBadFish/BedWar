@@ -91,6 +91,11 @@ public class GameRoomConfig implements Cloneable{
     public float fireballKnockBack = 0.6f;
 
     /**
+     * 获取击杀玩家的物品 (50%)
+     * */
+    public float killItem = 0.5f;
+
+    /**
      * 床自毁时间
      * */
     public int bedBreak = 120;
@@ -103,7 +108,7 @@ public class GameRoomConfig implements Cloneable{
     /**
      * 房间游戏货币类型
      * 目前只有default 和 exp
-     * 
+     *
      */
     public String gameRoomMoney = "default";
 
@@ -323,6 +328,7 @@ public class GameRoomConfig implements Cloneable{
                     BedWarMain.sendMessageToConsole("&c未成功加载 &a"+name+"&c 的游戏地图");
                     return null;
                 }
+
                 int time = room.getInt("gameTime");
                 int waitTime = room.getInt("waitTime");
                 int maxWaitTime = room.getInt("max-player-waitTime");
@@ -353,7 +359,7 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.setMoneyItem(itemInfo);
                 roomConfig.gameRoomMoney = room.getString("roomMoney","default");
                 roomConfig.setNbtItemInfo(nbtItemInfo);
-
+                roomConfig.killItem = (float) room.getDouble("killItem",0.5f);
                 roomConfig.uiType = Utils.loadUiTypeByName(room.getString("ui","auto"));
                 roomConfig.teamShopEntityId = room.getInt("entity.team",15);
                 roomConfig.itemShopEntityId = room.getInt("entity.item",15);

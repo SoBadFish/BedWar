@@ -26,7 +26,11 @@ import de.theamychan.scoreboard.network.ScoreboardDisplay;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.IronGolem;
 import org.sobadfish.bedwar.event.PlayerGameDeathEvent;
+import org.sobadfish.bedwar.item.ItemInfo;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
+import org.sobadfish.bedwar.item.config.ItemInfoConfig;
+import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
+import org.sobadfish.bedwar.item.config.NbtItemInfoConfig;
 import org.sobadfish.bedwar.item.team.TeamEffect;
 import org.sobadfish.bedwar.item.team.TeamEffectInfo;
 import org.sobadfish.bedwar.item.team.TeamEnchant;
@@ -68,9 +72,11 @@ public class PlayerInfo {
 
     public PlayerInventory inventory;
 
+    public int damageTime = 0;
+
 
     /**
-     * 
+     *
      * 封装经验金钱 省的面对其他实体报错
      */
     public int exp;
@@ -183,16 +189,31 @@ public class PlayerInfo {
        }
     }
 
+    /**
+     * 发送强制信息
+     * */
+    public void sendForceTitle(String msg,int time){
+        if(player instanceof Player){
+            ((Player) player).sendTitle(TextFormat.colorize('&',msg),null,0,time,0);
+        }
+    }
+
+    /**
+     * 发送强制信息
+     * */
+    public void sendForceSubTitle(String msg){
+        if(player instanceof Player){
+            ((Player) player).setSubtitle(TextFormat.colorize('&',msg));
+        }
+    }
+
+
+
     public void setDamageByInfo(PlayerInfo damageByInfo) {
         if(damageByInfo != null) {
             this.damageByInfo = damageByInfo;
+            damageTime = 5;
         }
-        ThreadManager.addThread(new BaseTimerRunnable(5) {
-            @Override
-            protected void callback() {
-                setDamageByInfo(null);
-            }
-        });
     }
 
     public PlayerInfo getDamageByInfo() {
@@ -338,7 +359,7 @@ public class PlayerInfo {
         if(player instanceof Player){
             ((Player) player).setExperience(0,this.exp);
         }
-    
+
     }
 
     public void removeScoreBoard(){
@@ -441,7 +462,7 @@ public class PlayerInfo {
 
     private int spawnTime = 0;
 
-    private String formatTime(int s){
+    public String formatTime(int s){
         int min = s / 60;
         int ss = s % 60;
         if(min > 0){
@@ -503,6 +524,11 @@ public class PlayerInfo {
      * 定时任务
      * */
     public void onUpdate(){
+        if(damageTime > 0){
+            damageTime--;
+        }else{
+            damageByInfo = null;
+        }
         if(playerType == PlayerType.WAIT_DEATH){
             if(spawnTime >= 5){
 
@@ -565,8 +591,6 @@ public class PlayerInfo {
             ((Player) player).removeAllWindows();
             ((Player) player).getUIInventory().clearAll();
         }
-        player.getInventory().clearAll();
-        player.getOffhandInventory().clearAll();
 
 
 
@@ -581,7 +605,7 @@ public class PlayerInfo {
         if(getPlayer() instanceof Player) {
             ((Player) getPlayer()).setGamemode(3);
         }
-        player.teleport(new Position(player.x,teamInfo.getTeamConfig().getBedPosition().y + 64,player.z));
+        player.teleport(new Position(player.x,teamInfo.getTeamConfig().getBedPosition().y + 64,player.z,getLevel()));
         sendTitle("&c你死了");
 
         if(event != null) {
@@ -646,6 +670,8 @@ public class PlayerInfo {
             gameRoom.sendMessage(this + " &e淘汰了");
         }
         damageByInfo = null;
+        player.getInventory().clearAll();
+        player.getOffhandInventory().clearAll();
 
     }
 
@@ -655,6 +681,31 @@ public class PlayerInfo {
         }else{
             info.endKillCount++;
         }
+        if(!info.getPlayer().closed){
+            if(isInRoom()){
+                if(getGameRoom().getRoomConfig().isExp()){
+                    int e = (int) (exp * getGameRoom().getRoomConfig().killItem);
+                    if(e > 0){
+                        info.addExp(e);
+                    }
+                }else{
+                    for(ItemInfoConfig config: getGameRoom().getRoomConfig().getWorldInfo().getItemInfos()){
+                        MoneyItemInfoConfig moneyItemInfoConfig = config.getMoneyItemInfoConfig();
+                        int c = ItemInfo.getCountByInventory(moneyItemInfoConfig,player.getInventory());
+                        int g = 0;
+                        if(c > 0){
+                            g = (int) (c * getGameRoom().getRoomConfig().killItem);
+                        }
+                        if(g > 0){
+                            Item item = moneyItemInfoConfig.getItem();
+                            item.setCount(g);
+                            info.getPlayer().getInventory().addItem(item);
+                        }
+                    }
+                }
+            }
+        }
+
 
     }
 
@@ -701,7 +752,7 @@ public class PlayerInfo {
 
         player.getInventory().clearAll();
         this.exp = 0;
-        
+
         player.teleport(gameRoom.getRoomConfig().worldInfo.getGameWorld().getSpawnLocation());
         player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
         if (getPlayer() instanceof Player) {
@@ -709,7 +760,7 @@ public class PlayerInfo {
             if(gameRoom.getRoomConfig().isExp()){
                 ((Player) getPlayer()).setExperience(0,0);
             }
-            
+
         }
         //TODO 初始装备
         for (Map.Entry<Integer, Item> entry : armor.entrySet()) {

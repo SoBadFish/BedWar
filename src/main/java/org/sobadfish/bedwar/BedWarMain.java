@@ -16,6 +16,7 @@ import org.sobadfish.bedwar.entity.EntityFireBall;
 import org.sobadfish.bedwar.entity.IronGolem;
 import org.sobadfish.bedwar.manager.MenuRoomManager;
 import org.sobadfish.bedwar.manager.NbtItemManager;
+import org.sobadfish.bedwar.manager.RandomJoinManager;
 import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.panel.lib.AbstractFakeInventory;
 import org.sobadfish.bedwar.tools.Utils;
@@ -55,6 +56,7 @@ public class BedWarMain extends PluginBase {
         this.getServer().getCommandMap().register("badwar",new BedWarCommand("bw"));
         this.getServer().getCommandMap().register("badwar",new BedWarSpeakCommand("bws"));
         this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
+        RandomJoinManager.newInstance().start();
     }
 
     /**
@@ -141,7 +143,7 @@ public class BedWarMain extends PluginBase {
         String message = TextFormat.colorize('&',msg);
         if(o != null){
             if(o.isOnline()) {
-                o.sendTitle(message,null,5,time,5);
+                o.sendTitle(message,null,time * 20,5,0);
             }
         }else{
             bedWarMain.getLogger().info(message);

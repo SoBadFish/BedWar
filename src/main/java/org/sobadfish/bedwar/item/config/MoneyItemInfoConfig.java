@@ -36,7 +36,8 @@ public class MoneyItemInfoConfig {
     }
 
     public Item getItem() {
-        Item item = this.item.clone();
+        Item item = new Item(this.item.getId(),this.item.getDamage());
+        item.setNamedTag(this.item.getNamedTag());
         item.setCount(1);
         item.setCustomName(TextFormat.colorize('&',"&r"+getCustomName()));
         return item;
