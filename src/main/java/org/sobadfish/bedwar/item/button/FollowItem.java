@@ -24,7 +24,7 @@ public class FollowItem {
 
     public static Item get(){
         Item item = Item.get(345);
-        CompoundTag tag = item.getNamedTag();
+        CompoundTag tag = new CompoundTag();
         tag.putBoolean("follow",true);
         item.setNamedTag(tag);
         item.setCustomName(TextFormat.colorize('&',"&r&l&e点我传送到玩家"));

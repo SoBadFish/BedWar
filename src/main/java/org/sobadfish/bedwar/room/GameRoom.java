@@ -527,32 +527,35 @@ public class GameRoom {
      * 玩家离开游戏
      * */
     public boolean quitPlayerInfo(PlayerInfo info,boolean teleport){
-        if(info.getPlayer() instanceof Player) {
-            if (playerInfos.contains(info)) {
+        if(info != null) {
 
-                info.setLeave(true);
+            if (info.getPlayer() instanceof Player) {
+                if (playerInfos.contains(info)) {
+
+                    info.setLeave(true);
 
 
-                PlayerQuitRoomEvent event = new PlayerQuitRoomEvent(info,this,BedWarMain.getBedWarMain());
-                info.cancel();
-                if(teleport) {
-                    info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
-                }
+                    PlayerQuitRoomEvent event = new PlayerQuitRoomEvent(info, this, BedWarMain.getBedWarMain());
+                    info.cancel();
+                    if (teleport) {
+                        info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+                    }
 
-                Server.getInstance().getPluginManager().callEvent(event);
-                ((Player) info.getPlayer()).setExperience(0,0);
-                if(((Player) info.getPlayer()).isOnline()) {
-                    BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
+                    Server.getInstance().getPluginManager().callEvent(event);
+                    ((Player) info.getPlayer()).setExperience(0, 0);
+                    if (((Player) info.getPlayer()).isOnline()) {
+                        BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
+                    }
+                } else {
+                    if (((Player) info.getPlayer()).isOnline()) {
+                        BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
+                    }
                 }
             } else {
-                if(((Player) info.getPlayer()).isOnline()) {
-                    BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
-                }
-            }
-        }else{
-            info.getPlayer().close();
-            playerInfos.remove(info);
+                info.getPlayer().close();
+                playerInfos.remove(info);
 
+            }
         }
         if (getIPlayerInfos().size() == 0) {
             onDisable();

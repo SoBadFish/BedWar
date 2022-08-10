@@ -620,8 +620,11 @@ public class PlayerInfo {
             ((Player) player).removeAllWindows();
             ((Player) player).getUIInventory().clearAll();
         }
-
-
+        PlayerGameDeathEvent event1 = new PlayerGameDeathEvent(this,getGameRoom(),BedWarMain.getBedWarMain());
+        Server.getInstance().getPluginManager().callEvent(event1);
+        if(getPlayer() instanceof Player) {
+            ((Player) getPlayer()).setGamemode(3);
+        }
 
         if(teamInfo.isBadExists()){
             playerType = PlayerType.DEATH;
@@ -630,11 +633,7 @@ public class PlayerInfo {
             getGameRoom().joinWatch(this);
 
         }
-        PlayerGameDeathEvent event1 = new PlayerGameDeathEvent(this,getGameRoom(),BedWarMain.getBedWarMain());
-        Server.getInstance().getPluginManager().callEvent(event1);
-        if(getPlayer() instanceof Player) {
-            ((Player) getPlayer()).setGamemode(3);
-        }
+
         player.teleport(new Position(player.x,teamInfo.getTeamConfig().getBedPosition().y + 64,player.z,getLevel()));
         sendTitle("&c你死了");
 

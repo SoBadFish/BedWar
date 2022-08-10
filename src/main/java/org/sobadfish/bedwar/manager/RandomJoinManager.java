@@ -39,7 +39,7 @@ public class RandomJoinManager {
             while (true){
                 playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info));
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     break;
                 }
@@ -83,7 +83,7 @@ public class RandomJoinManager {
             return false;
         }
         info.sendForceTitle("&6匹配中",2);
-        info.sendSubTitle(info.formatTime((int)(new Date().getTime() - i.time.getTime()) / 1000));
+        info.sendSubTitle(info.formatTime((int)(System.currentTimeMillis() - i.time.getTime()) / 1000));
 
         String input = i.name;
         ArrayList<String> names = BedWarMain.getMenuRoomManager().getNames();
@@ -98,14 +98,12 @@ public class RandomJoinManager {
             info.sendForceTitle("匹配终止!");
             return false;
         }
-        if(new Date().getTime() -  i.time.getTime() > 60 * 1000){
+        if(System.currentTimeMillis() -  i.time.getTime() > 60 * 1000){
             //一分钟未找到
-            if(!lock.contains(roomManager)){
-                roomManager.cancel = true;
-                return false;
-            }
             info.sendForceMessage("&c暂时没有合适的房间");
             roomManager.cancel = true;
+            return false;
+
 
         }
 
@@ -116,19 +114,23 @@ public class RandomJoinManager {
             for (GameRoom gameRoom : BedWarMain.getRoomManager().getRooms().values()) {
                 if (gameRoom.getType() == GameRoom.GameType.WAIT) {
                     if (gameRoom.joinPlayerInfo(info, false)) {
+                        i.cancel = true;
                         lock.remove(roomManager);
-                        return true;
+                        return false;
                     }
                 }
             }
             if (names.size() == 0) {
                 info.sendForceMessage("&c暂时没有合适的房间");
+                i.cancel = true;
+                return false;
             }
             i.name = names.get(0);
             if (names.size() > 1) {
                 i.name = names.get(Utils.rand(0, names.size() - 1));
                 if (roomManager.hasRoom(i.name)) {
                     if (roomManager.getStrings().size() == names.size()) {
+                        i.cancel = true;
                         return true;
                     }
                 } else {
@@ -154,11 +156,13 @@ public class RandomJoinManager {
                     GameRoom fg = BedWarMain.getRoomManager().getRoom(roomConfig.name);
                     if (fg.joinPlayerInfo(info, false)) {
                         info.sendForceTitle("&a匹配完成");
+                        i.cancel = true;
                         lock.remove(roomManager);
-                        return true;
+
+                        return false;
                     }
                 } else {
-                    return startGameRoom(info, roomManager, roomConfig);
+                    return !startGameRoom(info, roomManager, roomConfig);
 
                 }
             }
@@ -171,6 +175,7 @@ public class RandomJoinManager {
                         if (room.joinPlayerInfo(info, false)) {
                             lock.remove(roomManager);
                             info.sendForceTitle("&a匹配完成");
+                            i.cancel = true;
                             return false;
                         }
                     }else if(room != null){
@@ -183,6 +188,7 @@ public class RandomJoinManager {
                     }
                     if(startGameRoom(info, roomManager, roomConfig)){
                         info.sendForceTitle("&a匹配完成");
+                        i.cancel = true;
                         return false;
                     }
                 }

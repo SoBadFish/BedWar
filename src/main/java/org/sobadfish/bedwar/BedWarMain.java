@@ -159,7 +159,7 @@ public class BedWarMain extends PluginBase {
         String message = TextFormat.colorize('&',msg);
         if(o != null){
             if(o.isOnline()) {
-                o.sendTitle(message,null,time * 20,5,0);
+                o.sendTitle(message,null,0,time,0);
             }
         }else{
             bedWarMain.getLogger().info(message);
