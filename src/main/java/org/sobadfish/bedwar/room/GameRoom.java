@@ -601,10 +601,7 @@ public class GameRoom {
     public void joinWatch(PlayerInfo info) {
         //TODO 欢迎加入观察者大家庭
         if(!playerInfos.contains(info)){
-            Position position = getTeamInfos().get(0).getTeamConfig().getBedPosition();
-            position.add(0,64,0);
-            position.level = getWorldInfo().getConfig().getGameWorld();
-            info.getPlayer().teleport(position);
+
             if(info.getPlayer() instanceof Player) {
                 ((Player)info.getPlayer()).setGamemode(3);
             }
@@ -614,13 +611,19 @@ public class GameRoom {
                 BedWarMain.getRoomManager().playerJoin.put(info.getPlayer().getName(),getRoomConfig().name);
             }
             playerInfos.add(info);
+
         }
 
         info.setPlayerType(PlayerInfo.PlayerType.WATCH);
         info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
-        info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(), FollowItem.get());
+        info.getPlayer().getInventory().setItem(FollowItem.getIndex(), FollowItem.get());
+        info.getPlayer().getInventory().setHeldItemSlot(0);
         sendMessage("&7"+info+"&7 成为了旁观者 （"+getWatchPlayers().size()+"）");
         info.sendMessage("&e你可以等待游戏结束 也可以手动退出游戏房间");
+        Position position = getTeamInfos().get(0).getTeamConfig().getBedPosition();
+        position.add(0,64,0);
+        position.level = getWorldInfo().getConfig().getGameWorld();
+        info.getPlayer().teleport(position);
 
     }
 

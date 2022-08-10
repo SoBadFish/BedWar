@@ -662,8 +662,9 @@ public class RoomManager implements Listener {
         if(room != null){
             if(room.getType() == GameRoom.GameType.START){
                 //防止错杀玩家
-                if(entity instanceof EntityHuman){
-                    if(room.getPlayerInfo((EntityHuman) entity) != null){
+                if(entity instanceof Player){
+                    PlayerInfo info = room.getPlayerInfo((Player) entity);
+                    if(info != null && info.isWatch() ){
                         return;
                     }
                 }
@@ -877,12 +878,11 @@ public class RoomManager implements Listener {
                         }
                     }
                     if(item.hasCompoundTag() && item.getNamedTag().getBoolean("follow")){
-                        PlayerInfo info = room.getPlayerInfo(event.getPlayer());
-                        if(info != null){
-                            followPlayer(info,room);
-                        }
-                        //TODO 选择玩家的界面
+                        followPlayer(room.getPlayerInfo(player),room);
+                        event.setCancelled();
+                        return;
                     }
+
                     if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
                         if (choseteamItem(player, room)) {
                             event.setCancelled();
@@ -933,7 +933,7 @@ public class RoomManager implements Listener {
     }
 
     private void followPlayer(PlayerInfo info,GameRoom room){
-
+        info.sendMessage("选择要传送的玩家");
         if (((Player) info.getPlayer()).getLoginChainData().getDeviceOS() == 7){
             //WIN10 玩家
             DisPlayerPanel playerPanel = new DisPlayerPanel();
@@ -991,13 +991,19 @@ public class RoomManager implements Listener {
                 Item item = event.getItem();
                 if(item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem")){
                     player.getInventory().setHeldItemSlot(0);
-                    if (quitRoomItem(player, roomName, room)) return;
+                    if (quitRoomItem(player, roomName, room)) {
+                        return;
+                    }
                 }
                 if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
                     player.getInventory().setHeldItemSlot(0);
                     choseteamItem(player, room);
 
 
+                }
+                if(item.hasCompoundTag() && item.getNamedTag().getBoolean("follow")){
+                    followPlayer(room.getPlayerInfo(player),room);
+                    player.getInventory().setHeldItemSlot(0);
                 }
             }
         }

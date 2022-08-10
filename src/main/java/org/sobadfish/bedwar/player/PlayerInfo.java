@@ -558,6 +558,9 @@ public class PlayerInfo {
         }else{
             damageByInfo = null;
         }
+        if(damageByInfo != null){
+            sendTip(damageByInfo+"  &a"+damageByInfo.getPlayer().getHealth()+" / "+damageByInfo.getPlayer().getMaxHealth());
+        }
         if(playerType == PlayerType.DEATH){
             if(spawnTime >= 5){
 
@@ -626,13 +629,7 @@ public class PlayerInfo {
             ((Player) getPlayer()).setGamemode(3);
         }
 
-        if(teamInfo.isBadExists()){
-            playerType = PlayerType.DEATH;
-        }else{
-            //TODO 死亡后的观察模式
-            getGameRoom().joinWatch(this);
 
-        }
 
         player.teleport(new Position(player.x,teamInfo.getTeamConfig().getBedPosition().y + 64,player.z,getLevel()));
         sendTitle("&c你死了");
@@ -701,6 +698,13 @@ public class PlayerInfo {
         damageByInfo = null;
         player.getInventory().clearAll();
         player.getOffhandInventory().clearAll();
+        if(teamInfo.isBadExists()){
+            playerType = PlayerType.DEATH;
+        }else{
+            //TODO 死亡后的观察模式
+            getGameRoom().joinWatch(this);
+
+        }
 
     }
 

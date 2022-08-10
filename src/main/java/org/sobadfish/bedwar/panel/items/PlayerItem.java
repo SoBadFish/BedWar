@@ -45,7 +45,7 @@ public class PlayerItem extends BasePlayPanelItemInstance{
     }
 
     @Override
-    public Item getPanelItem(PlayerInfo info, int index) {
+    public Item getPanelItem(PlayerInfo i, int index) {
         CompoundTag tag = new CompoundTag();
         tag.putString("player",info.getName());
         Item item = new Item(397,3);
@@ -56,13 +56,13 @@ public class PlayerItem extends BasePlayPanelItemInstance{
         lore.add(TextFormat.colorize('&',"&r "));
         lore.add(TextFormat.colorize('&',"&r&7血量 &a"+this.info.getPlayer().getHealth()+" / "+this.info.getPlayer().getMaxHealth()));
         lore.add(TextFormat.colorize('&',"&r  "));
-        lore.add(TextFormat.colorize('&',"&r&击杀 &a"+this.info.getKillCount()));
+        lore.add(TextFormat.colorize('&',"&r&7击杀 &a"+this.info.getKillCount()));
         lore.add(TextFormat.colorize('&',"&r   "));
         String status = "&a存活";
         if(this.info.getPlayerType() == PlayerInfo.PlayerType.DEATH){
             status = "&c复活中";
         }
-        lore.add(TextFormat.colorize('&',"&r&状态 &a"+status));
+        lore.add(TextFormat.colorize('&',"&r&7状态 &a"+status));
         item.setLore(lore.toArray(new String[0]));
 
         return item;

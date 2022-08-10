@@ -39,6 +39,7 @@ public class DisPlayerPanel implements InventoryHolder {
             }
             panel.put(index,new PlayerItem(info));
             count++;
+            index++;
         }
 
         return panel;
