@@ -16,7 +16,7 @@ public class BedWarFrom {
 
     private final int id;
 
-    private List<BaseIButtom> baseIButtoms;
+    private List<BaseIButtom> baseIButtoms = new ArrayList<>();
 
     private String title,context;
     public BedWarFrom(String title,String context,int id){

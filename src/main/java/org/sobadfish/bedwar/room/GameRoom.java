@@ -308,7 +308,9 @@ public class GameRoom {
                     case 3: sendTitle("&63");break;
                     case 2: sendTitle("&42");break;
                     case 1: sendTitle("&41");break;
-                    default:break;
+                    default:
+                        sendTitle("");break;
+
                 }
                 //音效
                 addSound(Sound.RANDOM_CLICK);

@@ -321,7 +321,7 @@ public class PlayerInfo {
      * 发送信息
      * */
     public void sendTitle(String msg){
-        sendTitle(msg,2);
+        sendTitle(msg,1);
     }
     /**
      * 发送信息
@@ -478,6 +478,16 @@ public class PlayerInfo {
         }
 
     }
+    public String formatTime1(int s){
+        int min = s / 60;
+        int ss = s % 60;
+        if(min > 0){
+            return min+":"+ss;
+        }else{
+            return ss+"";
+        }
+
+    }
 
     private ArrayList<String> getLore(boolean isWait){
         ArrayList<String> lore = new ArrayList<>();
@@ -499,7 +509,7 @@ public class PlayerInfo {
         }else{
             GameRoomEventConfig.GameRoomEventItem eventItem = getGameRoom().getEventControl().getEventConfig();
             if(eventItem != null){
-                lore.add(eventItem.display+" &a"+formatTime(eventItem.eventTime - getGameRoom().getEventControl().loadTime));
+                lore.add(eventItem.display+" &a"+formatTime1(eventItem.eventTime - getGameRoom().getEventControl().loadTime));
                 lore.add("    ");
             }else{
                 lore.add("时间: &a"+formatTime(loadTime));
@@ -519,11 +529,11 @@ public class PlayerInfo {
                     lore.add("◎ "+teamInfo.toString()+": &r   &c✘ "+me);
                 }
             }
-            lore.add("    ");
+            lore.add("     ");
             lore.add("击杀数: &a"+killCount);
             lore.add("最终击杀数: &a"+endKillCount);
             lore.add("破坏床数: &a"+bedBreakCount);
-            lore.add("     ");
+            lore.add("      ");
         }
         Object obj = BedWarMain.getBedWarMain().getConfig().get("game-logo");
         if(obj instanceof List){
