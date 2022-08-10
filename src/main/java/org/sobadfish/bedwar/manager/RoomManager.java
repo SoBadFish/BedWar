@@ -44,11 +44,13 @@ import org.sobadfish.bedwar.item.nbt.DieBow;
 import org.sobadfish.bedwar.item.nbt.INbtItem;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
+import org.sobadfish.bedwar.panel.DisPlayerPanel;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
 import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
 import org.sobadfish.bedwar.panel.items.BasePlayPanelItemInstance;
 import org.sobadfish.bedwar.panel.items.NbtDefaultItem;
+import org.sobadfish.bedwar.panel.items.PlayerItem;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
@@ -177,8 +179,13 @@ public class RoomManager implements Listener {
             if (!BedWarMain.getRoomManager().hasGameRoom(roomName)) {
                 BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomName));
             }
-            if (!BedWarMain.getRoomManager().getRoom(roomName).joinPlayerInfo(player,true)) {
-                player.sendForceMessage("&c无法加入房间");
+            GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
+            if (!room.joinPlayerInfo(player,true)) {
+                if(!room.getRoomConfig().hasWatch){
+                    player.sendForceMessage("&c该房间开始后不允许旁观");
+                }else{
+                    room.joinWatch(player);
+                }
             }else{
                 return true;
             }
@@ -313,7 +320,9 @@ public class RoomManager implements Listener {
                 ((Player)info.getPlayer()).setFoodEnabled(false);
                 room.getRoomConfig().quitRoomCommand.forEach(cmd-> Server.getInstance().dispatchCommand(((Player)info.getPlayer()),cmd));
             }
-
+            if(info.isWatch()){
+                return;
+            }
             room.sendMessage("&c玩家 "+event.getPlayerInfo().getPlayer().getName()+" 离开了游戏");
         }
     }
@@ -349,7 +358,7 @@ public class RoomManager implements Listener {
             if (BedWarMain.getRoomManager().hasGameRoom(roomName)) {
                 GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
                 if (room.getType() != GameRoom.GameType.END && room.getPlayerInfos().contains(info)) {
-                    if (room.getPlayerInfo((Player) info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.DEATH ||
+                    if (room.getPlayerInfo((Player) info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.WATCH ||
                             room.getPlayerInfo((Player) info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.LEAVE) {
                         if(event.isSend()) {
                             info.sendForceMessage("&c你已经在游戏房间内了");
@@ -361,10 +370,14 @@ public class RoomManager implements Listener {
             }
         }
         if(gameRoom.getType() != GameRoom.GameType.WAIT){
-//            if(GameType.END != gameRoom.getType()){
-//                //TODO 或许还能旁观
-//
-//            }
+            if(GameType.END != gameRoom.getType()){
+                //TODO 或许还能旁观
+                if(gameRoom.getRoomConfig().hasWatch){
+                    event.setCancelled();
+                    return;
+                }
+
+            }
             if(event.isSend()) {
                 info.sendForceMessage("&c游戏已经开始了");
             }
@@ -431,26 +444,31 @@ public class RoomManager implements Listener {
         }
         GameRoom room = getGameRoomByLevel(level);
         if(room != null){
-            if(item.getId() == 65 && !room.getWorldInfo().getPlaceBlock().contains(event.getBlockAgainst())) {
-                event.setCancelled();
-                return;
-            }else{
-                if (block instanceof BlockTNT) {
+            PlayerInfo info = room.getPlayerInfo(event.getPlayer());
+            if(info != null) {
+                if (info.isWatch()) {
                     event.setCancelled();
-                    ((BlockTNT) block).prime(40);
-                    Item i2 = item.clone();
-                    i2.setCount(1);
-                    event.getPlayer().getInventory().removeItem(i2);
                     return;
                 }
+                if (item.getId() == 65 && !room.getWorldInfo().getPlaceBlock().contains(event.getBlockAgainst())) {
+                    event.setCancelled();
+                    return;
+                } else {
+                    if (block instanceof BlockTNT) {
+                        event.setCancelled();
+                        ((BlockTNT) block).prime(40);
+                        Item i2 = item.clone();
+                        i2.setCount(1);
+                        event.getPlayer().getInventory().removeItem(i2);
+                        return;
+                    }
 
-            }
-            if(!room.worldInfo.onChangeBlock(block,true)){
-                PlayerInfo info = room.getPlayerInfo(event.getPlayer());
-                if(info != null){
-                    info.sendMessage("&c你不能在这里放置方块");
                 }
-                event.setCancelled();
+                if (!room.worldInfo.onChangeBlock(block, true)) {
+                    info.sendMessage("&c你不能在这里放置方块");
+
+                    event.setCancelled();
+                }
             }
         }
 
@@ -465,20 +483,25 @@ public class RoomManager implements Listener {
         if(info != null){
             GameRoom room = info.getGameRoom();
             if(room != null){
-                String msg = event.getMessage();
-                if(msg.startsWith("@") || msg.startsWith("!")){
-                    info.getGameRoom().sendFaceMessage("&l&7(全体消息)&r "+info+"&r >> "+msg.substring(1));
+                if(info.isWatch()){
+                    room.sendMessageOnWatch(info+"&e(旁观) &r>> "+event.getMessage());
                 }else{
-                    TeamInfo teamInfo = info.getTeamInfo();
-                    if(teamInfo != null){
-                        if(info.isDeath()){
-                            room.sendMessageOnDeath(info+"&7(死亡) &r>> "+msg);
-                        }else {
-                            teamInfo.sendMessage(teamInfo.getTeamConfig().getNameColor() + "[队伍]&7 " + info.getPlayer().getName() + " &f>>&r " + msg);
-                        }
+                    String msg = event.getMessage();
+                    if(msg.startsWith("@") || msg.startsWith("!")){
+                        info.getGameRoom().sendFaceMessage("&l&7(全体消息)&r "+info+"&r >> "+msg.substring(1));
                     }else{
-                        room.sendMessage(info+" &f>>&r "+msg);
+                        TeamInfo teamInfo = info.getTeamInfo();
+                        if(teamInfo != null){
+                            if(info.isDeath()){
+                                room.sendMessageOnDeath(info+"&7(死亡) &r>> "+msg);
+                            }else {
+                                teamInfo.sendMessage(teamInfo.getTeamConfig().getNameColor() + "[队伍]&7 " + info.getPlayer().getName() + " &f>>&r " + msg);
+                            }
+                        }else{
+                            room.sendMessage(info+" &f>>&r "+msg);
+                        }
                     }
+
                 }
 
                 event.setCancelled();
@@ -497,11 +520,16 @@ public class RoomManager implements Listener {
         if(room != null){
             PlayerInfo info = room.getPlayerInfo(player);
             if(info == null){
+
                 if(!player.isOp()) {
                     player.sendMessage("你不能破坏此方块");
                     event.setCancelled();
                 }
             }else{
+                if(info.isWatch()){
+                    event.setCancelled();
+                    return;
+                }
                 if(block instanceof BlockBed){
                     event.setDrops(new Item[0]);
                 }
@@ -667,6 +695,10 @@ public class RoomManager implements Listener {
                 if(entity instanceof Player) {
                     if(entity.distance(event.getEntity()) <= 4 && event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK){
                         PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo((Player) entity);
+                        if (info.isWatch()) {
+                            event.setCancelled();
+                            return;
+                        }
                         ((ShopVillage) event.getEntity()).onClick(info);
                     }
 
@@ -678,6 +710,10 @@ public class RoomManager implements Listener {
         if(event.getEntity() instanceof Player){
             PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
             if(playerInfo != null) {
+                if (playerInfo.isWatch()) {
+                    event.setCancelled();
+                    return;
+                }
                 GameRoom room = playerInfo.getGameRoom();
                 if (room.getType() == GameRoom.GameType.WAIT) {
                     event.setCancelled();
@@ -724,8 +760,11 @@ public class RoomManager implements Listener {
                     //TODO 阻止队伍PVP
                     if (entity instanceof Player) {
                         PlayerInfo damageInfo = room.getPlayerInfo((Player) entity);
-
                         if (damageInfo != null) {
+                            if (damageInfo.isWatch()) {
+                                event.setCancelled();
+                                return;
+                            }
                             TeamInfo t1 = playerInfo.getTeamInfo();
                             TeamInfo t2 = damageInfo.getTeamInfo();
                             if (t1 != null && t2 != null) {
@@ -773,6 +812,10 @@ public class RoomManager implements Listener {
                 }else{
                     PlayerInfo info = room.getPlayerInfo(player);
                     if(info != null){
+                        if(info.isWatch()){
+                            room.quitPlayerInfo(info,true);
+                            return;
+                        }
                         player.getInventory().clearAll();
                         info.setLeave(true);
                     }
@@ -833,6 +876,13 @@ public class RoomManager implements Listener {
                             return;
                         }
                     }
+                    if(item.hasCompoundTag() && item.getNamedTag().getBoolean("follow")){
+                        PlayerInfo info = room.getPlayerInfo(event.getPlayer());
+                        if(info != null){
+                            followPlayer(info,room);
+                        }
+                        //TODO 选择玩家的界面
+                    }
                     if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
                         if (choseteamItem(player, room)) {
                             event.setCancelled();
@@ -882,6 +932,27 @@ public class RoomManager implements Listener {
         return false;
     }
 
+    private void followPlayer(PlayerInfo info,GameRoom room){
+
+        if (((Player) info.getPlayer()).getLoginChainData().getDeviceOS() == 7){
+            //WIN10 玩家
+            DisPlayerPanel playerPanel = new DisPlayerPanel();
+            playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
+        }else{
+            List<BaseIButtom> list = new ArrayList<>();
+            //手机玩家
+            for(PlayerInfo i: room.getLivePlayers()){
+                list.add(new BaseIButtom(new PlayerItem(i).getGUIButton(info)) {
+                    @Override
+                    public void onClick(Player player) {
+                        player.teleport(i.getPlayer().getLocation());
+                    }
+                });
+            }
+            DisPlayWindowsFrom.disPlayerCustomMenu((Player) info.getPlayer(),"传送玩家",list);
+        }
+    }
+
     private boolean quitRoomItem(Player player, String roomName, GameRoom room) {
         if(!RoomQuitItem.clickAgain.contains(player)){
             RoomQuitItem.clickAgain.add(player);
@@ -924,7 +995,8 @@ public class RoomManager implements Listener {
                 }
                 if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
                     player.getInventory().setHeldItemSlot(0);
-                    if (choseteamItem(player, room)) return;
+                    choseteamItem(player, room);
+
 
                 }
             }
@@ -936,22 +1008,18 @@ public class RoomManager implements Listener {
         if(event.wasClosed()){
             DisPlayWindowsFrom.SHOP.remove(event.getPlayer().getName());
             BedWarCommand.FROM.remove(event.getPlayer().getName());
+            DisPlayWindowsFrom.CUSTOM.remove(event.getPlayer().getName());
             return;
         }
         Player player = event.getPlayer();
+        if(DisPlayWindowsFrom.CUSTOM.containsKey(player.getName())){
+            BedWarFrom simple = DisPlayWindowsFrom.CUSTOM.get(player.getName());
+            if (onBedWarFrom(event, player, simple)) return;
+
+        }
         if(BedWarCommand.FROM.containsKey(player.getName())){
             BedWarFrom simple = BedWarCommand.FROM.get(player.getName());
-            if(simple.getId() == event.getFormID()) {
-                if (event.getResponse() instanceof FormResponseSimple) {
-                    BaseIButtom button = simple.getBaseIButtoms().get(((FormResponseSimple) event.getResponse())
-                            .getClickedButtonId());
-                    button.onClick(player);
-                }
-                return;
-
-            }else{
-                BedWarCommand.FROM.remove(player.getName());
-            }
+            if (onBedWarFrom(event, player, simple)) return;
 
         }
 
@@ -990,6 +1058,21 @@ public class RoomManager implements Listener {
                 DisPlayWindowsFrom.SHOP.remove(player.getName());
             }
         }
+    }
+
+    private boolean onBedWarFrom(PlayerFormRespondedEvent event, Player player, BedWarFrom simple) {
+        if(simple.getId() == event.getFormID()) {
+            if (event.getResponse() instanceof FormResponseSimple) {
+                BaseIButtom button = simple.getBaseIButtoms().get(((FormResponseSimple) event.getResponse())
+                        .getClickedButtonId());
+                button.onClick(player);
+            }
+            return true;
+
+        }else{
+            BedWarCommand.FROM.remove(player.getName());
+        }
+        return false;
     }
 
     @EventHandler

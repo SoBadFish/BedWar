@@ -27,7 +27,7 @@ public class ItemInfo {
 
     private int tick;
 
-    private ItemInfoConfig itemInfoConfig;
+    private final ItemInfoConfig itemInfoConfig;
 
     private int resetTick = -1;
 
@@ -77,7 +77,7 @@ public class ItemInfo {
             CompoundTag itemTag = NBTIO.putItemHelper(item);
             itemTag.setName("Item");
             Position position1 = position.add(0.5,0.5,0.5);
-            EntityItem itemEntity = new EntityItem(position1.getLevel().getChunk((int)position1.getX() >> 4, (int)position1.getZ() >> 4, true),
+            return new EntityItem(position1.getLevel().getChunk((int)position1.getX() >> 4, (int)position1.getZ() >> 4, true),
                     new CompoundTag().putList(new ListTag<>("Pos")
                             .add(new DoubleTag("", position1.getX()))
                             .add(new DoubleTag("", position1.getY()))
@@ -92,7 +92,6 @@ public class ItemInfo {
                                     .add(new FloatTag("", ThreadLocalRandom.current().nextFloat() * 360.0F))
                                     .add(new FloatTag("", 0.0F)))
                             .putShort("PickupDelay", 10));
-            return itemEntity;
         }catch (Exception e){
             return null;
         }

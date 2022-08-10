@@ -4,12 +4,9 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
-import cn.nukkit.command.ConsoleCommandSender;
-import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.utils.TextFormat;
-import cn.nukkit.utils.Utils;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.manager.RandomJoinManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
@@ -111,8 +108,9 @@ public class BedWarCommand extends Command {
                             }
 
                             PlayerInfo info = new PlayerInfo((Player)commandSender);
+                            String finalName = name;
                             ThreadManager.addThread(() -> {
-                                if(RandomJoinManager.newInstance().join(info,null)){
+                                if(RandomJoinManager.newInstance().join(info, finalName)){
                                     info.sendForceTitle("&a进入匹配队列");
                                 }else{
                                     info.sendForceTitle("&c无法进入匹配队列..");

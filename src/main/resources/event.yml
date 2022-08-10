@@ -1,24 +1,29 @@
+# 事件控制
+# 事件按照先后顺序执行
+# 上一个事件完成之前，下个事件不会执行 直到事件全部完成才开始游戏时间
+# value 数值在 time 类型中为tick时间 20 tick 为 1 秒
+# eventTime 为事件倒计时 单位为秒
 eventLists:
   - type: "time"
     display: "钻石生成点 II 级"
     item: "钻石"
     eventTime: 330
-    time: 30
+    value: 30
   - type: "time"
     display: "钻石生成点 III 级"
     item: "钻石"
     eventTime: 330
-    time: 30
+    value: 30
   - type: "time"
     display: "绿宝石生成点 II 级"
     item: "绿宝石"
     eventTime: 330
-    time: 30
+    value: 30
   - type: "time"
     display: "钻石生成点 III 级"
     item: "绿宝石"
     eventTime: 330
-    time: 30
+    value: 30
   - type: "break"
     display: "床破坏"
     eventTime: 330

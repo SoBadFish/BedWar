@@ -1,6 +1,8 @@
 package org.sobadfish.bedwar.panel;
 
 import cn.nukkit.Player;
+import org.sobadfish.bedwar.panel.from.BedWarFrom;
+import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
 import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
 import org.sobadfish.bedwar.panel.from.button.ShopButton;
@@ -13,6 +15,7 @@ import org.sobadfish.bedwar.shop.item.ShopItemInfo;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author SoBadFish
@@ -25,6 +28,16 @@ public class DisPlayWindowsFrom {
     public static int FROM_MAX_ID = 105478;
 
     public static LinkedHashMap<String, ShopFrom> SHOP = new LinkedHashMap<>();
+
+    public static LinkedHashMap<String, BedWarFrom> CUSTOM = new LinkedHashMap<>();
+
+    public static void disPlayerCustomMenu(Player player, String tag, List<BaseIButtom> from){
+        BedWarFrom bedWarFrom = new BedWarFrom(tag,"",getId());
+        bedWarFrom.setBaseIButtoms(from);
+        CUSTOM.put(player.getName(), bedWarFrom);
+        bedWarFrom.disPlay(player);
+    }
+
 
     public static void disPlayMenu(Player player, GameRoomConfig room, ShopItemInfo shopItemInfo){
 

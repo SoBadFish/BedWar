@@ -18,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * */
 public class RandomJoinManager {
 
-    private List<PlayerHasChoseRoomManager> lock = new CopyOnWriteArrayList<>();
+    private final List<PlayerHasChoseRoomManager> lock = new CopyOnWriteArrayList<>();
 
     public static RandomJoinManager joinManager;
 

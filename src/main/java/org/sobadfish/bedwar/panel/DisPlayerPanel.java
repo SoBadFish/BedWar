@@ -8,6 +8,7 @@ import org.sobadfish.bedwar.panel.items.*;
 import org.sobadfish.bedwar.panel.lib.AbstractFakeInventory;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
+import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.shop.config.ShopInfoConfig;
 import org.sobadfish.bedwar.shop.config.TeamShopInfoConfig;
@@ -15,6 +16,7 @@ import org.sobadfish.bedwar.shop.item.ShopItemInfo;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +26,24 @@ import java.util.Map;
 public class DisPlayerPanel implements InventoryHolder {
 
     private AbstractFakeInventory inventory;
+
+
+    public static Map<Integer, BasePlayPanelItemInstance> displayPlayers(GameRoom room){
+        Map<Integer, BasePlayPanelItemInstance> panel = new LinkedHashMap<>();
+        int index = 10;
+        int count = 0;
+        for(PlayerInfo info: room.getLivePlayers()){
+            if(count % 7 == 0){
+                count = 0;
+                index += 9;
+            }
+            panel.put(index,new PlayerItem(info));
+            count++;
+        }
+
+        return panel;
+
+    }
 
 
 

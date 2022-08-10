@@ -1,5 +1,13 @@
 package org.sobadfish.bedwar.room.config;
 
+import cn.nukkit.utils.Config;
+import cn.nukkit.utils.TextFormat;
+import org.sobadfish.bedwar.manager.RoomEventManager;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Sobadfish
  * 13:37
@@ -7,14 +15,76 @@ package org.sobadfish.bedwar.room.config;
 public class GameRoomEventConfig {
 
 
-    public EventType eventType;
+    private final List<GameRoomEventItem> items;
+
+    private GameRoomEventConfig(List<GameRoomEventItem> items){
+        this.items = items;
+    }
+
+    public List<GameRoomEventItem> getItems() {
+        return items;
+    }
+
+    public static GameRoomEventConfig getGameRoomEventConfigByFile(File file){
+        Config event = new Config(file,Config.YAML);
+        RoomEventManager eventManager = new RoomEventManager();
+        List<Map> lists = event.getMapList("eventLists");
+        List<GameRoomEventItem> items = new ArrayList<>();
+        for(Map map: lists){
+            String type = "";
+            String disPlay = "";
+            String item = "";
+            int eventTime = 0;
+            Object value = null;
+            if(map.containsKey("type")){
+                type = map.get("type").toString().toLowerCase();
+            }
+            if(map.containsKey("display")){
+                disPlay = TextFormat.colorize('&',map.get("display").toString());
+            }
+            if(map.containsKey("item")){
+                item = map.get("item").toString();
+            }
+            if(map.containsKey("eventTime")){
+                eventTime = Integer.parseInt(map.get("eventTime").toString());
+            }
+            if(map.containsKey("value")){
+                value = map.get("value");
+            }
+            if(type.equalsIgnoreCase("")){
+                continue;
+            }
+
+            items.add(new GameRoomEventItem(type,disPlay,item,eventTime,value));
+        }
+
+        return new GameRoomEventConfig(items);
+    }
 
 
 
-    public enum EventType{
-        /**
-         * 时间类型,破坏类型
-         * */
-        TIME,BREAK
+    public static class GameRoomEventItem{
+        public String eventType;
+
+        public String display;
+
+        public String item;
+
+        public int eventTime;
+
+        public Object value;
+
+        private GameRoomEventItem(String type,
+                                    String display,
+                                    String item,
+                                    int eventTime,
+                                    Object value){
+            this.eventType = type;
+            this.display = display;
+            this.item = item;
+            this.eventTime = eventTime;
+            this.value = value;
+        }
+
     }
 }

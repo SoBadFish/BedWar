@@ -6,6 +6,7 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.MoneyItemInfo;
 import org.sobadfish.bedwar.item.NbtItemInfo;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
+import org.sobadfish.bedwar.manager.RoomEventManager;
 import org.sobadfish.bedwar.player.team.config.TeamConfig;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.shop.item.ShopItemInfo;
@@ -96,9 +97,14 @@ public class GameRoomConfig implements Cloneable{
     public float killItem = 0.5f;
 
     /**
-     * 床自毁时间
+     * 是否允许旁观
      * */
-    public int bedBreak = 120;
+    public boolean hasWatch = true;
+
+//    /**
+//     * 床自毁时间
+//     * */
+//    public int bedBreak = 120;
 
     /**
      * 等待大厅拉回坐标
@@ -153,6 +159,13 @@ public class GameRoomConfig implements Cloneable{
      * */
     public ArrayList<String> gameStartMessage = new ArrayList<>();
 
+    /**
+     * 游戏的事件
+     * */
+    public GameRoomEventConfig eventConfig;
+
+
+
 
     private GameRoomConfig(String name,
                            WorldInfoConfig worldInfo,
@@ -181,16 +194,12 @@ public class GameRoomConfig implements Cloneable{
         if(!sdir.mkdirs()){
             BedWarMain.sendMessageToConsole("创建文件夹 shop 失败");
         }
-//        File w = new File(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+name+"/world");
-//        if(!w.exists()){
-//            if(!w.mkdirs()){
-//                BedWarMain.sendMessageToConsole("创建文件夹 world 失败");
-//            }
-//        }
+
         BedWarMain.getBedWarMain().saveResource("shop/defaultShop.yml","/rooms/"+name+"/shop/defaultShop.yml",false);
         BedWarMain.getBedWarMain().saveResource("shop/teamShop.yml","/rooms/"+name+"/shop/teamShop.yml",false);
         BedWarMain.getBedWarMain().saveResource("item.yml","/rooms/"+name+"/item.yml",false);
         BedWarMain.getBedWarMain().saveResource("team.yml","/rooms/"+name+"/team.yml",false);
+        BedWarMain.getBedWarMain().saveResource("event.yml","/rooms/"+name+"/event.yml",false);
         loadTeamShopConfig(roomConfig);
         return roomConfig;
 
@@ -349,6 +358,9 @@ public class GameRoomConfig implements Cloneable{
                         BedWarMain.getBedWarMain().saveResource("shop/teamShop.yml", "/rooms/" + name + "/shop/teamShop.yml", false);
                     }
                 }
+                if(!new File(file+"/event.yml").exists()){
+                    BedWarMain.getBedWarMain().saveResource("event.yml","/rooms/"+name+"/event.yml",false);
+                }
                 //TODO 实现商店
                 LinkedHashMap<String, ShopItemInfo> shopMap = new LinkedHashMap<>();
                 shopMap.put("defaultShop",ShopItemInfo.build("defaultShop",new Config(shopDir+"/defaultShop.yml",Config.YAML)));
@@ -359,13 +371,14 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.setMoneyItem(itemInfo);
                 roomConfig.gameRoomMoney = room.getString("roomMoney","default");
                 roomConfig.setNbtItemInfo(nbtItemInfo);
+                roomConfig.hasWatch = room.getBoolean("hasWatch",true);
                 roomConfig.killItem = (float) room.getDouble("killItem",0.5f);
                 roomConfig.uiType = Utils.loadUiTypeByName(room.getString("ui","auto"));
                 roomConfig.teamShopEntityId = room.getInt("entity.team",15);
                 roomConfig.itemShopEntityId = room.getInt("entity.item",15);
                 roomConfig.callbackY = room.getInt("callbackY",17);
                 roomConfig.fireballKnockBack = (float) room.getDouble("fireballKnockBack",0.6f);
-                roomConfig.bedBreak = room.getInt("times.bedbreak",120);
+//                roomConfig.bedBreak = room.getInt("times.bedbreak",120);
                 roomConfig.banCommand = new ArrayList<>(room.getStringList("ban-command"));
                 roomConfig.isAutomaticNextRound = room.getBoolean("AutomaticNextRound",true);
                 roomConfig.quitRoomCommand = new ArrayList<>(room.getStringList("QuitRoom"));
@@ -376,6 +389,7 @@ public class GameRoomConfig implements Cloneable{
                 }else{
                     roomConfig.gameStartMessage = defaultGameStartMessage();
                 }
+                roomConfig.eventConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/event.yml"));
                 return roomConfig;
             }catch (Exception e){
                 BedWarMain.sendMessageToConsole("加载房间出错: "+e.getMessage());
@@ -425,7 +439,7 @@ public class GameRoomConfig implements Cloneable{
         config.set("entity.team",teamShopEntityId);
         config.set("entity.item",itemShopEntityId);
         config.set("waitTime",waitTime);
-        config.set("tiems.bedbreak",bedBreak);
+//        config.set("tiems.bedbreak",bedBreak);
         config.set("max-player-waitTime",maxWaitTime);
         config.set("minPlayerSize",minPlayerSize);
         config.set("maxPlayerSize",maxPlayerSize);
@@ -442,6 +456,8 @@ public class GameRoomConfig implements Cloneable{
         config.set("waitPosition",WorldInfoConfig.positionToString(worldInfo.getWaitPosition()));
         config.set("ban-command",banCommand);
         config.set("QuitRoom",quitRoomCommand);
+        config.set("fireballKnockBack", fireballKnockBack);
+        config.set("hasWatch", hasWatch);
         config.set("AutomaticNextRound",isAutomaticNextRound);
         config.set("victoryCmd",victoryCommand);
         config.set("defeatCmd",defeatCommand);

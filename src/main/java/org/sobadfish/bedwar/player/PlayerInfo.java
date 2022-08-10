@@ -27,6 +27,7 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.IronGolem;
 import org.sobadfish.bedwar.event.PlayerGameDeathEvent;
 import org.sobadfish.bedwar.item.ItemInfo;
+import org.sobadfish.bedwar.item.button.FollowItem;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
@@ -38,6 +39,7 @@ import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.message.ScoreBoardMessage;
 import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
+import org.sobadfish.bedwar.room.config.GameRoomEventConfig;
 import org.sobadfish.bedwar.thread.BaseTimerRunnable;
 
 import java.text.SimpleDateFormat;
@@ -108,6 +110,7 @@ public class PlayerInfo {
     }
 
     public void setLeave(boolean leave) {
+
         isLeave = leave;
         if(leave){
             playerType = PlayerType.LEAVE;
@@ -144,9 +147,9 @@ public class PlayerInfo {
 
     public enum PlayerType{
         /**
-         * WAIT: 等待 START: 开始 DEATH: 死亡 WAIT_DEATH:等待复活 LEAVE: 离开 WATCH 观察
+         * WAIT: 等待 START: 开始 DEATH: 死亡(等待复活)  LEAVE: 离开 WATCH 观察(真正的死亡)
          * */
-        WAIT,START,DEATH,WAIT_DEATH,LEAVE,WATCH
+        WAIT,START,DEATH,LEAVE,WATCH
     }
 
     public Level getLevel(){
@@ -378,7 +381,7 @@ public class PlayerInfo {
     }
 
     public boolean isLive(){
-        return !cancel && !isLeave && playerType != PlayerType.DEATH;
+        return !cancel && !isLeave && playerType != PlayerType.WATCH;
     }
 
     public void sendScore(ScoreBoardMessage message){
@@ -449,9 +452,12 @@ public class PlayerInfo {
     public String toString(){
         String teamName = "&r";
         String playerName = "&7"+player.getName();
-        if(teamInfo != null){
+
+        if(teamInfo != null && !isWatch()){
             teamName = "&7[&r"+teamInfo.getTeamConfig().getNameColor()+teamInfo.getTeamConfig().getName()+"&7]&r";
             playerName = teamInfo.getTeamConfig().getNameColor()+" &7"+player.getName();
+        }else if(isWatch()){
+            teamName = "&7[旁观]";
         }
         return teamName+playerName;
     }
@@ -491,16 +497,29 @@ public class PlayerInfo {
             lore.add("   ");
 
         }else{
+            GameRoomEventConfig.GameRoomEventItem eventItem = getGameRoom().getEventControl().getEventConfig();
+            if(eventItem != null){
+                lore.add(eventItem.display+" &a"+formatTime(eventItem.eventTime - getGameRoom().getEventControl().loadTime));
+                lore.add("    ");
+            }else{
+                lore.add("时间: &a"+formatTime(loadTime));
+            }
+
             for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
+                String me = "";
+                if(getTeamInfo() != null && getTeamInfo().equals(teamInfo)){
+                    me = "&7(我)";
+                }
                 if(teamInfo.isBadExists() && teamInfo.isLoading()){
-                    lore.add("◎ "+teamInfo.toString()+":&r    &a✔ "+(getTeamInfo().equals(teamInfo)?"&7(我)":""));
+
+                    lore.add("◎ "+teamInfo.toString()+":&r    &a✔ "+me);
                 }else if(!teamInfo.isBadExists() && teamInfo.isLoading()){
-                    lore.add("◎ "+teamInfo.toString()+": &r   &c"+teamInfo.getLivePlayer().size()+" "+(getTeamInfo().equals(teamInfo)?"&7(我)":""));
+                    lore.add("◎ "+teamInfo.toString()+": &r   &c"+teamInfo.getLivePlayer().size()+" "+me);
                 }else{
-                    lore.add("◎ "+teamInfo.toString()+": &r   &c✘ "+(getTeamInfo().equals(teamInfo)?"&7(我)":""));
+                    lore.add("◎ "+teamInfo.toString()+": &r   &c✘ "+me);
                 }
             }
-            lore.add("   ");
+            lore.add("    ");
             lore.add("击杀数: &a"+killCount);
             lore.add("最终击杀数: &a"+endKillCount);
             lore.add("破坏床数: &a"+bedBreakCount);
@@ -529,7 +548,7 @@ public class PlayerInfo {
         }else{
             damageByInfo = null;
         }
-        if(playerType == PlayerType.WAIT_DEATH){
+        if(playerType == PlayerType.DEATH){
             if(spawnTime >= 5){
 
                 sendTitle("&a你复活了",1);
@@ -595,10 +614,11 @@ public class PlayerInfo {
 
 
         if(teamInfo.isBadExists()){
-            playerType = PlayerType.WAIT_DEATH;
-        }else{
             playerType = PlayerType.DEATH;
-            player.getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
+        }else{
+            //TODO 死亡后的观察模式
+            getGameRoom().joinWatch(this);
+
         }
         PlayerGameDeathEvent event1 = new PlayerGameDeathEvent(this,getGameRoom(),BedWarMain.getBedWarMain());
         Server.getInstance().getPluginManager().callEvent(event1);
@@ -611,7 +631,7 @@ public class PlayerInfo {
         if(event != null) {
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
                 if(damageByInfo != null){
-                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 推入虚空。"+(playerType==PlayerType.DEATH?"&b&l最终击杀!":""));
+                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 推入虚空。"+(playerType==PlayerType.WATCH?"&b&l最终击杀!":""));
                     addKill(damageByInfo);
                 }
                 gameRoom.sendMessage(this + "&e掉入虚空");
@@ -626,15 +646,15 @@ public class PlayerInfo {
                     }
                     if (info != null) {
                         addKill(info);
-                        gameRoom.sendMessage(this + " &e被 &r" + info + " "+killInfo+"了。"+(playerType==PlayerType.DEATH?"&b&l最终击杀!":""));
+                        gameRoom.sendMessage(this + " &e被 &r" + info + " "+killInfo+"了。"+(playerType==PlayerType.WATCH?"&b&l最终击杀!":""));
                     }
                 } else {
-                    gameRoom.sendMessage(this + " &e被 &r" + entity.getName() + " 击败了"+(playerType==PlayerType.DEATH?"&b&l最终击杀!":""));
+                    gameRoom.sendMessage(this + " &e被 &r" + entity.getName() + " 击败了"+(playerType==PlayerType.WATCH?"&b&l最终击杀!":""));
                 }
             } else {
                 if(damageByInfo != null){
                     addKill(damageByInfo);
-                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 击败了"+(playerType==PlayerType.DEATH?"&b&l最终击杀!":""));
+                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 击败了"+(playerType==PlayerType.WATCH?"&b&l最终击杀!":""));
                 }else {
                     String deathInfo = "&e死了";
                     switch (event.getCause()){
@@ -666,13 +686,30 @@ public class PlayerInfo {
             }
 
         }
-        if(playerType == PlayerType.DEATH && getGameRoom().getType() != GameRoom.GameType.END){
+        if(playerType == PlayerType.WATCH && getGameRoom().getType() != GameRoom.GameType.END){
             gameRoom.sendMessage(this + " &e淘汰了");
         }
         damageByInfo = null;
         player.getInventory().clearAll();
         player.getOffhandInventory().clearAll();
 
+    }
+
+    /**
+     * 玩家数据初始化
+     * */
+    public void init(){
+        if(BedWarMain.getBedWarMain().getConfig().getBoolean("save-playerInventory",true)){
+            inventory = getPlayer().getInventory();
+            eInventory = getPlayer().getEnderChestInventory();
+        }
+        getPlayer().setHealth(getPlayer().getMaxHealth());
+        if(getPlayer() instanceof Player) {
+            ((Player)getPlayer()).getFoodData().reset();
+        }
+        getPlayer().getInventory().clearAll();
+        //TODO 给玩家物品
+        getPlayer().getInventory().setHeldItemSlot(0);
     }
 
     private void addKill(PlayerInfo info){
@@ -705,12 +742,16 @@ public class PlayerInfo {
                 }
             }
         }
+    }
 
 
+
+    public boolean isWatch(){
+        return  playerType == PlayerType.WATCH;
     }
 
     public boolean  isDeath(){
-        return playerType == PlayerType.DEATH || playerType == PlayerType.WAIT_DEATH || playerType == PlayerType.LEAVE;
+        return  playerType == PlayerType.DEATH;
     }
 
     private void leave(){

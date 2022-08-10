@@ -31,7 +31,10 @@ public class RoomLoadThread implements Runnable{
                 playerInfo.onUpdate();
             }
             if(room.loadTime > 0) {
-                room.loadTime--;
+                if(!room.getEventControl().hasEvent()){
+                    room.loadTime--;
+                }
+
             }
 
 

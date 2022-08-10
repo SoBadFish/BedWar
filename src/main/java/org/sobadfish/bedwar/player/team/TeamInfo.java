@@ -197,13 +197,13 @@ public class TeamInfo {
         int d = 0;
         for(PlayerInfo info: getTeamPlayers()){
             info.putEffect(teamEffects);
-            if(info.getPlayerType() == PlayerInfo.PlayerType.DEATH || info.getPlayerType() == PlayerInfo.PlayerType.LEAVE){
+            if(info.getPlayerType() == PlayerInfo.PlayerType.WATCH || info.getPlayerType() == PlayerInfo.PlayerType.LEAVE){
                 d++;
             }
         }
         if(teamEffects.contains(new TeamEffectInfo(new TeamTrap(1)))){
             for(PlayerInfo playerInfo: room.getPlayerInfos()){
-                if(playerInfo.getTeamInfo().equals(this) || !playerInfo.isLive() || playerInfo.getPlayerType() == PlayerInfo.PlayerType.WAIT_DEATH){
+                if( !playerInfo.isLive() || playerInfo.getPlayerType() == PlayerInfo.PlayerType.WATCH || playerInfo.getTeamInfo().equals(this) ){
                     continue;
                 }
                 if(playerInfo.getPlayer().distance(getTeamConfig().getBedPosition()) <= 5){
@@ -249,6 +249,7 @@ public class TeamInfo {
         badExists = false;
         getTeamConfig().getBedPosition().getLevel().setBlock( getTeamConfig().getBedPosition(),new BlockAir());
         Position pos2 = getTeamConfig().getBedPosition().getSide(getTeamConfig().getBedFace());
+        room.addSound(Sound.MOB_ENDERDRAGON_GROWL);
         getTeamConfig().getBedPosition().getLevel().setBlock(pos2,new BlockAir(),true,true);
     }
 

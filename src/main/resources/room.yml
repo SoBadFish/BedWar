@@ -3,9 +3,10 @@ roomMoney: "default"
 gameTime: 1200
 fireballKnockBack: 0.6
 callbackY: 17
+hasWatch: true
 killItem: 0.5
-times:
-  bedbreak: 120
+#times:
+#  bedbreak: 120
 waitTime: 120
 ui: auto
 entity:

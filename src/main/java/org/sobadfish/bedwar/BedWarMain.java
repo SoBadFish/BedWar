@@ -14,11 +14,10 @@ import org.sobadfish.bedwar.command.BedWarSpeakCommand;
 import org.sobadfish.bedwar.entity.EntityBlueWitherSkull;
 import org.sobadfish.bedwar.entity.EntityFireBall;
 import org.sobadfish.bedwar.entity.IronGolem;
-import org.sobadfish.bedwar.manager.MenuRoomManager;
-import org.sobadfish.bedwar.manager.NbtItemManager;
-import org.sobadfish.bedwar.manager.RandomJoinManager;
-import org.sobadfish.bedwar.manager.RoomManager;
+import org.sobadfish.bedwar.manager.*;
 import org.sobadfish.bedwar.panel.lib.AbstractFakeInventory;
+import org.sobadfish.bedwar.room.event.BreakEvent;
+import org.sobadfish.bedwar.room.event.TimeEvent;
 import org.sobadfish.bedwar.tools.Utils;
 
 import java.io.File;
@@ -40,6 +39,7 @@ public class BedWarMain extends PluginBase {
     private static RoomManager roomManager;
 
     private static MenuRoomManager menuRoomManager;
+
 
 
     public static UiType uiType;
@@ -67,8 +67,12 @@ public class BedWarMain extends PluginBase {
         this.getServer().getCommandMap().register("badwar",new BedWarAdminCommand("bd"));
         this.getServer().getCommandMap().register("badwar",new BedWarCommand("bw"));
         this.getServer().getCommandMap().register("badwar",new BedWarSpeakCommand("bws"));
-        this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
         RandomJoinManager.newInstance().start();
+        RoomEventManager.register("time", TimeEvent.class);
+        RoomEventManager.register("break", BreakEvent.class);
+
+        this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
+
     }
 
     /**

@@ -17,6 +17,7 @@ import cn.nukkit.level.Sound;
 import de.theamychan.scoreboard.network.Scoreboard;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.event.*;
+import org.sobadfish.bedwar.item.button.FollowItem;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
 import org.sobadfish.bedwar.item.button.TeamChoseItem;
 import org.sobadfish.bedwar.manager.RandomJoinManager;
@@ -49,6 +50,8 @@ public class GameRoom {
 
     private GameRoomConfig roomConfig;
 
+    private EventControl eventControl;
+
     /**
      * 地图配置
      * */
@@ -65,11 +68,11 @@ public class GameRoom {
 
     private ShopInfo shopInfo;
 
-    private ArrayList<TeamInfo> teamInfos = new ArrayList<>();
+    private final ArrayList<TeamInfo> teamInfos = new ArrayList<>();
 
-    private ArrayList<BlockChest> clickChest = new ArrayList<>();
+    private final ArrayList<BlockChest> clickChest = new ArrayList<>();
 
-    private CopyOnWriteArrayList<PlayerInfo> playerInfos = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<PlayerInfo> playerInfos = new CopyOnWriteArrayList<>();
 
     private GameRoom(GameRoomConfig roomConfig){
         this.roomConfig = roomConfig;
@@ -79,6 +82,9 @@ public class GameRoom {
         for(TeamInfoConfig config: getRoomConfig().getTeamConfigs()){
             teamInfos.add(new TeamInfo(this,config));
         }
+        //启动事件
+        eventControl = new EventControl(this,roomConfig.eventConfig);
+
         ThreadManager.addThread(new RoomLoadThread(this));
 
     }
@@ -121,6 +127,10 @@ public class GameRoom {
         this.type = type;
     }
 
+    public EventControl getEventControl() {
+        return eventControl;
+    }
+
     public void setClose(boolean close) {
         this.close = close;
     }
@@ -153,6 +163,7 @@ public class GameRoom {
                 onWait();
                 break;
             case START:
+                eventControl.enable = true;
                 onStart();
                 break;
             case END:
@@ -203,6 +214,7 @@ public class GameRoom {
 
 
     private void onStart(){
+        eventControl.run();
         if(loadTime == -1 && teamAll){
             //TODO 当房间开始
             for(TeamInfo t:teamInfos){
@@ -224,14 +236,14 @@ public class GameRoom {
 
             for (TeamInfo teamInfo : teamInfos) {
                 teamInfo.onUpdate();
-                if(loadTime <= roomConfig.bedBreak){
-                    if(teamInfo.isBadExists()){
-                        teamInfo.breakBed();
-                        teamInfo.addSound(Sound.MOB_ENDERDRAGON_GROWL);
-                        teamInfo.sendTitle(" &c床被破坏！");
-                        teamInfo.sendSubTitle("进入死斗模式");
-                    }
-                }
+//                if(loadTime <= roomConfig.bedBreak){
+//                    if(teamInfo.isBadExists()){
+//                        teamInfo.breakBed();
+//                        teamInfo.addSound(Sound.MOB_ENDERDRAGON_GROWL);
+//                        teamInfo.sendTitle(" &c床被破坏！");
+//                        teamInfo.sendSubTitle("进入死斗模式");
+//                    }
+//                }
             }
             if (getLiveTeam().size() == 1) {
                 TeamInfo teamInfo = getLiveTeam().get(0);
@@ -325,9 +337,21 @@ public class GameRoom {
         shopInfo = new ShopInfo(linkedHashMaps);
     }
 
+    /**
+     * 旁观者们
+     * */
+    public ArrayList<PlayerInfo> getWatchPlayers(){
+        ArrayList<PlayerInfo> t = new ArrayList<>();
+        for(PlayerInfo playerInfo: playerInfos){
+            if(playerInfo.isWatch()){
+                t.add(playerInfo);
+            }
+        }
+        return t;
+    }
 
 
-    private LinkedHashMap<PlayerInfo, Scoreboard> scoreboards = new LinkedHashMap<>();
+    private final LinkedHashMap<PlayerInfo, Scoreboard> scoreboards = new LinkedHashMap<>();
 
     /**
      * 离开游戏的玩家们
@@ -421,17 +445,7 @@ public class GameRoom {
             if(info.getPlayer() instanceof Player) {
                 ((Player)info.getPlayer()).setGamemode(2);
             }
-            if(BedWarMain.getBedWarMain().getConfig().getBoolean("save-playerInventory",true)){
-                info.inventory = info.getPlayer().getInventory();
-                info.eInventory = info.getPlayer().getEnderChestInventory();
-            }
-            info.getPlayer().setHealth(info.getPlayer().getMaxHealth());
-            if(info.getPlayer() instanceof Player) {
-                ((Player)info.getPlayer()).getFoodData().reset();
-            }
-            info.getPlayer().getInventory().clearAll();
-            //TODO 给玩家物品
-            info.getPlayer().getInventory().setHeldItemSlot(0);
+            info.init();
             info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(),TeamChoseItem.get());
             info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
 
@@ -568,6 +582,44 @@ public class GameRoom {
         }
         return p;
     }
+
+    public void sendMessageOnWatch(String msg) {
+        ArrayList<PlayerInfo> watchPlayer = new ArrayList<>();
+        for(PlayerInfo info: playerInfos){
+            if(info.isWatch()){
+                watchPlayer.add(info);
+            }
+        }
+        watchPlayer.forEach(dp -> dp.sendMessage(msg));
+    }
+
+    public void joinWatch(PlayerInfo info) {
+        //TODO 欢迎加入观察者大家庭
+        if(!playerInfos.contains(info)){
+            Position position = getTeamInfos().get(0).getTeamConfig().getBedPosition();
+            position.add(0,64,0);
+            position.level = getWorldInfo().getConfig().getGameWorld();
+            info.getPlayer().teleport(position);
+            if(info.getPlayer() instanceof Player) {
+                ((Player)info.getPlayer()).setGamemode(3);
+            }
+            info.init();
+            info.setGameRoom(this);
+            if(info.getPlayer() instanceof Player) {
+                BedWarMain.getRoomManager().playerJoin.put(info.getPlayer().getName(),getRoomConfig().name);
+            }
+            playerInfos.add(info);
+        }
+
+        info.setPlayerType(PlayerInfo.PlayerType.WATCH);
+        info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
+        info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(), FollowItem.get());
+        sendMessage("&7"+info+"&7 成为了旁观者 （"+getWatchPlayers().size()+"）");
+        info.sendMessage("&e你可以等待游戏结束 也可以手动退出游戏房间");
+
+    }
+
+
 
     public enum GameType{
         /**

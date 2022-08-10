@@ -112,10 +112,10 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
 
     @Override
     public void explode() {
-        EntityExplosionPrimeEvent event = new EntityExplosionPrimeEvent(this, 4.0D);
+        EntityExplosionPrimeEvent event = new EntityExplosionPrimeEvent(this, 1);
         this.server.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            Explosion explosion = new Explosion(this, event.getForce(), master.getPlayer());
+            Explosion explosion = new Explosion(this, 4, master.getPlayer());
 
             if (event.isBlockBreaking()) {
                 explosion.explodeA();
