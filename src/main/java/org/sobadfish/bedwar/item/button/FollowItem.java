@@ -17,10 +17,6 @@ import java.util.ArrayList;
 public class FollowItem {
 
 
-    public static ArrayList<Player> clickAgain = new ArrayList<>();
-
-
-    private ArrayList<Player> clickAgainTeam = new ArrayList<>();
 
     public static int getIndex(){
         return 5;

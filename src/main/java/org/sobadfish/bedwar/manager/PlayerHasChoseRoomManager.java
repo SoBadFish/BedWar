@@ -11,13 +11,13 @@ import java.util.ArrayList;
  */
 public class PlayerHasChoseRoomManager {
 
-    private RandomJoinManager.IPlayerInfo playerInfo;
+    private final RandomJoinManager.IPlayerInfo playerInfo;
 
     public boolean cancel = false;
 
-    private ArrayList<String> strings = new ArrayList<>();
+    private final ArrayList<String> strings = new ArrayList<>();
 
-    private ArrayList<GameRoomConfig> roomName = new ArrayList<>();
+    private final ArrayList<GameRoomConfig> roomName = new ArrayList<>();
 
     public PlayerHasChoseRoomManager(RandomJoinManager.IPlayerInfo info){
         this.playerInfo = info;

@@ -484,7 +484,7 @@ public class RoomManager implements Listener {
             GameRoom room = info.getGameRoom();
             if(room != null){
                 if(info.isWatch()){
-                    room.sendMessageOnWatch(info+"&e(旁观) &r>> "+event.getMessage());
+                    room.sendMessageOnWatch(info+" &r>> "+event.getMessage());
                 }else{
                     String msg = event.getMessage();
                     if(msg.startsWith("@") || msg.startsWith("!")){
