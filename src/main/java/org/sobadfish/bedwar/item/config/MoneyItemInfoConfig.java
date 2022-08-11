@@ -45,6 +45,22 @@ public class MoneyItemInfoConfig {
         return item;
     }
 
+    public void setCustomName(String customName) {
+        this.customName = customName;
+    }
+
+    public void setExp(double exp) {
+        this.exp = exp;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getCustomName() {
         return customName;
     }

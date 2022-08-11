@@ -20,9 +20,13 @@ import org.sobadfish.bedwar.tools.Utils;
  * 2022/1/8
  */
 public class EntityBlueWitherSkull extends EntityProjectile implements EntityExplosive {
+
     public static final int NETWORK_ID = 89;
+
     protected boolean critical;
+
     protected boolean canExplode;
+
     private PlayerInfo master;
 
     @Override
@@ -124,18 +128,4 @@ public class EntityBlueWitherSkull extends EntityProjectile implements EntityExp
         }
     }
 
-//    @Override
-//    public void explode() {
-//        ExplosionPrimeEvent ev = new ExplosionPrimeEvent(this, 1.1D);
-//        this.server.getPluginManager().callEvent(ev);
-//        if (!ev.isCancelled()) {
-//            Explosion explosion = new Explosion(this, (double)((float)ev.getForce()), this.shootingEntity);
-//            if (ev.isBlockBreaking() && this.level.getGameRules().getBoolean(GameRule.MOB_GRIEFING)) {
-//                explosion.explodeA();
-//            }
-//
-//            explosion.explodeB();
-//        }
-
-//    }
 }

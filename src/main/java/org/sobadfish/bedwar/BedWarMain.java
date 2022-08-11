@@ -16,8 +16,7 @@ import org.sobadfish.bedwar.entity.EntityFireBall;
 import org.sobadfish.bedwar.entity.IronGolem;
 import org.sobadfish.bedwar.manager.*;
 import org.sobadfish.bedwar.panel.lib.AbstractFakeInventory;
-import org.sobadfish.bedwar.room.event.BreakEvent;
-import org.sobadfish.bedwar.room.event.TimeEvent;
+import org.sobadfish.bedwar.room.event.*;
 import org.sobadfish.bedwar.tools.Utils;
 
 import java.io.File;
@@ -39,9 +38,7 @@ public class BedWarMain extends PluginBase {
     private static RoomManager roomManager;
 
     private static MenuRoomManager menuRoomManager;
-
-
-
+    
     public static UiType uiType;
 
     @Override
@@ -68,8 +65,14 @@ public class BedWarMain extends PluginBase {
         this.getServer().getCommandMap().register("badwar",new BedWarCommand("bw"));
         this.getServer().getCommandMap().register("badwar",new BedWarSpeakCommand("bws"));
         RandomJoinManager.newInstance().start();
+
         RoomEventManager.register("time", TimeEvent.class);
         RoomEventManager.register("break", BreakEvent.class);
+        RoomEventManager.register("custom", CustomEvent.class);
+        RoomEventManager.register("effect", EffectEvent.class);
+        RoomEventManager.register("command", CommandEvent.class);
+        sendMessageToConsole("&e当前内置 &a"+RoomEventManager.EVENT.size()+" &e个事件");
+
 
         this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
 

@@ -223,47 +223,47 @@ public class Utils {
      * 复制文件
      * */
     public static boolean copyFiles(File old,File target){
+
+        int load = 1;
         File[] files = old.listFiles();
-        try {
-            ThreadManager.addThread(new AsyncTask() {
-                @Override
-                public void onRun() {
-                    if(files != null){
-                        for (File value : files) {
-                            if (value.isFile()) {
-                                // 复制文件
-                                try {
-                                    File file1 = new File(target +File.separator + value.getName());
-                                    if(!file1.exists()){
-                                        try{
-                                            file1.createNewFile();
-                                        }catch (Exception ignore){}
-
-                                    }
-                                    copyFile(value, file1);
-
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+        if(files != null){
+            for (File value : files) {
+                BedWarMain.sendMessageToConsole("复制地图中 ... "+((load / (float)files.length) * 100) +"%");
+                load++;
+                if (value.isFile()) {
+                    // 复制文件
+                    try {
+                        File file1 = new File(target +File.separator + value.getName());
+                        if(!file1.exists()){
+                            try{
+                                file1.createNewFile();
+                            }catch (Exception e){
+                                e.printStackTrace();
                             }
-                            if (value.isDirectory()) {
-                                // 复制目录
-                                String sourceDir = old + File.separator + value.getName();
-                                String targetDir = target+ File.separator + value.getName();
-                                try {
-                                    copyDirectiory(sourceDir, targetDir);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+
                         }
+                        copyFile(value, file1);
 
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
-            });
-        }catch (Exception e){
-            return false;
+                if (value.isDirectory()) {
+                    // 复制目录
+                    String sourceDir = old + File.separator + value.getName();
+                    String targetDir = target+ File.separator + value.getName();
+                    try {
+                        copyDirectiory(sourceDir, targetDir);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
         }
+
+
+
 
         return true;
     }

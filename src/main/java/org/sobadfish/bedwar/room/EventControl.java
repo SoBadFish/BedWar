@@ -2,8 +2,8 @@ package org.sobadfish.bedwar.room;
 
 
 import org.sobadfish.bedwar.manager.RoomEventManager;
-import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.config.GameRoomEventConfig;
+import org.sobadfish.bedwar.room.event.CustomEvent;
 import org.sobadfish.bedwar.room.event.IGameRoomEvent;
 
 import java.util.ArrayList;
@@ -22,6 +22,14 @@ public class EventControl {
 
     private final GameRoom room;
 
+    public IGameRoomEvent lastEvent;
+
+    /**
+     * 备选事件
+     * */
+    public List<GameRoomEventConfig.GameRoomEventItem> eventItems = new ArrayList<>();
+
+
 
     private final List<IGameRoomEvent> events = new ArrayList<>();
 
@@ -29,12 +37,13 @@ public class EventControl {
         this.eventConfig = eventConfig;
         this.room = room;
         for(GameRoomEventConfig.GameRoomEventItem item : eventConfig.getItems()){
-            IGameRoomEvent event = RoomEventManager.getEventByType(item);
+            IGameRoomEvent event = RoomEventManager.getEventByType(item,room);
             if(event != null){
                 events.add(event);
             }
 
         }
+        eventItems.addAll(room.getRoomConfig().eventListConfig.getItems());
 
     }
 
@@ -45,16 +54,63 @@ public class EventControl {
             loadTime++;
             if(position < events.size()){
                 IGameRoomEvent event = events.get(position);
-                if(loadTime >= event.item.eventTime){
-                    loadTime = 0;
-                    position++;
-                    event.onStart(room);
+                if(event instanceof CustomEvent){
+                    if(((CustomEvent) event).isEnable){
+                        IGameRoomEvent event1 = ((CustomEvent) event).nextEvent();
+                        if(event1 == null ){
+                            loadTime = 0;
+                            lastEvent = event;
+                            position++;
+                        }else{
+                            if(loadTime >= event.item.eventTime){
+                                loadTime = 0;
+                                event.onStart(room);
+                                ((CustomEvent) event).position++;
+                            }
+
+                        }
+
+                    }else{
+                        if(loadTime >= event.item.eventTime) {
+                            loadTime = 0;
+                            ((CustomEvent) event).isEnable = true;
+                            event.onStart(room);
+                        }
+                    }
+                }else{
+                    if(loadTime >= event.item.eventTime){
+                        loadTime = 0;
+                        lastEvent = event;
+                        position++;
+
+                        event.onStart(room);
+                    }
                 }
+
             }else{
                 loadTime = 0;
             }
 
         }
+    }
+
+    /**
+     * 配置 roomEventList 内部事件
+     * */
+    public List<GameRoomEventConfig.GameRoomEventItem> getEventConfigList() {
+        return eventItems;
+    }
+
+    public IGameRoomEvent getLastEvent() {
+        return lastEvent;
+    }
+
+    public IGameRoomEvent getNextEvent() {
+        if(hasEvent()){
+            return events.get(position);
+        }
+        return null;
+
     }
 
     public boolean hasEvent(){

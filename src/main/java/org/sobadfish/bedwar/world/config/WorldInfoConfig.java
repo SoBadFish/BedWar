@@ -6,10 +6,14 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
+import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.MoneyItemInfo;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
+import org.sobadfish.bedwar.room.config.GameRoomConfig;
+import org.sobadfish.bedwar.tools.Utils;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -73,14 +77,67 @@ public class WorldInfoConfig {
         this.waitPosition = waitPosition;
     }
 
-    public static WorldInfoConfig getInstance(MoneyItemInfo itemInfo, Config config){
+    public static boolean initWorld(String roomName,String levelName){
+        File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+File.separator+"rooms"+File.separator+roomName);
+        File world = new File(nameFile+File.separator+"world"+File.separator+levelName);
+        if(world.exists() && world.isDirectory()){
+            if(toPathWorld(roomName, levelName)){
+                BedWarMain.sendMessageToConsole("&a地图 &e"+levelName+" &a初始化完成");
+            }else{
+                BedWarMain.sendMessageToConsole("&c地图 &e"+levelName+" &c初始化失败,无法完成房间的加载");
+                return false;
+            }
+        }else{
+            if(toBackUpWorld(roomName,levelName)){
+                BedWarMain.sendMessageToConsole("&a备份地图 &e"+levelName+" &a完成");
+            }else{
+                BedWarMain.sendMessageToConsole("&c备份地图 &e"+levelName+" &c失败");
+            }
+        }
+        return true;
+    }
+
+    public static boolean toBackUpWorld(String roomName,String levelName){
+        File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+File.separator+"rooms"+File.separator+roomName);
+        File world = new File(nameFile+File.separator+"world"+File.separator+levelName);
+        if(!world.exists()){
+            world.mkdirs();
+        }
+
+        //
+        return Utils.copyFiles(new File(Server.getInstance().getFilePath()+File.separator + "worlds" +File.separator+ levelName), world);
+    }
+
+
+    public static boolean toPathWorld(String roomName,String levelName){
+        File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+File.separator+"rooms"+File.separator+roomName);
+        File world = new File(nameFile+File.separator+"world"+File.separator+levelName);
+        File[] files = world.listFiles();
+        File f2 = new File(Server.getInstance().getFilePath()+File.separator+"worlds"+File.separator+levelName);
+        if(!f2.exists()){
+            f2.mkdirs();
+        }
+        if(files != null && files.length > 0){
+            Utils.copyFiles(world,f2);
+            return Server.getInstance().loadLevel(levelName);
+        }
+        return false;
+        //载入地图 删掉之前的地图文件
+    }
+
+
+    public void setGameWorld(Level gameWorld) {
+        this.gameWorld = gameWorld;
+    }
+
+    public static WorldInfoConfig getInstance(String roomName, MoneyItemInfo itemInfo, Config config){
         Level gameWorld = Server.getInstance().getLevelByName(config.getString("world"));
         if(gameWorld == null){
+            if(!initWorld(roomName,config.getString("world"))){
+                return null;
+            }
             Server.getInstance().loadLevel(config.getString("world"));
             gameWorld = Server.getInstance().getLevelByName(config.getString("world"));
-        }
-        if(gameWorld == null){
-            return null;
         }
         Position waitPosition = getPositionByString(config.getString("waitPosition"));
         ArrayList<ItemInfoConfig> itemInfoConfigs = new ArrayList<>();

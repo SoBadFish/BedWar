@@ -18,6 +18,7 @@ import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
+import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.TextFormat;
 import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
@@ -27,20 +28,16 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.IronGolem;
 import org.sobadfish.bedwar.event.PlayerGameDeathEvent;
 import org.sobadfish.bedwar.item.ItemInfo;
-import org.sobadfish.bedwar.item.button.FollowItem;
-import org.sobadfish.bedwar.item.button.RoomQuitItem;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
-import org.sobadfish.bedwar.item.config.NbtItemInfoConfig;
 import org.sobadfish.bedwar.item.team.TeamEffect;
 import org.sobadfish.bedwar.item.team.TeamEffectInfo;
 import org.sobadfish.bedwar.item.team.TeamEnchant;
-import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.message.ScoreBoardMessage;
 import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.config.GameRoomEventConfig;
-import org.sobadfish.bedwar.thread.BaseTimerRunnable;
+import org.sobadfish.bedwar.room.event.IGameRoomEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -144,6 +141,8 @@ public class PlayerInfo {
     public GameRoom getGameRoom() {
         return gameRoom;
     }
+
+
 
     public enum PlayerType{
         /**
@@ -306,6 +305,17 @@ public class PlayerInfo {
         }
         getPlayer().getLevel().addSound(getPlayer(),sound);
     }
+
+    /**
+     * 增加效果
+     * */
+    public void addEffect(Effect effect) {
+        if(cancel || isLeave){
+            return;
+        }
+        getPlayer().addEffect(effect);
+    }
+
     /**
      * 发送信息
      * */
@@ -507,9 +517,9 @@ public class PlayerInfo {
             lore.add("   ");
 
         }else{
-            GameRoomEventConfig.GameRoomEventItem eventItem = getGameRoom().getEventControl().getEventConfig();
-            if(eventItem != null){
-                lore.add(eventItem.display+" &a"+formatTime1(eventItem.eventTime - getGameRoom().getEventControl().loadTime));
+            IGameRoomEvent event = getGameRoom().getEventControl().getNextEvent();
+            if(event != null){
+                lore.add(event.display()+" &a"+formatTime1(event.item.eventTime - getGameRoom().getEventControl().loadTime));
                 lore.add("    ");
             }else{
                 lore.add("时间: &a"+formatTime(loadTime));
@@ -571,9 +581,9 @@ public class PlayerInfo {
             }else{
                 if(spawnTime == 0 && !isSendkey){
                     isSendkey = true;
-                    sendTitle("&c你死了",6);
+                    sendTitle("&c你死了",gameRoom.reSpawnTime);
                 }
-                sendSubTitle((5 - spawnTime)+" 秒后复活");
+                sendSubTitle((gameRoom.reSpawnTime - spawnTime)+" 秒后复活");
                 spawnTime++;
             }
 

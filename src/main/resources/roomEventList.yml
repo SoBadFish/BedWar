@@ -1,0 +1,27 @@
+# 整局游戏中的事件
+# 跟 events 列表联动
+# 这里的事件不直接参与游戏内 但是会保存在游戏内
+# 通过自定义事件调用
+# value 数值在 time 类型中为tick时间 20 tick 为 1 秒
+# eventTime 为事件倒计时 单位为秒
+eventLists:
+  - type: "time"
+    display: "钻石生成点 II 级"
+    eventTime: 220
+    value: "钻石:400"
+  - type: "time"
+    display: "钻石生成点 III 级"
+    eventTime: 260
+    value: "钻石:300"
+  - type: "time"
+    display: "绿宝石生成点 II 级"
+    eventTime: 280
+    value: "绿宝石:500"
+  - type: "time"
+    display: "绿宝石生成点 III 级"
+    eventTime: 300
+    value: "绿宝石:400"
+  - type: "break"
+    display: "床破坏"
+    eventTime: 330
+

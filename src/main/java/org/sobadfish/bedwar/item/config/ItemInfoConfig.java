@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class ItemInfoConfig {
 
-    private MoneyItemInfoConfig moneyItemInfoConfig;
+    private final MoneyItemInfoConfig moneyItemInfoConfig;
 
     private int spawnTick;
 
@@ -52,6 +52,14 @@ public class ItemInfoConfig {
             return new ItemInfoConfig(moneyItemInfo.get(name),getPositionByList((List) oList),spawnTick);
         }
         return null;
+    }
+
+    public void setPositions(ArrayList<Position> positions) {
+        this.positions = positions;
+    }
+
+    public void setSpawnTick(int spawnTick) {
+        this.spawnTick = spawnTick;
     }
 
     private static ArrayList<Position> getPositionByList(List list){

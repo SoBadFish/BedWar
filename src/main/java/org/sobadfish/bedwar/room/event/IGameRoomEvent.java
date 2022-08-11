@@ -9,6 +9,8 @@ import org.sobadfish.bedwar.room.config.GameRoomEventConfig;
  */
 public abstract class IGameRoomEvent {
 
+    public GameRoom room;
+
     public GameRoomEventConfig.GameRoomEventItem item;
 
     public IGameRoomEvent(GameRoomEventConfig.GameRoomEventItem item){
@@ -18,12 +20,25 @@ public abstract class IGameRoomEvent {
     /**
      * 事件配置
      * */
-    abstract public GameRoomEventConfig.GameRoomEventItem getEventItem();
+    public GameRoomEventConfig.GameRoomEventItem getEventItem(){
+        return item;
+    }
 
     /**
      * 事件启动
      * */
     abstract public void onStart(GameRoom room);
+
+    /**
+     * 事件被创建
+     * */
+    public void onCreate(GameRoom room){
+        this.room = room;
+    }
+
+    public String display(){
+        return item.display;
+    }
 
 
 

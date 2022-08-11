@@ -17,6 +17,7 @@ import java.util.Map;
  * 2022/1/5
  */
 public class NbtItemInfoConfig {
+
     public INbtItem name;
 
     public Item item;

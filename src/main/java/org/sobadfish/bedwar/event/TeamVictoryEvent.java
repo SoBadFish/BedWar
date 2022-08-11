@@ -10,7 +10,7 @@ import org.sobadfish.bedwar.room.GameRoom;
  */
 public class TeamVictoryEvent extends GameRoomEvent{
 
-    private TeamInfo teamInfo;
+    private final TeamInfo teamInfo;
 
     public TeamVictoryEvent(TeamInfo teamInfo, GameRoom room, Plugin plugin) {
         super(room, plugin);

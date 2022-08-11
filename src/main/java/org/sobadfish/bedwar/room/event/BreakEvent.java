@@ -11,11 +11,6 @@ public class BreakEvent extends IGameRoomEvent{
         super(item);
     }
 
-    @Override
-    public GameRoomEventConfig.GameRoomEventItem getEventItem() {
-        return item;
-    }
-
 
     @Override
     public void onStart(GameRoom room) {

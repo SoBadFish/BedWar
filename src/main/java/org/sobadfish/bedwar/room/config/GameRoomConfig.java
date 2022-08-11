@@ -111,6 +111,9 @@ public class GameRoomConfig implements Cloneable{
      * */
     public int callbackY = 17;
 
+
+
+
     /**
      * 房间游戏货币类型
      * 目前只有default 和 exp
@@ -164,6 +167,11 @@ public class GameRoomConfig implements Cloneable{
      * */
     public GameRoomEventConfig eventConfig;
 
+    /**
+     * 游戏备选事件列表
+     * */
+    public GameRoomEventConfig eventListConfig;
+
 
 
 
@@ -200,6 +208,8 @@ public class GameRoomConfig implements Cloneable{
         BedWarMain.getBedWarMain().saveResource("item.yml","/rooms/"+name+"/item.yml",false);
         BedWarMain.getBedWarMain().saveResource("team.yml","/rooms/"+name+"/team.yml",false);
         BedWarMain.getBedWarMain().saveResource("event.yml","/rooms/"+name+"/event.yml",false);
+        BedWarMain.getBedWarMain().saveResource("roomEventList.yml","/rooms/"+name+"/roomEventList.yml",false);
+        BedWarMain.getBedWarMain().saveResource("readme.txt","/rooms/"+name+"/readme.txt",false);
         loadTeamShopConfig(roomConfig);
         return roomConfig;
 
@@ -332,7 +342,7 @@ public class GameRoomConfig implements Cloneable{
                     return null;
                 }
                 Config room = new Config(file+"/room.yml",Config.YAML);
-                WorldInfoConfig worldInfoConfig = WorldInfoConfig.getInstance(itemInfo,room);
+                WorldInfoConfig worldInfoConfig = WorldInfoConfig.getInstance(name,itemInfo,room);
                 if(worldInfoConfig == null){
                     BedWarMain.sendMessageToConsole("&c未成功加载 &a"+name+"&c 的游戏地图");
                     return null;
@@ -361,6 +371,9 @@ public class GameRoomConfig implements Cloneable{
                 if(!new File(file+"/event.yml").exists()){
                     BedWarMain.getBedWarMain().saveResource("event.yml","/rooms/"+name+"/event.yml",false);
                 }
+                if(!new File(file+"/roomEventList.yml").exists()){
+                    BedWarMain.getBedWarMain().saveResource("roomEventList.yml","/rooms/"+name+"/roomEventList.yml",false);
+                }
                 //TODO 实现商店
                 LinkedHashMap<String, ShopItemInfo> shopMap = new LinkedHashMap<>();
                 shopMap.put("defaultShop",ShopItemInfo.build("defaultShop",new Config(shopDir+"/defaultShop.yml",Config.YAML)));
@@ -378,7 +391,6 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.itemShopEntityId = room.getInt("entity.item",15);
                 roomConfig.callbackY = room.getInt("callbackY",17);
                 roomConfig.fireballKnockBack = (float) room.getDouble("fireballKnockBack",0.6f);
-//                roomConfig.bedBreak = room.getInt("times.bedbreak",120);
                 roomConfig.banCommand = new ArrayList<>(room.getStringList("ban-command"));
                 roomConfig.isAutomaticNextRound = room.getBoolean("AutomaticNextRound",true);
                 roomConfig.quitRoomCommand = new ArrayList<>(room.getStringList("QuitRoom"));
@@ -389,7 +401,10 @@ public class GameRoomConfig implements Cloneable{
                 }else{
                     roomConfig.gameStartMessage = defaultGameStartMessage();
                 }
+                BedWarMain.sendMessageToConsole("&e开始加载 房间主事件");
                 roomConfig.eventConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/event.yml"));
+                BedWarMain.sendMessageToConsole("&e开始加载 房间备选事件");
+                roomConfig.eventListConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/roomEventList.yml"));
                 return roomConfig;
             }catch (Exception e){
                 BedWarMain.sendMessageToConsole("加载房间出错: "+e.getMessage());
@@ -419,12 +434,6 @@ public class GameRoomConfig implements Cloneable{
         strings.add("&e保护你的床并摧毁敌人的床。收集铜锭，金锭，钻石和绿宝石");
         strings.add("&e来升级，使自身和队伍变得更强");
         strings.add("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-//        strings.add("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-//        strings.add("&f                                  起床战争                                      ");
-//        strings.add("&e                                                                               ");
-//        strings.add("&e            保护你的床并摧毁敌人的床。收集铜锭，金锭，钻石和绿宝石                 ");
-//        strings.add("&e                       来升级，使自身和队伍变得更强                              ");
-//        strings.add("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
         return strings;
     }
 

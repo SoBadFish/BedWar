@@ -10,7 +10,7 @@ import org.sobadfish.bedwar.room.GameRoom;
  */
 public class PlayerRoomInfoEvent extends GameRoomEvent{
 
-    private PlayerInfo playerInfo;
+    private final PlayerInfo playerInfo;
 
     public PlayerRoomInfoEvent(PlayerInfo playerInfo, GameRoom room, Plugin plugin) {
         super(room, plugin);

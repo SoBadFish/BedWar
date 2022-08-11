@@ -12,9 +12,9 @@ import org.sobadfish.bedwar.room.GameRoom;
  */
 public class TeamBedBreakEvent extends GameRoomEvent {
 
-    private TeamInfo teamInfo;
+    private final TeamInfo teamInfo;
 
-    private PlayerInfo breaker;
+    private final PlayerInfo breaker;
 
     public TeamBedBreakEvent(TeamInfo teamInfo,PlayerInfo breaker,GameRoom room, Plugin plugin) {
         super(room, plugin);

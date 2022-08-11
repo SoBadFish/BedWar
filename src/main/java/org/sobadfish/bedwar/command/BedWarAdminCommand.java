@@ -25,7 +25,7 @@ public class BedWarAdminCommand extends Command {
         super(name);
     }
 
-    private LinkedHashMap<String, GameRoomCreater> create = new LinkedHashMap<>();
+    private final LinkedHashMap<String, GameRoomCreater> create = new LinkedHashMap<>();
 
     private boolean createSetRoom(CommandSender commandSender,String value){
         GameRoomCreater creater;

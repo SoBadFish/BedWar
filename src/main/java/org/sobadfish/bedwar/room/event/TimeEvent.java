@@ -1,7 +1,6 @@
 package org.sobadfish.bedwar.room.event;
 
 import org.sobadfish.bedwar.item.ItemInfo;
-import org.sobadfish.bedwar.item.MoneyItemInfo;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.config.GameRoomEventConfig;
@@ -23,12 +22,17 @@ public class TimeEvent extends IGameRoomEvent{
 
     @Override
     public void onStart(GameRoom room) {
-        String item = getEventItem().item;
+        String[] item = getEventItem().value.toString().split(":");
+        if(item[0].equalsIgnoreCase("复活")){
+            room.reSpawnTime = Integer.parseInt(item[1]);
+            room.sendMessage(getEventItem().display);
+            return;
+        }
         for(ItemInfo itemInfo: room.getWorldInfo().getInfos()){
             MoneyItemInfoConfig moneyItemInfo = itemInfo.getItemInfoConfig().getMoneyItemInfoConfig();
-            if(moneyItemInfo.getName().equalsIgnoreCase(item)){
+            if(moneyItemInfo.getName().equalsIgnoreCase(item[0])){
                 //TODO
-                itemInfo.setResetTick((int)getEventItem().value);
+                itemInfo.setResetTick(Integer.parseInt(item[1]));
             }
         }
         room.sendMessage(getEventItem().display);

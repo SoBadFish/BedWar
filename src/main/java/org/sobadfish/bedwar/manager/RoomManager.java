@@ -113,27 +113,13 @@ public class RoomManager implements Listener {
                 for (File nameFile : dirNameList) {
                     if(nameFile.isDirectory()){
                         String roomName = nameFile.getName();
+
                         GameRoomConfig roomConfig = GameRoomConfig.getGameRoomConfigByFile(roomName,nameFile);
                         if(roomConfig != null){
                             BedWarMain.sendMessageToConsole("&a加载房间 "+roomName+" 完成");
                             map.put(roomName,roomConfig);
                             ////备份地图
-                            File world = new File(nameFile+File.separator+"world"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName());
-                            if(world.exists() && world.isDirectory()){
 
-                                if(toPathWorld(roomConfig)){
-                                    BedWarMain.sendMessageToConsole("&a地图 &e"+roomConfig.worldInfo.getGameWorld().getFolderName()+" &a初始化完成");
-                                }else{
-                                    BedWarMain.sendMessageToConsole("&c地图 &e"+roomConfig.worldInfo.getGameWorld().getFolderName()+" &ac初始化失败,无法完成房间的加载");
-                                    map.remove(roomName);
-                                }
-                            }else{
-                                if(toBackUpWorld(roomConfig)){
-                                    BedWarMain.sendMessageToConsole("&a备份地图 &e"+roomConfig.worldInfo.getGameWorld().getFolderName()+" &a完成");
-                                }else{
-                                    BedWarMain.sendMessageToConsole("&c备份地图 &e"+roomConfig.worldInfo.getGameWorld().getFolderName()+" &c失败");
-                                }
-                            }
                         }else{
                             BedWarMain.sendMessageToConsole("&c加载房间 "+roomName+" 失败");
 
@@ -145,34 +131,7 @@ public class RoomManager implements Listener {
         return new RoomManager(map);
     }
 
-    public static boolean toBackUpWorld(GameRoomConfig roomConfig){
-        File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+File.separator+"rooms"+File.separator+roomConfig.getName());
-        File world = new File(nameFile+File.separator+"world"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName());
-        if(!world.exists()){
-            world.mkdirs();
-        }
 
-        //
-        return Utils.copyFiles(new File(Server.getInstance().getFilePath()+File.separator + "worlds" +File.separator+ roomConfig.worldInfo.getGameWorld().getFolderName()), world);
-    }
-
-
-    public static boolean toPathWorld(GameRoomConfig roomConfig){
-        File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+File.separator+"rooms"+File.separator+roomConfig.getName());
-        File world = new File(nameFile+File.separator+"world"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName());
-        if(world.isDirectory() && world.exists()){
-            File[] files = world.listFiles();
-            if(files != null && files.length > 0){
-                Utils.copyFiles(world,new File(Server.getInstance().getFilePath()+File.separator+"worlds"+File.separator+roomConfig.worldInfo.getGameWorld().getFolderName()));
-                return Server.getInstance().loadLevel(roomConfig.worldInfo.getGameWorld().getFolderName());
-            }
-
-        }
-        return false;
-        //载入地图 删掉之前的地图文件
-
-
-    }
 
     public boolean joinRoom(PlayerInfo player,String roomName){
         if (BedWarMain.getRoomManager().hasRoom(roomName)) {
@@ -664,7 +623,7 @@ public class RoomManager implements Listener {
                 //防止错杀玩家
                 if(entity instanceof Player){
                     PlayerInfo info = room.getPlayerInfo((Player) entity);
-                    if(info != null && info.isWatch() ){
+                    if(info != null){
                         return;
                     }
                 }
@@ -732,6 +691,7 @@ public class RoomManager implements Listener {
                 }
                 if (event instanceof EntityDamageByEntityEvent) {
                     if (((EntityDamageByEntityEvent) event).getDamager() instanceof EntityFireBall) {
+                        event.setDamage(2);
                         ((EntityDamageByEntityEvent) event).setKnockBack(room.getRoomConfig().fireballKnockBack);
                     }
                 }

@@ -17,7 +17,7 @@ public class GameRoomEvent extends PluginEvent {
         return HANDLERS;
     }
 
-    private GameRoom room;
+    private final GameRoom room;
 
     public GameRoomEvent(GameRoom room,
                          Plugin plugin) {

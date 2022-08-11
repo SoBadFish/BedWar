@@ -14,6 +14,7 @@ import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.event.*;
@@ -33,6 +34,7 @@ import org.sobadfish.bedwar.thread.ProtectVillageThread;
 import org.sobadfish.bedwar.thread.RoomLoadThread;
 import org.sobadfish.bedwar.thread.WorldInfoLoadThread;
 import org.sobadfish.bedwar.world.WorldInfo;
+import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -48,9 +50,9 @@ public class GameRoom {
 
     public int loadTime = -1;
 
-    private GameRoomConfig roomConfig;
+    private final GameRoomConfig roomConfig;
 
-    private EventControl eventControl;
+    private final EventControl eventControl;
 
     /**
      * 地图配置
@@ -71,6 +73,12 @@ public class GameRoom {
     private final ArrayList<TeamInfo> teamInfos = new ArrayList<>();
 
     private final ArrayList<BlockChest> clickChest = new ArrayList<>();
+
+    /**
+     * 复活时间
+     * */
+    public int reSpawnTime = 5;
+
 
     private final CopyOnWriteArrayList<PlayerInfo> playerInfos = new CopyOnWriteArrayList<>();
 
@@ -224,6 +232,7 @@ public class GameRoom {
                     i.spawn();
                 }
             }
+
             shopInfo.init(getRoomConfig());
             ThreadManager.addThread(new ProtectVillageThread(this));
             loadTime = getRoomConfig().time;
@@ -236,27 +245,15 @@ public class GameRoom {
 
             for (TeamInfo teamInfo : teamInfos) {
                 teamInfo.onUpdate();
-//                if(loadTime <= roomConfig.bedBreak){
-//                    if(teamInfo.isBadExists()){
-//                        teamInfo.breakBed();
-//                        teamInfo.addSound(Sound.MOB_ENDERDRAGON_GROWL);
-//                        teamInfo.sendTitle(" &c床被破坏！");
-//                        teamInfo.sendSubTitle("进入死斗模式");
-//                    }
-//                }
             }
             if (getLiveTeam().size() == 1) {
                 TeamInfo teamInfo = getLiveTeam().get(0);
                 teamInfo.echoVictory();
-
-
                 type = GameType.END;
                 worldInfo.setClose(true);
-
                 loadTime = 5;
             }
         }else{
-
             TeamInfo successInfo = null;
             ArrayList<TeamInfo> teamInfos = getLiveTeam();
             if(teamInfos.size() > 0) {
@@ -416,6 +413,15 @@ public class GameRoom {
         }
     }
 
+    /**
+     * 全队BUFF
+     * */
+    public void addEffect(Effect effect){
+        for(PlayerInfo info: getLivePlayers()){
+            info.addEffect(effect);
+        }
+    }
+
     public boolean toBreakBlock(PlayerInfo info,Block block){
         if(worldInfo.getPlaceBlock().contains(block)){
             worldInfo.onChangeBlock(block,false);
@@ -443,20 +449,19 @@ public class GameRoom {
                 return false;
             }
             sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
-            info.getPlayer().teleport(getWorldInfo().getConfig().getWaitPosition());
-            if(info.getPlayer() instanceof Player) {
-                ((Player)info.getPlayer()).setGamemode(2);
-            }
             info.init();
             info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(),TeamChoseItem.get());
             info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
-
             info.setPlayerType(PlayerInfo.PlayerType.WAIT);
             info.setGameRoom(this);
             if(info.getPlayer() instanceof Player) {
                 BedWarMain.getRoomManager().playerJoin.put(info.getPlayer().getName(),getRoomConfig().name);
             }
             playerInfos.add(info);
+            info.getPlayer().teleport(getWorldInfo().getConfig().getWaitPosition());
+            if(info.getPlayer() instanceof Player) {
+                ((Player)info.getPlayer()).setGamemode(2);
+            }
             if(isInit){
                 isInit = false;
             }
@@ -778,7 +783,7 @@ public class GameRoom {
         //TODO 从列表中移除
         BedWarMain.getRoomManager().getRooms().remove(roomConfig.getName());
         BedWarMain.sendMessageToConsole("&r释放房间 "+roomConfig.getName());
-        if(RoomManager.toPathWorld(roomConfig)){
+        if(WorldInfoConfig.toPathWorld(roomConfig.getName(),roomConfig.getWorldInfo().getGameWorld().getFolderName())){
             BedWarMain.sendMessageToConsole("&a"+roomConfig.getName()+" 地图已还原");
         }
 

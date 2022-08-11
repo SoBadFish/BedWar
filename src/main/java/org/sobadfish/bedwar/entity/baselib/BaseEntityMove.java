@@ -115,9 +115,7 @@ public abstract class BaseEntityMove extends BaseEntity {
                                 continue;
                             }
                             if(entity instanceof EntityCreature) {
-                                if (entity != this) {
-                                    near = getAttackChunk(near, entity);
-                                }
+                                near = getAttackChunk(near, entity);
                             }
 
                         }

@@ -13,7 +13,7 @@ import org.sobadfish.bedwar.room.GameRoom;
 public class PlayerChoseTeamEvent extends PlayerRoomInfoEvent implements Cancellable {
 
 
-    private TeamInfo teamInfo;
+    private final TeamInfo teamInfo;
 
     public PlayerChoseTeamEvent(PlayerInfo playerInfo,TeamInfo teamInfo,GameRoom room, Plugin plugin) {
         super(playerInfo,room, plugin);

@@ -4,26 +4,7 @@
 # value 数值在 time 类型中为tick时间 20 tick 为 1 秒
 # eventTime 为事件倒计时 单位为秒
 eventLists:
-  - type: "time"
-    display: "钻石生成点 II 级"
-    item: "钻石"
+  - type: "custom"
+    display: "升级"
     eventTime: 220
-    value: 400
-  - type: "time"
-    display: "钻石生成点 III 级"
-    item: "钻石"
-    eventTime: 260
-    value: 300
-  - type: "time"
-    display: "绿宝石生成点 II 级"
-    item: "绿宝石"
-    eventTime: 280
-    value: 500
-  - type: "time"
-    display: "钻石生成点 III 级"
-    item: "绿宝石"
-    eventTime: 300
-    value: 400
-  - type: "break"
-    display: "床破坏"
-    eventTime: 330
+    value: "foreach:0-4"
