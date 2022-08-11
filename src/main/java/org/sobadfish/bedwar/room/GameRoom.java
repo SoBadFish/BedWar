@@ -3,10 +3,7 @@ package org.sobadfish.bedwar.room;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.block.Block;
-import cn.nukkit.block.BlockAir;
-import cn.nukkit.block.BlockBed;
-import cn.nukkit.block.BlockChest;
+import cn.nukkit.block.*;
 import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.blockentity.BlockEntityChest;
 import cn.nukkit.entity.Entity;
@@ -14,6 +11,7 @@ import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.math.BlockFace;
 import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
 import org.sobadfish.bedwar.BedWarMain;
@@ -39,6 +37,7 @@ import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -668,8 +667,11 @@ public class GameRoom {
         if(info1 != null) {
             Block block = info1.getTeamConfig().getBedPosition().getLevelBlock();
             if (block instanceof BlockBed) {
-
-
+                //TODO 判断一下床是否被保护的严实
+                if(isProtect((BlockBed) block)){
+                    info.sendMessage("&c这个床被方块包围，你至少要挖开一角");
+                    return false;
+                }
                 if (info.getTeamInfo().getTeamConfig().equals(info1.getTeamConfig())) {
                     info.sendMessage("&c你不能破坏自己的床");
                     return false;
@@ -685,6 +687,20 @@ public class GameRoom {
             }
         }
         return false;
+    }
+
+    private boolean isProtect(BlockBed block) {
+        List<Block> blocks = new ArrayList<>();
+        for(BlockFace fence: BlockFace.values()){
+            blocks.add(block.getSide(fence));
+        }
+        for(Block block1: blocks){
+            if(block1.getId() == 0){
+                return false;
+            }
+        }
+        return true;
+
     }
 
     /**

@@ -479,12 +479,14 @@ public class RoomManager implements Listener {
         if(room != null){
             PlayerInfo info = room.getPlayerInfo(player);
             if(info == null){
-
                 if(!player.isOp()) {
                     player.sendMessage("你不能破坏此方块");
                     event.setCancelled();
                 }
             }else{
+                if(block instanceof BlockEnderChest){
+                    event.setDrops(new Item[0]);
+                }
                 if(info.isWatch()){
                     event.setCancelled();
                     return;
