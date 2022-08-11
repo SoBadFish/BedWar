@@ -38,7 +38,7 @@ public class BedWarMain extends PluginBase {
     private static RoomManager roomManager;
 
     private static MenuRoomManager menuRoomManager;
-    
+
     public static UiType uiType;
 
     @Override
