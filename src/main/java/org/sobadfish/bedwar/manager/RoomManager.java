@@ -1079,15 +1079,7 @@ public class RoomManager implements Listener {
                             ((ChestInventoryPanel) inventory).update();
                         }
                     }
-                    if(i.hasCompoundTag() && i.getNamedTag().contains("player")){
-                        String playerName = i.getNamedTag().getString("player");
-                        Player player = ((ChestInventoryPanel) inventory).getPlayer();
-                        Player p = Server.getInstance().getPlayer(playerName);
-                        if(p != null){
-                            player.teleport(p.getLocation());
-                            inventory.close(player);
-                        }
-                    }
+
 
                 }
             }
