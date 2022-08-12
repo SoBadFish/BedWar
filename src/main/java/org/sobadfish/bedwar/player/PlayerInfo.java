@@ -507,7 +507,7 @@ public class PlayerInfo {
 
             return mi+":"+sss;
         }else{
-            return sss+"";
+            return "00:"+sss+"";
         }
 
     }

@@ -79,10 +79,7 @@ public class RoomManager implements Listener {
     }
 
     private GameRoom getGameRoomByLevel(Level level){
-//        if(getPlayerInfo(player) != null){
-//            return getPlayerInfo(player).getGameRoom();
-//        }
-//        return null;
+
         for(GameRoom room : rooms.values()){
             if(room.getRoomConfig().worldInfo.getGameWorld().getFolderName().equalsIgnoreCase(level.getFolderName())){
                 return room;
@@ -118,7 +115,6 @@ public class RoomManager implements Listener {
                         if(roomConfig != null){
                             BedWarMain.sendMessageToConsole("&a加载房间 "+roomName+" 完成");
                             map.put(roomName,roomConfig);
-                            ////备份地图
 
                         }else{
                             BedWarMain.sendMessageToConsole("&c加载房间 "+roomName+" 失败");
@@ -436,8 +432,6 @@ public class RoomManager implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(PlayerChatEvent event){
-//        Player player = event.getPlayer();
-//        GameRoom room = getGameRoomByLevel(player.getLevel());
         PlayerInfo info = getPlayerInfo(event.getPlayer());
         if(info != null){
             GameRoom room = info.getGameRoom();
@@ -681,11 +675,6 @@ public class RoomManager implements Listener {
                     event.setCancelled();
                     return;
                 }
-//                    if (playerInfo == null) {
-//                        event.setCancelled();
-//                        return;
-//                    }
-
                 //会重复
                 if (playerInfo.getPlayerType() == PlayerInfo.PlayerType.WAIT) {
                     event.setCancelled();

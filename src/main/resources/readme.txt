@@ -27,11 +27,11 @@ custom 自定义事件
 
 类型分为: while random foreach
 
-事件ID: 为 roomEventList 中的位置 0是第一条 后面的以此类推
+事件ID: 为 roomEventList.yml 文件中的事件 其中 0 是第一条 后面的以此类推
 
 while: 循环执行x事件
 
-示例 "while:0": 循环执行x事件
+示例 "while:0": 循环执行 roomEventList.yml 文件中的 第一个事件
 
 random: 随机执行事件
 
@@ -56,4 +56,14 @@ value: "药水id"
 多个效果:
 
 value: [""药水id:时间]
+
+----------------------------
+command 指令事件
+
+其中 command 事件的value参数格式为
+
+value: "give @p 264 1"
+
+给予玩家一颗钻石
+
 

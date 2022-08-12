@@ -1,7 +1,14 @@
 name: BedWar
 main: org.sobadfish.bedwar.BedWarMain
-version: 1.5.3
+version: 1.5.4
 api:
   - 1.0.11
   - 3.0.0
 author: sobadfish
+load: POSTWORLD
+description: "起床战争小游戏插件"
+
+depend:
+  - ScoreboardPlugin
+loadbefore:
+  - ScoreboardPlugin

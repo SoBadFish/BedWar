@@ -101,10 +101,6 @@ public class GameRoomConfig implements Cloneable{
      * */
     public boolean hasWatch = true;
 
-//    /**
-//     * 床自毁时间
-//     * */
-//    public int bedBreak = 120;
 
     /**
      * 等待大厅拉回坐标
