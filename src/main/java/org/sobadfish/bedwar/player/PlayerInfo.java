@@ -481,6 +481,7 @@ public class PlayerInfo {
     public String formatTime(int s){
         int min = s / 60;
         int ss = s % 60;
+
         if(min > 0){
             return min+" 分 "+ss+" 秒";
         }else{
@@ -488,13 +489,25 @@ public class PlayerInfo {
         }
 
     }
+
+
+
     public String formatTime1(int s){
         int min = s / 60;
         int ss = s % 60;
+        String mi = min+"";
+        String sss = ss+"";
+        if(min < 10){
+            mi = "0"+mi;
+        }
+        if(ss < 10){
+            sss = "0"+ss;
+        }
         if(min > 0){
-            return min+":"+ss;
+
+            return mi+":"+sss;
         }else{
-            return ss+"";
+            return sss+"";
         }
 
     }
@@ -522,7 +535,8 @@ public class PlayerInfo {
                 lore.add(event.display()+" &a"+formatTime1(event.item.eventTime - getGameRoom().getEventControl().loadTime));
                 lore.add("    ");
             }else{
-                lore.add("时间: &a"+formatTime(loadTime));
+
+                lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime));
             }
 
             for(TeamInfo teamInfo: gameRoom.getTeamInfos()){

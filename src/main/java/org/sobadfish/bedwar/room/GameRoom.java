@@ -91,7 +91,7 @@ public class GameRoom {
         }
         //启动事件
         eventControl = new EventControl(this,roomConfig.eventConfig);
-
+        eventControl.initAll(this);
         ThreadManager.addThread(new RoomLoadThread(this));
 
     }

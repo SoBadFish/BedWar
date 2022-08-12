@@ -20,13 +20,12 @@ public class RoomEventManager {
 
 
 
-    public static IGameRoomEvent getEventByType(GameRoomEventConfig.GameRoomEventItem item, GameRoom room){
+    public static IGameRoomEvent getEventByType(GameRoomEventConfig.GameRoomEventItem item){
         if(EVENT.containsKey(item.eventType)){
             Class<? extends IGameRoomEvent> e = EVENT.get(item.eventType);
             try {
-                IGameRoomEvent event = e.getConstructor(GameRoomEventConfig.GameRoomEventItem.class).newInstance(item);
-                event.onCreate(room);
-                return event;
+
+                return e.getConstructor(GameRoomEventConfig.GameRoomEventItem.class).newInstance(item);
             } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e1) {
                 e1.printStackTrace();
             }

@@ -37,7 +37,7 @@ public class EventControl {
         this.eventConfig = eventConfig;
         this.room = room;
         for(GameRoomEventConfig.GameRoomEventItem item : eventConfig.getItems()){
-            IGameRoomEvent event = RoomEventManager.getEventByType(item,room);
+            IGameRoomEvent event = RoomEventManager.getEventByType(item);
             if(event != null){
                 events.add(event);
             }
@@ -45,6 +45,12 @@ public class EventControl {
         }
         eventItems.addAll(room.getRoomConfig().eventListConfig.getItems());
 
+    }
+
+    public void initAll(GameRoom room){
+        for(IGameRoomEvent event: events){
+            event.onCreate(room);
+        }
     }
 
     public boolean enable;
@@ -75,6 +81,7 @@ public class EventControl {
                             loadTime = 0;
                             ((CustomEvent) event).isEnable = true;
                             event.onStart(room);
+                            ((CustomEvent) event).position++;
                         }
                     }
                 }else{

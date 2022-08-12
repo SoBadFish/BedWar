@@ -23,12 +23,11 @@ public class CustomEvent extends IGameRoomEvent{
     @Override
     public void onCreate(GameRoom room) {
         super.onCreate(room);
-        //TODO 这不得解析一下
-        init();
-
+        init(room);
     }
 
-    public void init(){
+    public void init(GameRoom room){
+        this.room = room;
         String[] type = getEventItem().value.toString().split(":");
         for(EventRunType runType: EventRunType.values()){
             if(runType.name().toLowerCase().equalsIgnoreCase(type[0])){
@@ -46,10 +45,11 @@ public class CustomEvent extends IGameRoomEvent{
                     if(pos > pos1){
                         continue;
                     }
-                    for(int i = pos;i < pos1;i++){
+                    for(int i = pos;i <= pos1;i++){
                         if(room.getEventControl().eventItems.size() > i){
-                            IGameRoomEvent event = RoomEventManager.getEventByType(room.getEventControl().eventItems.get(i),room);
+                            IGameRoomEvent event = RoomEventManager.getEventByType(room.getEventControl().eventItems.get(i));
                             if(event != null){
+                                event.onCreate(room);
                                 gameRoomEvents.add(event);
                             }
                         }
@@ -57,8 +57,9 @@ public class CustomEvent extends IGameRoomEvent{
                 }else{
                     int i = Integer.parseInt(v2[0]);
                     if(room.getEventControl().eventItems.size() > i){
-                        IGameRoomEvent event = RoomEventManager.getEventByType(room.getEventControl().eventItems.get(i),room);
+                        IGameRoomEvent event = RoomEventManager.getEventByType(room.getEventControl().eventItems.get(i));
                         if(event != null){
+                            event.onCreate(room);
                             gameRoomEvents.add(event);
                         }
                     }
@@ -68,6 +69,7 @@ public class CustomEvent extends IGameRoomEvent{
     }
 
     public enum EventRunType{
+        /**循环 随机 遍历*/
         WHILE,RANDOM,FOREACH
     }
 
@@ -93,7 +95,7 @@ public class CustomEvent extends IGameRoomEvent{
             case RANDOM:
                 if(!isRun){
                     if(random == null){
-                        random = gameRoomEvents.get(new Random().nextInt(gameRoomEvents.size() - 1));
+                        random = gameRoomEvents.get(new Random().nextInt(gameRoomEvents.size()));
                     }
                     event = random;
                 }
@@ -104,6 +106,7 @@ public class CustomEvent extends IGameRoomEvent{
                     event = gameRoomEvents.get(position);
                 }
                 break;
+                default:break;
         }
         return event;
 
@@ -117,11 +120,26 @@ public class CustomEvent extends IGameRoomEvent{
         }
         if(event != null){
             event.onStart(room);
+            if(event instanceof CustomEvent){
+                ((CustomEvent) event).isRun = false;
+                ((CustomEvent) event).random = null;
+            }
         }
     }
 
     @Override
     public String display() {
-        return getEventItem().display+"-"+super.display();
+        IGameRoomEvent event = nextEvent();
+        if(event != null){
+            if(event instanceof CustomEvent && ((CustomEvent) event).runType != EventRunType.RANDOM){
+                return getEventItem().display+nextEvent().getEventItem().display;
+            }else if(event instanceof CustomEvent && ((CustomEvent) event).runType == EventRunType.RANDOM){
+                return getEventItem().display;
+            }
+
+            return getEventItem().display+nextEvent().display();
+
+        }
+        return getEventItem().display;
     }
 }

@@ -44,7 +44,7 @@ public class BedWarCommand extends Command {
                     public void onClick(Player player) {
                         ThreadManager.addThread(() -> {
                             if(RandomJoinManager.newInstance().join(info,null)){
-                                info.sendForceTitle("&进入匹配队列");
+                                info.sendForceTitle("&a进入匹配队列");
                             }else{
                                 info.sendForceTitle("&c无法进入匹配队列..");
                             }
