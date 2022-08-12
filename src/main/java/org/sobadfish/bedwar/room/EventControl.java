@@ -24,6 +24,8 @@ public class EventControl {
 
     public IGameRoomEvent lastEvent;
 
+    public IGameRoomEvent thisEvent;
+
     /**
      * 备选事件
      * */

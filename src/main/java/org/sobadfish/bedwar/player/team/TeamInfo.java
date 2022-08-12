@@ -55,22 +55,6 @@ public class TeamInfo {
         return teamEffects;
     }
 
-    public void addEffect(TeamEffectInfo effect){
-        if(teamEffects.contains(effect)){
-            TeamEffectInfo ee = teamEffects.get(teamEffects.indexOf(effect));
-            ee.setLevel(ee.getLevel() + 1);
-        }else{
-            teamEffects.add(effect);
-        }
-    }
-
-
-
-    public ArrayList<PlayerInfo> getTeamPlayers() {
-        teamPlayers.removeIf((p)->p.disable);
-        return teamPlayers;
-    }
-
     public boolean isClose() {
         return close;
     }
@@ -117,6 +101,23 @@ public class TeamInfo {
         teamPlayers.forEach(playerInfo ->
                 playerInfo.sendForceMessage(msg));
     }
+
+    public void addEffect(TeamEffectInfo effect){
+        if(teamEffects.contains(effect)){
+            TeamEffectInfo ee = teamEffects.get(teamEffects.indexOf(effect));
+            ee.setLevel(ee.getLevel() + 1);
+        }else{
+            teamEffects.add(effect);
+        }
+    }
+
+
+
+    public ArrayList<PlayerInfo> getTeamPlayers() {
+        teamPlayers.removeIf((p)->p.disable);
+        return teamPlayers;
+    }
+
 
     public ArrayList<PlayerInfo> getInRoomPlayer(){
         ArrayList<PlayerInfo> playerInfos = new ArrayList<>();
