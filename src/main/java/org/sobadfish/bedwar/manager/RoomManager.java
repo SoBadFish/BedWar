@@ -885,23 +885,46 @@ public class RoomManager implements Listener {
 
     private void followPlayer(PlayerInfo info,GameRoom room){
         info.sendMessage("选择要传送的玩家");
-        if (((Player) info.getPlayer()).getLoginChainData().getDeviceOS() == 7){
-            //WIN10 玩家
-            DisPlayerPanel playerPanel = new DisPlayerPanel();
-            playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
-        }else{
-            List<BaseIButtom> list = new ArrayList<>();
-            //手机玩家
-            for(PlayerInfo i: room.getLivePlayers()){
-                list.add(new BaseIButtom(new PlayerItem(i).getGUIButton(info)) {
-                    @Override
-                    public void onClick(Player player) {
-                        player.teleport(i.getPlayer().getLocation());
-                    }
-                });
-            }
-            DisPlayWindowsFrom.disPlayerCustomMenu((Player) info.getPlayer(),"传送玩家",list);
+        switch(room.getRoomConfig().uiType){
+            case UI:
+                disPlayUI(info, room);
+                break;
+            case AUTO:
+                if (((Player) info.getPlayer()).getLoginChainData().getDeviceOS() == 7){
+                    disPlayUI(info, room);
+                }else{
+                    disPlayProtect(info, room);
+                }
+                break;
+            case PACKET:
+                disPlayProtect(info, room);
+                break;
+                default:break;
         }
+
+    }
+
+    private void disPlayProtect(PlayerInfo info,GameRoom room){
+        List<BaseIButtom> list = new ArrayList<>();
+        //手机玩家
+        for(PlayerInfo i: room.getLivePlayers()){
+            list.add(new BaseIButtom(new PlayerItem(i).getGUIButton(info)) {
+                @Override
+                public void onClick(Player player) {
+                    player.teleport(i.getPlayer().getLocation());
+                }
+            });
+        }
+        DisPlayWindowsFrom.disPlayerCustomMenu((Player) info.getPlayer(),"传送玩家",list);
+
+    }
+
+
+    private void disPlayUI(PlayerInfo info,GameRoom room){
+        //WIN10 玩家
+        DisPlayerPanel playerPanel = new DisPlayerPanel();
+        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
+
     }
 
     private boolean quitRoomItem(Player player, String roomName, GameRoom room) {
@@ -971,12 +994,16 @@ public class RoomManager implements Listener {
         Player player = event.getPlayer();
         if(DisPlayWindowsFrom.CUSTOM.containsKey(player.getName())){
             BedWarFrom simple = DisPlayWindowsFrom.CUSTOM.get(player.getName());
-            if (onBedWarFrom(event, player, simple)) return;
+            if (onBedWarFrom(event, player, simple)) {
+                return;
+            }
 
         }
         if(BedWarCommand.FROM.containsKey(player.getName())){
             BedWarFrom simple = BedWarCommand.FROM.get(player.getName());
-            if (onBedWarFrom(event, player, simple)) return;
+            if (onBedWarFrom(event, player, simple)) {
+                return;
+            }
 
         }
 
@@ -1038,6 +1065,7 @@ public class RoomManager implements Listener {
         for (InventoryAction action : transaction.getActions()) {
             for (Inventory inventory : transaction.getInventories()) {
 
+
                 if (inventory instanceof ChestInventoryPanel) {
                     event.setCancelled();
                     Item i = action.getSourceItem();
@@ -1049,6 +1077,15 @@ public class RoomManager implements Listener {
                             ((ChestInventoryPanel) inventory).clickSolt = index;
                             item.onClick((ChestInventoryPanel) inventory,player);
                             ((ChestInventoryPanel) inventory).update();
+                        }
+                    }
+                    if(i.hasCompoundTag() && i.getNamedTag().contains("player")){
+                        String playerName = i.getNamedTag().getString("player");
+                        Player player = ((ChestInventoryPanel) inventory).getPlayer();
+                        Player p = Server.getInstance().getPlayer(playerName);
+                        if(p != null){
+                            player.teleport(p.getLocation());
+                            inventory.close(player);
                         }
                     }
 
