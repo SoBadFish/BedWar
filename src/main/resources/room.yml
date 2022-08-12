@@ -24,6 +24,8 @@ AutomaticNextRound: true
 victoryCmd: []
 defeatCmd: []
 
+floatSpawnPos: {}
+
 roomStartMessage:
   - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
   - "&f起床战争"

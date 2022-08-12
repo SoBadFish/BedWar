@@ -6,6 +6,7 @@ import cn.nukkit.Player;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Position;
+import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.command.BedWarCommand;
@@ -18,6 +19,7 @@ import org.sobadfish.bedwar.manager.*;
 import org.sobadfish.bedwar.panel.lib.AbstractFakeInventory;
 import org.sobadfish.bedwar.room.event.*;
 import org.sobadfish.bedwar.tools.Utils;
+import org.sobadfish.bedwar.variable.BedWarVariable;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -73,6 +75,21 @@ public class BedWarMain extends PluginBase {
         RoomEventManager.register("command", CommandEvent.class);
         sendMessageToConsole("&e当前内置 &a"+RoomEventManager.EVENT.size()+" &e个事件");
 
+        sendMessageToConsole("&a正在检查相应的依赖");
+        for(String s : this.getDescription().getSoftDepend()){
+            Plugin plugin = getServer().getPluginManager().getPlugin(s);
+            if(plugin == null){
+                sendMessageToConsole("&c"+s+" 插件未加载，部分功能可能无法实现");
+                continue;
+            }
+            sendMessageToConsole("&a检测到 "+s+" 插件");
+            if(s.equalsIgnoreCase("RsNPC") || s.equalsIgnoreCase("RsNPCX")){
+                sendMessageToConsole("&7正在对接 "+s+" 插件");
+                BedWarVariable.init();
+                sendMessageToConsole("&a对接 "+s+" 插件完成");
+                break;
+            }
+        }
 
         this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
 

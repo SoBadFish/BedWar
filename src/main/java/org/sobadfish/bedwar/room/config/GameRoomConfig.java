@@ -9,6 +9,7 @@ import org.sobadfish.bedwar.item.config.ItemInfoConfig;
 import org.sobadfish.bedwar.manager.RoomEventManager;
 import org.sobadfish.bedwar.player.team.config.TeamConfig;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
+import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.bedwar.shop.item.ShopItemInfo;
 import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
@@ -16,6 +17,7 @@ import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -167,6 +169,11 @@ public class GameRoomConfig implements Cloneable{
      * 游戏备选事件列表
      * */
     public GameRoomEventConfig eventListConfig;
+
+    /**
+     * 游戏浮空字
+     * */
+    public List<FloatTextInfoConfig> floatTextInfoConfigs = new ArrayList<>();
 
 
 
