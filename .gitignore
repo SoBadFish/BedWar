@@ -24,4 +24,14 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-
+.gitignore
+.idea/.gitignore
+.idea/BedWar.iml
+.idea/compiler.xml
+.idea/inspectionProfiles/
+.idea/jarRepositories.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/uiDesigner.xml
+.idea/vcs.xml
+target/
