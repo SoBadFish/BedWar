@@ -708,6 +708,7 @@ public class GameRoom {
 
     private boolean isProtect(Position block) {
         List<Block> blocks = new ArrayList<>();
+
         for(BlockFace fence: BlockFace.values()){
             blocks.add(block.getLevelBlock().getSide(fence));
         }

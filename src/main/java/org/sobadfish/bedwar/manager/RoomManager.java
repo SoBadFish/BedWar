@@ -1084,19 +1084,28 @@ public class RoomManager implements Listener {
             for (Inventory inventory : transaction.getInventories()) {
 
                 if (inventory instanceof ChestInventoryPanel) {
+                    Player player = ((ChestInventoryPanel) inventory).getPlayer();
                     event.setCancelled();
                     Item i = action.getSourceItem();
+                    if(i.hasCompoundTag() && i.getNamedTag().contains("player")){
+                        String ps = i.getNamedTag().getString("player");
+                        Player p = Server.getInstance().getPlayer(ps);
+                        if(p != null){
+                            player.teleport(p);
+                            inventory.close(player);
+                        }
+                        return;
+                    }
                     if(i.hasCompoundTag() && i.getNamedTag().contains("index")){
                         int index = i.getNamedTag().getInt("index");
                         BasePlayPanelItemInstance item = ((ChestInventoryPanel) inventory).getPanel().getOrDefault(index,null);
-                        Player player = ((ChestInventoryPanel) inventory).getPlayer();
+
                         if(item != null){
                             ((ChestInventoryPanel) inventory).clickSolt = index;
                             item.onClick((ChestInventoryPanel) inventory,player);
                             ((ChestInventoryPanel) inventory).update();
                         }
                     }
-
 
                 }
             }

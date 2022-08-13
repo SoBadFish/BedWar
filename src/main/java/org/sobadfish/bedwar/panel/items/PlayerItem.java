@@ -37,9 +37,7 @@ public class PlayerItem extends BasePlayPanelItemInstance{
 
     @Override
     public void onClick(ChestInventoryPanel inventory, Player player) {
-        if(info.isLive()){
-            player.teleport(info.getPlayer());
-        }
+
     }
 
     @Override
@@ -65,13 +63,14 @@ public class PlayerItem extends BasePlayPanelItemInstance{
         lore.add(TextFormat.colorize('&',"&r&7状态 &a"+status));
         item.setLore(lore.toArray(new String[0]));
         item.setNamedTag(item.getNamedTag().putInt("index", index));
+        item.setNamedTag(item.getNamedTag().putString("player", i.getName()));
 
         return item;
     }
 
     @Override
     public ElementButton getGUIButton(PlayerInfo info) {
-        TeamInfo t = info.getTeamInfo();
+        TeamInfo t = this.info.getTeamInfo();
         String img = ItemIDSunName.getIDByPath(14);
         if(t != null){
             Item i = t.getTeamConfig().getTeamConfig().getBlockWoolColor();

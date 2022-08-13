@@ -27,9 +27,10 @@ public class FloatTextInfo {
                 BedWarMain.sendMessageToConsole("&c无法加载区块");
                 return null;
             }
-            bedWarFloatText = BedWarFloatText.showFloatText(floatTextInfoConfig.position,"");
+
 
         }
+        bedWarFloatText = BedWarFloatText.showFloatText(floatTextInfoConfig.position,"");
         return this;
     }
 

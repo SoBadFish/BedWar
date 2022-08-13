@@ -6,6 +6,7 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.player.PlayerData;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class PlayerDataManager {
             }
             reader = new InputStreamReader(new FileInputStream(file));
             PlayerData[] data = gson.fromJson(reader,PlayerData[].class);
-            return new PlayerDataManager(Arrays.asList(data),file);
+            return new PlayerDataManager(new ArrayList<>(Arrays.asList(data)),file);
         } catch (IOException e) {
             BedWarMain.sendMessageToConsole("&c无法读取 "+file.getName()+" 配置文件");
             e.printStackTrace();
