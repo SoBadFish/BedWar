@@ -3,6 +3,7 @@ package org.sobadfish.bedwar.player.team;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockAir;
+import cn.nukkit.block.BlockBed;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.potion.Effect;
@@ -18,6 +19,7 @@ import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.GameRoom;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -227,14 +229,24 @@ public class TeamInfo {
     }
     public void placeBed(){
         if(!getTeamConfig().getBedPosition().getChunk().isLoaded()){
-            getTeamConfig().getBedPosition().getLevel().loadChunk(getTeamConfig().getBedPosition().getChunkX(),getTeamConfig().getBedPosition().getChunkZ());
+            try {
+                getTeamConfig().getBedPosition().getChunk().load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         if(!getTeamConfig().getSpawnPosition().getChunk().isLoaded()){
-            getTeamConfig().getSpawnPosition().getLevel().loadChunk(getTeamConfig().getSpawnPosition().getChunkX(),getTeamConfig().getSpawnPosition().getChunkZ());
+            try {
+                getTeamConfig().getSpawnPosition().getChunk().load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         getTeamConfig().getBedPosition().getLevel().setBlock(getTeamConfig().getBedPosition(),Block.get(26,0),true,true);
         Position pos2 = getTeamConfig().getBedPosition().getSide(getTeamConfig().getBedFace());
         getTeamConfig().getBedPosition().getLevel().setBlock(pos2,Block.get(26,getTeamConfig().getBedFace().getHorizontalIndex()|8),true,true);
+
+
 
     }
 

@@ -557,12 +557,13 @@ public class GameRoom {
 
 
                     PlayerQuitRoomEvent event = new PlayerQuitRoomEvent(info, this, BedWarMain.getBedWarMain());
-                    info.cancel();
+
                     if (teleport) {
                         info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
                     }
 
                     Server.getInstance().getPluginManager().callEvent(event);
+                    info.cancel();
                     ((Player) info.getPlayer()).setExperience(0, 0);
                     if (((Player) info.getPlayer()).isOnline()) {
                         BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());

@@ -3,7 +3,6 @@ package org.sobadfish.bedwar.room.floattext;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.item.ItemInfo;
-import org.sobadfish.bedwar.item.config.ItemInfoConfig;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
 import org.sobadfish.bedwar.room.GameRoom;
 

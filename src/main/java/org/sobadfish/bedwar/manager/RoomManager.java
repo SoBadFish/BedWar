@@ -311,7 +311,7 @@ public class RoomManager implements Listener {
     @EventHandler
     public void onRoomClose(GameCloseEvent event){
         //TODO 写入
-        BedWarMain.getDataManager().save();
+        event.getRoom().getRoomConfig().save();
 
     }
 

@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class PlayerData {
 
-    public String name;
+    public String name = "";
 
     public List<RoomData> roomData = new ArrayList<>();
 
@@ -47,8 +47,10 @@ public class PlayerData {
         roomData.roomName = room;
         if(!this.roomData.contains(roomData)){
             this.roomData.add(roomData);
+        }else{
+            roomData = this.roomData.get(this.roomData.indexOf(roomData));
         }
-        return this.roomData.get(this.roomData.indexOf(roomData));
+        return roomData;
     }
 
     public void setInfo(PlayerInfo info){
@@ -61,10 +63,12 @@ public class PlayerData {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PlayerData data = (PlayerData) o;
-        return Objects.equals(name, data.name);
+       if(o instanceof PlayerData){
+           if(((PlayerData) o).name.equalsIgnoreCase(name)){
+               return true;
+           }
+       }
+       return false;
     }
 
     @Override

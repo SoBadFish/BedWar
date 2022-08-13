@@ -18,8 +18,13 @@ public class BedWarFloatText extends Entity {
     }
 
     @Override
-    public int getNetworkId() {
+    protected float getGravity() {
         return 0;
+    }
+
+    @Override
+    public int getNetworkId() {
+        return 64;
     }
 
     @Override
