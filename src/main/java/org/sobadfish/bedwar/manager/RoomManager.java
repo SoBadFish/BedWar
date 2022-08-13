@@ -939,10 +939,11 @@ public class RoomManager implements Listener {
 
 
     private void disPlayUI(PlayerInfo info,GameRoom room){
-        //WIN10 玩家
-        DisPlayerPanel playerPanel = new DisPlayerPanel();
-        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
+        //WIN10 玩家 故障，，，，
+//        DisPlayerPanel playerPanel = new DisPlayerPanel();
+//        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
 
+        disPlayProtect(info, room);
     }
 
     private boolean quitRoomItem(Player player, String roomName, GameRoom room) {
@@ -1079,23 +1080,14 @@ public class RoomManager implements Listener {
 
     @EventHandler
     public void onItemChange(InventoryTransactionEvent event) {
+
         InventoryTransaction transaction = event.getTransaction();
         for (InventoryAction action : transaction.getActions()) {
             for (Inventory inventory : transaction.getInventories()) {
-
                 if (inventory instanceof ChestInventoryPanel) {
                     Player player = ((ChestInventoryPanel) inventory).getPlayer();
                     event.setCancelled();
                     Item i = action.getSourceItem();
-                    if(i.hasCompoundTag() && i.getNamedTag().contains("player")){
-                        String ps = i.getNamedTag().getString("player");
-                        Player p = Server.getInstance().getPlayer(ps);
-                        if(p != null){
-                            player.teleport(p);
-                            inventory.close(player);
-                        }
-                        return;
-                    }
                     if(i.hasCompoundTag() && i.getNamedTag().contains("index")){
                         int index = i.getNamedTag().getInt("index");
                         BasePlayPanelItemInstance item = ((ChestInventoryPanel) inventory).getPanel().getOrDefault(index,null);

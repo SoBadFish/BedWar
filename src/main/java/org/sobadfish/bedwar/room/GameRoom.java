@@ -104,6 +104,24 @@ public class GameRoom {
             }
         }
         ThreadManager.addThread(new RoomLoadThread(this));
+        ThreadManager.addThread(new Runnable() {
+            @Override
+            public void run() {
+                //TODO 更新浮空字
+                while (true){
+                    for(FloatTextInfo floatTextInfo:floatTextInfos){
+                        floatTextInfo.stringUpdate(GameRoom.this);
+                    }
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        break;
+                    }
+                }
+
+            }
+        });
 
 
 
@@ -185,10 +203,7 @@ public class GameRoom {
             case START:
                 eventControl.enable = true;
                 onStart();
-                //TODO 更新浮空字
-                for(FloatTextInfo floatTextInfo:floatTextInfos){
-                    floatTextInfo.stringUpdate(this);
-                }
+
                 break;
             case END:
                 //TODO 房间结束
@@ -778,6 +793,7 @@ public class GameRoom {
             return;
         }
         close = true;
+        roomConfig.save();
         GameCloseEvent event = new GameCloseEvent(this,BedWarMain.getBedWarMain());
         Server.getInstance().getPluginManager().callEvent(event);
         worldInfo.setClose(true);

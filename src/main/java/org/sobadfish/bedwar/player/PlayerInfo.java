@@ -480,7 +480,7 @@ public class PlayerInfo {
 
     private int spawnTime = 0;
 
-    public String formatTime(int s){
+    public static String formatTime(int s){
         int min = s / 60;
         int ss = s % 60;
 
@@ -494,7 +494,7 @@ public class PlayerInfo {
 
 
 
-    public String formatTime1(int s){
+    public static String formatTime1(int s){
         int min = s / 60;
         int ss = s % 60;
         String mi = min+"";

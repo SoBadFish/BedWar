@@ -127,7 +127,7 @@ public class BedWarAdminCommand extends Command {
 
                    }else{
                        if(!roomConfig.hasFloatText(strings[3])){
-                           roomConfig.floatTextInfoConfigs.add(new FloatTextInfoConfig(strings[2],((Player) commandSender).getPosition(),strings[4]));
+                           roomConfig.floatTextInfoConfigs.add(new FloatTextInfoConfig(strings[3],((Player) commandSender).getPosition(),strings[4]));
                            commandSender.sendMessage("成功添加浮空字");
                        }else{
                            commandSender.sendMessage("房间存在 "+strings[3]+"的浮空字");

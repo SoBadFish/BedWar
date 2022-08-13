@@ -5,6 +5,7 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.utils.TextFormat;
 
 public class BedWarFloatText extends Entity {
 
@@ -35,7 +36,7 @@ public class BedWarFloatText extends Entity {
 
     public void setText(String text) {
         this.text = text;
-        this.setNameTag(text);
+        this.setNameTag(TextFormat.colorize('&',text));
     }
 
     public static BedWarFloatText showFloatText(Position position,String text){
