@@ -51,6 +51,9 @@ public class ItemInfo {
     }
 
     public int getResetTick() {
+        if(resetTick == -1){
+            return itemInfoConfig.getSpawnTick();
+        }
         return resetTick;
     }
 
@@ -104,7 +107,7 @@ public class ItemInfo {
     }
 
     public void toUpdate(){
-        if(resetTick > 0 && tick == resetTick || tick == itemInfoConfig.getSpawnTick()){
+        if(resetTick > 0 && tick == resetTick || resetTick == -1 && tick == itemInfoConfig.getSpawnTick()){
             tick = 0;
             itemInfoConfig.getPositions().forEach(position -> {
 

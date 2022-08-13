@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author SoBadFish
@@ -173,7 +174,7 @@ public class GameRoomConfig implements Cloneable{
     /**
      * 游戏浮空字
      * */
-    public List<FloatTextInfoConfig> floatTextInfoConfigs = new ArrayList<>();
+    public List<FloatTextInfoConfig> floatTextInfoConfigs = new CopyOnWriteArrayList<>();
 
 
 
@@ -231,6 +232,19 @@ public class GameRoomConfig implements Cloneable{
         roomConfig.setNbtItemInfo(NbtItemInfo.getNbtItemInfoByFile(item));
 
         roomConfig.setMoneyItem(itemInfo);
+    }
+
+    public boolean hasFloatText(String name){
+        for(FloatTextInfoConfig config: floatTextInfoConfigs){
+            if(config.name.equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeFloatText(String name){
+        floatTextInfoConfigs.removeIf(config -> config.name.equalsIgnoreCase(name));
     }
 
     public void setNbtItemInfo(NbtItemInfo nbtItemInfo) {
@@ -399,6 +413,16 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.quitRoomCommand = new ArrayList<>(room.getStringList("QuitRoom"));
                 roomConfig.victoryCommand = new ArrayList<>(room.getStringList("victoryCmd"));
                 roomConfig.defeatCommand = new ArrayList<>(room.getStringList("defeatCmd"));
+                List<FloatTextInfoConfig> configs = new ArrayList<>();
+                if(room.exists("floatSpawnPos")){
+                    for(Map map: room.getMapList("floatSpawnPos")){
+                        FloatTextInfoConfig config = FloatTextInfoConfig.build(map);
+                        if(config != null){
+                            configs.add(config);
+                        }
+                    }
+                    roomConfig.floatTextInfoConfigs = configs;
+                }
                 if(room.exists("roomStartMessage")){
                     roomConfig.gameStartMessage = new ArrayList<>(room.getStringList("roomStartMessage"));
                 }else{
@@ -451,7 +475,6 @@ public class GameRoomConfig implements Cloneable{
         config.set("entity.team",teamShopEntityId);
         config.set("entity.item",itemShopEntityId);
         config.set("waitTime",waitTime);
-//        config.set("tiems.bedbreak",bedBreak);
         config.set("max-player-waitTime",maxWaitTime);
         config.set("minPlayerSize",minPlayerSize);
         config.set("maxPlayerSize",maxPlayerSize);
@@ -474,6 +497,11 @@ public class GameRoomConfig implements Cloneable{
         config.set("victoryCmd",victoryCommand);
         config.set("defeatCmd",defeatCommand);
         config.set("roomStartMessage",gameStartMessage);
+        List<Map<String,Object>> pos = new ArrayList<>();
+        for(FloatTextInfoConfig floatTextInfoConfig: floatTextInfoConfigs){
+            pos.add(floatTextInfoConfig.toConfig());
+        }
+        config.set("floatSpawnPos",pos);
         config.save();
     }
 

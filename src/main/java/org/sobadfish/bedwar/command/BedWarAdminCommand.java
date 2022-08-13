@@ -8,9 +8,11 @@ import cn.nukkit.item.Item;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.ItemInfo;
+import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoomCreater;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
+import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
 
 import java.util.LinkedHashMap;
 
@@ -69,6 +71,7 @@ public class BedWarAdminCommand extends Command {
             commandSender.sendMessage("/bd see 查看所有加载的房间");
             commandSender.sendMessage("/bd close [名称] 关闭房间");
             commandSender.sendMessage("/bd end 停止模板预设");
+            commandSender.sendMessage("/bd float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字");
             commandSender.sendMessage("/bd cancel 终止房间创建");
 
             return true;
@@ -102,6 +105,40 @@ public class BedWarAdminCommand extends Command {
                     commandSender.sendMessage("请不要在控制台执行");
                     return false;
                 }
+                break;
+            case "float":
+                if(strings.length < 5){
+                    commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
+                    return false;
+                }
+                if(commandSender instanceof Player) {
+                   GameRoomConfig roomConfig = BedWarMain.getRoomManager().getRoomConfig(strings[2]);
+                   if(roomConfig == null){
+                       commandSender.sendMessage("房间 "+strings[2]+" 不存在");
+                       return false;
+                   }
+                   if(strings[1].equalsIgnoreCase("remove")){
+                       if(!roomConfig.hasFloatText(strings[3])){
+                           commandSender.sendMessage("浮空字 "+strings[3]+" 不存在");
+                           return false;
+                       }
+                       roomConfig.removeFloatText(strings[3]);
+                       commandSender.sendMessage("浮空字删除成功");
+
+                   }else{
+                       if(!roomConfig.hasFloatText(strings[3])){
+                           roomConfig.floatTextInfoConfigs.add(new FloatTextInfoConfig(strings[2],((Player) commandSender).getPosition(),strings[4]));
+                           commandSender.sendMessage("成功添加浮空字");
+                       }else{
+                           commandSender.sendMessage("房间存在 "+strings[3]+"的浮空字");
+                       }
+                   }
+
+                }else{
+                    commandSender.sendMessage("请不要在控制台执行");
+                    return false;
+                }
+
                 break;
             case "tsl":
                 teamShopLoad(commandSender);

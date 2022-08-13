@@ -28,6 +28,11 @@ import java.util.Random;
  * */
 public class ChickBeautifulEvent extends IGameRoomEvent implements Listener {
 
+    @Override
+    public void onCreate(GameRoom room) {
+        super.onCreate(room);
+        Server.getInstance().getPluginManager().registerEvents(this,BedWarMain.getBedWarMain());
+    }
 
     public ChickBeautifulEvent(GameRoomEventConfig.GameRoomEventItem item) {
         super(item);
@@ -35,7 +40,6 @@ public class ChickBeautifulEvent extends IGameRoomEvent implements Listener {
 
     @Override
     public void onStart(GameRoom room) {
-        Server.getInstance().getPluginManager().registerEvents(this,BedWarMain.getBedWarMain());
 
         room.getEventControl().thisEvent = this;
 

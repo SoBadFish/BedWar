@@ -26,6 +26,8 @@ import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
+import org.sobadfish.bedwar.room.floattext.FloatTextInfo;
+import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.bedwar.shop.ShopInfo;
 import org.sobadfish.bedwar.thread.BaseTimerRunnable;
 import org.sobadfish.bedwar.thread.ProtectVillageThread;
@@ -73,6 +75,8 @@ public class GameRoom {
 
     private final ArrayList<BlockChest> clickChest = new ArrayList<>();
 
+    private ArrayList<FloatTextInfo> floatTextInfos = new ArrayList<>();
+
     /**
      * 复活时间
      * */
@@ -92,7 +96,16 @@ public class GameRoom {
         //启动事件
         eventControl = new EventControl(this,roomConfig.eventConfig);
         eventControl.initAll(this);
+        //初始化浮空字
+        for(FloatTextInfoConfig config: roomConfig.floatTextInfoConfigs){
+            FloatTextInfo info = new FloatTextInfo(config).init();
+            if(info != null){
+                floatTextInfos.add(info);
+            }
+        }
         ThreadManager.addThread(new RoomLoadThread(this));
+
+
 
     }
 
@@ -172,6 +185,10 @@ public class GameRoom {
             case START:
                 eventControl.enable = true;
                 onStart();
+                //TODO 更新浮空字
+                for(FloatTextInfo floatTextInfo:floatTextInfos){
+                    floatTextInfo.stringUpdate(this);
+                }
                 break;
             case END:
                 //TODO 房间结束

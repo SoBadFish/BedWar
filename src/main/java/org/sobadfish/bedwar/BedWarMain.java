@@ -41,6 +41,8 @@ public class BedWarMain extends PluginBase {
 
     private static MenuRoomManager menuRoomManager;
 
+    private static PlayerDataManager dataManager;
+
     public static UiType uiType;
 
     @Override
@@ -73,6 +75,8 @@ public class BedWarMain extends PluginBase {
         RoomEventManager.register("custom", CustomEvent.class);
         RoomEventManager.register("effect", EffectEvent.class);
         RoomEventManager.register("command", CommandEvent.class);
+        RoomEventManager.register("chicken",ChickBeautifulEvent.class);
+        RoomEventManager.register("light",LightEvent.class);
         sendMessageToConsole("&e当前内置 &a"+RoomEventManager.EVENT.size()+" &e个事件");
 
         sendMessageToConsole("&a正在检查相应的依赖");
@@ -121,6 +125,8 @@ public class BedWarMain extends PluginBase {
             reloadConfig();
         }
         menuRoomManager = new MenuRoomManager(getConfig());
+
+        dataManager = PlayerDataManager.asFile(new File(this.getDataFolder()+"/player.json"));
     }
 
     public static BedWarMain getBedWarMain() {
@@ -131,7 +137,9 @@ public class BedWarMain extends PluginBase {
         return menuRoomManager;
     }
 
-
+    public static PlayerDataManager getDataManager() {
+        return dataManager;
+    }
 
     public static void sendMessageToConsole(String msg){
         sendMessageToObject(msg,null);

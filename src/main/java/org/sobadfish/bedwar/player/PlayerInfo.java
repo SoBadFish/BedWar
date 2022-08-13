@@ -47,11 +47,13 @@ import java.util.*;
  */
 public class PlayerInfo {
 
-    private int killCount = 0;
+    public int killCount = 0;
 
     public int bedBreakCount = 0;
 
-    private int endKillCount = 0;
+    public int endKillCount = 0;
+
+    public int deathCount = 0;
 
     private EntityHuman player;
 
@@ -657,6 +659,7 @@ public class PlayerInfo {
 
         player.teleport(new Position(player.x,teamInfo.getTeamConfig().getBedPosition().y + 64,player.z,getLevel()));
         sendTitle("&c你死了");
+        deathCount++;
 
         if(event != null) {
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {

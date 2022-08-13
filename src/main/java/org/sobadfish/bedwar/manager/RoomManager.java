@@ -51,6 +51,7 @@ import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
 import org.sobadfish.bedwar.panel.items.BasePlayPanelItemInstance;
 import org.sobadfish.bedwar.panel.items.NbtDefaultItem;
 import org.sobadfish.bedwar.panel.items.PlayerItem;
+import org.sobadfish.bedwar.player.PlayerData;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
@@ -197,6 +198,9 @@ public class RoomManager implements Listener {
     public void onTeamDefeat(TeamDefeatEvent event){
 
         for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
+            PlayerData data = BedWarMain.getDataManager().getData(info.getName());
+            data.getRoomData(event.getRoom().getRoomConfig().name).defeatCount++;
+            data.getRoomData(event.getRoom().getRoomConfig().name).gameCount++;
             event.getRoom().getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
             if(event.getRoom().getRoomConfig().isAutomaticNextRound){
                 info.sendMessage("&75 &e秒后自动进行下一局");
@@ -245,6 +249,9 @@ public class RoomManager implements Listener {
         }
         event.getRoom().sendTipMessage("&a"+line);
         for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
+            PlayerData data = BedWarMain.getDataManager().getData(info.getName());
+            data.getRoomData(event.getRoom().getRoomConfig().name).victoryCount++;
+            data.getRoomData(event.getRoom().getRoomConfig().name).gameCount++;
             event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
         }
         ThreadManager.addThread(new BaseTimerRunnable(5) {
@@ -269,6 +276,8 @@ public class RoomManager implements Listener {
     public void onQuitRoom(PlayerQuitRoomEvent event){
         if(event.performCommand){
             PlayerInfo info = event.getPlayerInfo();
+            PlayerData data = BedWarMain.getDataManager().getData(info.getName());
+            data.setInfo(info);
             GameRoom room = event.getRoom();
             info.clear();
             if(info.getPlayer() instanceof Player){
@@ -295,6 +304,15 @@ public class RoomManager implements Listener {
             event.setCancelled();
 
         }
+    }
+
+
+
+    @EventHandler
+    public void onRoomClose(GameCloseEvent event){
+        //TODO 写入
+        BedWarMain.getDataManager().save();
+
     }
 
     @EventHandler

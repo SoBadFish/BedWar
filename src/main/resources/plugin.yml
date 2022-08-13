@@ -11,8 +11,7 @@ description: "起床战争小游戏插件"
 softdepend:
   - RsNPC
   - RsNPCX
-
-depend:
   - ScoreboardPlugin
+
 loadbefore:
   - ScoreboardPlugin
