@@ -69,11 +69,13 @@ public class EventControl {
                             loadTime = 0;
                             lastEvent = event;
                             position++;
+                            thisEvent = null;
                         }else{
                             if(loadTime >= event.item.eventTime){
                                 loadTime = 0;
                                 event.onStart(room);
                                 ((CustomEvent) event).position++;
+                                thisEvent = null;
                             }
 
                         }
@@ -84,6 +86,7 @@ public class EventControl {
                             ((CustomEvent) event).isEnable = true;
                             event.onStart(room);
                             ((CustomEvent) event).position++;
+                            thisEvent = null;
                         }
                     }
                 }else{
@@ -91,7 +94,7 @@ public class EventControl {
                         loadTime = 0;
                         lastEvent = event;
                         position++;
-
+                        thisEvent = null;
                         event.onStart(room);
                     }
                 }
