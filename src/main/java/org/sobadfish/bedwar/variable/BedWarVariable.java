@@ -28,6 +28,7 @@ public class BedWarVariable extends BaseVariableV2 {
             int mp = roomConfig.getMaxPlayerSize();
             String status = "&a等待中";
             if(room != null){
+                p = room.getPlayerInfos().size();
                 switch (room.getType()){
                     case START:
                         status = "&c游戏中";

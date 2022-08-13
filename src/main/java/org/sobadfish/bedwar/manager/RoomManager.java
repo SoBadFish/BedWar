@@ -1065,7 +1065,6 @@ public class RoomManager implements Listener {
         for (InventoryAction action : transaction.getActions()) {
             for (Inventory inventory : transaction.getInventories()) {
 
-
                 if (inventory instanceof ChestInventoryPanel) {
                     event.setCancelled();
                     Item i = action.getSourceItem();

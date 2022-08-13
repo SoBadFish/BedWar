@@ -49,11 +49,7 @@ public class PlayerItem extends BasePlayPanelItemInstance{
 
     @Override
     public Item getPanelItem(PlayerInfo i, int index) {
-        CompoundTag tag = new CompoundTag();
-        tag.putString("player",info.getName());
-        tag.putInt("index",index);
         Item item = new Item(397,3);
-        item.setNamedTag(tag);
         item.setCustomName(TextFormat.colorize('&',"&r"+info.toString()));
         //todo 这里似乎可以画个lore
         List<String> lore = new ArrayList<>();
@@ -68,6 +64,7 @@ public class PlayerItem extends BasePlayPanelItemInstance{
         }
         lore.add(TextFormat.colorize('&',"&r&7状态 &a"+status));
         item.setLore(lore.toArray(new String[0]));
+        item.setNamedTag(item.getNamedTag().putInt("index", index));
 
         return item;
     }

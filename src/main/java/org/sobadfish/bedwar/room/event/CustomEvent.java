@@ -131,13 +131,11 @@ public class CustomEvent extends IGameRoomEvent{
     public String display() {
         IGameRoomEvent event = nextEvent();
         if(event != null){
-            if(event instanceof CustomEvent && ((CustomEvent) event).runType != EventRunType.RANDOM){
-                return getEventItem().display+nextEvent().getEventItem().display;
-            }else if(event instanceof CustomEvent && ((CustomEvent) event).runType == EventRunType.RANDOM){
-                return getEventItem().display;
+            if(event instanceof CustomEvent && ((CustomEvent) event).runType == EventRunType.RANDOM){
+                return getEventItem().display+event.getEventItem().display;
             }
 
-            return getEventItem().display+nextEvent().display();
+            return getEventItem().display+event.display();
 
         }
         return getEventItem().display;

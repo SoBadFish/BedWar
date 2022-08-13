@@ -4,6 +4,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.MoneyItemInfo;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
@@ -46,7 +47,12 @@ public class ItemInfoConfig {
     }
 
     public static ItemInfoConfig getItemInfoConfig(MoneyItemInfo moneyItemInfo, String name, Map map){
-        int spawnTick = Integer.parseInt(map.get("spawnTick").toString());
+        int spawnTick = 60;
+        try {
+            spawnTick = Integer.parseInt(map.get("spawnTick").toString());
+        }catch (Exception e){
+            BedWarMain.sendMessageToConsole("&c由于一个未知问题导致 spawnTick 无法转为 int 。传入的参数 "+map.get("spawnTIck").toString());
+        }
         Object oList = map.get("position");
         if(oList instanceof List){
             return new ItemInfoConfig(moneyItemInfo.get(name),getPositionByList((List) oList),spawnTick);
