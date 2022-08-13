@@ -1,14 +1,17 @@
 package org.sobadfish.bedwar.panel.items;
 
 import cn.nukkit.Player;
+import cn.nukkit.block.Block;
 import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.item.Item;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.bedwar.item.ItemIDSunName;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
 import org.sobadfish.bedwar.player.PlayerInfo;
+import org.sobadfish.bedwar.player.team.TeamInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +51,7 @@ public class PlayerItem extends BasePlayPanelItemInstance{
     public Item getPanelItem(PlayerInfo i, int index) {
         CompoundTag tag = new CompoundTag();
         tag.putString("player",info.getName());
+        tag.putInt("index",index);
         Item item = new Item(397,3);
         item.setNamedTag(tag);
         item.setCustomName(TextFormat.colorize('&',"&r"+info.toString()));
@@ -70,7 +74,13 @@ public class PlayerItem extends BasePlayPanelItemInstance{
 
     @Override
     public ElementButton getGUIButton(PlayerInfo info) {
+        TeamInfo t = info.getTeamInfo();
+        String img = ItemIDSunName.getIDByPath(14);
+        if(t != null){
+            Item i = t.getTeamConfig().getTeamConfig().getBlockWoolColor();
+            img = ItemIDSunName.getIDByPath(i.getId(),i.getDamage());
+        }
 
-        return new ElementButton(TextFormat.colorize('&', this.info.toString()+"\n&r生命 &c"+ this.info.getPlayer().getHealth()+" / "+ this.info.getPlayer().getMaxHealth()),new ElementButtonImageData("path","textures/ui/friends"));
+        return new ElementButton(TextFormat.colorize('&', this.info.toString()+"\n&r生命 &c"+ this.info.getPlayer().getHealth()+" / "+ this.info.getPlayer().getMaxHealth()),new ElementButtonImageData("path",img));
     }
 }
