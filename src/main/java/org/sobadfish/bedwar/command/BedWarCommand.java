@@ -42,15 +42,7 @@ public class BedWarCommand extends Command {
                 simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
                     @Override
                     public void onClick(Player player) {
-                        ThreadManager.addThread(() -> {
-                            if(RandomJoinManager.newInstance().join(info,null)){
-                                info.sendForceTitle("&a进入匹配队列");
-                            }else{
-                                info.sendForceTitle("&c无法进入匹配队列..");
-                            }
-                            FROM.remove(player.getName());
-
-                        });
+                        ThreadManager.addThread(new MatchingRunnable(info,null));
                     }
                 });
                 for (String wname : BedWarMain.getMenuRoomManager().getNames()) {
@@ -109,14 +101,7 @@ public class BedWarCommand extends Command {
 
                             PlayerInfo info = new PlayerInfo((Player)commandSender);
                             String finalName = name;
-                            ThreadManager.addThread(() -> {
-                                if(RandomJoinManager.newInstance().join(info, finalName)){
-                                    info.sendForceTitle("&a进入匹配队列");
-                                }else{
-                                    info.sendForceTitle("&c无法进入匹配队列..");
-                                }
-
-                            });
+                            ThreadManager.addThread(new MatchingRunnable(info,finalName));
                         }else{
                             commandSender.sendMessage("请在控制台执行");
                         }
@@ -139,12 +124,7 @@ public class BedWarCommand extends Command {
         simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
             @Override
             public void onClick(Player player) {
-                if(RandomJoinManager.newInstance().join(info,name)){
-                    info.sendForceTitle("&a进入匹配队列..");
-                }else{
-                    info.sendForceTitle("&c无法进入匹配队列");
-                }
-                FROM.remove(player.getName());
+                ThreadManager.addThread(new MatchingRunnable(info,name));
 
             }
         });
@@ -188,6 +168,38 @@ public class BedWarCommand extends Command {
         }
         simple.disPlay(player);
         FROM.put(player.getName(),simple);
+    }
+
+    private class MatchingRunnable extends ThreadManager.AbstractBedWarRunnable {
+
+        private PlayerInfo info;
+        private String name;
+
+        public MatchingRunnable(PlayerInfo info,String name){
+            this.info = info;
+            this.name = name;
+        }
+
+        @Override
+        public GameRoom getRoom() {
+            return null;
+        }
+
+        @Override
+        public String getThreadName() {
+            return "匹配线程";
+        }
+
+        @Override
+        public void run() {
+            if(RandomJoinManager.newInstance().join(info, name)){
+                info.sendForceTitle("&a进入匹配队列");
+            }else{
+                info.sendForceTitle("&c无法进入匹配队列..");
+                isClose = true;
+            }
+
+        }
     }
 
 

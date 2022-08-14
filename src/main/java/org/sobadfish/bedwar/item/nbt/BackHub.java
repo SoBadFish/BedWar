@@ -6,6 +6,7 @@ import cn.nukkit.level.Position;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
+import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.thread.BaseTimerRunnable;
 
 /**
@@ -57,6 +58,16 @@ public class BackHub implements INbtItem{
             PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
             info.sendMessage("已传送到出生点");
             info.getPlayer().teleport(info.getTeamInfo().getTeamConfig().getSpawnPosition());
+        }
+
+        @Override
+        public GameRoom getRoom() {
+            return null;
+        }
+
+        @Override
+        public String getThreadName() {
+            return "道具返回出生点线程";
         }
     }
 

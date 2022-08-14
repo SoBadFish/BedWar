@@ -35,17 +35,34 @@ public class RandomJoinManager {
 
     //将这个线程缩短为单个
     public void start(){
-        ThreadManager.addThread(() -> {
+        ThreadManager.addThread(new JoinListRunnable());
+    }
+
+    private class JoinListRunnable extends ThreadManager.AbstractBedWarRunnable{
+
+        @Override
+        public GameRoom getRoom() {
+            return null;
+        }
+
+        @Override
+        public String getThreadName() {
+            return "匹配玩家队列线程";
+        }
+
+        @Override
+        public void run() {
             while (true){
                 playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info));
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
+                    isClose = true;
                     break;
                 }
 
             }
-        });
+        }
     }
 
     public boolean join(PlayerInfo info,String name){
@@ -83,7 +100,7 @@ public class RandomJoinManager {
             return false;
         }
         info.sendForceTitle("&6匹配中",2);
-        info.sendSubTitle(info.formatTime((int)(System.currentTimeMillis() - i.time.getTime()) / 1000));
+        info.sendSubTitle(PlayerInfo.formatTime((int)(System.currentTimeMillis() - i.time.getTime()) / 1000));
 
         String input = i.name;
         ArrayList<String> names = BedWarMain.getMenuRoomManager().getNames();
@@ -210,6 +227,7 @@ public class RandomJoinManager {
             return false;
         }
     }
+
 
 
     public static class IPlayerInfo{

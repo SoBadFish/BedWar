@@ -1,10 +1,12 @@
 package org.sobadfish.bedwar.thread;
 
+import org.sobadfish.bedwar.manager.ThreadManager;
+
 /**
  * @author SoBadFish
  * 2022/1/7
  */
-public abstract class BaseTimerRunnable implements Runnable{
+public abstract class BaseTimerRunnable extends ThreadManager.AbstractBedWarRunnable{
     private int time = 0;
 
     private int end;
@@ -21,8 +23,9 @@ public abstract class BaseTimerRunnable implements Runnable{
 
     @Override
     public void run() {
-        while (true){
+        while (!isClose){
             if(close){
+                isClose = true;
                 return;
             }
             if(time < end){
@@ -30,6 +33,7 @@ public abstract class BaseTimerRunnable implements Runnable{
                 onRun();
             }else{
                 callback();
+                isClose = true;
                 return;
             }
             try {

@@ -31,4 +31,14 @@ public class BlockBreakRunnable extends BaseTimerRunnable {
             }
         }
     }
+
+    @Override
+    public GameRoom getRoom() {
+        return room;
+    }
+
+    @Override
+    public String getThreadName() {
+        return "生成方块自动破坏线程";
+    }
 }

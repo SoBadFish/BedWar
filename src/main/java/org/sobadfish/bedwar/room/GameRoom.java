@@ -20,7 +20,6 @@ import org.sobadfish.bedwar.item.button.FollowItem;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
 import org.sobadfish.bedwar.item.button.TeamChoseItem;
 import org.sobadfish.bedwar.manager.RandomJoinManager;
-import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
@@ -28,6 +27,7 @@ import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfo;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
+import org.sobadfish.bedwar.thread.FloatUpdateRunnable;
 import org.sobadfish.bedwar.shop.ShopInfo;
 import org.sobadfish.bedwar.thread.BaseTimerRunnable;
 import org.sobadfish.bedwar.thread.ProtectVillageThread;
@@ -104,24 +104,7 @@ public class GameRoom {
             }
         }
         ThreadManager.addThread(new RoomLoadThread(this));
-        ThreadManager.addThread(new Runnable() {
-            @Override
-            public void run() {
-                //TODO 更新浮空字
-                while (true){
-                    for(FloatTextInfo floatTextInfo:floatTextInfos){
-                        floatTextInfo.stringUpdate(GameRoom.this);
-                    }
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        break;
-                    }
-                }
-
-            }
-        });
+        ThreadManager.addThread(new FloatUpdateRunnable(this,floatTextInfos));
 
 
 
@@ -231,6 +214,16 @@ public class GameRoom {
                 sendMessage("&75 &e秒后自动进行下一局");
                 for(PlayerInfo playerInfo: getInRoomPlayers()){
                     ThreadManager.addThread(new BaseTimerRunnable(5) {
+                        @Override
+                        public GameRoom getRoom() {
+                            return GameRoom.this;
+                        }
+
+                        @Override
+                        public String getThreadName() {
+                            return "自动进入游戏线程";
+                        }
+
                         @Override
                         protected void callback() {
                             if(RandomJoinManager.newInstance().join(new PlayerInfo(playerInfo.getPlayer()),null)){

@@ -51,7 +51,6 @@ public class GameRoomEventConfig {
             if(type.equalsIgnoreCase("")){
                 continue;
             }
-            BedWarMain.sendMessageToConsole("&a装载 &r"+type+" - "+disPlay+"&a 完成");
             items.add(new GameRoomEventItem(type,disPlay,eventTime,value));
         }
 

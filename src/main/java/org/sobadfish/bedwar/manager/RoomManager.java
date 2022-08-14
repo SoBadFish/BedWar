@@ -197,14 +197,25 @@ public class RoomManager implements Listener {
     @EventHandler
     public void onTeamDefeat(TeamDefeatEvent event){
 
+        final GameRoom room = event.getRoom();
         for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
             PlayerData data = BedWarMain.getDataManager().getData(info.getName());
             data.getRoomData(event.getRoom().getRoomConfig().name).defeatCount++;
             data.getRoomData(event.getRoom().getRoomConfig().name).gameCount++;
-            event.getRoom().getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
+            room.getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
             if(event.getRoom().getRoomConfig().isAutomaticNextRound){
                 info.sendMessage("&75 &e秒后自动进行下一局");
                 ThreadManager.addThread(new BaseTimerRunnable(5) {
+                    @Override
+                    public GameRoom getRoom() {
+                        return room;
+                    }
+
+                    @Override
+                    public String getThreadName() {
+                        return "自动进入下一局线程";
+                    }
+
                     @Override
                     protected void callback() {
                         if(RandomJoinManager.newInstance().join(new PlayerInfo(info.getPlayer()),null)){
@@ -255,6 +266,16 @@ public class RoomManager implements Listener {
             event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
         }
         ThreadManager.addThread(new BaseTimerRunnable(5) {
+            @Override
+            public GameRoom getRoom() {
+                return event.getRoom();
+            }
+
+            @Override
+            public String getThreadName() {
+                return "燃放烟花线程";
+            }
+
             @Override
             public void onRun() {
                 if(event.getTeamInfo() == null){

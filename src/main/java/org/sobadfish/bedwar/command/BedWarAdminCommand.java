@@ -9,7 +9,9 @@ import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.ItemInfo;
 import org.sobadfish.bedwar.manager.RoomManager;
+import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
+import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.GameRoomCreater;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
@@ -70,6 +72,7 @@ public class BedWarAdminCommand extends Command {
             commandSender.sendMessage("/bd tsl 读取模板的队伍数据与商店物品数据");
             commandSender.sendMessage("/bd see 查看所有加载的房间");
             commandSender.sendMessage("/bd close [名称] 关闭房间");
+            commandSender.sendMessage("/bd status 查看线程状态");
             commandSender.sendMessage("/bd end 停止模板预设");
             commandSender.sendMessage("/bd float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字");
             commandSender.sendMessage("/bd cancel 终止房间创建");
@@ -139,6 +142,21 @@ public class BedWarAdminCommand extends Command {
                     return false;
                 }
 
+                break;
+            case "status":
+                BedWarMain.sendMessageToObject("&6活跃线程: &a"+ ThreadManager.getActiveCount(),commandSender);
+                BedWarMain.sendMessageToObject("&6线程数量: &a"+ ThreadManager.getSize(),commandSender);
+                BedWarMain.sendMessageToObject("&6线程详情: &r\n"+ThreadManager.info(),commandSender);
+                BedWarMain.sendMessageToObject("&6房间状态: &a",commandSender);
+                for(GameRoomConfig config: BedWarMain.getRoomManager().getRoomConfigs()){
+                    GameRoom room = BedWarMain.getRoomManager().getRoom(config.name);
+                    if(room != null){
+
+                        BedWarMain.sendMessageToObject("&a"+config.getName()+" (已启动) "+room.getType()+" : &2"+room.getPlayerInfos().size(),commandSender);
+                    }else{
+                        BedWarMain.sendMessageToObject("&c"+config.getName()+" (未启动)",commandSender);
+                    }
+                }
                 break;
             case "tsl":
                 teamShopLoad(commandSender);

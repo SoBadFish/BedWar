@@ -94,7 +94,7 @@ public class BedWarMain extends PluginBase {
                 break;
             }
         }
-
+        new ThreadManager();
         this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
 
     }
@@ -159,11 +159,12 @@ public class BedWarMain extends PluginBase {
             if(o instanceof Player){
                 if(((Player) o).isOnline()) {
                     ((Player) o).sendMessage(message);
+                    return;
                 }
             }
-        }else{
-            bedWarMain.getLogger().info(message);
         }
+        bedWarMain.getLogger().info(message);
+
     }
 
 

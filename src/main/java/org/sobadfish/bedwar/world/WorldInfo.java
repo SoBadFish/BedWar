@@ -88,5 +88,7 @@ public class WorldInfo {
 
     }
 
-
+    public GameRoom getRoom() {
+        return room;
+    }
 }
