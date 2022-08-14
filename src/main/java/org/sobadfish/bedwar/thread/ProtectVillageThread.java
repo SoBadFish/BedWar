@@ -50,7 +50,7 @@ public class ProtectVillageThread extends ThreadManager.AbstractBedWarRunnable {
     }
 
     @Override
-    public String getName() {
+    public String getThreadName() {
         return "商店NPC保护线程";
     }
 }

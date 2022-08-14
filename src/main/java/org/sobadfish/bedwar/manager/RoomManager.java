@@ -212,7 +212,7 @@ public class RoomManager implements Listener {
                     }
 
                     @Override
-                    public String getName() {
+                    public String getThreadName() {
                         return "自动进入下一局线程";
                     }
 
@@ -272,7 +272,7 @@ public class RoomManager implements Listener {
             }
 
             @Override
-            public String getName() {
+            public String getThreadName() {
                 return "燃放烟花线程";
             }
 
@@ -1051,6 +1051,9 @@ public class RoomManager implements Listener {
         if(event.getFormID() == fromId && event.getResponse() instanceof FormResponseSimple){
             PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
             if(info != null){
+                if(info.getGameRoom() == null || info.getGameRoom().getType() == GameType.START){
+                    return;
+                }
                 TeamInfo teamInfo = info.getGameRoom().getTeamInfos().get(((FormResponseSimple) event.getResponse())
                         .getClickedButtonId());
                 if(!teamInfo.join(info)){

@@ -25,7 +25,7 @@ public class BackHub implements INbtItem{
         PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
         info.sendMessage("10秒后传送至出生点请不要移动");
 
-        ThreadManager.addThread(new GoBackRunnable(info, player.getPosition(), 10));
+        ThreadManager.addThread(new GoBackRunnable(player, player.getPosition(), 10));
         player.getInventory().removeItem(item);
         return true;
     }
@@ -34,9 +34,9 @@ public class BackHub implements INbtItem{
 
         private final Position lastPos;
 
-        private final PlayerInfo player;
+        private final Player player;
 
-        GoBackRunnable(PlayerInfo player, Position lastPos, int end) {
+        public GoBackRunnable(Player player,Position lastPos,int end) {
             super(end);
             this.lastPos = lastPos;
             this.player = player;
@@ -44,19 +44,20 @@ public class BackHub implements INbtItem{
 
         @Override
         public void onRun() {
-            if(lastPos.getFloorX() != player.getPlayer().getFloorX() && lastPos.getFloorZ() != player.getPlayer().getFloorZ()){
+            PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
+            if(lastPos.getFloorX() != player.getFloorX() && lastPos.getFloorZ() != player.getFloorZ()){
                 this.cancel();
             }
-            if(player.isDeath()){
+            if(info.isDeath()){
                 this.cancel();
             }
         }
 
         @Override
         protected void callback() {
-
-            player.sendMessage("已传送到出生点");
-            player.getPlayer().teleport(player.getTeamInfo().getTeamConfig().getSpawnPosition());
+            PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
+            info.sendMessage("已传送到出生点");
+            info.getPlayer().teleport(info.getTeamInfo().getTeamConfig().getSpawnPosition());
         }
 
         @Override
@@ -65,7 +66,7 @@ public class BackHub implements INbtItem{
         }
 
         @Override
-        public String getName() {
+        public String getThreadName() {
             return "道具返回出生点线程";
         }
     }

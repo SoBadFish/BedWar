@@ -1,7 +1,9 @@
 package org.sobadfish.bedwar.manager;
 
+import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.room.GameRoom;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -12,7 +14,7 @@ import java.util.concurrent.*;
 public class ThreadManager {
 
 
-    private static final List<AbstractBedWarRunnable> RUNNABLES = new CopyOnWriteArrayList<>();
+    public static final List<AbstractBedWarRunnable> RUNNABLES = new CopyOnWriteArrayList<>();
     /**
      * 工具类，构造方法私有化
      */
@@ -24,7 +26,7 @@ public class ThreadManager {
             }
 
             @Override
-            public String getName() {
+            public String getThreadName() {
                 return "线程检测";
             }
 
@@ -46,16 +48,15 @@ public class ThreadManager {
     }
 
     // 线程池核心线程数
-    private final static Integer COREPOOLSIZE = 2;
+    private final static Integer COREPOOLSIZE = 1;
     // 最大线程数
     private final static Integer MAXIMUMPOOLSIZE = Integer.MAX_VALUE;
     // 空闲线程存活时间
     private final static Integer KEEPALIVETIME = 5;
-    // 线程等待队列
-    private static BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(10);
+
     // 线程池对象
     private static ThreadPoolExecutor threadPool = new ThreadPoolExecutor(COREPOOLSIZE, MAXIMUMPOOLSIZE,
-            KEEPALIVETIME, TimeUnit.SECONDS, queue ,new ThreadPoolExecutor.AbortPolicy());
+            KEEPALIVETIME, TimeUnit.SECONDS,  new SynchronousQueue<Runnable>() ,new ThreadPoolExecutor.AbortPolicy());
 
 
 
@@ -121,7 +122,7 @@ public class ThreadManager {
     private static String listToString(List<AbstractBedWarRunnable> runnables){
         StringBuilder s = new StringBuilder();
         for(AbstractBedWarRunnable runnable: runnables){
-            s.append("  &r- ").append(runnable.isClose ? "&7" : "&a").append(runnable.getName()).append("\n");
+            s.append("  &r- ").append(runnable.isClose ? "&7" : "&a").append(runnable.getThreadName()).append("\n");
         }
         return s.toString();
     }
@@ -130,21 +131,21 @@ public class ThreadManager {
         LinkedHashMap<String, List<AbstractBedWarRunnable>> threadList = new LinkedHashMap<>();
 
         for(AbstractBedWarRunnable workerValue: RUNNABLES) {
-            GameRoom room = workerValue.getRoom();
+            GameRoom room = ((AbstractBedWarRunnable) workerValue).getRoom();
             if (room != null) {
                 if (!threadList.containsKey(room.getRoomConfig().name)) {
                     threadList.put(room.getRoomConfig().name, new ArrayList<>());
                 }
                 List<AbstractBedWarRunnable> runnables = threadList.get(room.getRoomConfig().name);
-                runnables.add(workerValue);
+                runnables.add((AbstractBedWarRunnable) workerValue);
                 threadList.put(room.getRoomConfig().name, runnables);
             } else {
-                String name = "Other";
+                String name = "Unknown";
                 if (!threadList.containsKey(name)) {
                     threadList.put(name, new ArrayList<>());
                 }
                 List<AbstractBedWarRunnable> runnables = threadList.get(name);
-                runnables.add(workerValue);
+                runnables.add((AbstractBedWarRunnable) workerValue);
                 threadList.put(name, runnables);
             }
         }
@@ -156,17 +157,9 @@ public class ThreadManager {
 
         public boolean isClose;
 
-        /**
-         * 如果是房间内触发的就返回房间信息
-         * @return 游戏房间
-         * */
         abstract public GameRoom getRoom();
 
-        /**
-         * 线程的名称
-         * @return 名称
-         * */
-        abstract public String getName();
+        abstract public String getThreadName();
 
         public boolean isClose() {
             return isClose;

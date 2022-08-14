@@ -186,7 +186,7 @@ public class BedWarCommand extends Command {
         }
 
         @Override
-        public String getName() {
+        public String getThreadName() {
             return "匹配线程";
         }
 
@@ -196,8 +196,9 @@ public class BedWarCommand extends Command {
                 info.sendForceTitle("&a进入匹配队列");
             }else{
                 info.sendForceTitle("&c无法进入匹配队列..");
-                isClose = true;
+
             }
+            isClose = true;
 
         }
     }

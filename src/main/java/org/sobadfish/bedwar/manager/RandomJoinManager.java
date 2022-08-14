@@ -1,5 +1,6 @@
 package org.sobadfish.bedwar.manager;
 
+import cn.nukkit.Player;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
@@ -46,7 +47,7 @@ public class RandomJoinManager {
         }
 
         @Override
-        public String getName() {
+        public String getThreadName() {
             return "匹配玩家队列线程";
         }
 
@@ -241,7 +242,7 @@ public class RandomJoinManager {
         public boolean cancel;
 
         public PlayerInfo getPlayerInfo() {
-            if(playerInfo != null && playerInfo.getPlayer().isPlayer && !playerInfo.getPlayer().closed){
+            if(playerInfo != null && playerInfo.getPlayer() instanceof Player && !playerInfo.getPlayer().closed){
                 return playerInfo;
             }
             cancel = true;

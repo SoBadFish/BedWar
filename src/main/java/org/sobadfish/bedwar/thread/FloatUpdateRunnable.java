@@ -28,7 +28,7 @@ public class FloatUpdateRunnable extends ThreadManager.AbstractBedWarRunnable {
     }
 
     @Override
-    public String getName() {
+    public String getThreadName() {
         return room.getRoomConfig().name+" 浮空字更新";
     }
 

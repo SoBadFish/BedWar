@@ -220,7 +220,7 @@ public class GameRoom {
                         }
 
                         @Override
-                        public String getName() {
+                        public String getThreadName() {
                             return "自动进入游戏线程";
                         }
 
@@ -256,7 +256,8 @@ public class GameRoom {
                     i.spawn();
                 }
             }
-
+            sendTitle("&c游戏开始");
+            sendSubTitle("保护你的床");
             shopInfo.init(getRoomConfig());
             ThreadManager.addThread(new ProtectVillageThread(this));
             loadTime = getRoomConfig().time;

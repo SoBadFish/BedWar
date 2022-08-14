@@ -50,7 +50,7 @@ public class WorldInfoLoadThread extends ThreadManager.AbstractBedWarRunnable {
     }
 
     @Override
-    public String getName() {
+    public String getThreadName() {
         if(worldInfo == null){
             isClose = true;
             return "终止的"+level+"地图线程";
