@@ -186,7 +186,7 @@ public class BedWarCommand extends Command {
         }
 
         @Override
-        public String getThreadName() {
+        public String getName() {
             return "匹配线程";
         }
 

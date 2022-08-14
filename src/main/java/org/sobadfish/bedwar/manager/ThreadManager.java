@@ -1,9 +1,7 @@
 package org.sobadfish.bedwar.manager;
 
-import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.room.GameRoom;
 
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -14,12 +12,11 @@ import java.util.concurrent.*;
 public class ThreadManager {
 
 
-    public static final List<AbstractBedWarRunnable> RUNNABLES = new CopyOnWriteArrayList<>();
+    private static final List<AbstractBedWarRunnable> RUNNABLES = new CopyOnWriteArrayList<>();
     /**
      * 工具类，构造方法私有化
      */
     public ThreadManager() {
-        threadPool.setKeepAliveTime(5,TimeUnit.SECONDS);
         ThreadManager.execute(new AbstractBedWarRunnable() {
             @Override
             public GameRoom getRoom() {
@@ -27,7 +24,7 @@ public class ThreadManager {
             }
 
             @Override
-            public String getThreadName() {
+            public String getName() {
                 return "线程检测";
             }
 
@@ -53,7 +50,7 @@ public class ThreadManager {
     // 最大线程数
     private final static Integer MAXIMUMPOOLSIZE = Integer.MAX_VALUE;
     // 空闲线程存活时间
-    private final static Integer KEEPALIVETIME = 3 * 60;
+    private final static Integer KEEPALIVETIME = 5;
     // 线程等待队列
     private static BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(10);
     // 线程池对象
@@ -124,80 +121,52 @@ public class ThreadManager {
     private static String listToString(List<AbstractBedWarRunnable> runnables){
         StringBuilder s = new StringBuilder();
         for(AbstractBedWarRunnable runnable: runnables){
-            s.append("  &r- ").append(runnable.isClose ? "&7" : "&a").append(runnable.getThreadName()).append("\n");
+            s.append("  &r- ").append(runnable.isClose ? "&7" : "&a").append(runnable.getName()).append("\n");
         }
         return s.toString();
     }
 
     private static Map<String,List<AbstractBedWarRunnable>> getRunnables(){
         LinkedHashMap<String, List<AbstractBedWarRunnable>> threadList = new LinkedHashMap<>();
-        //1.获取私有对象workers
-//        Object resultValue = getPrivateClass(threadPool,"workers");
-//        HashSet workers = (HashSet) resultValue;
-//        System.out.println(workers);
-//        //2.遍历workers集合
-//        for (Object obj : workers) {
-//            //3.获取workers的私有属性thread对象
-//            Object workerValue = getPrivateClass(obj, "thread");
-//            Thread thread = (Thread) workerValue;
-//            System.out.println(thread.getName()+" - "+thread.getClass().getSimpleName());
-//            Object o = getPrivateClass(thread,"target");
-//            System.out.println(thread.getClass().getSimpleName());
-//            if (o instanceof AbstractBedWarRunnable) {
+
         for(AbstractBedWarRunnable workerValue: RUNNABLES) {
-            GameRoom room = ((AbstractBedWarRunnable) workerValue).getRoom();
+            GameRoom room = workerValue.getRoom();
             if (room != null) {
                 if (!threadList.containsKey(room.getRoomConfig().name)) {
                     threadList.put(room.getRoomConfig().name, new ArrayList<>());
                 }
                 List<AbstractBedWarRunnable> runnables = threadList.get(room.getRoomConfig().name);
-                runnables.add((AbstractBedWarRunnable) workerValue);
+                runnables.add(workerValue);
                 threadList.put(room.getRoomConfig().name, runnables);
             } else {
-                String name = "Unknown";
+                String name = "Other";
                 if (!threadList.containsKey(name)) {
                     threadList.put(name, new ArrayList<>());
                 }
                 List<AbstractBedWarRunnable> runnables = threadList.get(name);
-                runnables.add((AbstractBedWarRunnable) workerValue);
+                runnables.add(workerValue);
                 threadList.put(name, runnables);
             }
-//            }
-//        }
         }
         return threadList;
     }
-
-    private static <T> Object getPrivateClass(T t, String param) {
-        Object workerValue = null;
-        Class workerCla = t.getClass();
-        Field[] workerFields = workerCla.getDeclaredFields();
-        for (Field workerField : workerFields) {
-            // 私有属性必须设置访问权限
-            workerField.setAccessible(true);
-            // 获取私有对象的属性名称
-            String workerName = workerField.getName();
-            if (param.equals(workerName)) {
-                try {
-                    // 获取私有对象的属性
-                    workerValue = workerField.get(t);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return workerValue;
-    }
-
 
 
     public abstract static class AbstractBedWarRunnable implements Runnable{
 
         public boolean isClose;
 
+        /**
+         * 如果是房间内触发的就返回房间信息
+         * @return 游戏房间
+         * */
         abstract public GameRoom getRoom();
 
-        abstract public String getThreadName();
+        /**
+         * 线程的名称
+         * @return 名称
+         * */
+        abstract public String getName();
 
         public boolean isClose() {
             return isClose;

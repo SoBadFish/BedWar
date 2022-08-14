@@ -38,7 +38,7 @@ public class BlockBreakRunnable extends BaseTimerRunnable {
     }
 
     @Override
-    public String getThreadName() {
+    public String getName() {
         return "生成方块自动破坏线程";
     }
 }

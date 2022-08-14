@@ -220,7 +220,7 @@ public class GameRoom {
                         }
 
                         @Override
-                        public String getThreadName() {
+                        public String getName() {
                             return "自动进入游戏线程";
                         }
 

@@ -46,7 +46,7 @@ public class RandomJoinManager {
         }
 
         @Override
-        public String getThreadName() {
+        public String getName() {
             return "匹配玩家队列线程";
         }
 

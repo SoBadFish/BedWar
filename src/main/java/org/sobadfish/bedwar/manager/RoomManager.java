@@ -212,7 +212,7 @@ public class RoomManager implements Listener {
                     }
 
                     @Override
-                    public String getThreadName() {
+                    public String getName() {
                         return "自动进入下一局线程";
                     }
 
@@ -272,7 +272,7 @@ public class RoomManager implements Listener {
             }
 
             @Override
-            public String getThreadName() {
+            public String getName() {
                 return "燃放烟花线程";
             }
 

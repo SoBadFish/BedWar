@@ -25,7 +25,7 @@ public class BackHub implements INbtItem{
         PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
         info.sendMessage("10秒后传送至出生点请不要移动");
 
-        ThreadManager.addThread(new GoBackRunnable(player, player.getPosition(), 10));
+        ThreadManager.addThread(new GoBackRunnable(info, player.getPosition(), 10));
         player.getInventory().removeItem(item);
         return true;
     }
@@ -34,9 +34,9 @@ public class BackHub implements INbtItem{
 
         private final Position lastPos;
 
-        private final Player player;
+        private final PlayerInfo player;
 
-        public GoBackRunnable(Player player,Position lastPos,int end) {
+        GoBackRunnable(PlayerInfo player, Position lastPos, int end) {
             super(end);
             this.lastPos = lastPos;
             this.player = player;
@@ -44,20 +44,19 @@ public class BackHub implements INbtItem{
 
         @Override
         public void onRun() {
-            PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
-            if(lastPos.getFloorX() != player.getFloorX() && lastPos.getFloorZ() != player.getFloorZ()){
+            if(lastPos.getFloorX() != player.getPlayer().getFloorX() && lastPos.getFloorZ() != player.getPlayer().getFloorZ()){
                 this.cancel();
             }
-            if(info.isDeath()){
+            if(player.isDeath()){
                 this.cancel();
             }
         }
 
         @Override
         protected void callback() {
-            PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
-            info.sendMessage("已传送到出生点");
-            info.getPlayer().teleport(info.getTeamInfo().getTeamConfig().getSpawnPosition());
+
+            player.sendMessage("已传送到出生点");
+            player.getPlayer().teleport(player.getTeamInfo().getTeamConfig().getSpawnPosition());
         }
 
         @Override
@@ -66,7 +65,7 @@ public class BackHub implements INbtItem{
         }
 
         @Override
-        public String getThreadName() {
+        public String getName() {
             return "道具返回出生点线程";
         }
     }

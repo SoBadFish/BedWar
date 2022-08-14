@@ -11,23 +11,18 @@ public abstract class BaseTimerRunnable extends ThreadManager.AbstractBedWarRunn
 
     private int end;
 
-    private boolean close;
 
     public BaseTimerRunnable(int end){
         this.end = end;
     }
 
     public void cancel(){
-        this.close = true;
+        this.isClose = true;
     }
 
     @Override
     public void run() {
         while (!isClose){
-            if(close){
-                isClose = true;
-                return;
-            }
             if(time < end){
                 time++;
                 onRun();
