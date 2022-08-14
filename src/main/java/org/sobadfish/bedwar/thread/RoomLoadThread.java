@@ -61,7 +61,7 @@ public class RoomLoadThread extends ThreadManager.AbstractBedWarRunnable {
     public String getThreadName() {
         if(room == null){
             isClose = true;
-            return "终止的"+roomName+"游戏线程";
+            return "终止 "+roomName+" 游戏线程";
         }
         return room.getRoomConfig().name+" 游戏线程";
     }

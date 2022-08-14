@@ -53,7 +53,7 @@ public class WorldInfoLoadThread extends ThreadManager.AbstractBedWarRunnable {
     public String getThreadName() {
         if(worldInfo == null){
             isClose = true;
-            return "终止的"+level+"地图线程";
+            return "终止 "+level+" 地图线程";
         }
         return worldInfo.getConfig().getGameWorld().getFolderName()+" 地图线程";
     }
