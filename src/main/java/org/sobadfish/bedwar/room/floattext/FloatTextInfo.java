@@ -34,8 +34,11 @@ public class FloatTextInfo {
         return this;
     }
 
-    public void stringUpdate(GameRoom room){
+    public boolean stringUpdate(GameRoom room){
         String text = floatTextInfoConfig.text;
+        if(room == null){
+            return false;
+        }
         for(ItemInfo moneyItemInfoConfig: room.getWorldInfo().getInfos()){
             MoneyItemInfoConfig config = moneyItemInfoConfig.getItemInfoConfig().getMoneyItemInfoConfig();
             text = text
@@ -45,5 +48,6 @@ public class FloatTextInfo {
         if(bedWarFloatText != null){
             bedWarFloatText.setText(text);
         }
+        return true;
     }
 }

@@ -82,6 +82,10 @@ public class EntityBlueWitherSkull extends EntityProjectile implements EntityExp
     }
 
     @Override
+    public void saveNBT() {
+    }
+
+    @Override
     public boolean onUpdate(int currentTick) {
         if (this.closed) {
             return false;

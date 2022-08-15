@@ -46,6 +46,11 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
     }
 
     @Override
+    public void saveNBT() {
+
+    }
+
+    @Override
     public float getDrag() {
         return 0.01F;
     }

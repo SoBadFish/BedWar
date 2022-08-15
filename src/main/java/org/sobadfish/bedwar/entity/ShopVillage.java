@@ -103,6 +103,11 @@ public class ShopVillage extends EntityCreature {
     }
 
     @Override
+    public void saveNBT() {
+
+    }
+
+    @Override
     public boolean onInteract(Player player, Item item) {
         return true;
     }

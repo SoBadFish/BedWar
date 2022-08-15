@@ -110,7 +110,7 @@ public class BedWarMain extends PluginBase {
         uiType = Utils.loadUiTypeByName(getConfig().getString("shop-ui","auto"));
         NbtItemManager.init();
 //        saveResource("skin.png");
-        File mainFileDir = new File(this.getDataFolder()+"/rooms");
+        File mainFileDir = new File(this.getDataFolder()+File.separator+"rooms");
         if(!mainFileDir.exists()){
             if(!mainFileDir.mkdirs()){
                 sendMessageToConsole("&c创建文件夹 rooms失败");
@@ -129,9 +129,9 @@ public class BedWarMain extends PluginBase {
         menuRoomManager = new MenuRoomManager(getConfig());
 
 
-        dataManager = PlayerDataManager.asFile(new File(this.getDataFolder()+"/player.json"));
+        dataManager = PlayerDataManager.asFile(new File(this.getDataFolder()+File.separator+"player.json"));
         //初始化排行榜
-        topManager = PlayerTopManager.asFile(new File(this.getDataFolder()+"/top.json"));
+        topManager = PlayerTopManager.asFile(new File(this.getDataFolder()+File.separator+"top.json"));
         if(topManager != null){
             topManager.init();
         }

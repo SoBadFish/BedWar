@@ -41,7 +41,10 @@ public class FloatUpdateRunnable extends ThreadManager.AbstractBedWarRunnable {
                 return;
             }
             for(FloatTextInfo floatTextInfo:floatTextInfos){
-                floatTextInfo.stringUpdate(room);
+                if(!floatTextInfo.stringUpdate(room)){
+                    isClose = true;
+                    break;
+                }
             }
             try {
                 Thread.sleep(500);

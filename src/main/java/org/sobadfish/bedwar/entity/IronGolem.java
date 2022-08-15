@@ -87,6 +87,11 @@ public class IronGolem extends BaseEntityMove {
     }
 
     @Override
+    public void saveNBT() {
+
+    }
+
+    @Override
     public void onUpdate() {}
 
 
