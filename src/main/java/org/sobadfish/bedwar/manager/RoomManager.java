@@ -690,6 +690,9 @@ public class RoomManager implements Listener {
         if(event.getEntity() instanceof ShopVillage) {
             if(event instanceof EntityDamageByEntityEvent){
                 Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
+                if(entity == null){
+                    return;
+                }
                 if(entity instanceof Player) {
                     if(entity.distance(event.getEntity()) <= 4 && event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK){
                         PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo((Player) entity);

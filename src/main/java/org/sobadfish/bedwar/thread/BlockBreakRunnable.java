@@ -30,6 +30,7 @@ public class BlockBreakRunnable extends BaseTimerRunnable {
                 block.getLevel().setBlock(block,new BlockAir());
             }
         }
+        isClose = true;
     }
 
     @Override

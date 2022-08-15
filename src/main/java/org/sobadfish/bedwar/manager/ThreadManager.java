@@ -78,6 +78,10 @@ public class ThreadManager {
 
 
     public static void addThread(AbstractBedWarRunnable runnable){
+        if(RUNNABLES.contains(runnable)){
+            AbstractBedWarRunnable runnable1 = RUNNABLES.get(RUNNABLES.indexOf(runnable));
+            runnable1.isClose = true;
+        }
         execute(runnable);
     }
 

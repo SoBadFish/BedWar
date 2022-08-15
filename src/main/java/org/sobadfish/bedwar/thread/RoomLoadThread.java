@@ -23,6 +23,7 @@ public class RoomLoadThread extends ThreadManager.AbstractBedWarRunnable {
         while (true){
             if(room.close || isClose){
                 room = null;
+                isClose  =true;
                 return;
             }
             roomName = room.getRoomConfig().name;

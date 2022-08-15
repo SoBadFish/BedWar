@@ -23,7 +23,6 @@ public class WorldInfoLoadThread extends ThreadManager.AbstractBedWarRunnable {
     public void run() {
         while (worldInfo != null && !worldInfo.isClose()){
             level = worldInfo.getConfig().getGameWorld().getFolderName();
-
             if(isClose){
                 return;
             }
@@ -39,6 +38,7 @@ public class WorldInfoLoadThread extends ThreadManager.AbstractBedWarRunnable {
                 isClose = true;
             }
         }
+        isClose = true;
     }
 
     @Override

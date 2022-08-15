@@ -263,6 +263,7 @@ public class GameRoom {
             sendTitle("&c游戏开始");
             sendSubTitle("保护你的床");
             shopInfo.init(getRoomConfig());
+
             ThreadManager.addThread(new ProtectVillageThread(this));
             loadTime = getRoomConfig().time;
             worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);

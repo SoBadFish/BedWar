@@ -6,6 +6,7 @@ import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.room.GameRoom;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * 商店NPC保护线程
@@ -14,15 +15,17 @@ import java.util.ArrayList;
  */
 public class ProtectVillageThread extends ThreadManager.AbstractBedWarRunnable {
 
-    private GameRoom room;
+    private  GameRoom room;
 
     public ProtectVillageThread(GameRoom room){
         this.room = room;
     }
     @Override
     public void run() {
-        while (!room.close || isClose) {
-
+        while (!room.close) {
+            if(isClose){
+                return;
+            }
             for (ShopVillage shopVillage : new ArrayList<>(room.getShopInfo().getShopVillages())) {
                 if (shopVillage.getChunk() != null && shopVillage.getChunk().isLoaded()) {
                     if (shopVillage.isClosed()) {
@@ -41,7 +44,21 @@ public class ProtectVillageThread extends ThreadManager.AbstractBedWarRunnable {
                 isClose = true;
             }
         }
+        isClose = true;
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProtectVillageThread that = (ProtectVillageThread) o;
+        return Objects.equals(room, that.room);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(room);
     }
 
     @Override

@@ -619,6 +619,13 @@ public class PlayerInfo {
 
         }else if(playerType == PlayerType.WAIT){
             if(getGameRoom().getRoomConfig().getWorldInfo().getWaitPosition().getY() - player.getY() > getGameRoom().getRoomConfig().callbackY){
+                if(getGameRoom().getRoomConfig().getWorldInfo().getWaitPosition() == null){
+                    if(getGameRoom() != null){
+                        getGameRoom().quitPlayerInfo(this,true);
+                        sendMessage("&c房间出现了错误 （未识别到等待大厅）已将你送回出生点");
+                    }
+                    return;
+                }
                 player.teleport(getGameRoom().getRoomConfig().getWorldInfo().getWaitPosition());
             }
         }
