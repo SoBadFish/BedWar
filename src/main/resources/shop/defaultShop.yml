@@ -106,10 +106,15 @@ tools:
     name: ""
     ench: ""
     money: "金锭x10"
+  - id: "287:0"
+    name: ""
+    ench: ""
+    money: "金锭x20"
   - id: "359:0"
     name: ""
     ench: ""
     money: "铜锭x10"
+
 items:
   - id: "46:0"
     name: ""

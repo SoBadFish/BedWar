@@ -22,21 +22,26 @@ public class WorldInfoLoadThread extends ThreadManager.AbstractBedWarRunnable {
     @Override
     public void run() {
         while (worldInfo != null && !worldInfo.isClose()){
-            level = worldInfo.getConfig().getGameWorld().getFolderName();
-            if(isClose){
-                return;
-            }
-            if(!worldInfo.onUpdate()){
-                worldInfo = null;
+            try{
+                level = worldInfo.getConfig().getGameWorld().getFolderName();
+                if(isClose){
+                    return;
+                }
+                if(!worldInfo.onUpdate()){
+                    worldInfo = null;
+                    isClose = true;
+                    return;
+                }
+                try {
+                    Thread.sleep(1000 / 20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    isClose = true;
+                }
+            }catch (Exception e){
                 isClose = true;
-                return;
             }
-            try {
-                Thread.sleep(1000 / 20);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                isClose = true;
-            }
+
         }
         isClose = true;
     }

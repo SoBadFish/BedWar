@@ -22,14 +22,19 @@ public class ProtectFloatTextThread extends ThreadManager.AbstractBedWarRunnable
     public void run() {
         while (!isClose) {
             for (BedWarFloatText floatText : new ArrayList<>(FloatTextManager.floatTextList)) {
-
-                if (floatText.getChunk() != null && floatText.getChunk().isLoaded()) {
-                    if (floatText.isClosed()) {
-                        BedWarFloatText floatText1 = new BedWarFloatText(floatText.name,floatText.chunk,floatText.namedTag);
-                        floatText1.setText(floatText.text);
-                        floatText1.toDisplay();
-                        FloatTextManager.floatTextList.remove(floatText);
-                    }
+                if(floatText == null){
+                    continue;
+                }
+                if(floatText.isFinalClose){
+                    FloatTextManager.removeFloatText(floatText);
+                    continue;
+                }
+                floatText.toDisplay();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    isClose = true;
                 }
             }
 

@@ -282,5 +282,8 @@ public class BedWarMain extends PluginBase {
         if(topManager != null){
             topManager.save();
         }
+        if(dataManager != null){
+            dataManager.save();
+        }
     }
 }

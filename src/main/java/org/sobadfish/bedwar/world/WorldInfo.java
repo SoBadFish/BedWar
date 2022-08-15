@@ -82,7 +82,12 @@ public class WorldInfo {
             return false;
         }
         for(ItemInfo itemInfo: infos){
-            itemInfo.toUpdate();
+            try {
+                itemInfo.toUpdate();
+            }catch (Exception e){
+                return false;
+            }
+
         }
         return true;
 

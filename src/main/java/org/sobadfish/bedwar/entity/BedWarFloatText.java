@@ -10,6 +10,8 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.manager.FloatTextManager;
 
+import java.io.IOException;
+
 public class BedWarFloatText extends Entity {
 
     public String name;
@@ -73,6 +75,13 @@ public class BedWarFloatText extends Entity {
 
 
     public static BedWarFloatText showFloatText(String name,Position position, String text){
+        if(!position.getChunk().isLoaded()){
+            try {
+                position.getChunk().load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         BedWarFloatText text1 = new BedWarFloatText(name,position.getChunk(),Entity.getDefaultNBT(position));
         text1.setText(text);
         FloatTextManager.addFloatText(text1);
@@ -84,6 +93,7 @@ public class BedWarFloatText extends Entity {
     public void toDisplay(){
         for(Player player: Server.getInstance().getOnlinePlayers().values()){
             this.player = player;
+
             spawnTo(player);
 
         }

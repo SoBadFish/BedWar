@@ -44,7 +44,6 @@ import org.sobadfish.bedwar.item.nbt.DieBow;
 import org.sobadfish.bedwar.item.nbt.INbtItem;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
-import org.sobadfish.bedwar.panel.DisPlayerPanel;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
 import org.sobadfish.bedwar.panel.from.button.BaseIButtom;

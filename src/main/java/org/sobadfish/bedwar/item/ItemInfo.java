@@ -122,11 +122,16 @@ public class ItemInfo {
                 if (entityItems.size() > 20) {
                     return;
                 }
-                Item item = getItemInfoConfig().getMoneyItemInfoConfig().getItem();
-                EntityItem entityItem = getEntityItem(item, position);
-                if (entityItem != null) {
-                    entityItem.spawnToAll();
+                try{
+                    Item item = getItemInfoConfig().getMoneyItemInfoConfig().getItem();
+                    EntityItem entityItem = getEntityItem(item, position);
+                    if (entityItem != null) {
+                        entityItem.spawnToAll();
+                    }
+                }catch (Exception e){
+                    throw new NullPointerException();
                 }
+
             });
         }else{
             tick++;

@@ -149,18 +149,12 @@ public class BedWarCommand extends Command {
                 @Override
                 public void onClick(Player player) {
                     PlayerInfo playerInfo = new PlayerInfo(player);
-                    if (BedWarMain.getRoomManager().hasRoom(roomConfig.name)) {
-                        if (!BedWarMain.getRoomManager().hasGameRoom(roomConfig.name)) {
-                            BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomConfig.name));
-                        }
-                        if (!BedWarMain.getRoomManager().getRoom(roomConfig.name).joinPlayerInfo(playerInfo,true)) {
-                            playerInfo.sendForceMessage("&c无法加入房间");
-                        }else{
-                            playerInfo.sendForceMessage("&a你已加入 "+roomConfig.getName()+" 房间");
-                        }
-                    } else {
-                        playerInfo.sendForceMessage("不存在" + roomConfig.name + "房间");
+                    if (!BedWarMain.getRoomManager().joinRoom(info,roomConfig.name)) {
+                        playerInfo.sendForceMessage("&c无法加入房间");
+                    }else{
+                        playerInfo.sendForceMessage("&a你已加入 "+roomConfig.getName()+" 房间");
                     }
+//                    if (BedWarMain.getRoomManager().hasRoom(roomConfig.name)) {
                     FROM.remove(player.getName());
 
                 }

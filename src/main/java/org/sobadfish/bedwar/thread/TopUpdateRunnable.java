@@ -26,11 +26,21 @@ public class TopUpdateRunnable extends ThreadManager.AbstractBedWarRunnable {
                     continue;
                 }
                 if(topItem.floatText != null ){
+                    if(topItem.floatText.player == null){
+                        continue;
+                    }
                     topItem.floatText.setText(topItem.topItem.getListText(topItem.floatText.player.getName()));
                 }else{
                     BedWarMain.getTopManager().topItemInfos.remove(topItem);
                 }
 
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                isClose = true;
+                break;
             }
         }
 

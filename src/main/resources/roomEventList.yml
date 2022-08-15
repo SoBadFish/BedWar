@@ -24,8 +24,11 @@ eventLists:
   - type: "break"
     display: "床破坏"
     eventTime: 330
-  - type: "chick"
+  - type: "chicken"
     display: "鸡你太美~~"
+    eventTime: 20
+  - type: "light"
+    display: "天选时刻"
     eventTime: 20
 
 

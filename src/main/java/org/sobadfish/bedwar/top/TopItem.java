@@ -85,7 +85,7 @@ public class TopItem {
             }else{
                 num = data.getFinalData(getTopType());
             }
-            builder.append("&7[").append(topColor).append("&7]&r ").append(data.name).append(" ").append(data.name.equalsIgnoreCase(player) ? "&7(我)" : "").append("  &a").append(num).append("\n");
+            builder.append("&7[").append(topColor).append("TOP").append(top).append("&7]&r ").append(data.name).append(" ").append(data.name.equalsIgnoreCase(player) ? "&7(我)" : "").append("  &a").append(num).append("\n");
             top++;
         }
         return builder.toString();
@@ -94,7 +94,7 @@ public class TopItem {
     @Override
     public boolean equals(Object o) {
         if(o instanceof TopItem){
-            return ((TopItem) o).name.equalsIgnoreCase(name) && ((TopItem) o).topType == topType;
+            return ((TopItem) o).name.equalsIgnoreCase(name) && ((TopItem) o).topType.equals(topType);
         }
         return false;
     }
