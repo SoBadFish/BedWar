@@ -636,6 +636,7 @@ public class RoomManager implements Listener {
             ((ShopVillage) event.getEntity()).onClick(info);
         }
 
+
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -856,7 +857,7 @@ public class RoomManager implements Listener {
         Player player = event.getPlayer();
         if(event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             Item item = event.getItem();
-            if(event.getBlock() instanceof BlockCraftingTable){
+            if(event.getBlock() instanceof BlockCraftingTable || event.getBlock() instanceof BlockBed){
                 if(BedWarMain.getRoomManager().getPlayerInfo(event.getPlayer()) != null){
                     event.setCancelled();
                     return;

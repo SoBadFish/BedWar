@@ -50,8 +50,12 @@ public class ProtectVillageThread extends ThreadManager.AbstractBedWarRunnable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ProtectVillageThread that = (ProtectVillageThread) o;
         return Objects.equals(room, that.room);
     }

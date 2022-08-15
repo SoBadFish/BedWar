@@ -11,6 +11,8 @@ import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.manager.FloatTextManager;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BedWarFloatText extends Entity {
 
@@ -20,7 +22,7 @@ public class BedWarFloatText extends Entity {
 
     public String text = "";
 
-    public Player player;
+    public List<Player> player = new CopyOnWriteArrayList<>();
 
     public BedWarFloatText(String name,FullChunk fullChunk, CompoundTag compoundTag) {
         super(fullChunk, compoundTag);
@@ -84,16 +86,22 @@ public class BedWarFloatText extends Entity {
         }
         BedWarFloatText text1 = new BedWarFloatText(name,position.getChunk(),Entity.getDefaultNBT(position));
         text1.setText(text);
-        FloatTextManager.addFloatText(text1);
 
+        FloatTextManager.addFloatText(text1);
         text1.toDisplay();
         return text1;
     }
 
-    public void toDisplay(){
-        for(Player player: Server.getInstance().getOnlinePlayers().values()){
-            this.player = player;
+    public void disPlayers(){
+        for(Player player: player){
+            spawnTo(player);
 
+        }
+    }
+
+    private void toDisplay(){
+        for(Player player: Server.getInstance().getOnlinePlayers().values()){
+            this.player.add(player);
             spawnTo(player);
 
         }

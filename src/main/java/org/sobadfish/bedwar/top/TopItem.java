@@ -47,8 +47,9 @@ public class TopItem {
         return title;
     }
 
-    public String getListText(String player){
+    public String getListText(){
         StringBuilder builder = new StringBuilder(getTitle()+"\n");
+
         List<PlayerData> dataList = new ArrayList<>(BedWarMain.getDataManager().dataList);
         dataList.sort((o1, o2) -> {
             if(room != null){
@@ -59,35 +60,42 @@ public class TopItem {
         });
         String topColor;
         int top = 1;
-        for(PlayerData data: dataList){
-            if(top >= 10){
-                break;
-            }
-            if(top <= 3){
-                switch (top){
-                    case 1:
-                        topColor = "&l&e";
-                        break;
-                    case 2:
-                        topColor = "&l&a";
-                        break;
+        if(dataList.size() > 0) {
 
-                    default:
-                        topColor = "&l&b";
-                        break;
+
+            for (PlayerData data : dataList) {
+                if (top >= 10) {
+                    break;
                 }
-            }else{
-                topColor = "&7";
+                if (top <= 3) {
+                    switch (top) {
+                        case 1:
+                            topColor = "&l&e";
+                            break;
+                        case 2:
+                            topColor = "&l&a";
+                            break;
+
+                        default:
+                            topColor = "&l&b";
+                            break;
+                    }
+                } else {
+                    topColor = "&7";
+                }
+                int num;
+                if (room != null) {
+                    num = data.getRoomData(room).getInt(getTopType());
+                } else {
+                    num = data.getFinalData(getTopType());
+                }
+                builder.append("&7[").append(topColor).append("TOP").append(top).append("&7]&r ").append(data.name).append(" ").append("  &a").append(num).append("\n");
+                top++;
             }
-            int num;
-            if (room != null){
-                num = data.getRoomData(room).getInt(getTopType());
-            }else{
-                num = data.getFinalData(getTopType());
-            }
-            builder.append("&7[").append(topColor).append("TOP").append(top).append("&7]&r ").append(data.name).append(" ").append(data.name.equalsIgnoreCase(player) ? "&7(我)" : "").append("  &a").append(num).append("\n");
-            top++;
+        }else{
+            builder.append("&c暂无");
         }
+
         return builder.toString();
     }
 

@@ -29,7 +29,7 @@ public class TopUpdateRunnable extends ThreadManager.AbstractBedWarRunnable {
                     if(topItem.floatText.player == null){
                         continue;
                     }
-                    topItem.floatText.setText(topItem.topItem.getListText(topItem.floatText.player.getName()));
+                    topItem.floatText.setText(topItem.topItem.getListText());
                 }else{
                     BedWarMain.getTopManager().topItemInfos.remove(topItem);
                 }
