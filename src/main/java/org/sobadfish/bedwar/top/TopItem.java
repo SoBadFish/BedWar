@@ -12,9 +12,9 @@ import java.util.Objects;
 
 public class TopItem {
 
-    public final String name;
+    public String name;
 
-    public final String topType;
+    public String topType;
 
     public String position;
 
