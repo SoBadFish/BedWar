@@ -441,10 +441,12 @@ public class RoomManager implements Listener {
             PlayerInfo info = room.getPlayerInfo(event.getPlayer());
             if(info != null) {
                 if (info.isWatch()) {
+                    info.sendMessage("&c观察状态下不能放置方块");
                     event.setCancelled();
                     return;
                 }
                 if (item.getId() == 65 && !room.getWorldInfo().getPlaceBlock().contains(event.getBlockAgainst())) {
+                    info.sendMessage("&c你只能将梯子放置在玩家放置的方块上");
                     event.setCancelled();
                     return;
                 } else {
@@ -521,6 +523,7 @@ public class RoomManager implements Listener {
                     event.setDrops(new Item[0]);
                 }
                 if(info.isWatch()){
+                    player.sendMessage("&c观察状态下不能破坏方块");
                     event.setCancelled();
                     return;
                 }
@@ -1068,6 +1071,10 @@ public class RoomManager implements Listener {
         if(DisPlayWindowsFrom.SHOP.containsKey(player.getName())){
             if(BedWarMain.getRoomManager().getPlayerInfo(player) != null) {
                 ShopFrom shopFrom = DisPlayWindowsFrom.SHOP.get(player.getName());
+                if(shopFrom == null){
+                    DisPlayWindowsFrom.SHOP.remove(player.getName());
+                    return;
+                }
                 if (event.getResponse() instanceof FormResponseSimple) {
                     if (((FormResponseSimple) event.getResponse())
                             .getClickedButtonId() == shopFrom.getShopButtons().size()) {
