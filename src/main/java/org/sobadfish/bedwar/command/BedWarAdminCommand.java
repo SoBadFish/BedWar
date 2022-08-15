@@ -8,13 +8,16 @@ import cn.nukkit.item.Item;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.ItemInfo;
+import org.sobadfish.bedwar.manager.PlayerTopManager;
 import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
+import org.sobadfish.bedwar.player.PlayerData;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.GameRoomCreater;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
+import org.sobadfish.bedwar.top.TopItem;
 
 import java.util.LinkedHashMap;
 
@@ -27,6 +30,8 @@ public class BedWarAdminCommand extends Command {
 
     public BedWarAdminCommand(String name) {
         super(name);
+        this.usageMessage = "/bw help 查看指令帮助";
+        this.setPermission("op");
     }
 
     private final LinkedHashMap<String, GameRoomCreater> create = new LinkedHashMap<>();
@@ -62,6 +67,7 @@ public class BedWarAdminCommand extends Command {
     @Override
     public boolean execute(CommandSender commandSender, String s, String[] strings) {
         if(!commandSender.isOp()){
+            BedWarMain.sendMessageToObject("&c你没有使用此指令的权限",commandSender);
             return true;
         }
         if (strings.length > 0 && "help".equalsIgnoreCase(strings[0])) {
@@ -76,7 +82,12 @@ public class BedWarAdminCommand extends Command {
             commandSender.sendMessage("/bd end 停止模板预设");
             commandSender.sendMessage("/bd float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字");
             commandSender.sendMessage("/bd cancel 终止房间创建");
-
+            commandSender.sendMessage("/bd top add/remove [名称] [类型] [房间(可不填)] 创建/删除排行榜");
+            StringBuilder v = new StringBuilder("类型: ");
+            for(PlayerData.DataType type: PlayerData.DataType.values()){
+                v.append(type.getName()).append(" , ");
+            }
+            commandSender.sendMessage(v.toString());
             return true;
         }
         if (strings.length == 0) {
@@ -160,6 +171,47 @@ public class BedWarAdminCommand extends Command {
                 break;
             case "tsl":
                 teamShopLoad(commandSender);
+                break;
+            case "top":
+                if(commandSender instanceof Player) {
+                    if (strings.length < 4) {
+                        commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
+                        return false;
+                    }
+                    String name = strings[2];
+
+                    PlayerData.DataType type = PlayerData.DataType.byName(strings[3]);
+                    if (type == null) {
+                        commandSender.sendMessage("未知类型");
+                        return true;
+                    }
+                    String room = null;
+                    if (strings.length > 4) {
+                        room = strings[4];
+                    }
+                    TopItem item = new TopItem(name,type,((Player) commandSender).getPosition(),"");
+                    item.room = room;
+                    if (strings[1].equalsIgnoreCase("add")) {
+                        if(BedWarMain.getTopManager().hasTop(name)){
+                            commandSender.sendMessage("存在名称为 "+name+" 的排行榜了");
+                            return true;
+                        }
+                        item.setTitle(TextFormat.colorize('&',BedWarMain.getTitle()+" &a"+type.getName()+" &r排行榜"));
+                        BedWarMain.getTopManager().addTopItem(item);
+                        commandSender.sendMessage("排行榜创建成功");
+                    } else {
+                        if(!BedWarMain.getTopManager().hasTop(name)){
+                            commandSender.sendMessage("不存在名称为 "+name+" 的排行榜");
+                            return true;
+                        }
+                        BedWarMain.getTopManager().removeTopItem(item);
+                        commandSender.sendMessage("排行榜删除成功");
+
+                    }
+                }else{
+                    commandSender.sendMessage("请不要在控制台执行");
+                    return false;
+                }
                 break;
             case "see":
                 BedWarMain.sendMessageToObject(BedWarMain.getRoomManager().getRooms().keySet().toString(),commandSender);

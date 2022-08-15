@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class FloatUpdateRunnable extends ThreadManager.AbstractBedWarRunnable {
 
-    private List<FloatTextInfo> floatTextInfos = new ArrayList<>();
+    private List<FloatTextInfo> floatTextInfos;
 
     private GameRoom room;
 

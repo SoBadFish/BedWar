@@ -2,6 +2,8 @@ package org.sobadfish.bedwar.manager;
 
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.room.GameRoom;
+import org.sobadfish.bedwar.thread.ProtectFloatTextThread;
+import org.sobadfish.bedwar.thread.TopUpdateRunnable;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -18,34 +20,7 @@ public class ThreadManager {
     /**
      * 工具类，构造方法私有化
      */
-    public ThreadManager() {
-        ThreadManager.execute(new AbstractBedWarRunnable() {
-            @Override
-            public GameRoom getRoom() {
-                return null;
-            }
 
-            @Override
-            public String getThreadName() {
-                return "线程检测";
-            }
-
-            @Override
-            public void run() {
-                for(;;) {
-                    if(isClose){
-                        return;
-                    }
-                    for (AbstractBedWarRunnable runnable : RUNNABLES) {
-                        if (runnable.isClose) {
-                            threadPool.remove(runnable);
-                            RUNNABLES.remove(runnable);
-                        }
-                    }
-                }
-            }
-        });
-    }
 
     // 线程池核心线程数
     private final static Integer COREPOOLSIZE = 1;
@@ -55,7 +30,7 @@ public class ThreadManager {
     private final static Integer KEEPALIVETIME = 5;
 
     // 线程池对象
-    private static ThreadPoolExecutor threadPool = new ThreadPoolExecutor(COREPOOLSIZE, MAXIMUMPOOLSIZE,
+    private static final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(COREPOOLSIZE, MAXIMUMPOOLSIZE,
             KEEPALIVETIME, TimeUnit.SECONDS,  new SynchronousQueue<Runnable>() ,new ThreadPoolExecutor.AbortPolicy());
 
 
@@ -131,13 +106,13 @@ public class ThreadManager {
         LinkedHashMap<String, List<AbstractBedWarRunnable>> threadList = new LinkedHashMap<>();
 
         for(AbstractBedWarRunnable workerValue: RUNNABLES) {
-            GameRoom room = ((AbstractBedWarRunnable) workerValue).getRoom();
+            GameRoom room = workerValue.getRoom();
             if (room != null) {
                 if (!threadList.containsKey(room.getRoomConfig().name)) {
                     threadList.put(room.getRoomConfig().name, new ArrayList<>());
                 }
                 List<AbstractBedWarRunnable> runnables = threadList.get(room.getRoomConfig().name);
-                runnables.add((AbstractBedWarRunnable) workerValue);
+                runnables.add(workerValue);
                 threadList.put(room.getRoomConfig().name, runnables);
             } else {
                 String name = "Unknown";
@@ -145,11 +120,18 @@ public class ThreadManager {
                     threadList.put(name, new ArrayList<>());
                 }
                 List<AbstractBedWarRunnable> runnables = threadList.get(name);
-                runnables.add((AbstractBedWarRunnable) workerValue);
+                runnables.add(workerValue);
                 threadList.put(name, runnables);
             }
         }
         return threadList;
+    }
+
+    public static void init() {
+        ThreadManager.execute(new RunnableCheck());
+        ThreadManager.execute(new ProtectFloatTextThread());
+        ThreadManager.execute(new TopUpdateRunnable());
+
     }
 
 
@@ -163,6 +145,33 @@ public class ThreadManager {
 
         public boolean isClose() {
             return isClose;
+        }
+    }
+
+    public static class RunnableCheck extends AbstractBedWarRunnable{
+        @Override
+        public GameRoom getRoom() {
+            return null;
+        }
+
+        @Override
+        public String getThreadName() {
+            return "线程检测";
+        }
+
+        @Override
+        public void run() {
+            for(;;) {
+                if(isClose){
+                    return;
+                }
+                for (AbstractBedWarRunnable runnable : RUNNABLES) {
+                    if (runnable.isClose) {
+                        threadPool.remove(runnable);
+                        RUNNABLES.remove(runnable);
+                    }
+                }
+            }
         }
     }
 

@@ -757,6 +757,7 @@ public class PlayerInfo {
             info.killCount++;
         }else{
             info.endKillCount++;
+            info.killCount++;
         }
         if(!info.getPlayer().closed){
             if(isInRoom()){

@@ -10,6 +10,15 @@ public class PlayerData {
 
     public List<RoomData> roomData = new ArrayList<>();
 
+    public int getFinalData(DataType dataType){
+        int c = 0;
+        for(RoomData data: roomData){
+            c += data.getInt(dataType);
+        }
+        return c;
+    }
+
+
     public static class RoomData{
 
         public String roomName = "";
@@ -40,6 +49,38 @@ public class PlayerData {
         public int hashCode() {
             return Objects.hash(roomName);
         }
+
+        public int getInt(DataType type){
+            int c = 0;
+            switch (type){
+                case BED_BREAK:
+                    c += breakCount;
+                    break;
+                case END_KILL:
+                    c += endCont;
+                    break;
+                case VICTORY:
+                    c += victoryCount;
+                    break;
+                case DEFEAT:
+                    c += defeatCount;
+                    break;
+                case DEATH:
+                    c += deathCount;
+                    break;
+                case KILL:
+                    c += killCount;
+                    break;
+                case GAME:
+                    c += gameCount;
+                    break;
+
+            }
+
+            return c;
+
+
+        }
     }
 
     public RoomData getRoomData(String room){
@@ -64,11 +105,61 @@ public class PlayerData {
     @Override
     public boolean equals(Object o) {
        if(o instanceof PlayerData){
-           if(((PlayerData) o).name.equalsIgnoreCase(name)){
-               return true;
-           }
+           return ((PlayerData) o).name.equalsIgnoreCase(name);
        }
        return false;
+    }
+
+    public enum DataType{
+        /**
+         * 击杀
+         * */
+        KILL("击杀"),
+        /**
+         * 死亡
+         * */
+        DEATH("死亡"),
+        /**
+         * 胜利
+         * */
+        VICTORY("胜利"),
+        /**
+         * 失败
+         * */
+        DEFEAT("失败"),
+        /**
+         * 破坏床
+         * */
+        BED_BREAK("破坏床"),
+        /**
+         * 最终击杀
+         * */
+        END_KILL("最终击杀"),
+
+        /**
+         * 游戏次数
+         * */
+        GAME("游戏次数");
+
+        protected String name;
+
+        DataType(String name){
+            this.name = name;
+        }
+
+
+        public String getName() {
+            return name;
+        }
+
+        public static DataType byName(String name){
+            for(DataType type: values()){
+                if(type.getName().equalsIgnoreCase(name)){
+                    return type;
+                }
+            }
+            return null;
+        }
     }
 
     @Override

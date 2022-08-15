@@ -13,9 +13,9 @@ import java.util.ArrayList;
  */
 public class BlockBreakRunnable extends BaseTimerRunnable {
 
-    private ArrayList<Position> blocks;
+    private final ArrayList<Position> blocks;
 
-    private GameRoom room;
+    private final GameRoom room;
 
     public BlockBreakRunnable(GameRoom room,ArrayList<Position> blocks, int end) {
         super(end);

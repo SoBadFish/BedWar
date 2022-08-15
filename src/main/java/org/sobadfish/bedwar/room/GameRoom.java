@@ -15,10 +15,12 @@ import cn.nukkit.math.BlockFace;
 import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
 import org.sobadfish.bedwar.BedWarMain;
+import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.event.*;
 import org.sobadfish.bedwar.item.button.FollowItem;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
 import org.sobadfish.bedwar.item.button.TeamChoseItem;
+import org.sobadfish.bedwar.manager.FloatTextManager;
 import org.sobadfish.bedwar.manager.RandomJoinManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
@@ -104,6 +106,8 @@ public class GameRoom {
             }
         }
         ThreadManager.addThread(new RoomLoadThread(this));
+//        FloatTextManager.addAll(floatTextInfos);
+
         ThreadManager.addThread(new FloatUpdateRunnable(this,floatTextInfos));
 
 
@@ -813,7 +817,12 @@ public class GameRoom {
             if(entity instanceof Player){
                 continue;
             }
-            entity.close();
+            if(entity instanceof BedWarFloatText){
+                ((BedWarFloatText) entity).toClose();
+            }else{
+                entity.close();
+            }
+
         }
         for(BlockEntity entity:worldInfo.getConfig()
                 .getGameWorld()

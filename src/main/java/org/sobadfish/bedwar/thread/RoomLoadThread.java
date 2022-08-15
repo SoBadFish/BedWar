@@ -45,8 +45,9 @@ public class RoomLoadThread extends ThreadManager.AbstractBedWarRunnable {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
                 isClose = true;
+                e.printStackTrace();
+
             }
         }
 

@@ -43,6 +43,8 @@ public class BedWarMain extends PluginBase {
 
     private static PlayerDataManager dataManager;
 
+    private static PlayerTopManager topManager;
+
     public static UiType uiType;
 
     @Override
@@ -94,7 +96,7 @@ public class BedWarMain extends PluginBase {
                 break;
             }
         }
-        new ThreadManager();
+        ThreadManager.init();
         this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
 
     }
@@ -126,7 +128,19 @@ public class BedWarMain extends PluginBase {
         }
         menuRoomManager = new MenuRoomManager(getConfig());
 
+
         dataManager = PlayerDataManager.asFile(new File(this.getDataFolder()+"/player.json"));
+        //初始化排行榜
+        topManager = PlayerTopManager.asFile(new File(this.getDataFolder()+"/top.json"));
+        if(topManager != null){
+            topManager.init();
+        }
+
+
+    }
+
+    public static PlayerTopManager getTopManager() {
+        return topManager;
     }
 
     public static BedWarMain getBedWarMain() {
@@ -261,5 +275,12 @@ public class BedWarMain extends PluginBase {
          * ui: 箱子界面
          * */
         AUTO,PACKET,UI
+    }
+
+    @Override
+    public void onDisable() {
+        if(topManager != null){
+            topManager.save();
+        }
     }
 }

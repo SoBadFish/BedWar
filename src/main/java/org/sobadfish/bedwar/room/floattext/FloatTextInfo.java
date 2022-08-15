@@ -30,7 +30,7 @@ public class FloatTextInfo {
 
 
         }
-        bedWarFloatText = BedWarFloatText.showFloatText(floatTextInfoConfig.position,"");
+        bedWarFloatText = BedWarFloatText.showFloatText(floatTextInfoConfig.name,floatTextInfoConfig.position,"");
         return this;
     }
 
