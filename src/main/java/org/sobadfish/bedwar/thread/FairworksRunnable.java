@@ -25,15 +25,19 @@ public class FairworksRunnable extends BaseTimerRunnable{
 
     @Override
     public String getThreadName() {
-        return "燃放烟花线程";
+        String color = "&a";
+        if(isClose){
+            color = "&7";
+        }
+        return color+"燃放烟花线程";
     }
 
     @Override
     public void onRun() {
-
         for(PlayerInfo playerInfo:playerInfos){
             Utils.spawnFirework(playerInfo.getPosition());
         }
+        isClose = true;
     }
     @Override
     protected void callback() {}

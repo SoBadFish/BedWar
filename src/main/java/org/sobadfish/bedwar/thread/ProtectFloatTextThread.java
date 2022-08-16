@@ -17,7 +17,11 @@ public class ProtectFloatTextThread extends ThreadManager.AbstractBedWarRunnable
 
     @Override
     public String getThreadName() {
-        return "浮空字守护线程  &7("+ FloatTextManager.floatTextList.size() +")";
+        String color = "&a";
+        if(isClose){
+            color = "&7";
+        }
+        return color+"浮空字守护线程  &7("+ FloatTextManager.floatTextList.size() +")";
     }
 
     @Override

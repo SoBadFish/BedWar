@@ -40,6 +40,10 @@ public class BlockBreakRunnable extends BaseTimerRunnable {
 
     @Override
     public String getThreadName() {
-        return "生成方块自动破坏线程";
+        String color = "&a";
+        if(isClose){
+            color = "&7";
+        }
+        return color+"生成方块自动破坏线程";
     }
 }

@@ -17,10 +17,6 @@ public class ThreadManager {
 
 
     public static final List<AbstractBedWarRunnable> RUNNABLES = new CopyOnWriteArrayList<>();
-    /**
-     * 工具类，构造方法私有化
-     */
-
 
     // 线程池核心线程数
     private final static Integer COREPOOLSIZE = 1;
@@ -31,7 +27,7 @@ public class ThreadManager {
 
     // 线程池对象
     private static final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(COREPOOLSIZE, MAXIMUMPOOLSIZE,
-            KEEPALIVETIME, TimeUnit.SECONDS,  new SynchronousQueue<Runnable>() ,new ThreadPoolExecutor.AbortPolicy());
+            KEEPALIVETIME, TimeUnit.SECONDS, new SynchronousQueue<>() ,new ThreadPoolExecutor.AbortPolicy());
 
 
 
@@ -101,7 +97,7 @@ public class ThreadManager {
     private static String listToString(List<AbstractBedWarRunnable> runnables){
         StringBuilder s = new StringBuilder();
         for(AbstractBedWarRunnable runnable: runnables){
-            s.append("  &r- ").append(runnable.isClose ? "&7" : "&a").append(runnable.getThreadName()).append("\n");
+            s.append("  &r- ").append(runnable.getThreadName()).append("\n");
         }
         return s.toString();
     }

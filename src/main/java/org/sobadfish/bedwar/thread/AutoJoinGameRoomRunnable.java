@@ -26,7 +26,11 @@ public class AutoJoinGameRoomRunnable extends BaseTimerRunnable{
 
     @Override
     public String getThreadName() {
-        return "自动进入游戏线程";
+        String color = "&a";
+        if(isClose){
+            color = "&7";
+        }
+        return color+"自动进入游戏线程";
     }
 
     @Override
@@ -34,6 +38,7 @@ public class AutoJoinGameRoomRunnable extends BaseTimerRunnable{
         if(RandomJoinManager.newInstance().join(new PlayerInfo(playerInfo.getPlayer()),name)){
             room.quitPlayerInfo(playerInfo,false);
         }
+        isClose = true;
 
     }
 }

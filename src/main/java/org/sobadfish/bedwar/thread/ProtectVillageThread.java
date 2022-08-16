@@ -72,6 +72,10 @@ public class ProtectVillageThread extends ThreadManager.AbstractBedWarRunnable {
 
     @Override
     public String getThreadName() {
-        return "商店NPC保护线程";
+        String color = "&a";
+        if(isClose){
+            color = "&7";
+        }
+        return color+"商店NPC保护线程";
     }
 }

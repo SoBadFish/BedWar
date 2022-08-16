@@ -23,7 +23,11 @@ public class MatchingRunnable extends ThreadManager.AbstractBedWarRunnable {
 
     @Override
     public String getThreadName() {
-        return "匹配线程";
+        String color = "&a";
+        if(isClose){
+            color = "&7";
+        }
+        return color+"匹配线程";
     }
 
     @Override

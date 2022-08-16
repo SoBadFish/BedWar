@@ -29,13 +29,21 @@ public class FloatUpdateRunnable extends ThreadManager.AbstractBedWarRunnable {
 
     @Override
     public String getThreadName() {
-        return room.getRoomConfig().name+" 浮空字更新";
+        String color = "&a";
+        if(isClose){
+            color = "&7";
+        }
+        return color+room.getRoomConfig().name+" 浮空字更新";
     }
 
     @Override
     public void run() {
         //TODO 更新浮空字
         while (true){
+            if(room == null){
+                isClose = true;
+                return;
+            }
             if(room.close){
                 isClose = true;
                 return;

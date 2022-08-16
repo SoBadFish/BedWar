@@ -13,7 +13,11 @@ public class TopUpdateRunnable extends ThreadManager.AbstractBedWarRunnable {
 
     @Override
     public String getThreadName() {
-        return "排行榜更新线程";
+        String color = "&a";
+        if(isClose){
+            color = "&7";
+        }
+        return color+"排行榜更新线程";
     }
 
     @Override
