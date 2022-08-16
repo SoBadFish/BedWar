@@ -529,7 +529,10 @@ public class RoomManager implements Listener {
                 if(block instanceof BlockBed){
                     event.setDrops(new Item[0]);
                 }
-                event.setCancelled(room.toBreakBlock(info,block));
+                if(!room.toBreakBlock(info,block)){
+                    event.setCancelled();
+                }
+
             }
         }
 

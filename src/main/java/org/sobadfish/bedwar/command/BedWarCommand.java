@@ -167,6 +167,7 @@ public class BedWarCommand extends Command {
     private class MatchingRunnable extends ThreadManager.AbstractBedWarRunnable {
 
         private PlayerInfo info;
+
         private String name;
 
         public MatchingRunnable(PlayerInfo info,String name){

@@ -77,8 +77,13 @@ public class WorldInfoConfig {
         this.waitPosition = waitPosition;
     }
 
+    /**
+     * 如果插件内不存在地图，则从worlds文件夹中备份，反之写入worlds文件夹
+     * */
     public static boolean initWorld(String roomName,String levelName){
+        //插件的地图
         File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+File.separator+"rooms"+File.separator+roomName);
+        //主世界地图
         File world = new File(nameFile+File.separator+"world"+File.separator+levelName);
         if(world.exists() && world.isDirectory()){
             if(toPathWorld(roomName, levelName)){

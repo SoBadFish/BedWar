@@ -20,7 +20,7 @@ public class TopUpdateRunnable extends ThreadManager.AbstractBedWarRunnable {
     public void run() {
         while (!isClose){
             for(TopItemInfo topItem: BedWarMain.getTopManager().topItemInfos){
-                if(!BedWarMain.getTopManager().topItems.contains(topItem.topItem)){
+                if(!BedWarMain.getTopManager().dataList.contains(topItem.topItem)){
                     topItem.floatText.toClose();
                     BedWarMain.getTopManager().topItemInfos.remove(topItem);
                     continue;

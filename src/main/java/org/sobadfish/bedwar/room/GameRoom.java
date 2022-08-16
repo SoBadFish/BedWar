@@ -455,13 +455,13 @@ public class GameRoom {
     public boolean toBreakBlock(PlayerInfo info,Block block){
         if(worldInfo.getPlaceBlock().contains(block)){
             worldInfo.onChangeBlock(block,false);
-            return false;
+            return true;
         }else{
             if(block instanceof BlockBed){
                 return !isBreadBed(info, block);
             }
         }
-        return true;
+        return false;
 
     }
 
@@ -832,15 +832,16 @@ public class GameRoom {
                 ((BlockEntityChest) entity).getInventory().clearAll();
             }
         }
-        worldInfo.getConfig().getGameWorld().doChunkGarbageCollection();
-        worldInfo.getConfig().getGameWorld().unloadChunks(true);
+        worldInfo.setClose(true);
         worldInfo = null;
         //TODO 从列表中移除
         BedWarMain.getRoomManager().getRooms().remove(roomConfig.getName());
         BedWarMain.sendMessageToConsole("&r释放房间 "+roomConfig.getName());
         if(WorldInfoConfig.toPathWorld(roomConfig.getName(),roomConfig.getWorldInfo().getGameWorld().getFolderName())){
+            Server.getInstance().loadLevel(roomConfig.getWorldInfo().getGameWorld().getFolderName());
             BedWarMain.sendMessageToConsole("&a"+roomConfig.getName()+" 地图已还原");
         }
+
 
         isGc = true;
         System.gc();

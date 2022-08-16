@@ -22,6 +22,8 @@ public class WorldInfo {
 
     private boolean isClose;
 
+
+
     private WorldInfoConfig config;
 
     private ArrayList<Block> placeBlock = new ArrayList<>();

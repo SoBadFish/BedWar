@@ -143,8 +143,6 @@ public class ThreadManager {
 
         public boolean isClose;
 
-
-
         abstract public GameRoom getRoom();
 
         abstract public String getThreadName();
