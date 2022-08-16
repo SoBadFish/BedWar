@@ -229,18 +229,15 @@ public class TeamInfo {
     }
     public void placeBed(){
         if(!getTeamConfig().getBedPosition().getChunk().isLoaded()){
-            try {
-                getTeamConfig().getBedPosition().getChunk().load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                getTeamConfig().getBedPosition().getChunk().load();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+            getTeamConfig().getBedPosition().getLevel().loadChunk(getTeamConfig().getBedPosition().getChunkX(),getTeamConfig().getBedPosition().getChunkZ());
         }
         if(!getTeamConfig().getSpawnPosition().getChunk().isLoaded()){
-            try {
-                getTeamConfig().getSpawnPosition().getChunk().load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            getTeamConfig().getSpawnPosition().getLevel().loadChunk(getTeamConfig().getSpawnPosition().getChunkX(),getTeamConfig().getSpawnPosition().getChunkZ());
         }
         getTeamConfig().getBedPosition().getLevel().setBlock(getTeamConfig().getBedPosition(),Block.get(26,0),true,true);
         Position pos2 = getTeamConfig().getBedPosition().getSide(getTeamConfig().getBedFace());

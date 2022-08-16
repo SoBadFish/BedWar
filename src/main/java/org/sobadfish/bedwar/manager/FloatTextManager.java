@@ -16,7 +16,6 @@ public class FloatTextManager {
 
 
 
-
     public static void removeFloatText(BedWarFloatText floatText) {
         floatTextList.remove(floatText);
     }

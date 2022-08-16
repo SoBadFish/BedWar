@@ -21,12 +21,7 @@ public class FloatTextInfo {
 
     public FloatTextInfo init(){
         if(!floatTextInfoConfig.position.getChunk().isLoaded()){
-            try {
-                floatTextInfoConfig.position.getChunk().load();
-            } catch (IOException e) {
-                BedWarMain.sendMessageToConsole("&c无法加载区块");
-                return null;
-            }
+            floatTextInfoConfig.position.getLevel().loadChunk(floatTextInfoConfig.position.getChunkX(),floatTextInfoConfig.position.getChunkZ());
 
 
         }

@@ -134,6 +134,10 @@ public class RoomManager implements Listener {
 
 
     public boolean joinRoom(PlayerInfo player,String roomName){
+        PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player.getPlayer());
+        if(info != null){
+            player = info;
+        }
         if (BedWarMain.getRoomManager().hasRoom(roomName)) {
             if (!BedWarMain.getRoomManager().hasGameRoom(roomName)) {
                 if(BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomName))){
@@ -146,7 +150,13 @@ public class RoomManager implements Listener {
                 if(!room.getRoomConfig().hasWatch){
                     player.sendForceMessage("&c该房间开始后不允许旁观");
                 }else{
-                    room.joinWatch(player);
+                    if(player.getGameRoom() != null){
+
+                        room.joinWatch(player);
+                    }else{
+                        player.sendForceMessage("&c你无法进入此房间");
+                    }
+
                 }
             }else{
                 return true;
@@ -296,7 +306,7 @@ public class RoomManager implements Listener {
     @EventHandler
     public void onChunkUnload(ChunkUnloadEvent event){
         GameRoom room = getGameRoomByLevel(event.getLevel());
-        if(room != null && !room.isGc){
+        if(room != null && !room.close){
             event.setCancelled();
 
         }
@@ -535,6 +545,7 @@ public class RoomManager implements Listener {
                         info.setPlayer(player);
                         info.setLeave(false);
                         if(room1.getType() == GameRoom.GameType.WAIT){
+                            player.teleport(room1.worldInfo.getConfig().getGameWorld().getSafeSpawn());
                             player.teleport(room1.getWorldInfo().getConfig().getWaitPosition());
                         }else{
                             info.death(null);
@@ -691,11 +702,13 @@ public class RoomManager implements Listener {
             PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
             if(playerInfo != null) {
                 if (playerInfo.isWatch()) {
+                    playerInfo.sendForceMessage("&c你处于观察者模式");
                     event.setCancelled();
                     return;
                 }
                 GameRoom room = playerInfo.getGameRoom();
                 if (room.getType() == GameRoom.GameType.WAIT) {
+
                     event.setCancelled();
                     return;
                 }

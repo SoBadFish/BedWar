@@ -477,7 +477,13 @@ public class GameRoom {
             }
 
         }else {
-            return false;
+            if(info.getGameRoom().getType() != GameType.END && info.getGameRoom() == this){
+                info.death(null);
+                return true;
+            }else{
+                info.getGameRoom().quitPlayerInfo(info,false);
+                return false;
+            }
         }
         return true;
 

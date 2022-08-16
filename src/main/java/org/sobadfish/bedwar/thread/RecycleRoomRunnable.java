@@ -42,6 +42,7 @@ public class RecycleRoomRunnable extends ThreadManager.AbstractBedWarRunnable {
         room.isGc = true;
         RoomManager.LOCK_GAME.remove(room.getRoomConfig());
         BedWarMain.getRoomManager().getRooms().remove(room.getRoomConfig().getName());
+        isClose = true;
 
 
     }

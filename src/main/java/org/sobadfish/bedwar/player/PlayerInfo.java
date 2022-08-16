@@ -663,6 +663,7 @@ public class PlayerInfo {
         }
 
 
+        player.teleport(getLevel().getSafeSpawn());
 
         player.teleport(new Position(player.x,teamInfo.getTeamConfig().getBedPosition().y + 64,player.z,getLevel()));
         sendTitle("&c你死了");

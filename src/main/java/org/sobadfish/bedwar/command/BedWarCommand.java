@@ -9,6 +9,7 @@ import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.manager.RandomJoinManager;
+import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
@@ -39,11 +40,16 @@ public class BedWarCommand extends Command {
         if(commandSender instanceof Player) {
             if(strings.length == 0) {
                 PlayerInfo info = new PlayerInfo((Player)commandSender);
+                PlayerInfo i = BedWarMain.getRoomManager().getPlayerInfo((Player) commandSender);
+                if(i != null){
+                    info = i;
+                }
                 BedWarFrom simple = new BedWarFrom(BedWarMain.getTitle(), "请选择地图", DisPlayWindowsFrom.getId(51530, 99810));
+                PlayerInfo finalInfo = info;
                 simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
                     @Override
                     public void onClick(Player player) {
-                        ThreadManager.addThread(new MatchingRunnable(info,null));
+                        ThreadManager.addThread(new MatchingRunnable(finalInfo,null));
                     }
                 });
                 for (String wname : BedWarMain.getMenuRoomManager().getNames()) {
@@ -66,6 +72,10 @@ public class BedWarCommand extends Command {
                 FROM.put(commandSender.getName(), simple);
             }else{
                 PlayerInfo playerInfo = new PlayerInfo((Player) commandSender);
+                PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo((Player) commandSender);
+                if(info != null){
+                    playerInfo = info;
+                }
                 switch (strings[0]){
                     case "quit":
                         PlayerInfo player = BedWarMain.getRoomManager().getPlayerInfo((Player) commandSender);
@@ -100,7 +110,11 @@ public class BedWarCommand extends Command {
                                 }
                             }
 
-                            PlayerInfo info = new PlayerInfo((Player)commandSender);
+                            info = new PlayerInfo((Player)commandSender);
+                            PlayerInfo i = BedWarMain.getRoomManager().getPlayerInfo((Player) commandSender);
+                            if(i != null){
+                                info = i;
+                            }
                             String finalName = name;
                             ThreadManager.addThread(new MatchingRunnable(info,finalName));
                         }else{

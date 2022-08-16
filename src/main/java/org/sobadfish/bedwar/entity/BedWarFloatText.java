@@ -78,11 +78,7 @@ public class BedWarFloatText extends Entity {
 
     public static BedWarFloatText showFloatText(String name,Position position, String text){
         if(!position.getChunk().isLoaded()){
-            try {
-                position.getChunk().load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            position.getLevel().loadChunk(position.getChunkX(),position.getChunkZ());
         }
         BedWarFloatText text1 = new BedWarFloatText(name,position.getChunk(),Entity.getDefaultNBT(position));
         text1.setText(text);
