@@ -57,7 +57,9 @@ import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.GameRoom.GameType;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.entity.ShopVillage;
+import org.sobadfish.bedwar.thread.AutoJoinGameRoomRunnable;
 import org.sobadfish.bedwar.thread.BaseTimerRunnable;
+import org.sobadfish.bedwar.thread.FairworksRunnable;
 import org.sobadfish.bedwar.tools.Utils;
 
 import java.io.File;
@@ -154,13 +156,13 @@ public class RoomManager implements Listener {
     }
 
 
-    private Map<String, GameRoomConfig> roomConfig;
+    private final Map<String, GameRoomConfig> roomConfig;
 
     public Map<String, GameRoom> getRooms() {
         return rooms;
     }
 
-    private Map<String, GameRoom> rooms = new LinkedHashMap<>();
+    private final Map<String, GameRoom> rooms = new LinkedHashMap<>();
 
     public boolean hasRoom(String room){
         return roomConfig.containsKey(room);
@@ -204,26 +206,7 @@ public class RoomManager implements Listener {
             room.getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
             if(event.getRoom().getRoomConfig().isAutomaticNextRound){
                 info.sendMessage("&75 &e秒后自动进行下一局");
-                ThreadManager.addThread(new BaseTimerRunnable(5) {
-                    @Override
-                    public GameRoom getRoom() {
-                        return room;
-                    }
-
-                    @Override
-                    public String getThreadName() {
-                        return "自动进入下一局线程";
-                    }
-
-                    @Override
-                    protected void callback() {
-                        if(RandomJoinManager.newInstance().join(new PlayerInfo(info.getPlayer()),null)){
-                            event.getRoom().quitPlayerInfo(info,false);
-                        }
-//                        quitPlayerInfo(playerInfo,false);
-
-                    }
-                });
+                ThreadManager.addThread(new AutoJoinGameRoomRunnable(5,info,event.getRoom(),null));
 
             }
 
@@ -264,29 +247,11 @@ public class RoomManager implements Listener {
             data.getRoomData(event.getRoom().getRoomConfig().name).gameCount++;
             event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
         }
-        ThreadManager.addThread(new BaseTimerRunnable(5) {
-            @Override
-            public GameRoom getRoom() {
-                return event.getRoom();
-            }
+        TeamInfo teamInfo = event.getTeamInfo();
+        if(teamInfo != null){
+            ThreadManager.addThread(new FairworksRunnable(5,event.getRoom(),teamInfo.getLivePlayer()));
+        }
 
-            @Override
-            public String getThreadName() {
-                return "燃放烟花线程";
-            }
-
-            @Override
-            public void onRun() {
-                if(event.getTeamInfo() == null){
-                    return;
-                }
-                for(PlayerInfo playerInfo: event.getTeamInfo().getLivePlayer()){
-                    Utils.spawnFirework(playerInfo.getPosition());
-                }
-            }
-            @Override
-            protected void callback() {}
-        });
         event.getRoom().sendMessage("&a恭喜 "+event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()+" &a 获得了胜利!");
 
     }

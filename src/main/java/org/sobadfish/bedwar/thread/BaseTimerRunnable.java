@@ -7,9 +7,10 @@ import org.sobadfish.bedwar.manager.ThreadManager;
  * 2022/1/7
  */
 public abstract class BaseTimerRunnable extends ThreadManager.AbstractBedWarRunnable{
+
     private int time = 0;
 
-    private int end;
+    private final int end;
 
     private boolean close;
 

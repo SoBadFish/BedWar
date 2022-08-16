@@ -1,6 +1,7 @@
-package org.sobadfish.bedwar.manager;
+package org.sobadfish.bedwar.manager.data;
 
 import org.sobadfish.bedwar.entity.BedWarFloatText;
+import org.sobadfish.bedwar.manager.BaseDataWriterGetterManager;
 import org.sobadfish.bedwar.top.TopItem;
 import org.sobadfish.bedwar.top.TopItemInfo;
 
@@ -8,7 +9,7 @@ import java.io.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class PlayerTopManager extends BaseDataWriterGetterManager<TopItem>{
+public class PlayerTopManager extends BaseDataWriterGetterManager<TopItem> {
 
 
     public List<TopItemInfo> topItemInfos = new CopyOnWriteArrayList<>();

@@ -29,12 +29,8 @@ import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfo;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
-import org.sobadfish.bedwar.thread.FloatUpdateRunnable;
+import org.sobadfish.bedwar.thread.*;
 import org.sobadfish.bedwar.shop.ShopInfo;
-import org.sobadfish.bedwar.thread.BaseTimerRunnable;
-import org.sobadfish.bedwar.thread.ProtectVillageThread;
-import org.sobadfish.bedwar.thread.RoomLoadThread;
-import org.sobadfish.bedwar.thread.WorldInfoLoadThread;
 import org.sobadfish.bedwar.world.WorldInfo;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
@@ -217,25 +213,7 @@ public class GameRoom {
             if(getRoomConfig().isAutomaticNextRound){
                 sendMessage("&75 &e秒后自动进行下一局");
                 for(PlayerInfo playerInfo: getInRoomPlayers()){
-                    ThreadManager.addThread(new BaseTimerRunnable(5) {
-                        @Override
-                        public GameRoom getRoom() {
-                            return GameRoom.this;
-                        }
-
-                        @Override
-                        public String getThreadName() {
-                            return "自动进入游戏线程";
-                        }
-
-                        @Override
-                        protected void callback() {
-                            if(RandomJoinManager.newInstance().join(new PlayerInfo(playerInfo.getPlayer()),null)){
-                                quitPlayerInfo(playerInfo,false);
-                            }
-
-                        }
-                    });
+                    ThreadManager.addThread(new AutoJoinGameRoomRunnable(5,playerInfo,this,null));
                 }
             }
 

@@ -1,7 +1,6 @@
 package org.sobadfish.bedwar;
 
 
-import cn.nukkit.Nukkit;
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
@@ -16,6 +15,8 @@ import org.sobadfish.bedwar.entity.EntityBlueWitherSkull;
 import org.sobadfish.bedwar.entity.EntityFireBall;
 import org.sobadfish.bedwar.entity.IronGolem;
 import org.sobadfish.bedwar.manager.*;
+import org.sobadfish.bedwar.manager.data.PlayerDataManager;
+import org.sobadfish.bedwar.manager.data.PlayerTopManager;
 import org.sobadfish.bedwar.panel.lib.AbstractFakeInventory;
 import org.sobadfish.bedwar.room.event.*;
 import org.sobadfish.bedwar.tools.Utils;

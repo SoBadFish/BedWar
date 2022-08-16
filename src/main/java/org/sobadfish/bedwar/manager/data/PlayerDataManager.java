@@ -1,12 +1,13 @@
-package org.sobadfish.bedwar.manager;
+package org.sobadfish.bedwar.manager.data;
 
+import org.sobadfish.bedwar.manager.BaseDataWriterGetterManager;
 import org.sobadfish.bedwar.player.PlayerData;
 import org.sobadfish.bedwar.top.TopItem;
 
 import java.io.*;
 import java.util.List;
 
-public class PlayerDataManager extends BaseDataWriterGetterManager<PlayerData>{
+public class PlayerDataManager extends BaseDataWriterGetterManager<PlayerData> {
 
 
     public PlayerDataManager(List<PlayerData> dataList, File file) {
