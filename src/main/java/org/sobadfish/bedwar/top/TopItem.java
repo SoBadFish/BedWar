@@ -62,7 +62,6 @@ public class TopItem {
         int top = 1;
         if(dataList.size() > 0) {
 
-
             for (PlayerData data : dataList) {
                 if (top >= 10) {
                     break;

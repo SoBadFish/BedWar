@@ -24,7 +24,7 @@ public class PlayerDataManager extends BaseDataWriterGetterManager<PlayerData> {
     }
 
     public static PlayerDataManager asFile(File file){
-        return (PlayerDataManager) BaseDataWriterGetterManager.asFile(file,"player.json", TopItem[].class,PlayerDataManager.class);
+        return (PlayerDataManager) BaseDataWriterGetterManager.asFile(file,"player.json", PlayerData[].class,PlayerDataManager.class);
     }
 
 }

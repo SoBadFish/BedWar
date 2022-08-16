@@ -31,7 +31,7 @@ public class BaseDataWriterGetterManager<T>{
                 BedWarMain.getBedWarMain().saveResource(fileName,false);
             }
             reader = new InputStreamReader(new FileInputStream(file));
-            T[] data =  gson.fromJson(reader, (Type) tClass);
+            T[] data = (T[]) gson.fromJson(reader, tClass);
             Constructor constructor = baseClass.getConstructor(List.class,File.class);
             return (BaseDataWriterGetterManager) constructor.newInstance(new ArrayList<T>(Arrays.asList(data)),file);
 
