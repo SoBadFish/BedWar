@@ -478,6 +478,10 @@ public class GameRoom {
 
         }else {
             if(info.getGameRoom().getType() != GameType.END && info.getGameRoom() == this){
+                if(info.getGameRoom().getType() != GameType.WAIT){
+                    info.getGameRoom().quitPlayerInfo(info,false);
+                    return false;
+                }
                 info.death(null);
                 return true;
             }else{

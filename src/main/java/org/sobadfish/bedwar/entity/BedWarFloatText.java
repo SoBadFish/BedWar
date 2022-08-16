@@ -91,14 +91,15 @@ public class BedWarFloatText extends Entity {
     public void disPlayers(){
         for(Player player: player){
             spawnTo(player);
-
         }
     }
 
     private void toDisplay(){
         for(Player player: Server.getInstance().getOnlinePlayers().values()){
-            this.player.add(player);
-            spawnTo(player);
+            if(!this.player.contains(player)) {
+                this.player.add(player);
+                spawnTo(player);
+            }
 
         }
     }
