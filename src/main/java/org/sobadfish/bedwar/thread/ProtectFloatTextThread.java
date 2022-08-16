@@ -2,6 +2,7 @@ package org.sobadfish.bedwar.thread;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.manager.FloatTextManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
@@ -27,6 +28,10 @@ public class ProtectFloatTextThread extends ThreadManager.AbstractBedWarRunnable
     @Override
     public void run() {
         while (!isClose) {
+            if(BedWarMain.getBedWarMain().isDisabled()){
+                isClose = true;
+                return;
+            }
             for (Player player : Server.getInstance().getOnlinePlayers().values()) {
                 for (BedWarFloatText floatText : new ArrayList<>(FloatTextManager.floatTextList)) {
                     if (floatText == null) {

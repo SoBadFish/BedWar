@@ -23,6 +23,10 @@ public class TopUpdateRunnable extends ThreadManager.AbstractBedWarRunnable {
     @Override
     public void run() {
         while (!isClose){
+            if(BedWarMain.getBedWarMain().isDisabled()){
+                isClose = true;
+                return;
+            }
             for(TopItemInfo topItem: BedWarMain.getTopManager().topItemInfos){
                 if(!BedWarMain.getTopManager().dataList.contains(topItem.topItem)){
                     topItem.floatText.toClose();

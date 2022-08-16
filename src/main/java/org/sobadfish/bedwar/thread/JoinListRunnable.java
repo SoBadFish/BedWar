@@ -42,6 +42,10 @@ public class JoinListRunnable extends ThreadManager.AbstractBedWarRunnable{
     @Override
     public void run() {
         while (true){
+            if(BedWarMain.getBedWarMain().isDisabled()){
+                isClose = true;
+                return;
+            }
             manager.playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info));
             try {
                 Thread.sleep(500);

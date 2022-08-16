@@ -156,12 +156,20 @@ public class ThreadManager {
 
         @Override
         public String getThreadName() {
-            return "线程检测";
+            String color = "&a";
+            if(isClose){
+                color = "&7";
+            }
+            return color+"线程检测";
         }
 
         @Override
         public void run() {
             for(;;) {
+                if(BedWarMain.getBedWarMain().isDisabled()){
+                    isClose = true;
+                    return;
+                }
                 if(isClose){
                     return;
                 }
