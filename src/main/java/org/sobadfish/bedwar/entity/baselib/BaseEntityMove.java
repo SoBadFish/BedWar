@@ -169,9 +169,14 @@ public abstract class BaseEntityMove extends BaseEntity {
         if(entity instanceof Player ){
             PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo((Player) entity);
             if (info != null) {
-                if (info.getTeamInfo().equals(master.getTeamInfo())) {
+                if(info.getTeamInfo() != null){
+                    if (info.getTeamInfo().equals(master.getTeamInfo())) {
+                        return near;
+                    }
+                }else{
                     return near;
                 }
+
             }
         }else{
             return near;

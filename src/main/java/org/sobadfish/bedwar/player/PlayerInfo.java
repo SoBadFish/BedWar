@@ -663,11 +663,19 @@ public class PlayerInfo {
         }
 
 
+
         player.teleport(getLevel().getSafeSpawn());
 
         player.teleport(new Position(player.x,teamInfo.getTeamConfig().getBedPosition().y + 64,player.z,getLevel()));
         sendTitle("&c你死了");
         deathCount++;
+        if(teamInfo.isBadExists()){
+            playerType = PlayerType.DEATH;
+        }else{
+            //TODO 死亡后的观察模式
+           playerType = PlayerType.WATCH;
+
+        }
 
         if(event != null) {
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
@@ -733,13 +741,11 @@ public class PlayerInfo {
         damageByInfo = null;
         player.getInventory().clearAll();
         player.getOffhandInventory().clearAll();
-        if(teamInfo.isBadExists()){
-            playerType = PlayerType.DEATH;
-        }else{
-            //TODO 死亡后的观察模式
+        if(playerType == PlayerType.WATCH){
             getGameRoom().joinWatch(this);
-
         }
+
+
 
     }
 

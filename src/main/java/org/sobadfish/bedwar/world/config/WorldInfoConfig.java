@@ -115,6 +115,11 @@ public class WorldInfoConfig {
 
 
     public static boolean toPathWorld(String roomName,String levelName){
+        if(Server.getInstance().getLevelByName(levelName) != null){
+            //先卸载了
+            Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName));
+
+        }
         File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+File.separator+"rooms"+File.separator+roomName);
         File world = new File(nameFile+File.separator+"world"+File.separator+levelName);
         File[] files = world.listFiles();

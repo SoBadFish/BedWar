@@ -140,7 +140,7 @@ public class RoomManager implements Listener {
         }
         if (BedWarMain.getRoomManager().hasRoom(roomName)) {
             if (!BedWarMain.getRoomManager().hasGameRoom(roomName)) {
-                if(BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomName))){
+                if(!BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomName))){
                     player.sendForceMessage("&c" + roomName + " 还没准备好");
                     return false;
                 }
@@ -151,10 +151,9 @@ public class RoomManager implements Listener {
                     player.sendForceMessage("&c该房间开始后不允许旁观");
                 }else{
                     if(player.getGameRoom() != null){
-
-                        room.joinWatch(player);
-                    }else{
                         player.sendForceMessage("&c你无法进入此房间");
+                    }else{
+                        room.joinWatch(player);
                     }
 
                 }
@@ -490,7 +489,7 @@ public class RoomManager implements Listener {
 
 
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event){
         Level level = event.getBlock().level;
         Block block = event.getBlock();
@@ -515,8 +514,12 @@ public class RoomManager implements Listener {
                 if(block instanceof BlockBed){
                     event.setDrops(new Item[0]);
                 }
+
                 if(!room.toBreakBlock(info,block)){
                     event.setCancelled();
+                }else{
+                    //防止一些无敌方块
+                    event.getBlock().getLevel().setBlock(event.getBlock(),Block.get(0),true);
                 }
 
             }
@@ -561,7 +564,10 @@ public class RoomManager implements Listener {
                 //TODO 无房间回到出生点
                reset(player);
             }
+        }else if(player.getGamemode() == 3){
+            player.setGamemode(0);
         }
+
     }
 
     private void reset(Player player){

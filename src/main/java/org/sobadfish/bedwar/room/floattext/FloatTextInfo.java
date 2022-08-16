@@ -34,6 +34,7 @@ public class FloatTextInfo {
         if(room == null){
             return false;
         }
+        BedWarMain.sendMessageToConsole("测试浮空字正在更新.."+floatTextInfoConfig.name);
         for(ItemInfo moneyItemInfoConfig: room.getWorldInfo().getInfos()){
             MoneyItemInfoConfig config = moneyItemInfoConfig.getItemInfoConfig().getMoneyItemInfoConfig();
             text = text

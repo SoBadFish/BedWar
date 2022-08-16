@@ -434,11 +434,12 @@ public class GameRoom {
 
     public boolean toBreakBlock(PlayerInfo info,Block block){
         if(worldInfo.getPlaceBlock().contains(block)){
-            worldInfo.onChangeBlock(block,false);
-            return true;
+            return worldInfo.onChangeBlock(block, false);
+
+
         }else{
             if(block instanceof BlockBed){
-                return !isBreadBed(info, block);
+                return isBreadBed(info, block);
             }
         }
         return false;
@@ -568,6 +569,7 @@ public class GameRoom {
 
                     Server.getInstance().getPluginManager().callEvent(event);
                     info.cancel();
+                    info.getPlayer().removeAllEffects();
                     ((Player) info.getPlayer()).setExperience(0, 0);
                     if (((Player) info.getPlayer()).isOnline()) {
                         BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
@@ -825,8 +827,14 @@ public class GameRoom {
         worldInfo.setClose(true);
         worldInfo = null;
         //TODO 从列表中移除
+        BedWarMain.sendMessageToConsole("&r释放房间 "+getRoomConfig().getName());
+        if(WorldInfoConfig.toPathWorld(getRoomConfig().getName(),getRoomConfig().getWorldInfo().getGameWorld().getFolderName())){
+            BedWarMain.sendMessageToConsole("&a"+getRoomConfig().getName()+" 地图已还原");
+        }
+        isGc = true;
+        RoomManager.LOCK_GAME.remove(getRoomConfig());
+        BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().getName());
 
-        ThreadManager.addThread(new RecycleRoomRunnable(this));
 
 
         System.gc();
