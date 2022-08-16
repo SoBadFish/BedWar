@@ -116,7 +116,8 @@ public class BedWarAdminCommand extends Command {
                 }
                 break;
             case "float":
-                if(strings.length < 5){
+                if(strings.length < 4){
+
                     commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
                     return false;
                 }
@@ -135,6 +136,10 @@ public class BedWarAdminCommand extends Command {
                        commandSender.sendMessage("浮空字删除成功");
 
                    }else{
+                       if(strings.length < 5){
+                           commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
+                           return false;
+                       }
                        if(!roomConfig.hasFloatText(strings[3])){
                            roomConfig.floatTextInfoConfigs.add(new FloatTextInfoConfig(strings[3],((Player) commandSender).getPosition(),strings[4]));
                            commandSender.sendMessage("成功添加浮空字");
@@ -169,24 +174,29 @@ public class BedWarAdminCommand extends Command {
                 break;
             case "top":
                 if(commandSender instanceof Player) {
-                    if (strings.length < 4) {
+                    if (strings.length < 3) {
                         commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
                         return false;
                     }
                     String name = strings[2];
 
-                    PlayerData.DataType type = PlayerData.DataType.byName(strings[3]);
-                    if (type == null) {
-                        commandSender.sendMessage("未知类型");
-                        return true;
-                    }
-                    String room = null;
-                    if (strings.length > 4) {
-                        room = strings[4];
-                    }
-                    TopItem item = new TopItem(name,type,((Player) commandSender).getPosition(),"");
-                    item.room = room;
+
                     if (strings[1].equalsIgnoreCase("add")) {
+                        if(strings.length < 4){
+                            commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
+                            return false;
+                        }
+                        PlayerData.DataType type = PlayerData.DataType.byName(strings[3]);
+                        if (type == null) {
+                            commandSender.sendMessage("未知类型");
+                            return true;
+                        }
+                        String room = null;
+                        if (strings.length > 4) {
+                            room = strings[4];
+                        }
+                        TopItem item = new TopItem(name,type,((Player) commandSender).getPosition(),"");
+                        item.room = room;
                         if(BedWarMain.getTopManager().hasTop(name)){
                             commandSender.sendMessage("存在名称为 "+name+" 的排行榜了");
                             return true;
@@ -199,7 +209,12 @@ public class BedWarAdminCommand extends Command {
                             commandSender.sendMessage("不存在名称为 "+name+" 的排行榜");
                             return true;
                         }
-                        BedWarMain.getTopManager().removeTopItem(item);
+                        TopItem topItem = BedWarMain.getTopManager().getTop(name);
+                        if(topItem == null){
+                            commandSender.sendMessage("不存在名称为 "+name+" 的排行榜");
+                            return true;
+                        }
+                        BedWarMain.getTopManager().removeTopItem(topItem);
                         commandSender.sendMessage("排行榜删除成功");
 
                     }

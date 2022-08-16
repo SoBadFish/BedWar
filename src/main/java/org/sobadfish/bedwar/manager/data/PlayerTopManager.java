@@ -42,6 +42,15 @@ public class PlayerTopManager extends BaseDataWriterGetterManager<TopItem> {
 
     public void removeTopItem(TopItem topItem){
         dataList.remove(topItem);
+        TopItemInfo topItemInfo = new TopItemInfo(topItem,null);
+        if(topItemInfos.contains(topItemInfo)){
+            topItemInfo = topItemInfos.get(topItemInfos.indexOf(topItemInfo));
+            BedWarFloatText floatText = topItemInfo.floatText;
+            if(floatText != null){
+                floatText.toClose();
+            }
+        }
+        topItemInfos.remove(topItemInfo);
     }
 
     public void addTopItem(TopItem topItem){
@@ -55,5 +64,12 @@ public class PlayerTopManager extends BaseDataWriterGetterManager<TopItem> {
     }
 
 
-
+    public TopItem getTop(String name) {
+        for(TopItem topItem: dataList){
+            if(topItem.name.equalsIgnoreCase(name)){
+                return topItem;
+            }
+        }
+        return null;
+    }
 }

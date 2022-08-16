@@ -37,7 +37,7 @@ public class RandomJoinManager {
 
     //将这个线程缩短为单个
     public void start(){
-        ThreadManager.addThread(new JoinListRunnable(playerInfos,this));
+        ThreadManager.addThread(new JoinListRunnable(this));
     }
 
 
