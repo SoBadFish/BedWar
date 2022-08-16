@@ -22,6 +22,7 @@ import org.sobadfish.bedwar.item.button.RoomQuitItem;
 import org.sobadfish.bedwar.item.button.TeamChoseItem;
 import org.sobadfish.bedwar.manager.FloatTextManager;
 import org.sobadfish.bedwar.manager.RandomJoinManager;
+import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
@@ -412,6 +413,7 @@ public class GameRoom {
 //
 
     public static GameRoom enableRoom(GameRoomConfig roomConfig){
+
         return new GameRoom(roomConfig);
     }
 
@@ -813,15 +815,10 @@ public class GameRoom {
         worldInfo.setClose(true);
         worldInfo = null;
         //TODO 从列表中移除
-        BedWarMain.getRoomManager().getRooms().remove(roomConfig.getName());
-        BedWarMain.sendMessageToConsole("&r释放房间 "+roomConfig.getName());
-        if(WorldInfoConfig.toPathWorld(roomConfig.getName(),roomConfig.getWorldInfo().getGameWorld().getFolderName())){
-            Server.getInstance().loadLevel(roomConfig.getWorldInfo().getGameWorld().getFolderName());
-            BedWarMain.sendMessageToConsole("&a"+roomConfig.getName()+" 地图已还原");
-        }
+
+        ThreadManager.addThread(new RecycleRoomRunnable(this));
 
 
-        isGc = true;
         System.gc();
     }
 }

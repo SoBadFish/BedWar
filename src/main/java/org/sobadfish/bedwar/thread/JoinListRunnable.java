@@ -192,14 +192,18 @@ public class JoinListRunnable extends ThreadManager.AbstractBedWarRunnable{
     }
 
     private boolean startGameRoom(PlayerInfo info, PlayerHasChoseRoomManager roomManager, GameRoomConfig roomConfig) {
-        BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomConfig.name));
-        if (BedWarMain.getRoomManager().getRoom(roomConfig.name).joinPlayerInfo(info, true)) {
-            lock.remove(roomManager);
-            return true;
-        } else {
-            lock.remove(roomManager);
-            return false;
+
+        if(BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomConfig.name))){
+            if (BedWarMain.getRoomManager().getRoom(roomConfig.name).joinPlayerInfo(info, true)) {
+                lock.remove(roomManager);
+                return true;
+            } else {
+                lock.remove(roomManager);
+                return false;
+            }
         }
+        return false;
+
     }
 
 

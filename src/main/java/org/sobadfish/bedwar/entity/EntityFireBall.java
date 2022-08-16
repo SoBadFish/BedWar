@@ -64,6 +64,10 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
     }
 
 
+    @Override
+    protected double getDamage() {
+        return 2;
+    }
 
     public EntityFireBall(FullChunk chunk, CompoundTag nbt, Entity shootingEntity) {
         this(chunk, nbt, shootingEntity, false);

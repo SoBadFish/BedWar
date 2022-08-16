@@ -74,6 +74,8 @@ import java.util.Map;
  */
 public class RoomManager implements Listener {
 
+    public static List<GameRoomConfig> LOCK_GAME = new ArrayList<>();
+
     public LinkedHashMap<String,String> playerJoin = new LinkedHashMap<>();
 
     private RoomManager(Map<String, GameRoomConfig> roomConfig){
@@ -134,7 +136,10 @@ public class RoomManager implements Listener {
     public boolean joinRoom(PlayerInfo player,String roomName){
         if (BedWarMain.getRoomManager().hasRoom(roomName)) {
             if (!BedWarMain.getRoomManager().hasGameRoom(roomName)) {
-                BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomName));
+                if(BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomName))){
+                    player.sendForceMessage("&c" + roomName + " 还没准备好");
+                    return false;
+                }
             }
             GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
             if (!room.joinPlayerInfo(player,true)) {
@@ -172,8 +177,14 @@ public class RoomManager implements Listener {
         return rooms.containsKey(room);
     }
 
-    public void enableRoom(GameRoomConfig config){
-        rooms.put(config.getName(),GameRoom.enableRoom(config));
+    public boolean enableRoom(GameRoomConfig config){
+        if(!RoomManager.LOCK_GAME.contains(config)){
+            RoomManager.LOCK_GAME.add(config);
+            rooms.put(config.getName(),GameRoom.enableRoom(config));
+            return true;
+        }
+        return false;
+
     }
 
     public GameRoomConfig getRoomConfig(String name){

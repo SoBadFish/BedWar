@@ -18,6 +18,7 @@ import org.sobadfish.bedwar.manager.*;
 import org.sobadfish.bedwar.manager.data.PlayerDataManager;
 import org.sobadfish.bedwar.manager.data.PlayerTopManager;
 import org.sobadfish.bedwar.panel.lib.AbstractFakeInventory;
+import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.event.*;
 import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.variable.BedWarVariable;
@@ -286,6 +287,11 @@ public class BedWarMain extends PluginBase {
         }
         if(dataManager != null){
             dataManager.save();
+        }
+        if(roomManager != null){
+            for (GameRoomConfig roomConfig: roomManager.getRoomConfigs()){
+                roomConfig.save();
+            }
         }
     }
 }
