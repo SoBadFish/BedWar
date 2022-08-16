@@ -46,9 +46,11 @@ public class BackHub implements INbtItem{
         public void onRun() {
             PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
             if(lastPos.getFloorX() != player.getFloorX() && lastPos.getFloorZ() != player.getFloorZ()){
+                info.sendMessage("&c传送取消!");
                 this.cancel();
             }
             if(info.isDeath()){
+                info.sendMessage("&c传送取消!");
                 this.cancel();
             }
         }
