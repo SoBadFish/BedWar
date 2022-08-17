@@ -446,18 +446,24 @@ public class GameRoom {
 
     }
 
-    public boolean joinPlayerInfo(PlayerInfo info,boolean sendMessage){
+    public JoinType joinPlayerInfo(PlayerInfo info,boolean sendMessage){
         if(info.getGameRoom() == null){
             if(info.getPlayer() instanceof Player) {
                 if(!((Player) info.getPlayer()).isOnline()){
-                    return false;
+                    return JoinType.NO_ONLINE;
                 }
             }
             PlayerJoinRoomEvent event = new PlayerJoinRoomEvent(info,this,BedWarMain.getBedWarMain());
             event.setSend(sendMessage);
             Server.getInstance().getPluginManager().callEvent(event);
             if(event.isCancelled()){
-                return false;
+                return JoinType.NO_JOIN;
+            }
+            if(getWorldInfo().getConfig().getGameWorld() == null || !Server.getInstance().isLevelLoaded(getWorldInfo().getConfig().getGameWorld().getFolderName())){
+                if(getWorldInfo().getConfig().getGameWorld() != null){
+                    Server.getInstance().loadLevel(getWorldInfo().getConfig().getGameWorld().getFolderName());
+                }
+                return JoinType.NO_LEVEL;
             }
             sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
             info.init();
@@ -481,18 +487,22 @@ public class GameRoom {
             if(info.getGameRoom().getType() != GameType.END && info.getGameRoom() == this){
                 if(info.getGameRoom().getType() != GameType.WAIT){
                     info.getGameRoom().quitPlayerInfo(info,false);
-                    return false;
+                    return JoinType.CAN_WATCH;
                 }
                 info.death(null);
-                return true;
             }else{
                 info.getGameRoom().quitPlayerInfo(info,false);
-                return false;
+                return JoinType.CAN_WATCH;
             }
         }
-        return true;
+        return JoinType.CAN_JOIN;
 
     }
+
+    public enum JoinType{
+        NO_ONLINE,NO_JOIN,NO_LEVEL,CAN_WATCH,CAN_JOIN
+    }
+
     /**
      * 分配玩家
      * */
@@ -834,7 +844,6 @@ public class GameRoom {
         isGc = true;
         RoomManager.LOCK_GAME.remove(getRoomConfig());
         BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().getName());
-
 
 
         System.gc();

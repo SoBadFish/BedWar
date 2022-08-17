@@ -104,7 +104,7 @@ public class JoinListRunnable extends ThreadManager.AbstractBedWarRunnable{
         if (i.name == null) {
             for (GameRoom gameRoom : BedWarMain.getRoomManager().getRooms().values()) {
                 if (gameRoom.getType() == GameRoom.GameType.WAIT) {
-                    if (gameRoom.joinPlayerInfo(info, false)) {
+                    if (gameRoom.joinPlayerInfo(info, false) == GameRoom.JoinType.CAN_JOIN) {
                         i.cancel = true;
                         lock.remove(roomManager);
                         return false;
@@ -145,11 +145,10 @@ public class JoinListRunnable extends ThreadManager.AbstractBedWarRunnable{
                 }
                 if (BedWarMain.getRoomManager().hasGameRoom(roomConfig.name)) {
                     GameRoom fg = BedWarMain.getRoomManager().getRoom(roomConfig.name);
-                    if (fg.joinPlayerInfo(info, false)) {
+                    if (fg.joinPlayerInfo(info, false) == GameRoom.JoinType.CAN_JOIN) {
                         info.sendForceTitle("&a匹配完成");
                         i.cancel = true;
                         lock.remove(roomManager);
-
                         return false;
                     }
                 } else {
@@ -163,7 +162,7 @@ public class JoinListRunnable extends ThreadManager.AbstractBedWarRunnable{
                 for(GameRoomConfig roomConfig: worldRoom.getRoomConfigs()){
                     GameRoom room = BedWarMain.getRoomManager().getRoom(roomConfig.name);
                     if(room != null && room.getType() == GameRoom.GameType.WAIT){
-                        if (room.joinPlayerInfo(info, false)) {
+                        if (room.joinPlayerInfo(info, false) == GameRoom.JoinType.CAN_JOIN) {
                             lock.remove(roomManager);
                             info.sendForceTitle("&a匹配完成");
                             i.cancel = true;
@@ -194,7 +193,7 @@ public class JoinListRunnable extends ThreadManager.AbstractBedWarRunnable{
     private boolean startGameRoom(PlayerInfo info, PlayerHasChoseRoomManager roomManager, GameRoomConfig roomConfig) {
 
         if(BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomConfig.name))){
-            if (BedWarMain.getRoomManager().getRoom(roomConfig.name).joinPlayerInfo(info, true)) {
+            if (BedWarMain.getRoomManager().getRoom(roomConfig.name).joinPlayerInfo(info, true) == GameRoom.JoinType.CAN_JOIN) {
                 lock.remove(roomManager);
                 return true;
             } else {

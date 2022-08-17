@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class BaseDataWriterGetterManager<T>{
 
@@ -33,7 +34,12 @@ public class BaseDataWriterGetterManager<T>{
             reader = new InputStreamReader(new FileInputStream(file));
             T[] data = (T[]) gson.fromJson(reader, tClass);
             Constructor constructor = baseClass.getConstructor(List.class,File.class);
-            return (BaseDataWriterGetterManager) constructor.newInstance(new ArrayList<T>(Arrays.asList(data)),file);
+            if(data != null){
+                return (BaseDataWriterGetterManager) constructor.newInstance(new ArrayList<T>(Arrays.asList(data)),file);
+            }else{
+                return (BaseDataWriterGetterManager) constructor.newInstance(new ArrayList<>(),file);
+            }
+
 
         } catch (IOException  e) {
             BedWarMain.sendMessageToConsole("&c无法读取 "+file.getName()+" 配置文件");

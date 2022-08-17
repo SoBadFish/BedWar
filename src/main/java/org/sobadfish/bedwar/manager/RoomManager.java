@@ -146,20 +146,45 @@ public class RoomManager implements Listener {
                 }
             }
             GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
-            if (!room.joinPlayerInfo(player,true)) {
-                if(!room.getRoomConfig().hasWatch){
-                    player.sendForceMessage("&c该房间开始后不允许旁观");
-                }else{
-                    if(player.getGameRoom() != null){
-                        player.sendForceMessage("&c你无法进入此房间");
+            switch (room.joinPlayerInfo(player,true)){
+                case CAN_WATCH:
+                    if(!room.getRoomConfig().hasWatch){
+                        player.sendForceMessage("&c该房间开始后不允许旁观");
                     }else{
-                        room.joinWatch(player);
+                        if(player.getGameRoom() != null){
+                            player.sendForceMessage("&c你无法进入此房间");
+                        }else{
+                            room.joinWatch(player);
+                            return true;
+                        }
                     }
-
-                }
-            }else{
-                return true;
+                    break;
+                case NO_LEVEL:
+                    player.sendForceMessage("&c这个房间正在准备中，稍等一会吧");
+                    break;
+                case NO_ONLINE:
+                    break;
+                case NO_JOIN:
+                    player.sendForceMessage("&c该房间不允许加入");
+                    break;
+                default:
+                    //可以加入
+                    return true;
             }
+//            if (!room.joinPlayerInfo(player,true)) {
+//                if(!room.getRoomConfig().hasWatch){
+//                    player.sendForceMessage("&c该房间开始后不允许旁观");
+//                }else{
+//                    if(player.getGameRoom() != null){
+//                        player.sendForceMessage("&c你无法进入此房间");
+//                    }else{
+//                        room.joinWatch(player);
+//                    }
+//
+//                }
+//            }else{
+//                return true;
+//            }
 
 
         } else {
