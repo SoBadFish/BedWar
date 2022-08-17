@@ -200,8 +200,10 @@ public class RoomManager implements Listener {
             rooms.put(config.getName(),GameRoom.enableRoom(config));
             return true;
         }else{
+
             if(!Server.getInstance().isLevelLoaded(config.getWorldInfo().getGameWorld().getFolderName())){
-                return false;
+                Server.getInstance().generateLevel(config.getWorldInfo().getGameWorld().getFolderName());
+                return Server.getInstance().loadLevel(config.getWorldInfo().getGameWorld().getFolderName());
             }else{
                 rooms.put(config.getName(),GameRoom.enableRoom(config));
                 return true;
@@ -567,6 +569,7 @@ public class RoomManager implements Listener {
                             player.teleport(room1.worldInfo.getConfig().getGameWorld().getSafeSpawn());
                             player.teleport(room1.getWorldInfo().getConfig().getWaitPosition());
                         }else{
+
                             info.death(null);
                         }
                     }else{
@@ -692,11 +695,14 @@ public class RoomManager implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onWeatherChange(WeatherChangeEvent event){
         for(GameRoomConfig gameRoomConfig: BedWarMain.getRoomManager().roomConfig.values()){
-            if(gameRoomConfig.worldInfo.getGameWorld().
-                    getFolderName().equalsIgnoreCase(event.getLevel().getFolderName())){
-                event.setCancelled();
-                return;
+            if(gameRoomConfig.getWorldInfo().getGameWorld() != null){
+                if(gameRoomConfig.worldInfo.getGameWorld().
+                        getFolderName().equalsIgnoreCase(event.getLevel().getFolderName())){
+                    event.setCancelled();
+                    return;
+                }
             }
+
         }
     }
 

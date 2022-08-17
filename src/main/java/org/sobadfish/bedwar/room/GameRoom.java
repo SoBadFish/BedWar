@@ -32,6 +32,7 @@ import org.sobadfish.bedwar.room.floattext.FloatTextInfo;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.bedwar.thread.*;
 import org.sobadfish.bedwar.shop.ShopInfo;
+import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.world.WorldInfo;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
@@ -820,27 +821,28 @@ public class GameRoom {
             }
         }
 
+        Server.getInstance().unloadLevel(getWorldInfo().getConfig().getGameWorld(),true);
 
-        //TODO 从列表中移除
+//        //TODO 从列表中移除
         if(WorldInfoConfig.toPathWorld(getRoomConfig().getName(),getRoomConfig().getWorldInfo().getGameWorld().getFolderName())){
             BedWarMain.sendMessageToConsole("&a"+getRoomConfig().getName()+" 地图已还原");
-        }else{
-            BedWarMain.sendMessageToConsole("&a"+getRoomConfig().getName()+" 地图还原失败！");
-//            BedWarMain.sendMessageToConsole("&a正在执行备选方案");
-//            for(Block block: worldInfo.getPlaceBlock()){
-//                worldInfo.getConfig().getGameWorld().setBlock(block,Block.get(0));
-//                for(Entity entity: worldInfo.getConfig().getGameWorld().getEntities()){
-//                    entity.kill();
-//                }
-//            }
-//            for(BlockChest chest: clickChest){
-//                BlockEntity entity = chest.level.getBlockEntity(chest);
-//                if(entity instanceof BlockEntityChest){
-//                    ((BlockEntityChest) entity).getInventory().clearAll();
-//                }
-//            }
-
         }
+//            BedWarMain.sendMessageToConsole("&a"+getRoomConfig().getName()+" 地图还原失败！");
+////            BedWarMain.sendMessageToConsole("&a正在执行备选方案");
+////            for(Block block: worldInfo.getPlaceBlock()){
+////                worldInfo.getConfig().getGameWorld().setBlock(block,Block.get(0));
+////                for(Entity entity: worldInfo.getConfig().getGameWorld().getEntities()){
+////                    entity.kill();
+////                }
+////            }
+////            for(BlockChest chest: clickChest){
+////                BlockEntity entity = chest.level.getBlockEntity(chest);
+////                if(entity instanceof BlockEntityChest){
+////                    ((BlockEntityChest) entity).getInventory().clearAll();
+////                }
+////            }
+
+//        }
         BedWarMain.sendMessageToConsole("&r释放房间 "+getRoomConfig().getName());
         isGc = true;
         BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().getName());
