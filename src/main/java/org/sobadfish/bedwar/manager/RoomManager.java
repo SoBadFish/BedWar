@@ -598,6 +598,8 @@ public class RoomManager implements Listener {
         playerJoin.remove(player.getName());
         player.setHealth(player.getMaxHealth());
         player.getInventory().clearAll();
+        player.removeAllEffects();
+        player.setGamemode(0);
         player.getEnderChestInventory().clearAll();
         player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
     }

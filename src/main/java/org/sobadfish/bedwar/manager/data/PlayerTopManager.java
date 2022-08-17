@@ -26,6 +26,9 @@ public class PlayerTopManager extends BaseDataWriterGetterManager<TopItem> {
     public void init(){
         for(TopItem topItem: dataList){
             BedWarFloatText floatText = BedWarFloatText.showFloatText(topItem.name,topItem.getPosition(),"");
+            if(floatText == null){
+                continue;
+            }
             topItemInfos.add(new TopItemInfo(topItem,floatText));
         }
 
@@ -55,6 +58,9 @@ public class PlayerTopManager extends BaseDataWriterGetterManager<TopItem> {
 
     public void addTopItem(TopItem topItem){
         BedWarFloatText floatText = BedWarFloatText.showFloatText(topItem.name,topItem.getPosition(),"");
+        if(floatText == null){
+            return;
+        }
         topItemInfos.add(new TopItemInfo(topItem,floatText));
         dataList.add(topItem);
     }

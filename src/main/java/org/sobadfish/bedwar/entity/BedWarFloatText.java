@@ -77,6 +77,9 @@ public class BedWarFloatText extends Entity {
 
 
     public static BedWarFloatText showFloatText(String name,Position position, String text){
+        if(!Server.getInstance().isLevelLoaded(position.level.getFolderName())){
+            return null;
+        }
         if(!position.getChunk().isLoaded()){
             position.getLevel().loadChunk(position.getChunkX(),position.getChunkZ());
         }
