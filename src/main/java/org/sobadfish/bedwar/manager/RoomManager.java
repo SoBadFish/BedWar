@@ -57,8 +57,6 @@ import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.GameRoom.GameType;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.entity.ShopVillage;
-import org.sobadfish.bedwar.thread.AutoJoinGameRoomRunnable;
-import org.sobadfish.bedwar.thread.BaseTimerRunnable;
 import org.sobadfish.bedwar.thread.FairworksRunnable;
 import org.sobadfish.bedwar.tools.Utils;
 
@@ -250,8 +248,9 @@ public class RoomManager implements Listener {
             data.getRoomData(event.getRoom().getRoomConfig().name).gameCount++;
             room.getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
             if(event.getRoom().getRoomConfig().isAutomaticNextRound){
-                info.sendMessage("&75 &e秒后自动进行下一局");
-                ThreadManager.addThread(new AutoJoinGameRoomRunnable(5,info,event.getRoom(),null));
+                info.sendMessage("&7即将自动进行下一局");
+                RandomJoinManager.joinManager.join(info,null);
+//                ThreadManager.addThread(new AutoJoinGameRoomRunnable(5,info,event.getRoom(),null));
 
             }
 

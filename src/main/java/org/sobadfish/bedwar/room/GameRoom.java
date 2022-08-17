@@ -212,9 +212,9 @@ public class GameRoom {
             loadTime = 10;
             //房间结束后的执行逻辑
             if(getRoomConfig().isAutomaticNextRound){
-                sendMessage("&75 &e秒后自动进行下一局");
+                sendMessage("&7即将自动进行下一局");
                 for(PlayerInfo playerInfo: getInRoomPlayers()){
-                    ThreadManager.addThread(new AutoJoinGameRoomRunnable(5,playerInfo,this,null));
+                    RandomJoinManager.joinManager.join(playerInfo,null);
                 }
             }
 
