@@ -27,8 +27,10 @@ eventLists:
   - type: "chicken"
     display: "鸡你太美~~"
     eventTime: 20
+    value: 0.25
   - type: "light"
     display: "天选时刻"
     eventTime: 20
+    value: 1
 
 
