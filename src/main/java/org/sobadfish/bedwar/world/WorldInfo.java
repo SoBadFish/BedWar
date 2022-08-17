@@ -22,6 +22,8 @@ public class WorldInfo {
 
     private boolean isClose;
 
+    public boolean isStart;
+
 
 
     private WorldInfoConfig config;
@@ -79,17 +81,19 @@ public class WorldInfo {
      * 定时任务
      * */
     public boolean onUpdate(){
-        if(room.close || isClose){
-            infos.clear();
-            return false;
-        }
-        for(ItemInfo itemInfo: infos){
-            try {
-                itemInfo.toUpdate();
-            }catch (Exception e){
+        if(isStart) {
+            if (room.close || isClose) {
+                infos.clear();
                 return false;
             }
+            for (ItemInfo itemInfo : infos) {
+                try {
+                    itemInfo.toUpdate();
+                } catch (Exception e) {
+                    return false;
+                }
 
+            }
         }
         return true;
 

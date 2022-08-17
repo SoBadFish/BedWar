@@ -119,6 +119,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
     private void givePlayerItem(PlayerInfo info){
         if(info != null) {
             Player player = (Player) info.getPlayer();
+
             GameRoom room = info.getGameRoom();
             boolean u;
             int rc = 1;

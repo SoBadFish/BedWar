@@ -23,6 +23,8 @@ public class ThreadManager {
     // 空闲线程存活时间
     private final static Integer KEEPALIVETIME = 5;
 
+    public static final ExecutorService executorService = Executors.newCachedThreadPool();
+
 
     private static final ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(1,new ThreadPoolExecutor.AbortPolicy());
 

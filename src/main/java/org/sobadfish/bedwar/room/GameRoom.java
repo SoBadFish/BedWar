@@ -185,6 +185,7 @@ public class GameRoom {
                 break;
             case START:
                 eventControl.enable = true;
+                worldInfo.isStart = true;
                 onStart();
 
                 break;
@@ -449,6 +450,10 @@ public class GameRoom {
                     return JoinType.NO_ONLINE;
                 }
             }
+            if(getType() != GameType.WAIT){
+                return JoinType.CAN_WATCH;
+            }
+
             PlayerJoinRoomEvent event = new PlayerJoinRoomEvent(info,this,BedWarMain.getBedWarMain());
             event.setSend(sendMessage);
             Server.getInstance().getPluginManager().callEvent(event);
@@ -575,11 +580,12 @@ public class GameRoom {
 
                     PlayerQuitRoomEvent event = new PlayerQuitRoomEvent(info, this, BedWarMain.getBedWarMain());
 
+
+                    Server.getInstance().getPluginManager().callEvent(event);
                     if (teleport) {
                         info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
                     }
 
-                    Server.getInstance().getPluginManager().callEvent(event);
                     info.cancel();
                     info.getPlayer().removeAllEffects();
                     ((Player) info.getPlayer()).setExperience(0, 0);
@@ -642,9 +648,7 @@ public class GameRoom {
         //TODO 欢迎加入观察者大家庭
         if(!playerInfos.contains(info)){
 
-            if(info.getPlayer() instanceof Player) {
-                ((Player)info.getPlayer()).setGamemode(3);
-            }
+
             info.init();
             info.setGameRoom(this);
             if(info.getPlayer() instanceof Player) {
@@ -652,6 +656,9 @@ public class GameRoom {
             }
             playerInfos.add(info);
 
+        }
+        if(info.getPlayer() instanceof Player) {
+            ((Player)info.getPlayer()).setGamemode(3);
         }
 
         info.setPlayerType(PlayerInfo.PlayerType.WATCH);
@@ -817,14 +824,25 @@ public class GameRoom {
         //TODO 从列表中移除
         if(WorldInfoConfig.toPathWorld(getRoomConfig().getName(),getRoomConfig().getWorldInfo().getGameWorld().getFolderName())){
             BedWarMain.sendMessageToConsole("&a"+getRoomConfig().getName()+" 地图已还原");
+        }else{
+            BedWarMain.sendMessageToConsole("&a"+getRoomConfig().getName()+" 地图还原失败！");
+//            BedWarMain.sendMessageToConsole("&a正在执行备选方案");
+//            for(Block block: worldInfo.getPlaceBlock()){
+//                worldInfo.getConfig().getGameWorld().setBlock(block,Block.get(0));
+//                for(Entity entity: worldInfo.getConfig().getGameWorld().getEntities()){
+//                    entity.kill();
+//                }
+//            }
+//            for(BlockChest chest: clickChest){
+//                BlockEntity entity = chest.level.getBlockEntity(chest);
+//                if(entity instanceof BlockEntityChest){
+//                    ((BlockEntityChest) entity).getInventory().clearAll();
+//                }
+//            }
+
         }
         BedWarMain.sendMessageToConsole("&r释放房间 "+getRoomConfig().getName());
-
         isGc = true;
-        RoomManager.LOCK_GAME.remove(getRoomConfig());
         BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().getName());
-
-
-        System.gc();
     }
 }

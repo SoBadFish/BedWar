@@ -112,7 +112,6 @@ public class RoomManager implements Listener {
                 for (File nameFile : dirNameList) {
                     if(nameFile.isDirectory()){
                         String roomName = nameFile.getName();
-
                         GameRoomConfig roomConfig = GameRoomConfig.getGameRoomConfigByFile(roomName,nameFile);
                         if(roomConfig != null){
                             BedWarMain.sendMessageToConsole("&a加载房间 "+roomName+" 完成");
@@ -136,6 +135,7 @@ public class RoomManager implements Listener {
         if(info != null){
             player = info;
         }
+
         if (BedWarMain.getRoomManager().hasRoom(roomName)) {
             if (!BedWarMain.getRoomManager().hasGameRoom(roomName)) {
                 if(!BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomName))){
@@ -149,6 +149,7 @@ public class RoomManager implements Listener {
                     if(!room.getRoomConfig().hasWatch){
                         player.sendForceMessage("&c该房间开始后不允许旁观");
                     }else{
+                        player.setGameRoom(null);
                         if(player.getGameRoom() != null){
                             player.sendForceMessage("&c你无法进入此房间");
                         }else{
@@ -169,22 +170,6 @@ public class RoomManager implements Listener {
                     //可以加入
                     return true;
             }
-//            if (!room.joinPlayerInfo(player,true)) {
-//                if(!room.getRoomConfig().hasWatch){
-//                    player.sendForceMessage("&c该房间开始后不允许旁观");
-//                }else{
-//                    if(player.getGameRoom() != null){
-//                        player.sendForceMessage("&c你无法进入此房间");
-//                    }else{
-//                        room.joinWatch(player);
-//                    }
-//
-//                }
-//            }else{
-//                return true;
-//            }
-
-
         } else {
             player.sendForceMessage("&c不存在 &r" + roomName + " &c房间");
 
@@ -214,8 +199,15 @@ public class RoomManager implements Listener {
             RoomManager.LOCK_GAME.add(config);
             rooms.put(config.getName(),GameRoom.enableRoom(config));
             return true;
+        }else{
+            if(!Server.getInstance().isLevelLoaded(config.getWorldInfo().getGameWorld().getFolderName())){
+                return false;
+            }else{
+                rooms.put(config.getName(),GameRoom.enableRoom(config));
+                return true;
+
+            }
         }
-        return false;
 
     }
 
@@ -653,6 +645,9 @@ public class RoomManager implements Listener {
         if(event.getEntity() instanceof ShopVillage){
             event.setCancelled();
             PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
+            if(info.isWatch()){
+                return;
+            }
             ((ShopVillage) event.getEntity()).onClick(info);
         }
 

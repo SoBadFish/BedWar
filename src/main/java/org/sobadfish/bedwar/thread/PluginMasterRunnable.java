@@ -48,32 +48,34 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
             isClose = true;
             return;
         }
-        for (Player player : new ArrayList<>(Server.getInstance().getOnlinePlayers().values())) {
-            for (BedWarFloatText floatText : new ArrayList<>(FloatTextManager.floatTextList)) {
-                if (floatText == null) {
-                    continue;
-                }
-                if (floatText.isFinalClose) {
-                    FloatTextManager.removeFloatText(floatText);
-                    continue;
-                }
-                if(floatText.player.contains(player)){
-                    if(player.getLevel() != floatText.getPosition().getLevel() || !player.isOnline()) {
-                        if (!floatText.closed) {
-                            floatText.close();
-                        }
-                        floatText.player.remove(player);
+        ThreadManager.executorService.execute(() -> {
+            for (Player player : new ArrayList<>(Server.getInstance().getOnlinePlayers().values())) {
+                for (BedWarFloatText floatText : new ArrayList<>(FloatTextManager.floatTextList)) {
+                    if (floatText == null) {
+                        continue;
                     }
-                }
-                if(player.getLevel() == floatText.getPosition().getLevel()){
-                    floatText.player.add(player);
-                }
+                    if (floatText.isFinalClose) {
+                        FloatTextManager.removeFloatText(floatText);
+                        continue;
+                    }
+                    if(floatText.player.contains(player)){
+                        if(player.getLevel() != floatText.getPosition().getLevel() || !player.isOnline()) {
+                            if (!floatText.closed) {
+                                floatText.close();
+                            }
+                            floatText.player.remove(player);
+                        }
+                    }
+                    if(player.getLevel() == floatText.getPosition().getLevel()){
+                        floatText.player.add(player);
+                    }
 
-                floatText.disPlayers();
+                    floatText.disPlayers();
+
+                }
 
             }
-
-        }
+        });
         for(GameRoom room: BedWarMain.getRoomManager().getRooms().values()){
             if(room.close){
                 continue;
@@ -129,6 +131,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 BedWarMain.getTopManager().topItemInfos.remove(topItem);
             }
         }
+
         new Thread(() -> RandomJoinManager.newInstance().playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info))).start();
         loadTime = System.currentTimeMillis() - t1;
     }

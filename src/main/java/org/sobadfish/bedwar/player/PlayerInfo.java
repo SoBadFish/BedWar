@@ -579,6 +579,13 @@ public class PlayerInfo {
      * 定时任务
      * */
     public void onUpdate(){
+        if(isWatch()){
+            if(player instanceof Player){
+                if(((Player) player).getGamemode() != 3){
+                    ((Player) player).setGamemode(3);
+                }
+            }
+        }
         if(damageTime > 0){
             damageTime--;
         }else{

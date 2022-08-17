@@ -85,20 +85,23 @@ public class WorldInfoConfig {
         File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+File.separator+"rooms"+File.separator+roomName);
         //主世界地图
         File world = new File(nameFile+File.separator+"world"+File.separator+levelName);
-        if(world.exists() && world.isDirectory()){
+        if(!world.exists() && world.isDirectory()){
             if(toPathWorld(roomName, levelName)){
                 BedWarMain.sendMessageToConsole("&a地图 &e"+levelName+" &a初始化完成");
             }else{
                 BedWarMain.sendMessageToConsole("&c地图 &e"+levelName+" &c初始化失败,无法完成房间的加载");
                 return false;
             }
-        }else{
-            if(toBackUpWorld(roomName,levelName)){
-                BedWarMain.sendMessageToConsole("&a备份地图 &e"+levelName+" &a完成");
+        }
+        if(!nameFile.exists()){
+            if(toBackUpWorld(roomName, levelName)){
+                BedWarMain.sendMessageToConsole("&a地图 &e"+levelName+" &a备份完成");
             }else{
-                BedWarMain.sendMessageToConsole("&c备份地图 &e"+levelName+" &c失败");
+                BedWarMain.sendMessageToConsole("&c地图 &e"+levelName+" &c备份失败,无法完成房间的加载");
+                return false;
             }
         }
+
         return true;
     }
 
@@ -115,21 +118,26 @@ public class WorldInfoConfig {
 
 
     public static boolean toPathWorld(String roomName,String levelName){
-        if(Server.getInstance().getLevelByName(levelName) != null){
-            //先卸载了
-            Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName));
+        try {
 
-        }
-        File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+File.separator+"rooms"+File.separator+roomName);
-        File world = new File(nameFile+File.separator+"world"+File.separator+levelName);
-        File[] files = world.listFiles();
-        File f2 = new File(Server.getInstance().getFilePath()+File.separator+"worlds"+File.separator+levelName);
-        if(!f2.exists()){
-            f2.mkdirs();
-        }
-        if(files != null && files.length > 0){
-            Utils.copyFiles(world,f2);
-            return Server.getInstance().loadLevel(levelName);
+            File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder() + File.separator + "rooms" + File.separator + roomName);
+            if (!nameFile.exists()) {
+                return false;
+            }
+            File world = new File(nameFile + File.separator + "world" + File.separator + levelName);
+            File[] files = world.listFiles();
+            File f2 = new File(Server.getInstance().getFilePath() + File.separator + "worlds" + File.separator + levelName);
+            if (!f2.exists()) {
+                f2.mkdirs();
+            }
+            if (files != null && files.length > 0) {
+                Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName),true);
+                Utils.copyFiles(world, f2);
+                Server.getInstance().generateLevel(levelName);
+                return Server.getInstance().loadLevel(levelName);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return false;
         //载入地图 删掉之前的地图文件
