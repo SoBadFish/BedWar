@@ -102,13 +102,12 @@ public class GameRoom {
                 floatTextInfos.add(info);
             }
         }
-        ThreadManager.addThread(new RoomLoadThread(this));
-//        FloatTextManager.addAll(floatTextInfos);
-
-        ThreadManager.addThread(new FloatUpdateRunnable(this,floatTextInfos));
 
 
+    }
 
+    public ArrayList<FloatTextInfo> getFloatTextInfos() {
+        return floatTextInfos;
     }
 
     private boolean isInit = true;
@@ -242,8 +241,6 @@ public class GameRoom {
             sendTitle("&c游戏开始");
             sendSubTitle("保护你的床");
             shopInfo.init(getRoomConfig());
-
-            ThreadManager.addThread(new ProtectVillageThread(this));
             loadTime = getRoomConfig().time;
             worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);
             GameRoomStartEvent event = new GameRoomStartEvent(this,BedWarMain.getBedWarMain());
@@ -328,7 +325,6 @@ public class GameRoom {
                 if(allotOfAverage()){
                     teamAll = true;
                 }
-                ThreadManager.addThread(new WorldInfoLoadThread(worldInfo));
 
 
             }
@@ -489,7 +485,13 @@ public class GameRoom {
                     info.getGameRoom().quitPlayerInfo(info,false);
                     return JoinType.CAN_WATCH;
                 }
-                info.death(null);
+                if(info.getTeamInfo() != null){
+                    info.death(null);
+                }else{
+                    info.getGameRoom().quitPlayerInfo(info,false);
+                    return JoinType.CAN_WATCH;
+                }
+
             }else{
                 info.getGameRoom().quitPlayerInfo(info,false);
                 return JoinType.CAN_WATCH;
@@ -806,41 +808,18 @@ public class GameRoom {
             if(info.getPlayer() instanceof Player) {
                 quitPlayerInfo(info,true);
             }
-
             if(info.getTeamInfo() != null) {
                 info.getTeamInfo().breakBed();
             }
         }
-        for(Block block:worldInfo.getPlaceBlock()){
-            block.getLevel().setBlock(block,new BlockAir(),true,true);
-        }
-        for(Entity entity:worldInfo.getConfig()
-                .getGameWorld()
-                .getEntities()){
-            if(entity instanceof Player){
-                continue;
-            }
-            if(entity instanceof BedWarFloatText){
-                ((BedWarFloatText) entity).toClose();
-            }else{
-                entity.close();
-            }
 
-        }
-        for(BlockEntity entity:worldInfo.getConfig()
-                .getGameWorld()
-                .getBlockEntities().values()){
-            if(entity instanceof BlockEntityChest){
-                ((BlockEntityChest) entity).getInventory().clearAll();
-            }
-        }
-        worldInfo.setClose(true);
-        worldInfo = null;
+
         //TODO 从列表中移除
-        BedWarMain.sendMessageToConsole("&r释放房间 "+getRoomConfig().getName());
         if(WorldInfoConfig.toPathWorld(getRoomConfig().getName(),getRoomConfig().getWorldInfo().getGameWorld().getFolderName())){
             BedWarMain.sendMessageToConsole("&a"+getRoomConfig().getName()+" 地图已还原");
         }
+        BedWarMain.sendMessageToConsole("&r释放房间 "+getRoomConfig().getName());
+
         isGc = true;
         RoomManager.LOCK_GAME.remove(getRoomConfig());
         BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().getName());

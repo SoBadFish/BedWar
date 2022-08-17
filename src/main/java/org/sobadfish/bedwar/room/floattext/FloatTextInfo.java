@@ -20,12 +20,17 @@ public class FloatTextInfo {
     }
 
     public FloatTextInfo init(){
-        if(!floatTextInfoConfig.position.getChunk().isLoaded()){
-            floatTextInfoConfig.position.getLevel().loadChunk(floatTextInfoConfig.position.getChunkX(),floatTextInfoConfig.position.getChunkZ());
-
-
+//        if(!floatTextInfoConfig.position.getChunk().isLoaded()){
+//            floatTextInfoConfig.position.getLevel().loadChunk(floatTextInfoConfig.position.getChunkX(),floatTextInfoConfig.position.getChunkZ());
+//
+//
+//        }
+        try{
+            bedWarFloatText = BedWarFloatText.showFloatText(floatTextInfoConfig.name,floatTextInfoConfig.position,"");
+        }catch (Exception e){
+            return null;
         }
-        bedWarFloatText = BedWarFloatText.showFloatText(floatTextInfoConfig.name,floatTextInfoConfig.position,"");
+
         return this;
     }
 
@@ -39,7 +44,7 @@ public class FloatTextInfo {
             MoneyItemInfoConfig config = moneyItemInfoConfig.getItemInfoConfig().getMoneyItemInfoConfig();
             text = text
                     .replace("%"+config.getName()+"%",config.getCustomName())
-                    .replace("%"+config.getName()+"-time%", PlayerInfo.formatTime1((moneyItemInfoConfig.getResetTick() - moneyItemInfoConfig.getTick()) / 20)+"");
+                    .replace("%"+config.getName()+"-time%", PlayerInfo.formatTime1((moneyItemInfoConfig.getResetTick() - moneyItemInfoConfig.getTick()))+"");
         }
         if(bedWarFloatText != null){
             bedWarFloatText.setText(text);

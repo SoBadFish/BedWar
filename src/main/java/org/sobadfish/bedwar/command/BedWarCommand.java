@@ -18,7 +18,6 @@ import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.WorldRoom;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
-import org.sobadfish.bedwar.thread.MatchingRunnable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -49,7 +48,8 @@ public class BedWarCommand extends Command {
                 simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
                     @Override
                     public void onClick(Player player) {
-                        ThreadManager.addThread(new MatchingRunnable(finalInfo,null));
+                        RandomJoinManager.joinManager.join(finalInfo,null);
+//                        ThreadManager.addThread(new MatchingRunnable(finalInfo,null));
                     }
                 });
                 for (String wname : BedWarMain.getMenuRoomManager().getNames()) {
@@ -116,7 +116,8 @@ public class BedWarCommand extends Command {
                                 info = i;
                             }
                             String finalName = name;
-                            ThreadManager.addThread(new MatchingRunnable(info,finalName));
+                            RandomJoinManager.joinManager.join(info,finalName);
+
                         }else{
                             commandSender.sendMessage("请在控制台执行");
                         }
@@ -139,7 +140,7 @@ public class BedWarCommand extends Command {
         simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
             @Override
             public void onClick(Player player) {
-                ThreadManager.addThread(new MatchingRunnable(info,name));
+                RandomJoinManager.joinManager.join(info,null);
 
             }
         });

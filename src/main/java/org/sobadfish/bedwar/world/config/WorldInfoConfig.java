@@ -146,7 +146,6 @@ public class WorldInfoConfig {
             if(!initWorld(roomName,config.getString("world"))){
                 return null;
             }
-            Server.getInstance().loadLevel(config.getString("world"));
             gameWorld = Server.getInstance().getLevelByName(config.getString("world"));
         }
         Position waitPosition = getPositionByString(config.getString("waitPosition"));

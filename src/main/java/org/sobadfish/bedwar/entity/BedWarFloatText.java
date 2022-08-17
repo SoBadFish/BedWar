@@ -39,6 +39,7 @@ public class BedWarFloatText extends Entity {
 
 
 
+
     @Override
     public int getNetworkId() {
         return 64;
@@ -73,16 +74,22 @@ public class BedWarFloatText extends Entity {
     public void saveNBT() {
     }
 
+    @Override
+    public boolean onUpdate(int i) {
+        return super.onUpdate(i);
+    }
+
     public int spawnTick = 0;
 
 
     public static BedWarFloatText showFloatText(String name,Position position, String text){
-        if(!position.getChunk().isLoaded()){
-            position.getLevel().loadChunk(position.getChunkX(),position.getChunkZ());
+        BedWarFloatText text1;
+        try {
+            text1 = new BedWarFloatText(name, position.getChunk(), Entity.getDefaultNBT(position));
+        }catch (Exception e){
+            return null;
         }
-        BedWarFloatText text1 = new BedWarFloatText(name,position.getChunk(),Entity.getDefaultNBT(position));
         text1.setText(text);
-
         FloatTextManager.addFloatText(text1);
         text1.toDisplay();
         return text1;

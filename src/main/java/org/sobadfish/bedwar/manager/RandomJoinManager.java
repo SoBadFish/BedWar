@@ -1,15 +1,9 @@
 package org.sobadfish.bedwar.manager;
 
 import cn.nukkit.Player;
-import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
-import org.sobadfish.bedwar.room.WorldRoom;
-import org.sobadfish.bedwar.room.config.GameRoomConfig;
-import org.sobadfish.bedwar.thread.JoinListRunnable;
-import org.sobadfish.bedwar.tools.Utils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -35,27 +29,27 @@ public class RandomJoinManager {
 
     public List<IPlayerInfo> playerInfos = new CopyOnWriteArrayList<>();
 
-    //将这个线程缩短为单个
-    public void start(){
-        ThreadManager.addThread(new JoinListRunnable(this));
-    }
+//    //将这个线程缩短为单个
+//    public void start(){
+//        ThreadManager.addThread(new JoinListRunnable(this));
+//    }
 
 
-    public boolean join(PlayerInfo info,String name){
+    public void join(PlayerInfo info, String name){
         if(info.getGameRoom() != null && info.getGameRoom().getType() != GameRoom.GameType.END){
-            return false;
+            return;
         }
         IPlayerInfo iPlayerInfo = new IPlayerInfo();
         iPlayerInfo.playerInfo = info;
         if(playerInfos.contains(iPlayerInfo)){
-            info.sendForceMessage("&b重新开始匹配");
-            iPlayerInfo = playerInfos.get(playerInfos.indexOf(iPlayerInfo));
+            info.sendForceMessage("&c取消匹配");
+            playerInfos.remove(iPlayerInfo);
+            return;
         }
 
         iPlayerInfo.name = name;
         iPlayerInfo.time = new Date();
         playerInfos.add(iPlayerInfo);
-        return true;
     }
 
 

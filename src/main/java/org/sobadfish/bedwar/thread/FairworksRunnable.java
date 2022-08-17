@@ -8,19 +8,17 @@ import java.util.List;
 
 public class FairworksRunnable extends BaseTimerRunnable{
 
-    private final GameRoom room;
-
     private final List<PlayerInfo> playerInfos;
 
     public FairworksRunnable(int end, GameRoom room, List<PlayerInfo> playerInfos) {
         super(end);
-        this.room = room;
         this.playerInfos = playerInfos;
     }
 
+
     @Override
     public GameRoom getRoom() {
-        return room;
+        return null;
     }
 
     @Override

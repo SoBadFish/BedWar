@@ -24,25 +24,19 @@ public abstract class BaseTimerRunnable extends ThreadManager.AbstractBedWarRunn
 
     @Override
     public void run() {
-        while (!isClose){
-            if(close){
-                isClose = true;
-                return;
-            }
-            if(time < end){
-                time++;
-                onRun();
-            }else{
-                callback();
-                isClose = true;
-                return;
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        if(close){
+            isClose = true;
+            return;
         }
+        if(time < end){
+            time++;
+            onRun();
+        }else{
+            callback();
+            isClose = true;
+
+        }
+
     }
 
     public void onRun(){}

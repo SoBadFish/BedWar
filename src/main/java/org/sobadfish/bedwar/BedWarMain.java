@@ -72,7 +72,7 @@ public class BedWarMain extends PluginBase {
         this.getServer().getCommandMap().register("badwar",new BedWarAdminCommand("bd"));
         this.getServer().getCommandMap().register("badwar",new BedWarCommand("bw"));
         this.getServer().getCommandMap().register("badwar",new BedWarSpeakCommand("bws"));
-        RandomJoinManager.newInstance().start();
+
 
         RoomEventManager.register("time", TimeEvent.class);
         RoomEventManager.register("break", BreakEvent.class);
@@ -112,7 +112,6 @@ public class BedWarMain extends PluginBase {
         reloadConfig();
         uiType = Utils.loadUiTypeByName(getConfig().getString("shop-ui","auto"));
         NbtItemManager.init();
-//        saveResource("skin.png");
         File mainFileDir = new File(this.getDataFolder()+File.separator+"rooms");
         if(!mainFileDir.exists()){
             if(!mainFileDir.mkdirs()){
@@ -120,9 +119,7 @@ public class BedWarMain extends PluginBase {
             }
         }
 
-
         roomManager = RoomManager.initGameRoomConfig(mainFileDir);
-
         sendMessageToConsole("&a房间数据全部加载完成");
         this.getServer().getPluginManager().registerEvents(roomManager,this);
         if(getConfig().getAll().size() == 0) {

@@ -293,7 +293,7 @@ public class RoomManager implements Listener {
         }
         TeamInfo teamInfo = event.getTeamInfo();
         if(teamInfo != null){
-            ThreadManager.addThread(new FairworksRunnable(5,event.getRoom(),teamInfo.getLivePlayer()));
+            ThreadManager.addScheduled(new FairworksRunnable(5,event.getRoom(),teamInfo.getLivePlayer()));
         }
 
         event.getRoom().sendMessage("&a恭喜 "+event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()+" &a 获得了胜利!");
@@ -890,10 +890,9 @@ public class RoomManager implements Listener {
                 GameRoom room = getRoom(roomName);
                 if (room != null) {
                     if(item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem")){
-                        if (quitRoomItem(player, roomName, room)) {
-                            event.setCancelled();
-                            return;
-                        }
+                        event.setCancelled();
+                        quitRoomItem(player, roomName, room);
+                        return;
                     }
                     if(item.hasCompoundTag() && item.getNamedTag().getBoolean("follow")){
                         followPlayer(room.getPlayerInfo(player),room);
@@ -902,10 +901,10 @@ public class RoomManager implements Listener {
                     }
 
                     if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
-                        if (choseteamItem(player, room)) {
-                            event.setCancelled();
-                            return;
-                        }
+                        event.setCancelled();
+                        choseteamItem(player, room);
+                        return;
+
                     }
                     if (item.hasCompoundTag() && item.getNamedTag().contains(NbtDefaultItem.TAG)) {
                         String name = item.getNamedTag().getString(NbtDefaultItem.TAG);

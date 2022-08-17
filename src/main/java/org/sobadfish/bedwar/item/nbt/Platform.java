@@ -51,7 +51,7 @@ public class Platform implements INbtItem {
             }
 
         }
-        ThreadManager.addThread(new BlockBreakRunnable(info.getGameRoom(),new ArrayList<>(spawn.keySet()),10));
+        ThreadManager.addScheduled(new BlockBreakRunnable(info.getGameRoom(),new ArrayList<>(spawn.keySet()),10));
         player.getInventory().removeItem(item);
     }
 

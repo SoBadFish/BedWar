@@ -25,7 +25,7 @@ public class BackHub implements INbtItem{
         PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
         info.sendMessage("10秒后传送至出生点请不要移动");
 
-        ThreadManager.addThread(new GoBackRunnable(player, player.getPosition(), 10));
+        ThreadManager.addScheduled(new GoBackRunnable(player, player.getPosition(), 10));
         player.getInventory().removeItem(item);
         return true;
     }

@@ -2,10 +2,8 @@ package org.sobadfish.bedwar.manager;
 
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.room.GameRoom;
-import org.sobadfish.bedwar.thread.ProtectFloatTextThread;
-import org.sobadfish.bedwar.thread.TopUpdateRunnable;
+import org.sobadfish.bedwar.thread.PluginMasterRunnable;
 
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -25,60 +23,43 @@ public class ThreadManager {
     // 空闲线程存活时间
     private final static Integer KEEPALIVETIME = 5;
 
-    // 线程池对象
-    private static final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(COREPOOLSIZE, MAXIMUMPOOLSIZE,
-            KEEPALIVETIME, TimeUnit.SECONDS, new SynchronousQueue<>() ,new ThreadPoolExecutor.AbortPolicy());
+
+    private static final ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(1,new ThreadPoolExecutor.AbortPolicy());
 
 
-
-    /**
-     * 向线程池提交一个任务,返回线程结果
-     *
-     */
-    public static Future<?> submit(Callable<?> r) {
-        return threadPool.submit(r);
+    public static void cancel(AbstractBedWarRunnable r) {
+        RUNNABLES.remove(r);
+        scheduled.remove(r);
     }
 
-    /**
-     * 向线程池提交一个任务，不关心处理结果
-     *
-     */
-    private static void execute(AbstractBedWarRunnable r) {
-
+    private static void schedule(AbstractBedWarRunnable r) {
         RUNNABLES.add(r);
-        threadPool.execute(r);
+        scheduled.scheduleAtFixedRate(r,0,1,TimeUnit.SECONDS);
     }
 
-    /**
-     * 停止任务
-     */
-    public static void shutdown() {
-        threadPool.shutdown();
-    }
 
     /**
      * 获取当前线程池线程数量
      */
-    public static int getSize() {
-        return threadPool.getPoolSize();
+    public static int getScheduledSize() {
+        return scheduled.getPoolSize();
     }
 
     /**
      * 获取当前活动的线程数量
      */
-    public static int getActiveCount() {
-        return threadPool.getActiveCount();
+    public static int getScheduledActiveCount() {
+        return scheduled.getActiveCount();
     }
 
 
 
-
-    public static void addThread(AbstractBedWarRunnable runnable){
+    public static void addScheduled(AbstractBedWarRunnable runnable){
         if(RUNNABLES.contains(runnable)){
             AbstractBedWarRunnable runnable1 = RUNNABLES.get(RUNNABLES.indexOf(runnable));
             runnable1.isClose = true;
         }
-        execute(runnable);
+        schedule(runnable);
     }
 
     public static String info() {
@@ -128,9 +109,8 @@ public class ThreadManager {
     }
 
     public static void init() {
-        ThreadManager.execute(new RunnableCheck());
-        ThreadManager.execute(new ProtectFloatTextThread());
-        ThreadManager.execute(new TopUpdateRunnable());
+        ThreadManager.schedule(new RunnableCheck());
+        ThreadManager.schedule(new PluginMasterRunnable());
 
     }
 
@@ -165,22 +145,20 @@ public class ThreadManager {
 
         @Override
         public void run() {
-            for(;;) {
-                if(BedWarMain.getBedWarMain().isDisabled()){
-                    isClose = true;
-                    return;
-                }
-                if(isClose){
-                    return;
-                }
-                for (AbstractBedWarRunnable runnable : RUNNABLES) {
-                    if (runnable.isClose) {
-                        threadPool.remove(runnable);
-                        RUNNABLES.remove(runnable);
-                    }
+            if(isClose){
+                return;
+            }
+            if(BedWarMain.getBedWarMain().isDisabled()){
+                isClose = true;
+                return;
+            }
+            for (AbstractBedWarRunnable runnable : RUNNABLES) {
+                if (runnable.isClose) {
+                    cancel(runnable);
                 }
             }
         }
+
     }
 
 

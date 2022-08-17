@@ -228,17 +228,17 @@ public class TeamInfo {
         }
     }
     public void placeBed(){
-        if(!getTeamConfig().getBedPosition().getChunk().isLoaded()){
-//            try {
-//                getTeamConfig().getBedPosition().getChunk().load();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-            getTeamConfig().getBedPosition().getLevel().loadChunk(getTeamConfig().getBedPosition().getChunkX(),getTeamConfig().getBedPosition().getChunkZ());
-        }
-        if(!getTeamConfig().getSpawnPosition().getChunk().isLoaded()){
-            getTeamConfig().getSpawnPosition().getLevel().loadChunk(getTeamConfig().getSpawnPosition().getChunkX(),getTeamConfig().getSpawnPosition().getChunkZ());
-        }
+//        if(!getTeamConfig().getBedPosition().getChunk().isLoaded()){
+////            try {
+////                getTeamConfig().getBedPosition().getChunk().load();
+////            } catch (IOException e) {
+////                e.printStackTrace();
+////            }
+//            getTeamConfig().getBedPosition().getLevel().loadChunk(getTeamConfig().getBedPosition().getChunkX(),getTeamConfig().getBedPosition().getChunkZ());
+//        }
+//        if(!getTeamConfig().getSpawnPosition().getChunk().isLoaded()){
+//            getTeamConfig().getSpawnPosition().getLevel().loadChunk(getTeamConfig().getSpawnPosition().getChunkX(),getTeamConfig().getSpawnPosition().getChunkZ());
+//        }
         getTeamConfig().getBedPosition().getLevel().setBlock(getTeamConfig().getBedPosition(),Block.get(26,0),true,true);
         Position pos2 = getTeamConfig().getBedPosition().getSide(getTeamConfig().getBedFace());
         getTeamConfig().getBedPosition().getLevel().setBlock(pos2,Block.get(26,getTeamConfig().getBedFace().getHorizontalIndex()|8),true,true);

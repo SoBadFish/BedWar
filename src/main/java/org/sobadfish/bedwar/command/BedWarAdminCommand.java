@@ -155,8 +155,8 @@ public class BedWarAdminCommand extends Command {
 
                 break;
             case "status":
-                BedWarMain.sendMessageToObject("&6活跃线程: &a"+ ThreadManager.getActiveCount(),commandSender);
-                BedWarMain.sendMessageToObject("&6线程数量: &a"+ ThreadManager.getSize(),commandSender);
+                BedWarMain.sendMessageToObject("&6定时任务: &a"+ ThreadManager.getScheduledSize(),commandSender);
+                BedWarMain.sendMessageToObject("&6正在执行的定时任务: &a"+ ThreadManager.getScheduledActiveCount(),commandSender);
                 BedWarMain.sendMessageToObject("&6线程详情: &r\n"+ThreadManager.info(),commandSender);
                 BedWarMain.sendMessageToObject("&6房间状态: &a",commandSender);
                 for(GameRoomConfig config: BedWarMain.getRoomManager().getRoomConfigs()){
