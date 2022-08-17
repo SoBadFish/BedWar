@@ -25,6 +25,7 @@ import java.util.Map;
  */
 public class WorldInfoConfig {
 
+    private String level;
     /**
      * 游戏地图
      * */
@@ -49,6 +50,7 @@ public class WorldInfoConfig {
                             ArrayList<ItemInfoConfig> itemInfos
                            ){
         this.gameWorld = gameWorld;
+        this.level = gameWorld.getFolderName();
         this.waitPosition = waitPosition;
         this.itemInfos = itemInfos;
 
@@ -68,6 +70,9 @@ public class WorldInfoConfig {
     }
 
 
+    public String getLevel() {
+        return level;
+    }
 
     public Position getWaitPosition() {
         return waitPosition;
@@ -87,6 +92,7 @@ public class WorldInfoConfig {
         File world = new File(nameFile+File.separator+"world"+File.separator+levelName);
         if(!world.exists() && world.isDirectory()){
             if(toPathWorld(roomName, levelName)){
+                Server.getInstance().loadLevel(levelName);
                 BedWarMain.sendMessageToConsole("&a地图 &e"+levelName+" &a初始化完成");
             }else{
                 BedWarMain.sendMessageToConsole("&c地图 &e"+levelName+" &c初始化失败,无法完成房间的加载");
@@ -148,13 +154,15 @@ public class WorldInfoConfig {
     }
 
     public static WorldInfoConfig getInstance(String roomName, MoneyItemInfo itemInfo, Config config){
+        if(!initWorld(roomName,config.getString("world"))){
+            return null;
+        }
         Level gameWorld = Server.getInstance().getLevelByName(config.getString("world"));
         if(gameWorld == null){
-            if(!initWorld(roomName,config.getString("world"))){
-                return null;
-            }
+
             gameWorld = Server.getInstance().getLevelByName(config.getString("world"));
         }
+
         Position waitPosition = getPositionByString(config.getString("waitPosition"));
         ArrayList<ItemInfoConfig> itemInfoConfigs = new ArrayList<>();
         Map mItemSpawn = (Map) config.get("itemSpawn");

@@ -76,11 +76,13 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
 
             }
         });
-        for(GameRoom room: BedWarMain.getRoomManager().getRooms().values()){
+        for(GameRoom room: new CopyOnWriteArrayList<>(BedWarMain.getRoomManager().getRooms().values())){
             if(room.close){
+                if(room.isGc){
+                    BedWarMain.getRoomManager().getRooms().remove(room.getRoomConfig().name);
+                }
                 continue;
             }
-            room.onUpdate();
             for(PlayerInfo playerInfo:room.getPlayerInfos()){
                 if(playerInfo.cancel || playerInfo.isLeave){
                     playerInfo.removeScoreBoard();
@@ -88,6 +90,8 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 }
                 playerInfo.onUpdate();
             }
+            room.onUpdate();
+
             if(room.loadTime > 0) {
                 if(!room.getEventControl().hasEvent()){
                     room.loadTime--;
@@ -132,7 +136,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
             }
         }
 
-        new Thread(() -> RandomJoinManager.newInstance().playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info))).start();
+        ThreadManager.executorService.execute(() -> RandomJoinManager.newInstance().playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info)));
         loadTime = System.currentTimeMillis() - t1;
     }
     public synchronized boolean joinRandomRoom(RandomJoinManager.IPlayerInfo i){

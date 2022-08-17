@@ -142,6 +142,14 @@ public class RoomManager implements Listener {
                     player.sendForceMessage("&c" + roomName + " 还没准备好");
                     return false;
                 }
+            }else{
+                GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
+                if(room != null){
+                    if(room.getType() == GameType.END){
+                        player.sendForceMessage("&c" + roomName + " 结算中");
+                        return false;
+                    }
+                }
             }
             GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
             switch (room.joinPlayerInfo(player,true)){
@@ -149,7 +157,7 @@ public class RoomManager implements Listener {
                     if(!room.getRoomConfig().hasWatch){
                         player.sendForceMessage("&c该房间开始后不允许旁观");
                     }else{
-                        player.setGameRoom(null);
+
                         if(player.getGameRoom() != null){
                             player.sendForceMessage("&c你无法进入此房间");
                         }else{
@@ -184,7 +192,7 @@ public class RoomManager implements Listener {
         return rooms;
     }
 
-    private final Map<String, GameRoom> rooms = new LinkedHashMap<>();
+    private Map<String, GameRoom> rooms = new LinkedHashMap<>();
 
     public boolean hasRoom(String room){
         return roomConfig.containsKey(room);
@@ -201,9 +209,8 @@ public class RoomManager implements Listener {
             return true;
         }else{
 
-            if(!Server.getInstance().isLevelLoaded(config.getWorldInfo().getGameWorld().getFolderName())){
-                Server.getInstance().generateLevel(config.getWorldInfo().getGameWorld().getFolderName());
-                return Server.getInstance().loadLevel(config.getWorldInfo().getGameWorld().getFolderName());
+            if(!Server.getInstance().isLevelLoaded(config.getWorldInfo().getLevel())){
+                return false;
             }else{
                 rooms.put(config.getName(),GameRoom.enableRoom(config));
                 return true;

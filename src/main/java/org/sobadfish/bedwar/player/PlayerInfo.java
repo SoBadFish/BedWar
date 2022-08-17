@@ -444,7 +444,6 @@ public class PlayerInfo {
      * 取消
      * */
     public void cancel(){
-
         leave();
         cancel = true;
         disable = true;
@@ -579,11 +578,23 @@ public class PlayerInfo {
      * 定时任务
      * */
     public void onUpdate(){
+        if(gameRoom != null && gameRoom.getType() == GameRoom.GameType.END){
+            return;
+        }
         if(isWatch()){
             if(player instanceof Player){
                 if(((Player) player).getGamemode() != 3){
                     ((Player) player).setGamemode(3);
                 }
+                if(gameRoom != null && gameRoom.getType() == GameRoom.GameType.START && Server.getInstance().isLevelLoaded(getGameRoom().worldInfo.getConfig().getLevel())){
+                    if(player.getLevel() != gameRoom.getWorldInfo().getConfig().getGameWorld()){
+                        Position position = gameRoom.getTeamInfos().get(0).getTeamConfig().getBedPosition();
+                        position.add(0,64,0);
+                        position.level = gameRoom.getWorldInfo().getConfig().getGameWorld();
+                        player.teleport(position);
+                    }
+                }
+
             }
         }
         if(damageTime > 0){

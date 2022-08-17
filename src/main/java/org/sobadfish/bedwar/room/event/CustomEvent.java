@@ -112,6 +112,14 @@ public class CustomEvent extends IGameRoomEvent{
 
     }
 
+    public int getEventTime(){
+        IGameRoomEvent event = nextEvent();
+        if(event != null){
+            return event.getEventItem().eventTime;
+        }
+        return item.eventTime;
+    }
+
     @Override
     public void onStart(GameRoom room) {
         IGameRoomEvent event = nextEvent();

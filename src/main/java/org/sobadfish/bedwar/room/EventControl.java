@@ -71,7 +71,7 @@ public class EventControl {
                             position++;
                             thisEvent = null;
                         }else{
-                            if(loadTime >= event.item.eventTime){
+                            if(loadTime >= ((CustomEvent) event).getEventTime()){
                                 loadTime = 0;
                                 event.onStart(room);
                                 ((CustomEvent) event).position++;
@@ -81,7 +81,7 @@ public class EventControl {
                         }
 
                     }else{
-                        if(loadTime >= event.item.eventTime) {
+                        if(loadTime >= ((CustomEvent) event).getEventTime()) {
                             loadTime = 0;
                             ((CustomEvent) event).isEnable = true;
                             event.onStart(room);
