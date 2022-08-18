@@ -35,7 +35,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
         if(isClose){
             color = "&7";
         }
-        return color+"插件主进程  浮空字数量&7("+ FloatTextManager.floatTextList.size() +") &a"+loadTime+"ms";
+        return color+"插件主进程  浮空字数量&7("+ FloatTextManager.floatTextList.size() +") &a"+loadTime+" ms";
     }
 
     @Override
@@ -75,22 +75,6 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
 
         }
 
-
-        for(TopItemInfo topItem: BedWarMain.getTopManager().topItemInfos){
-            if(!BedWarMain.getTopManager().dataList.contains(topItem.topItem)){
-                topItem.floatText.toClose();
-                BedWarMain.getTopManager().topItemInfos.remove(topItem);
-                continue;
-            }
-            if(topItem.floatText != null ){
-                if(topItem.floatText.player == null){
-                    continue;
-                }
-                topItem.floatText.setText(topItem.topItem.getListText());
-            }else{
-                BedWarMain.getTopManager().topItemInfos.remove(topItem);
-            }
-        }
 
         ThreadManager.executorService.execute(() -> RandomJoinManager.newInstance().playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info)));
         loadTime = System.currentTimeMillis() - t1;

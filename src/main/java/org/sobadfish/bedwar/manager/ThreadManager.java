@@ -4,6 +4,7 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.thread.PluginMasterRunnable;
 import org.sobadfish.bedwar.thread.RoomLoadRunnable;
+import org.sobadfish.bedwar.thread.TopRunnable;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -115,6 +116,7 @@ public class ThreadManager {
         ThreadManager.schedule(new RunnableCheck());
         ThreadManager.schedule(new PluginMasterRunnable());
         ThreadManager.schedule(new RoomLoadRunnable());
+        ThreadManager.schedule(new TopRunnable());
 
     }
 
