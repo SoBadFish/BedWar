@@ -147,7 +147,7 @@ public class GameRoomCreater {
                 flag++;
                 break;
             case 2:
-                worldInfoConfig = WorldInfoConfig.createWorldConfig(creater.getLevel());
+                worldInfoConfig = WorldInfoConfig.createWorldConfig(creater.getLevel().getFolderName());
                 creater.sendForceMessage("&2成功设定游戏地图");
                 creater.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &b[设置等待大厅]");
                 flag++;

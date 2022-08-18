@@ -151,6 +151,7 @@ public class RoomManager implements Listener {
                     }
                 }
             }
+
             GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
             switch (room.joinPlayerInfo(player,true)){
                 case CAN_WATCH:

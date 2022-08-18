@@ -533,7 +533,7 @@ public class PlayerInfo {
         }else{
             IGameRoomEvent event = getGameRoom().getEventControl().getNextEvent();
             if(event != null){
-                lore.add(event.display()+" &a"+formatTime1(event.item.eventTime - getGameRoom().getEventControl().loadTime));
+                lore.add(event.display()+" &a"+formatTime1(event.getEventTime() - getGameRoom().getEventControl().loadTime));
                 lore.add("    ");
             }else{
 

@@ -29,12 +29,12 @@ public class WorldInfoConfig {
     /**
      * 游戏地图
      * */
-    private Level gameWorld;
+//    private Level gameWorld;
 
     /**
      * 等待大厅坐标
      * */
-    private Position waitPosition;
+    private String waitPosition;
 
 
 
@@ -45,19 +45,18 @@ public class WorldInfoConfig {
 
 
 
-    private WorldInfoConfig(Level gameWorld,
-                            Position waitPosition,
+    private WorldInfoConfig(String gameWorld,
+                            String waitPosition,
                             ArrayList<ItemInfoConfig> itemInfos
                            ){
-        this.gameWorld = gameWorld;
-        this.level = gameWorld.getFolderName();
+        this.level = gameWorld;
         this.waitPosition = waitPosition;
         this.itemInfos = itemInfos;
 
 
     }
 
-    public static WorldInfoConfig createWorldConfig(Level gameWorld){
+    public static WorldInfoConfig createWorldConfig(String gameWorld){
         return new WorldInfoConfig(gameWorld,null,new ArrayList<>());
     }
 
@@ -66,7 +65,7 @@ public class WorldInfoConfig {
     }
 
     public Level getGameWorld() {
-        return gameWorld;
+        return Server.getInstance().getLevelByName(level);
     }
 
 
@@ -75,11 +74,11 @@ public class WorldInfoConfig {
     }
 
     public Position getWaitPosition() {
-        return waitPosition;
+        return getPositionByString(waitPosition);
     }
 
     public void setWaitPosition(Position waitPosition) {
-        this.waitPosition = waitPosition;
+        this.waitPosition = positionToString(waitPosition);
     }
 
     /**
@@ -90,7 +89,7 @@ public class WorldInfoConfig {
         File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder()+File.separator+"rooms"+File.separator+roomName);
         //主世界地图
         File world = new File(nameFile+File.separator+"world"+File.separator+levelName);
-        if(!world.exists() && world.isDirectory()){
+        if(world.exists() && world.isDirectory()){
             if(toPathWorld(roomName, levelName)){
                 Server.getInstance().loadLevel(levelName);
                 BedWarMain.sendMessageToConsole("&a地图 &e"+levelName+" &a初始化完成");
@@ -99,7 +98,7 @@ public class WorldInfoConfig {
                 return false;
             }
         }
-        if(!nameFile.exists()){
+        if(!world.exists()){
             if(toBackUpWorld(roomName, levelName)){
                 BedWarMain.sendMessageToConsole("&a地图 &e"+levelName+" &a备份完成");
             }else{
@@ -149,21 +148,13 @@ public class WorldInfoConfig {
     }
 
 
-    public void setGameWorld(Level gameWorld) {
-        this.gameWorld = gameWorld;
-    }
+
 
     public static WorldInfoConfig getInstance(String roomName, MoneyItemInfo itemInfo, Config config){
         if(!initWorld(roomName,config.getString("world"))){
             return null;
         }
-        Level gameWorld = Server.getInstance().getLevelByName(config.getString("world"));
-        if(gameWorld == null){
 
-            gameWorld = Server.getInstance().getLevelByName(config.getString("world"));
-        }
-
-        Position waitPosition = getPositionByString(config.getString("waitPosition"));
         ArrayList<ItemInfoConfig> itemInfoConfigs = new ArrayList<>();
         Map mItemSpawn = (Map) config.get("itemSpawn");
         for(Object mName:mItemSpawn.keySet()){
@@ -171,7 +162,7 @@ public class WorldInfoConfig {
         }
 
 
-        return new WorldInfoConfig(gameWorld,waitPosition,itemInfoConfigs);
+        return new WorldInfoConfig(config.getString("world"),config.getString("waitPosition"),itemInfoConfigs);
     }
 
     public static String positionToString(Position position){

@@ -48,7 +48,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
             isClose = true;
             return;
         }
-        ThreadManager.executorService.execute(() -> {
+
             for (Player player : new ArrayList<>(Server.getInstance().getOnlinePlayers().values())) {
                 for (BedWarFloatText floatText : new ArrayList<>(FloatTextManager.floatTextList)) {
                     if (floatText == null) {
@@ -75,7 +75,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 }
 
             }
-        });
+
         for(GameRoom room: new CopyOnWriteArrayList<>(BedWarMain.getRoomManager().getRooms().values())){
             if(room.close){
                 if(room.isGc){

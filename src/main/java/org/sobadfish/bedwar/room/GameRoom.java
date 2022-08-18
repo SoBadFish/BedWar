@@ -457,6 +457,9 @@ public class GameRoom {
                 }
                 return JoinType.CAN_WATCH;
             }
+            if(getWorldInfo().getConfig().getGameWorld() == null || getWorldInfo().getConfig().getGameWorld().getSafeSpawn() == null){
+                return JoinType.NO_LEVEL;
+            }
 
             PlayerJoinRoomEvent event = new PlayerJoinRoomEvent(info,this,BedWarMain.getBedWarMain());
             event.setSend(sendMessage);
@@ -464,12 +467,7 @@ public class GameRoom {
             if(event.isCancelled()){
                 return JoinType.NO_JOIN;
             }
-            if(getWorldInfo().getConfig().getGameWorld() == null || !Server.getInstance().isLevelLoaded(getWorldInfo().getConfig().getLevel())){
-                if(getWorldInfo().getConfig().getGameWorld() != null){
-                    Server.getInstance().loadLevel(getWorldInfo().getConfig().getLevel());
-                }
-                return JoinType.NO_LEVEL;
-            }
+
             sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
             info.init();
             info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(),TeamChoseItem.get());
@@ -827,6 +825,7 @@ public class GameRoom {
         Server.getInstance().loadLevel(worldInfo.getConfig().getLevel());
         BedWarMain.sendMessageToConsole("&r释放房间 "+getRoomConfig().getName());
         isGc = true;
+        RoomManager.LOCK_GAME.remove(getRoomConfig());
         BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().getName());
         System.gc();
     }

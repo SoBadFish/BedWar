@@ -24,6 +24,9 @@ public abstract class IGameRoomEvent {
         return item;
     }
 
+    public int getEventTime(){
+        return item.eventTime;
+    }
     /**
      * 事件启动
      * */
