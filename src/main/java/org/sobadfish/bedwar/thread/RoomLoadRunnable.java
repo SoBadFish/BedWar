@@ -25,7 +25,11 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
 
     @Override
     public String getThreadName() {
-        StringBuilder s = new StringBuilder("房间进程 &7(" + BedWarMain.getRoomManager().getRooms().size() + ")\n");
+        String color = "&a";
+        if(isClose){
+            color = "&7";
+        }
+        StringBuilder s = new StringBuilder(color+"房间进程 &7(" + BedWarMain.getRoomManager().getRooms().size() + ")\n");
         for(Map.Entry<String,Long> room: time.entrySet()){
             s.append("  &r").append(room.getKey()).append("  &a").append(room.getValue()).append(" ms");
 
