@@ -48,78 +48,34 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
             isClose = true;
             return;
         }
-
-            for (Player player : new ArrayList<>(Server.getInstance().getOnlinePlayers().values())) {
-                for (BedWarFloatText floatText : new ArrayList<>(FloatTextManager.floatTextList)) {
-                    if (floatText == null) {
-                        continue;
-                    }
-                    if (floatText.isFinalClose) {
-                        FloatTextManager.removeFloatText(floatText);
-                        continue;
-                    }
-                    if(floatText.player.contains(player)){
-                        if(player.getLevel() != floatText.getPosition().getLevel() || !player.isOnline()) {
-                            if (!floatText.closed) {
-                                floatText.close();
-                            }
-                            floatText.player.remove(player);
-                        }
-                    }
-                    if(player.getLevel() == floatText.getPosition().getLevel()){
-                        floatText.player.add(player);
-                    }
-
-                    floatText.disPlayers();
-
-                }
-
-            }
-
-        for(GameRoom room: new CopyOnWriteArrayList<>(BedWarMain.getRoomManager().getRooms().values())){
-            if(room.close){
-                if(room.isGc){
-                    BedWarMain.getRoomManager().getRooms().remove(room.getRoomConfig().name);
-                }
-                continue;
-            }
-            for(PlayerInfo playerInfo:room.getPlayerInfos()){
-                if(playerInfo.cancel || playerInfo.isLeave){
-                    playerInfo.removeScoreBoard();
+        for (Player player : new ArrayList<>(Server.getInstance().getOnlinePlayers().values())) {
+            for (BedWarFloatText floatText : new ArrayList<>(FloatTextManager.floatTextList)) {
+                if (floatText == null) {
                     continue;
                 }
-                playerInfo.onUpdate();
-            }
-            room.onUpdate();
-
-            if(room.loadTime > 0) {
-                if(!room.getEventControl().hasEvent()){
-                    room.loadTime--;
+                if (floatText.isFinalClose) {
+                    FloatTextManager.removeFloatText(floatText);
+                    continue;
                 }
-
-            }
-            try{
-                if(room.worldInfo != null){
-                    if(!room.worldInfo.isClose()){
-                        room.worldInfo.onUpdate();
+                if(floatText.player.contains(player)){
+                    if(!player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName()) || !player.isOnline()) {
+                        if (!floatText.closed) {
+                            floatText.close();
+                        }
+                        floatText.player.remove(player);
                     }
                 }
-            }catch (Exception ignore){}
-            for(FloatTextInfo floatTextInfo:room.getFloatTextInfos()){
-                if(!floatTextInfo.stringUpdate(room)){
-                    break;
+                if(player.getLevel() == floatText.getPosition().getLevel()){
+                    floatText.player.add(player);
                 }
+
+                floatText.disPlayers();
+
             }
-            for (ShopVillage shopVillage : new ArrayList<>(room.getShopInfo().getShopVillages())) {
-                if (shopVillage.isClosed()) {
-                    ShopVillage respawnVillage = new ShopVillage(room.getRoomConfig(), shopVillage.getInfoConfig(), shopVillage.getChunk(), Entity.getDefaultNBT(shopVillage));
-                    respawnVillage.yaw = shopVillage.yaw;
-                    respawnVillage.spawnToAll();
-                    room.getShopInfo().getShopVillages().remove(shopVillage);
-                    room.getShopInfo().getShopVillages().add(respawnVillage);
-                }
-            }
+
         }
+
+
         for(TopItemInfo topItem: BedWarMain.getTopManager().topItemInfos){
             if(!BedWarMain.getTopManager().dataList.contains(topItem.topItem)){
                 topItem.floatText.toClose();

@@ -13,6 +13,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.potion.Effect;
+import cn.nukkit.scheduler.AsyncTask;
 import de.theamychan.scoreboard.network.Scoreboard;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
@@ -36,10 +37,7 @@ import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.world.WorldInfo;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -97,12 +95,7 @@ public class GameRoom {
         eventControl = new EventControl(this,roomConfig.eventConfig);
         eventControl.initAll(this);
         //初始化浮空字
-        for(FloatTextInfoConfig config: roomConfig.floatTextInfoConfigs){
-            FloatTextInfo info = new FloatTextInfo(config).init();
-            if(info != null){
-                floatTextInfos.add(info);
-            }
-        }
+
 
 
     }
@@ -175,6 +168,9 @@ public class GameRoom {
 
     /** 房间被实例化后 */
     public void onUpdate(){
+        if(close){
+            return;
+        }
         //TODO 当房间启动后
         if(getIPlayerInfos().size() == 0 && !isInit){
             onDisable();
@@ -185,6 +181,12 @@ public class GameRoom {
                 onWait();
                 break;
             case START:
+                for(FloatTextInfoConfig config: roomConfig.floatTextInfoConfigs){
+                    FloatTextInfo info = new FloatTextInfo(config).init();
+                    if(info != null){
+                        floatTextInfos.add(info);
+                    }
+                }
                 eventControl.enable = true;
                 worldInfo.isStart = true;
                 onStart();
@@ -336,7 +338,7 @@ public class GameRoom {
     }
 
     private void initShopInfo(){
-        ArrayList<LinkedHashMap<String, Location>> linkedHashMaps = new ArrayList<>();
+        ArrayList<LinkedHashMap<String, String>> linkedHashMaps = new ArrayList<>();
         for(TeamInfoConfig teamInfoConfig: roomConfig.teamConfigs){
             linkedHashMaps.add(teamInfoConfig.getVillage());
         }
@@ -412,6 +414,9 @@ public class GameRoom {
 
     public static GameRoom enableRoom(GameRoomConfig roomConfig){
 
+        if(roomConfig.getWorldInfo().getGameWorld() == null){
+            return null;
+        }
         return new GameRoom(roomConfig);
     }
 
@@ -452,7 +457,7 @@ public class GameRoom {
                 }
             }
             if(getType() != GameType.WAIT){
-                if(getType() == GameType.END){
+                if(getType() == GameType.END || getType() == GameType.CLOSE){
                     return JoinType.NO_JOIN;
                 }
                 return JoinType.CAN_WATCH;
@@ -815,18 +820,25 @@ public class GameRoom {
                 info.getTeamInfo().breakBed();
             }
         }
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //TODO 从列表中移除
+                if(WorldInfoConfig.toPathWorld(getRoomConfig().getName(),worldInfo.getConfig().getLevel())){
+                    BedWarMain.sendMessageToConsole("&a"+getRoomConfig().getName()+" 地图已还原");
+                }
+                Server.getInstance().generateLevel(worldInfo.getConfig().getLevel());
+                Server.getInstance().loadLevel(worldInfo.getConfig().getLevel());
+                BedWarMain.sendMessageToConsole("&r释放房间 "+getRoomConfig().getName());
+                isGc = true;
 
-//
-////        //TODO 从列表中移除
-        if(WorldInfoConfig.toPathWorld(getRoomConfig().getName(),worldInfo.getConfig().getLevel())){
-            BedWarMain.sendMessageToConsole("&a"+getRoomConfig().getName()+" 地图已还原");
-        }
-        Server.getInstance().generateLevel(worldInfo.getConfig().getLevel());
-        Server.getInstance().loadLevel(worldInfo.getConfig().getLevel());
-        BedWarMain.sendMessageToConsole("&r释放房间 "+getRoomConfig().getName());
-        isGc = true;
-        RoomManager.LOCK_GAME.remove(getRoomConfig());
-        BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().getName());
-        System.gc();
+                BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().name);
+                RoomManager.LOCK_GAME.remove(getRoomConfig());
+
+                BedWarMain.sendMessageToConsole("&r房间 "+getRoomConfig().getName()+" 已回收");
+            }
+        },50);
+
     }
 }

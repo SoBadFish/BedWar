@@ -25,17 +25,21 @@ public class ItemInfoConfig {
 
     private int spawnTick;
 
-    private ArrayList<Position> positions;
+    private ArrayList<String> positions;
 
 
-    public ItemInfoConfig(MoneyItemInfoConfig moneyItemInfoConfig,ArrayList<Position> positions,int spawnTick){
+    public ItemInfoConfig(MoneyItemInfoConfig moneyItemInfoConfig,ArrayList<String> positions,int spawnTick){
         this.moneyItemInfoConfig = moneyItemInfoConfig;
         this.positions = positions;
         this.spawnTick = spawnTick;
     }
 
     public ArrayList<Position> getPositions() {
-        return positions;
+        ArrayList<Position> list = new ArrayList<>();
+        for(String sl: positions){
+            list.add(WorldInfoConfig.getPositionByString(sl));
+        }
+        return list;
     }
 
     public int getSpawnTick() {
@@ -60,18 +64,16 @@ public class ItemInfoConfig {
         return null;
     }
 
-    public void setPositions(ArrayList<Position> positions) {
-        this.positions = positions;
-    }
+
 
     public void setSpawnTick(int spawnTick) {
         this.spawnTick = spawnTick;
     }
 
-    private static ArrayList<Position> getPositionByList(List list){
-        ArrayList<Position> positions = new ArrayList<>();
+    private static ArrayList<String> getPositionByList(List list){
+        ArrayList<String> positions = new ArrayList<>();
         for(Object ostr : list){
-            positions.add(WorldInfoConfig.getPositionByString(ostr.toString()));
+            positions.add(ostr.toString());
         }
         return positions;
     }
@@ -80,12 +82,9 @@ public class ItemInfoConfig {
 
     public LinkedHashMap<String, Object> save(){
         LinkedHashMap<String, Object> config = new LinkedHashMap<>();
-        ArrayList<String> pos = new ArrayList<>();
-        for(Position position: positions){
-            pos.add(WorldInfoConfig.positionToString(position));
-        }
+
         config.put("spawnTick",spawnTick);
-        config.put("position",pos);
+        config.put("position",positions);
         return config;
     }
 

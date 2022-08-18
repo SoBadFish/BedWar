@@ -81,8 +81,10 @@ public class RoomManager implements Listener {
     }
 
     private GameRoom getGameRoomByLevel(Level level){
-
         for(GameRoom room : rooms.values()){
+            if(room.getRoomConfig().worldInfo.getGameWorld() == null){
+                continue;
+            }
             if(room.getRoomConfig().worldInfo.getGameWorld().getFolderName().equalsIgnoreCase(level.getFolderName())){
                 return room;
             }
@@ -144,7 +146,11 @@ public class RoomManager implements Listener {
                 }
             }else{
                 GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
+
                 if(room != null){
+                    if(room.getWorldInfo().getConfig().getGameWorld() == null){
+                        return false;
+                    }
                     if(room.getType() == GameType.END){
                         player.sendForceMessage("&c" + roomName + " 结算中");
                         return false;
@@ -204,19 +210,21 @@ public class RoomManager implements Listener {
     }
 
     public boolean enableRoom(GameRoomConfig config){
+        if(config.getWorldInfo().getGameWorld() == null){
+            return false;
+        }
         if(!RoomManager.LOCK_GAME.contains(config)){
             RoomManager.LOCK_GAME.add(config);
-            rooms.put(config.getName(),GameRoom.enableRoom(config));
+
+            GameRoom room = GameRoom.enableRoom(config);
+            if(room == null){
+                return false;
+            }
+            rooms.put(config.getName(),room);
             return true;
         }else{
 
-            if(!Server.getInstance().isLevelLoaded(config.getWorldInfo().getLevel())){
-                return false;
-            }else{
-                rooms.put(config.getName(),GameRoom.enableRoom(config));
-                return true;
-
-            }
+            return false;
         }
 
     }
@@ -230,7 +238,14 @@ public class RoomManager implements Listener {
     }
 
     public GameRoom getRoom(String name){
-        return rooms.getOrDefault(name,null);
+        GameRoom room = rooms.getOrDefault(name,null);
+        if(room == null){
+            return null;
+        }
+        if(room.getWorldInfo().getConfig().getGameWorld() == null){
+            return null;
+        }
+        return room;
     }
 
     public void disEnableRoom(String name){
@@ -574,8 +589,11 @@ public class RoomManager implements Listener {
                         info.setPlayer(player);
                         info.setLeave(false);
                         if(room1.getType() == GameRoom.GameType.WAIT){
-                            player.teleport(room1.worldInfo.getConfig().getGameWorld().getSafeSpawn());
-                            player.teleport(room1.getWorldInfo().getConfig().getWaitPosition());
+                            if(room1.worldInfo.getConfig().getGameWorld() != null){
+                                player.teleport(room1.worldInfo.getConfig().getGameWorld().getSafeSpawn());
+                                player.teleport(room1.getWorldInfo().getConfig().getWaitPosition());
+                            }
+
                         }else{
 
                             info.death(null);
@@ -671,6 +689,9 @@ public class RoomManager implements Listener {
     public void onBlockBurn(BlockBurnEvent event){
         Block block = event.getBlock();
         for(GameRoomConfig gameRoomConfig: BedWarMain.getRoomManager().roomConfig.values()){
+            if(gameRoomConfig.worldInfo.getGameWorld() == null){
+                continue;
+            }
             if(gameRoomConfig.worldInfo.getGameWorld().
                     getFolderName().equalsIgnoreCase(block.getLevel().getFolderName())){
                 event.setCancelled();

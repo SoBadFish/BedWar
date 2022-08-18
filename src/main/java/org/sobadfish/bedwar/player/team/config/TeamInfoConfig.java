@@ -27,19 +27,19 @@ public class TeamInfoConfig {
     /**
      * 床坐标
      * */
-    private Position bedPosition;
+    private String bedPosition;
 
     /**
      * 出生坐标
      * */
-    private Position spawnPosition;
+    private String spawnPosition;
 
     /**
      * 商店坐标
      * */
-    private LinkedHashMap<String, Location> village = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> village = new LinkedHashMap<>();
 
-    public TeamInfoConfig(TeamConfig teamConfig,Position bedPosition,BlockFace bedFace,Position spawnPosition){
+    public TeamInfoConfig(TeamConfig teamConfig,String bedPosition,BlockFace bedFace,String spawnPosition){
         this.teamConfig = teamConfig;
         this.bedPosition = bedPosition;
         this.bedFace = bedFace;
@@ -48,17 +48,24 @@ public class TeamInfoConfig {
 
     }
 
+    public Position getBedPosition() {
+        return WorldInfoConfig.getPositionByString(bedPosition);
+    }
+
+    public Position getSpawnPosition() {
+        return WorldInfoConfig.getPositionByString(spawnPosition);
+    }
 
     public static TeamInfoConfig getInfoByMap(TeamConfig teamConfig, Map map){
-        Position bedPosition = WorldInfoConfig.getPositionByString(map.get("bedPosition").toString());
-        Position spawnPosition = WorldInfoConfig.getPositionByString(map.get("position").toString());
+//        Position bedPosition = WorldInfoConfig.getPositionByString();
+//        Position spawnPosition = WorldInfoConfig.getPositionByString(.toString());
         BlockFace face = BlockFace.valueOf(map.get("bedFace").toString().toUpperCase());
-        LinkedHashMap<String,Location> village = new LinkedHashMap<>();
+        LinkedHashMap<String,String> village = new LinkedHashMap<>();
         Map m2 = (Map) map.get("village");
         for(Object o: m2.keySet()){
-            village.put(o.toString(),WorldInfoConfig.getLocationByString(m2.get(o).toString()));
+            village.put(o.toString(),m2.get(o).toString());
         }
-        TeamInfoConfig config = new TeamInfoConfig(teamConfig,bedPosition,face,spawnPosition);
+        TeamInfoConfig config = new TeamInfoConfig(teamConfig,map.get("bedPosition").toString(),face,map.get("position").toString());
         config.setVillage(village);
         return config;
     }
@@ -80,12 +87,12 @@ public class TeamInfoConfig {
     public LinkedHashMap<String, Object> save(){
         LinkedHashMap<String, Object> config = new LinkedHashMap<>();
         config.put("name",teamConfig.getName());
-        config.put("position",WorldInfoConfig.positionToString(spawnPosition));
-        config.put("bedPosition",WorldInfoConfig.positionToString(bedPosition));
+        config.put("position",spawnPosition);
+        config.put("bedPosition",bedPosition);
         config.put("bedFace",bedFace.getName());
         LinkedHashMap<String, Object> vil = new LinkedHashMap<>();
         for(String s: village.keySet()){
-            vil.put(s,WorldInfoConfig.locationToString(village.get(s)));
+            vil.put(s,village.get(s));
         }
         config.put("village",vil);
         return config;

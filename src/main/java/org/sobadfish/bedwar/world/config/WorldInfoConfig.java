@@ -65,7 +65,14 @@ public class WorldInfoConfig {
     }
 
     public Level getGameWorld() {
-        return Server.getInstance().getLevelByName(level);
+        Level l =  Server.getInstance().isLevelLoaded(level) && Server.getInstance().getLevelByName(level) != null
+                && Server.getInstance().getLevelByName(level).getSafeSpawn() != null?Server.getInstance().getLevelByName(level):null;
+        if(l == null){
+            Server.getInstance().loadLevel(level);
+            l = Server.getInstance().getLevelByName(level);
+            return l;
+        }
+        return l;
     }
 
 

@@ -467,7 +467,7 @@ public class GameRoomConfig implements Cloneable{
     public void save(){
 
         Config config = new Config(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+getName()+"/room.yml",Config.YAML);
-        config.set("world",worldInfo.getGameWorld().getFolderName());
+        config.set("world",worldInfo.getLevel());
         config.set("roomMoney", gameRoomMoney);
         config.set("gameTime",time);
 

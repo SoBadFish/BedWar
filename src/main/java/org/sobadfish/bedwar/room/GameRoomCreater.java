@@ -46,24 +46,24 @@ public class GameRoomCreater {
     /**
      * 队伍出生点
      * */
-    private LinkedHashMap<String, Position> team = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> team = new LinkedHashMap<>();
     /**
      * 队伍床
      * */
-    private LinkedHashMap<String, Position> teamBed = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> teamBed = new LinkedHashMap<>();
     /**
      * 队伍床
      * */
     private LinkedHashMap<String, BlockFace> teamBedFace = new LinkedHashMap<>();
 
-    private LinkedHashMap<String, Location> teamShop = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> teamShop = new LinkedHashMap<>();
 
-    private LinkedHashMap<String, Location> teamShop2 = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> teamShop2 = new LinkedHashMap<>();
 
     /**
      * 物品刷新点
      * */
-    private LinkedHashMap<String, ArrayList<Position>> itemPosition = new LinkedHashMap<>();
+    private LinkedHashMap<String, ArrayList<String>> itemPosition = new LinkedHashMap<>();
 
     public GameRoomCreater(PlayerInfo player){
         this.creater = player;
@@ -165,7 +165,7 @@ public class GameRoomCreater {
                 createShop2Pos();
                 break;
             case 6:
-                team.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()),creater.getPosition());
+                team.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()),WorldInfoConfig.positionToString(creater.getPosition()));
                 int index = 0;
                 if(team.size() > 0){
                     index = team.size() - 1;
@@ -197,7 +197,7 @@ public class GameRoomCreater {
      * 创建商店1坐标
      * */
     private void createShopPos(){
-        teamShop.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop.size()),creater.getLocation());
+        teamShop.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop.size()),WorldInfoConfig.locationToString(creater.getLocation()));
 
         creater.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop.size() - 1))+"商店 &r[&a"+teamShop.size()+"&b/&d"+roomConfig.getTeamCfg().size()+"&r]");
         if(teamShop.size() == roomConfig.getTeamCfg().size()){
@@ -211,7 +211,7 @@ public class GameRoomCreater {
      * 创建商店2坐标
      * */
     private void createShop2Pos(){
-        teamShop2.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop2.size()),creater.getLocation());
+        teamShop2.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop2.size()),WorldInfoConfig.locationToString(creater.getLocation()));
         creater.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop2.size() - 1))+"团队商店 &r[&2"+teamShop2.size()+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
         if(teamShop2.size() == roomConfig.getTeamCfg().size()){
             creater.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(0))+"出生点 &r[&2"+(team.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
@@ -227,7 +227,7 @@ public class GameRoomCreater {
      * 创建床坐标
      * */
     private void createBedPos(){
-        teamBed.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size()),creater.getPosition());
+        teamBed.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size()),WorldInfoConfig.positionToString(creater.getPosition()));
         teamBedFace.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBedFace.size()),creater.getHorizontalFacing());
         creater.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size() - 1))+"床坐标 &r[&2"+teamBed.size()+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
         if(teamBed.size() == roomConfig.getTeamCfg().size()){
@@ -237,7 +237,7 @@ public class GameRoomCreater {
             ArrayList<TeamInfoConfig> teamInfoConfigs = new ArrayList<>();
             for(String teamName : team.keySet()){
                 TeamInfoConfig teamInfoConfig = new TeamInfoConfig(roomConfig.teamCfg.get(teamName),teamBed.get(teamName),teamBedFace.get(teamName),team.get(teamName));
-                teamInfoConfig.setVillage(new LinkedHashMap<String, Location>(){
+                teamInfoConfig.setVillage(new LinkedHashMap<String, String>(){
                     {
                         put("defaultShop",teamShop.get(teamName));
                         put("teamShop",teamShop2.get(teamName));
@@ -262,9 +262,9 @@ public class GameRoomCreater {
         if(!itemPosition.containsKey(name)){
             itemPosition.put(name,new ArrayList<>());
         }
-        ArrayList<Position> positions = itemPosition.get(name);
+        ArrayList<String> positions = itemPosition.get(name);
         if(positions.size() < moneyItemSize.getOrDefault(name,4)){
-            positions.add(creater.getPosition());
+            positions.add(WorldInfoConfig.positionToString(creater.getPosition()));
             creater.sendForceMessage("&2设置&r "+name+" &2生成点坐标&r [&2"+positions.size()+" &b/&d "+moneyItemSize.getOrDefault(name,4)+"&r]");
             if(positions.size() != moneyItemSize.getOrDefault(name,4)) {
                 creater.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置物品刷新点&r " + name + " [&2" + (positions.size() + 1) + " &b/&d "+moneyItemSize.getOrDefault(name,4)+"&r]");

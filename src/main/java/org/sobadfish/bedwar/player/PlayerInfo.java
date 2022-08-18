@@ -681,6 +681,9 @@ public class PlayerInfo {
         }
 
         player.removeAllEffects();
+        if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
+            return;
+        }
         player.teleport(getGameRoom().worldInfo.getConfig().getGameWorld().getSafeSpawn());
         player.teleport(new Position(player.x,teamInfo.getTeamConfig().getBedPosition().y + 64,player.z,getLevel()));
         sendTitle("&c你死了");

@@ -4,9 +4,7 @@ import cn.nukkit.Player;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -14,11 +12,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * */
 public class RandomJoinManager {
 
+    private Timer timer;
 
 
     public static RandomJoinManager joinManager;
 
-    private RandomJoinManager(){}
+    private RandomJoinManager(){
+        timer = new Timer();
+    }
 
     public static RandomJoinManager newInstance(){
         if(joinManager == null){
@@ -28,11 +29,6 @@ public class RandomJoinManager {
     }
 
     public List<IPlayerInfo> playerInfos = new CopyOnWriteArrayList<>();
-
-//    //将这个线程缩短为单个
-//    public void start(){
-//        ThreadManager.addThread(new JoinListRunnable(this));
-//    }
 
 
     public void join(PlayerInfo info, String name){
@@ -49,7 +45,13 @@ public class RandomJoinManager {
 
         iPlayerInfo.name = name;
         iPlayerInfo.time = new Date();
-        playerInfos.add(iPlayerInfo);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                playerInfos.add(iPlayerInfo);
+            }
+        },1000);
+
     }
 
 
