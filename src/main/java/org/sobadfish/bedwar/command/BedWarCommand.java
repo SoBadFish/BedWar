@@ -49,7 +49,6 @@ public class BedWarCommand extends Command {
                     @Override
                     public void onClick(Player player) {
                         RandomJoinManager.joinManager.join(finalInfo,null);
-//                        ThreadManager.addThread(new MatchingRunnable(finalInfo,null));
                     }
                 });
                 for (String wname : BedWarMain.getMenuRoomManager().getNames()) {

@@ -2,17 +2,15 @@ package org.sobadfish.bedwar.item.nbt;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
+import cn.nukkit.block.BlockAir;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
-import org.sobadfish.bedwar.thread.BlockBreakRunnable;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Timer;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -22,6 +20,7 @@ import java.util.Timer;
  */
 public class Platform implements INbtItem {
 
+    public static Timer timer = new Timer();
 
     @Override
     public String getName() {
@@ -52,8 +51,17 @@ public class Platform implements INbtItem {
             }
 
         }
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                for(Position block: new ArrayList<>(spawn.keySet())){
+                    if(info.getGameRoom().worldInfo.onChangeBlock(block.getLevelBlock(),false)){
+                        block.getLevel().setBlock(block,new BlockAir());
+                    }
+                }
+            }
+        },5000);
 
-        ThreadManager.addScheduled(new BlockBreakRunnable(info.getGameRoom(),new ArrayList<>(spawn.keySet()),10));
         player.getInventory().removeItem(item);
     }
 

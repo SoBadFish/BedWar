@@ -15,6 +15,9 @@ import org.sobadfish.bedwar.player.PlayerInfo;
  * 2022/1/8
  */
 public class FireBall implements INbtItem{
+
+
+
     @Override
     public String getName() {
         return "火球";

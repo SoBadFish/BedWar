@@ -3,12 +3,12 @@ package org.sobadfish.bedwar.thread;
 import cn.nukkit.entity.Entity;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.ShopVillage;
+import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfo;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
         }
         StringBuilder s = new StringBuilder(color+"房间进程 &7(" + BedWarMain.getRoomManager().getRooms().size() + ")\n");
         for(Map.Entry<String,Long> room: time.entrySet()){
-            s.append("     &r").append(room.getKey()).append("  &a").append(room.getValue()).append(" ms");
+            s.append("     &r").append(room.getKey()).append("  &a").append(room.getValue()).append(" ms\n");
 
         }
         return s.toString();
@@ -49,10 +49,16 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
         }
         List<GameRoom> gameRooms = new CopyOnWriteArrayList<>(BedWarMain.getRoomManager().getRooms().values());
         for(GameRoom room: gameRooms){
+            if(BedWarMain.getRoomManager().getRoom(room.getRoomConfig().name) == null){
+                RoomManager.LOCK_GAME.remove(room.getRoomConfig());
+                BedWarMain.getRoomManager().getRooms().remove(room.getRoomConfig().name);
+                continue;
+            }
             long t1 = System.currentTimeMillis();
             if(room.close || room.getWorldInfo().getConfig().getGameWorld() == null){
                 continue;
             }
+            room.onUpdate();
             for(PlayerInfo playerInfo:room.getPlayerInfos()){
                 if(playerInfo.cancel || playerInfo.isLeave){
                     playerInfo.removeScoreBoard();
@@ -62,7 +68,6 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
                 }
 
             }
-            room.onUpdate();
 
             if(room.loadTime > 0) {
                 if(!room.getEventControl().hasEvent()){

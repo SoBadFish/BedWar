@@ -1,5 +1,6 @@
 package org.sobadfish.bedwar.thread;
 
+import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.tools.Utils;
@@ -10,7 +11,7 @@ public class FairworksRunnable extends BaseTimerRunnable{
 
     private final List<PlayerInfo> playerInfos;
 
-    public FairworksRunnable(int end, GameRoom room, List<PlayerInfo> playerInfos) {
+    public FairworksRunnable(int end, List<PlayerInfo> playerInfos) {
         super(end);
         this.playerInfos = playerInfos;
     }
@@ -36,6 +37,7 @@ public class FairworksRunnable extends BaseTimerRunnable{
             Utils.spawnFirework(playerInfo.getPosition());
         }
         isClose = true;
+        ThreadManager.cancel(this);
     }
     @Override
     protected void callback() {}

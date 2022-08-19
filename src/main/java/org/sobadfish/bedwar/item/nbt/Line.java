@@ -5,13 +5,9 @@ import cn.nukkit.block.Block;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import org.sobadfish.bedwar.BedWarMain;
-import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
-import org.sobadfish.bedwar.thread.BlockBreakRunnable;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 
 /**

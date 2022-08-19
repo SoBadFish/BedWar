@@ -149,7 +149,7 @@ public class RoomManager implements Listener {
                 GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
 
                 if(room != null){
-                    if(RoomManager.LOCK_GAME.contains(room.getRoomConfig()) && room.getType() == GameType.END){
+                    if(RoomManager.LOCK_GAME.contains(room.getRoomConfig()) && room.getType() == GameType.END || room.getType() == GameType.CLOSE){
                         player.sendForceMessage("&c" + roomName + " 还没准备好");
                         return false;
                     }
@@ -164,6 +164,9 @@ public class RoomManager implements Listener {
             }
 
             GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
+            if(room == null){
+                return false;
+            }
             switch (room.joinPlayerInfo(player,true)){
                 case CAN_WATCH:
                     if(!room.getRoomConfig().hasWatch){
@@ -244,9 +247,10 @@ public class RoomManager implements Listener {
 
     public GameRoom getRoom(String name){
         GameRoom room = rooms.getOrDefault(name,null);
-        if(room == null){
+        if(room == null || room.worldInfo == null){
             return null;
         }
+
         if(room.getWorldInfo().getConfig().getGameWorld() == null){
             return null;
         }
@@ -315,7 +319,7 @@ public class RoomManager implements Listener {
         }
         TeamInfo teamInfo = event.getTeamInfo();
         if(teamInfo != null){
-            ThreadManager.addScheduled(new FairworksRunnable(5,event.getRoom(),teamInfo.getLivePlayer()));
+            ThreadManager.addScheduled(new FairworksRunnable(5,teamInfo.getLivePlayer()));
         }
 
         event.getRoom().sendMessage("&a恭喜 "+event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()+" &a 获得了胜利!");
@@ -342,20 +346,20 @@ public class RoomManager implements Listener {
         }
     }
 
-    /**
-     * 阻止区块卸载 如果区块卸载会出现如下问题
-     *
-     * 1. 还原房间部分方块无法还原
-     * 2. 导致后台循环报错空指针异常
-     * */
-    @EventHandler
-    public void onChunkUnload(ChunkUnloadEvent event){
-        GameRoom room = getGameRoomByLevel(event.getLevel());
-        if(room != null && !room.close){
-            event.setCancelled();
-
-        }
-    }
+//    /**
+//     * 阻止区块卸载 如果区块卸载会出现如下问题
+//     *
+//     * 1. 还原房间部分方块无法还原
+//     * 2. 导致后台循环报错空指针异常
+//     * */
+//    @EventHandler
+//    public void onChunkUnload(ChunkUnloadEvent event){
+//        GameRoom room = getGameRoomByLevel(event.getLevel());
+//        if(room != null && !room.close){
+//            event.setCancelled();
+//
+//        }
+//    }
 
 
 
@@ -588,6 +592,11 @@ public class RoomManager implements Listener {
             String room = playerJoin.get(player.getName());
             if(hasGameRoom(room)){
                 GameRoom room1 = getRoom(room);
+                if(room1 == null){
+                    playerJoin.remove(player.getName());
+                    player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+                    return;
+                }
                 if(room1.getType() != GameRoom.GameType.END && !room1.close ){
                     PlayerInfo info = room1.getPlayerInfo(player);
                     if(info != null){
@@ -1143,6 +1152,9 @@ public class RoomManager implements Listener {
                             shopFrom.getLastFrom().disPlay(shopFrom.getLastFrom().getTitle(), false);
                         }
 
+                        return;
+                    }
+                    if(((FormResponseSimple) event.getResponse()).getClickedButtonId() >= shopFrom.getShopButtons().size()){
                         return;
                     }
                     shopFrom.getShopButtons().get(((FormResponseSimple) event.getResponse())

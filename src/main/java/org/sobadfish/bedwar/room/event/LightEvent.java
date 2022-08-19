@@ -34,7 +34,7 @@ public class LightEvent extends IGameRoomEvent implements Listener {
     public void onDamage(EntityDamageEvent event){
         if(event instanceof EntityDamageByEntityEvent){
             if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityLightning){
-                event.setDamage(2);
+                event.setDamage(7);
             }
         }
     }

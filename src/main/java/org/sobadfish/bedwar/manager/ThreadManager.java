@@ -23,8 +23,6 @@ public class ThreadManager {
     // 线程池核心线程数
     private final static Integer CORE_POOLSIZE = 1;
 
-    public static final ExecutorService executorService = Executors.newCachedThreadPool();
-
 
     private static final ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(CORE_POOLSIZE,new ThreadPoolExecutor.AbortPolicy());
 

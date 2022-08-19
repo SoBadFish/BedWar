@@ -4,39 +4,28 @@ package org.sobadfish.bedwar.room;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.*;
-import cn.nukkit.blockentity.BlockEntity;
-import cn.nukkit.blockentity.BlockEntityChest;
-import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
-import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.potion.Effect;
-import cn.nukkit.scheduler.AsyncTask;
 import de.theamychan.scoreboard.network.Scoreboard;
 import org.sobadfish.bedwar.BedWarMain;
-import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.event.*;
 import org.sobadfish.bedwar.item.button.FollowItem;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
 import org.sobadfish.bedwar.item.button.TeamChoseItem;
-import org.sobadfish.bedwar.manager.FloatTextManager;
 import org.sobadfish.bedwar.manager.RandomJoinManager;
 import org.sobadfish.bedwar.manager.RoomManager;
-import org.sobadfish.bedwar.manager.ThreadManager;
-import org.sobadfish.bedwar.manager.data.WorldResetManager;
+import org.sobadfish.bedwar.manager.WorldResetManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfo;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
-import org.sobadfish.bedwar.thread.*;
 import org.sobadfish.bedwar.shop.ShopInfo;
-import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.world.WorldInfo;
-import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -806,14 +795,12 @@ public class GameRoom {
             return;
         }
         close = true;
-
+        type = GameType.CLOSE;
         if(hasStart) {
             roomConfig.save();
             GameCloseEvent event = new GameCloseEvent(this, BedWarMain.getBedWarMain());
             Server.getInstance().getPluginManager().callEvent(event);
             worldInfo.setClose(true);
-
-            type = GameType.END;
             //TODO 房间被关闭 释放一些资源
             for (PlayerInfo info : playerInfos) {
                 info.clear();
@@ -828,6 +815,10 @@ public class GameRoom {
             worldInfo = null;
             WorldResetManager.RESET_QUEUE.put(getRoomConfig(),level);
         }else{
+
+            worldInfo.setClose(true);
+            worldInfo = null;
+
             BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().name);
             RoomManager.LOCK_GAME.remove(getRoomConfig());
         }

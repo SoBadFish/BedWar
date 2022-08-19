@@ -1,4 +1,4 @@
-package org.sobadfish.bedwar.manager.data;
+package org.sobadfish.bedwar.manager;
 
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 
