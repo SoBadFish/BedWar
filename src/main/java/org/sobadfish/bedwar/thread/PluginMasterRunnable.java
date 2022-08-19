@@ -7,6 +7,7 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.entity.ShopVillage;
 import org.sobadfish.bedwar.manager.*;
+import org.sobadfish.bedwar.manager.data.WorldResetManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.WorldRoom;
@@ -14,9 +15,11 @@ import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfo;
 import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.top.TopItemInfo;
+import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 
@@ -74,9 +77,9 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
             }
 
         }
+        worldReset();
 
-
-        ThreadManager.executorService.execute(() -> RandomJoinManager.newInstance().playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info)));
+        RandomJoinManager.newInstance().playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info));
         loadTime = System.currentTimeMillis() - t1;
     }
     public synchronized boolean joinRandomRoom(RandomJoinManager.IPlayerInfo i){
@@ -96,7 +99,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
         if(roomManager.cancel){
             return false;
         }
-        info.sendForceTitle("&6匹配中",2);
+        info.sendForceTitle("&6匹配中",4);
         info.sendSubTitle(PlayerInfo.formatTime((int)(System.currentTimeMillis() - i.time.getTime()) / 1000));
 
         String input = i.name;
@@ -141,7 +144,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
             }
             i.name = names.get(0);
             if (names.size() > 1) {
-                i.name = names.get(Utils.rand(0, names.size() - 1));
+                i.name = names.get(Utils.rand(0, names.size()));
                 if (roomManager.hasRoom(i.name)) {
                     if (roomManager.getStrings().size() == names.size()) {
                         i.cancel = true;
@@ -211,6 +214,30 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
             }
         }
         return true;
+    }
+
+    public void worldReset() {
+        List<GameRoomConfig> bufferQueue = new ArrayList<>();
+        try {
+            for(Map.Entry<GameRoomConfig,String> map: WorldResetManager.RESET_QUEUE.entrySet()){
+                if (WorldInfoConfig.toPathWorld(map.getKey().getName(), map.getValue())) {
+                    BedWarMain.sendMessageToConsole("&a" + map.getKey().getName() + " 地图已还原");
+                }
+                Server.getInstance().loadLevel(map.getValue());
+                BedWarMain.sendMessageToConsole("&r释放房间 " + map.getKey().getName());
+                BedWarMain.sendMessageToConsole("&r房间 " + map.getKey().getName() + " 已回收");
+                bufferQueue.add(map.getKey());
+            }
+            //TODO 从列表中移除
+            for(GameRoomConfig config: bufferQueue){
+                BedWarMain.getRoomManager().getRooms().remove(config.getName());
+                RoomManager.LOCK_GAME.remove(config);
+                WorldResetManager.RESET_QUEUE.remove(config);
+            }
+        } catch (Exception e) {
+            BedWarMain.sendMessageToConsole("&c释放房间出现了一个小问题，导致无法正常释放,已将这个房间暂时锁定");
+        }
+
     }
 
 

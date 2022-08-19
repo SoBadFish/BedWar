@@ -12,6 +12,7 @@ import org.sobadfish.bedwar.thread.BlockBreakRunnable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Timer;
 
 
 /**
@@ -51,6 +52,7 @@ public class Platform implements INbtItem {
             }
 
         }
+
         ThreadManager.addScheduled(new BlockBreakRunnable(info.getGameRoom(),new ArrayList<>(spawn.keySet()),10));
         player.getInventory().removeItem(item);
     }

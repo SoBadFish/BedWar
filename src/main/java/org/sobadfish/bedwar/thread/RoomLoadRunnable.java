@@ -48,7 +48,7 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
             return;
         }
         List<GameRoom> gameRooms = new CopyOnWriteArrayList<>(BedWarMain.getRoomManager().getRooms().values());
-        for(GameRoom room: new CopyOnWriteArrayList<>(gameRooms)){
+        for(GameRoom room: gameRooms){
             long t1 = System.currentTimeMillis();
             if(room.close || room.getWorldInfo().getConfig().getGameWorld() == null){
                 continue;
@@ -82,13 +82,15 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
                     break;
                 }
             }
-            for (ShopVillage shopVillage : new ArrayList<>(room.getShopInfo().getShopVillages())) {
-                if (shopVillage.isClosed()) {
-                    ShopVillage respawnVillage = new ShopVillage(room.getRoomConfig(), shopVillage.getInfoConfig(), shopVillage.getChunk(), Entity.getDefaultNBT(shopVillage));
-                    respawnVillage.yaw = shopVillage.yaw;
-                    respawnVillage.spawnToAll();
-                    room.getShopInfo().getShopVillages().remove(shopVillage);
-                    room.getShopInfo().getShopVillages().add(respawnVillage);
+            if(room.worldInfo != null) {
+                for (ShopVillage shopVillage : room.getShopInfo().getShopVillages()) {
+                    if (shopVillage.isClosed()) {
+                        ShopVillage respawnVillage = new ShopVillage(room.getRoomConfig(), shopVillage.getInfoConfig(), shopVillage.getChunk(), Entity.getDefaultNBT(shopVillage));
+                        respawnVillage.yaw = shopVillage.yaw;
+                        respawnVillage.spawnToAll();
+                        room.getShopInfo().getShopVillages().remove(shopVillage);
+                        room.getShopInfo().getShopVillages().add(respawnVillage);
+                    }
                 }
             }
             time.put(room.getRoomConfig().name,System.currentTimeMillis() - t1);

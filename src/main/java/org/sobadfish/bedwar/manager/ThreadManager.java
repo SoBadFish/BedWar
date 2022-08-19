@@ -16,19 +16,17 @@ import java.util.concurrent.*;
 public class ThreadManager {
 
 
+    public static final Timer timer = new Timer();
+
     public static final List<AbstractBedWarRunnable> RUNNABLES = new CopyOnWriteArrayList<>();
 
     // 线程池核心线程数
-    private final static Integer COREPOOLSIZE = 1;
-    // 最大线程数
-    private final static Integer MAXIMUMPOOLSIZE = Integer.MAX_VALUE;
-    // 空闲线程存活时间
-    private final static Integer KEEPALIVETIME = 5;
+    private final static Integer CORE_POOLSIZE = 1;
 
     public static final ExecutorService executorService = Executors.newCachedThreadPool();
 
 
-    private static final ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(1,new ThreadPoolExecutor.AbortPolicy());
+    private static final ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(CORE_POOLSIZE,new ThreadPoolExecutor.AbortPolicy());
 
 
     public static void cancel(AbstractBedWarRunnable r) {
@@ -56,6 +54,9 @@ public class ThreadManager {
         return scheduled.getActiveCount();
     }
 
+    public static void addDelayThread(){
+        timer.cancel();
+    }
 
 
     public static void addScheduled(AbstractBedWarRunnable runnable){

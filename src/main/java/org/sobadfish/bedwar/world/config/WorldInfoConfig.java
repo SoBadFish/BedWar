@@ -80,6 +80,7 @@ public class WorldInfoConfig {
         return level;
     }
 
+
     public Position getWaitPosition() {
         return getPositionByString(waitPosition);
     }
@@ -143,7 +144,9 @@ public class WorldInfoConfig {
                 f2.mkdirs();
             }
             if (files != null && files.length > 0) {
-                Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName),true);
+                if(Server.getInstance().isLevelLoaded(levelName)) {
+                    Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName), true);
+                }
                 Utils.copyFiles(world, f2);
                 return true;
             }

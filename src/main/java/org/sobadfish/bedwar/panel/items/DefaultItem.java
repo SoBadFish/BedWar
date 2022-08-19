@@ -36,7 +36,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
 
     public int count;
 
-    private Item item;
+    private final Item item;
 
     public String moneyItem;
 

@@ -25,6 +25,7 @@ import org.sobadfish.bedwar.manager.FloatTextManager;
 import org.sobadfish.bedwar.manager.RandomJoinManager;
 import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
+import org.sobadfish.bedwar.manager.data.WorldResetManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
@@ -53,6 +54,8 @@ public class GameRoom {
 
     private final EventControl eventControl;
 
+    private boolean hasStart;
+
     /**
      * 地图配置
      * */
@@ -73,7 +76,7 @@ public class GameRoom {
 
     private final ArrayList<BlockChest> clickChest = new ArrayList<>();
 
-    private ArrayList<FloatTextInfo> floatTextInfos = new ArrayList<>();
+    private final ArrayList<FloatTextInfo> floatTextInfos = new ArrayList<>();
 
     /**
      * 复活时间
@@ -95,9 +98,6 @@ public class GameRoom {
         eventControl = new EventControl(this,roomConfig.eventConfig);
         eventControl.initAll(this);
         //初始化浮空字
-
-
-
     }
 
     public ArrayList<FloatTextInfo> getFloatTextInfos() {
@@ -232,6 +232,7 @@ public class GameRoom {
 
 
     private void onStart(){
+        hasStart = true;
         eventControl.run();
         if(loadTime == -1 && teamAll){
             //TODO 当房间开始
@@ -456,6 +457,7 @@ public class GameRoom {
                     return JoinType.NO_ONLINE;
                 }
             }
+
             if(getType() != GameType.WAIT){
                 if(getType() == GameType.END || getType() == GameType.CLOSE){
                     return JoinType.NO_JOIN;
@@ -804,41 +806,31 @@ public class GameRoom {
             return;
         }
         close = true;
-        roomConfig.save();
-        GameCloseEvent event = new GameCloseEvent(this,BedWarMain.getBedWarMain());
-        Server.getInstance().getPluginManager().callEvent(event);
-        worldInfo.setClose(true);
 
-        type = GameType.END;
-        //TODO 房间被关闭 释放一些资源
-        for(PlayerInfo info: playerInfos){
-            info.clear();
-            if(info.getPlayer() instanceof Player) {
-                quitPlayerInfo(info,true);
-            }
-            if(info.getTeamInfo() != null) {
-                info.getTeamInfo().breakBed();
-            }
-        }
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                //TODO 从列表中移除
-                if(WorldInfoConfig.toPathWorld(getRoomConfig().getName(),worldInfo.getConfig().getLevel())){
-                    BedWarMain.sendMessageToConsole("&a"+getRoomConfig().getName()+" 地图已还原");
+        if(hasStart) {
+            roomConfig.save();
+            GameCloseEvent event = new GameCloseEvent(this, BedWarMain.getBedWarMain());
+            Server.getInstance().getPluginManager().callEvent(event);
+            worldInfo.setClose(true);
+
+            type = GameType.END;
+            //TODO 房间被关闭 释放一些资源
+            for (PlayerInfo info : playerInfos) {
+                info.clear();
+                if (info.getPlayer() instanceof Player) {
+                    quitPlayerInfo(info, true);
                 }
-                Server.getInstance().generateLevel(worldInfo.getConfig().getLevel());
-                Server.getInstance().loadLevel(worldInfo.getConfig().getLevel());
-                BedWarMain.sendMessageToConsole("&r释放房间 "+getRoomConfig().getName());
-                isGc = true;
-
-                BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().name);
-                RoomManager.LOCK_GAME.remove(getRoomConfig());
-
-                BedWarMain.sendMessageToConsole("&r房间 "+getRoomConfig().getName()+" 已回收");
+                if (info.getTeamInfo() != null) {
+                    info.getTeamInfo().breakBed();
+                }
             }
-        },50);
+            String level = worldInfo.getConfig().getLevel();
+            worldInfo = null;
+            WorldResetManager.RESET_QUEUE.put(getRoomConfig(),level);
+        }else{
+            BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().name);
+            RoomManager.LOCK_GAME.remove(getRoomConfig());
+        }
 
     }
 }

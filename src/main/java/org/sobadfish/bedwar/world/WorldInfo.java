@@ -83,6 +83,7 @@ public class WorldInfo {
     public boolean onUpdate(){
         if(isStart) {
             if (room.close || isClose) {
+                isStart = false;
                 infos.clear();
                 return false;
             }

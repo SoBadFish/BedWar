@@ -22,11 +22,11 @@ import org.sobadfish.bedwar.shop.item.ShopItemInfo;
  */
 public class PanelItem extends BasePlayPanelItemInstance{
 
-    private ShopInfoConfig.ShopItemClassify classify;
+    private final ShopInfoConfig.ShopItemClassify classify;
 
-    private ShopItemInfo shopInfo;
+    private final ShopItemInfo shopInfo;
 
-    private GameRoomConfig room;
+    private final GameRoomConfig room;
 
 
     public PanelItem(GameRoomConfig room, ShopItemInfo shopInfo, ShopInfoConfig.ShopItemClassify classify){

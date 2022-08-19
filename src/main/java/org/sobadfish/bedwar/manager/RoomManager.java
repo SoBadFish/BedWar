@@ -145,9 +145,14 @@ public class RoomManager implements Listener {
                     return false;
                 }
             }else{
+
                 GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
 
                 if(room != null){
+                    if(RoomManager.LOCK_GAME.contains(room.getRoomConfig()) && room.getType() == GameType.END){
+                        player.sendForceMessage("&c" + roomName + " 还没准备好");
+                        return false;
+                    }
                     if(room.getWorldInfo().getConfig().getGameWorld() == null){
                         return false;
                     }
