@@ -522,4 +522,9 @@ public class GameRoomConfig implements Cloneable{
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

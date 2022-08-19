@@ -49,12 +49,13 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
         }
         List<GameRoom> gameRooms = new CopyOnWriteArrayList<>(BedWarMain.getRoomManager().getRooms().values());
         for(GameRoom room: gameRooms){
+            long t1 = System.currentTimeMillis();
             if(BedWarMain.getRoomManager().getRoom(room.getRoomConfig().name) == null){
                 RoomManager.LOCK_GAME.remove(room.getRoomConfig());
                 BedWarMain.getRoomManager().getRooms().remove(room.getRoomConfig().name);
                 continue;
             }
-            long t1 = System.currentTimeMillis();
+
             if(room.close || room.getWorldInfo().getConfig().getGameWorld() == null){
                 continue;
             }

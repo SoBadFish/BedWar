@@ -12,14 +12,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * */
 public class RandomJoinManager {
 
-    private Timer timer;
 
 
     public static RandomJoinManager joinManager;
 
-    private RandomJoinManager(){
-        timer = new Timer();
-    }
+
 
     public static RandomJoinManager newInstance(){
         if(joinManager == null){
@@ -45,12 +42,7 @@ public class RandomJoinManager {
 
         iPlayerInfo.name = name;
         iPlayerInfo.time = new Date();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                playerInfos.add(iPlayerInfo);
-            }
-        },1000);
+        playerInfos.add(iPlayerInfo);
 
 
     }

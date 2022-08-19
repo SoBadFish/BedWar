@@ -812,6 +812,7 @@ public class GameRoom {
                 }
             }
             String level = worldInfo.getConfig().getLevel();
+            worldInfo.setClose(true);
             worldInfo = null;
             WorldResetManager.RESET_QUEUE.put(getRoomConfig(),level);
         }else{

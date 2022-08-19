@@ -124,7 +124,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
             boolean u;
             int rc = 1;
             String errorMessage = moneyItem+"不足";
-            if(!moneyItem.equalsIgnoreCase("exp")){
+            if(room.getRoomConfig().moneyItem.containsKey(moneyItem)){
                 MoneyItemInfoConfig oInfo = room.getRoomConfig().moneyItem.get(moneyItem);
                 rc = (int) oInfo.getExp();
             }
@@ -187,7 +187,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
         ArrayList<String> lore = new ArrayList<>();
         if(info.getGameRoom().getRoomConfig().isExp()){
             int rc = 1;
-            if(!moneyItem.equalsIgnoreCase("exp")){
+            if(info.getGameRoom().getRoomConfig().moneyItem.containsKey(moneyItem)){
                 MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
                 rc = (int) oInfo.getExp();
             }
@@ -211,7 +211,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
         String btName = TextFormat.colorize('&',  itemString+" * "+getItem().getCount()+"\n&r价格: "+moneyItem+" * "+count);
         if(info.getGameRoom().getRoomConfig().isExp()){
             int rc = 1;
-            if(!moneyItem.equalsIgnoreCase("exp")){
+            if(info.getGameRoom().getRoomConfig().moneyItem.containsKey(moneyItem)){
                 MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
                 rc = (int) oInfo.getExp();
             }

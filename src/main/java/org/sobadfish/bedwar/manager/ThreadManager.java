@@ -3,6 +3,7 @@ package org.sobadfish.bedwar.manager;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.thread.PluginMasterRunnable;
+import org.sobadfish.bedwar.thread.RandomJoinRunnable;
 import org.sobadfish.bedwar.thread.RoomLoadRunnable;
 import org.sobadfish.bedwar.thread.TopRunnable;
 
@@ -16,25 +17,24 @@ import java.util.concurrent.*;
 public class ThreadManager {
 
 
-    public static final Timer timer = new Timer();
 
     public static final List<AbstractBedWarRunnable> RUNNABLES = new CopyOnWriteArrayList<>();
 
     // 线程池核心线程数
-    private final static Integer CORE_POOLSIZE = 1;
+    private final static Integer CORE_POOLSIZE = 5;
 
 
-    private static final ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(CORE_POOLSIZE,new ThreadPoolExecutor.AbortPolicy());
+    private static final ScheduledThreadPoolExecutor SCHEDULED = new ScheduledThreadPoolExecutor(CORE_POOLSIZE,new ThreadPoolExecutor.AbortPolicy());
 
 
     public static void cancel(AbstractBedWarRunnable r) {
         RUNNABLES.remove(r);
-        scheduled.remove(r);
+        SCHEDULED.remove(r);
     }
 
     private static void schedule(AbstractBedWarRunnable r) {
         RUNNABLES.add(r);
-        scheduled.scheduleAtFixedRate(r,0,1,TimeUnit.SECONDS);
+        SCHEDULED.scheduleAtFixedRate(r,0,1,TimeUnit.SECONDS);
     }
 
 
@@ -42,18 +42,14 @@ public class ThreadManager {
      * 获取当前线程池线程数量
      */
     public static int getScheduledSize() {
-        return scheduled.getPoolSize();
+        return SCHEDULED.getPoolSize();
     }
 
     /**
      * 获取当前活动的线程数量
      */
     public static int getScheduledActiveCount() {
-        return scheduled.getActiveCount();
-    }
-
-    public static void addDelayThread(){
-        timer.cancel();
+        return SCHEDULED.getActiveCount();
     }
 
 
@@ -116,6 +112,7 @@ public class ThreadManager {
         ThreadManager.schedule(new PluginMasterRunnable());
         ThreadManager.schedule(new RoomLoadRunnable());
         ThreadManager.schedule(new TopRunnable());
+        ThreadManager.schedule(new RandomJoinRunnable());
 
     }
 
