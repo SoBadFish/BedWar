@@ -119,7 +119,7 @@ public class ItemInfo {
                         }
                     }
                 }
-                if (entityItems.size() > 20) {
+                if (entityItems.size() > 10) {
                     return;
                 }
                 try{

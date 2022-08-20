@@ -7,6 +7,7 @@ import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.entity.item.EntityPrimedTNT;
+import cn.nukkit.entity.weather.EntityLightning;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
@@ -781,6 +782,13 @@ public class RoomManager implements Listener {
                     event.setCancelled();
                     return;
                 }
+                //救援平台伤害
+                if(event.getCause() == EntityDamageEvent.DamageCause.FALL){
+                    if(playerInfo.getPlayer().getLevelBlock().getId() == 165){
+                        event.setCancelled();
+                    }
+                }
+
                 //会重复
                 if (playerInfo.getPlayerType() == PlayerInfo.PlayerType.WAIT) {
                     event.setCancelled();
@@ -790,6 +798,9 @@ public class RoomManager implements Listener {
                     if (((EntityDamageByEntityEvent) event).getDamager() instanceof EntityFireBall) {
                         event.setDamage(2);
                         ((EntityDamageByEntityEvent) event).setKnockBack(room.getRoomConfig().fireballKnockBack);
+                    }
+                    if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityLightning){
+                        event.setDamage(12);
                     }
                 }
                 if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
@@ -807,6 +818,10 @@ public class RoomManager implements Listener {
                             }
 
                         }
+                        if(damagers instanceof EntityFireBall){
+                            event.setDamage(2);
+                        }
+
                     }
                 }
                 if (event instanceof EntityDamageByEntityEvent) {

@@ -26,17 +26,7 @@ public class LightEvent extends IGameRoomEvent implements Listener {
     @Override
     public void onCreate(GameRoom room) {
         super.onCreate(room);
-        Server.getInstance().getPluginManager().registerEvents(this, BedWarMain.getBedWarMain());
 
-    }
-
-    @EventHandler
-    public void onDamage(EntityDamageEvent event){
-        if(event instanceof EntityDamageByEntityEvent){
-            if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityLightning){
-                event.setDamage(7);
-            }
-        }
     }
 
     @Override
