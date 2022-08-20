@@ -25,6 +25,7 @@ import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfo;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.bedwar.shop.ShopInfo;
+import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.world.WorldInfo;
 
 import java.util.*;
@@ -202,6 +203,7 @@ public class GameRoom {
     private void onEnd(){
         if(loadTime == -1){
             loadTime = 10;
+
             //房间结束后的执行逻辑
             if(getRoomConfig().isAutomaticNextRound){
                 sendMessage("&7即将自动进行下一局");
@@ -210,6 +212,10 @@ public class GameRoom {
                 }
             }
 
+        }
+
+        for(PlayerInfo playerInfo:getLivePlayers()){
+            Utils.spawnFirework(playerInfo.getPosition());
         }
 
         if(loadTime == 0){
@@ -264,8 +270,9 @@ public class GameRoom {
                         successInfo = info;
                         continue;
                     }
-                    info.setStop(true);
+
                     info.onUpdate();
+                    info.setStop(true);
 
                 }
                 successInfo.echoVictory();

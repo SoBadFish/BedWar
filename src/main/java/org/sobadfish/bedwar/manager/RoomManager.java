@@ -57,7 +57,6 @@ import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.GameRoom.GameType;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.entity.ShopVillage;
-import org.sobadfish.bedwar.thread.FairworksRunnable;
 import org.sobadfish.bedwar.tools.Utils;
 
 import java.io.File;
@@ -314,10 +313,6 @@ public class RoomManager implements Listener {
             data.getRoomData(event.getRoom().getRoomConfig().name).victoryCount++;
             data.getRoomData(event.getRoom().getRoomConfig().name).gameCount++;
             event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
-        }
-        TeamInfo teamInfo = event.getTeamInfo();
-        if(teamInfo != null){
-            ThreadManager.addScheduled(new FairworksRunnable(5,teamInfo.getLivePlayer()));
         }
 
         event.getRoom().sendMessage("&a恭喜 "+event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()+" &a 获得了胜利!");

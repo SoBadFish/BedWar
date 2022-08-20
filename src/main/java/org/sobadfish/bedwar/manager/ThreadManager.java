@@ -53,13 +53,7 @@ public class ThreadManager {
     }
 
 
-    public static void addScheduled(AbstractBedWarRunnable runnable){
-        if(RUNNABLES.contains(runnable)){
-            AbstractBedWarRunnable runnable1 = RUNNABLES.get(RUNNABLES.indexOf(runnable));
-            runnable1.isClose = true;
-        }
-        schedule(runnable);
-    }
+
 
     public static String info() {
         StringBuilder builder = new StringBuilder();

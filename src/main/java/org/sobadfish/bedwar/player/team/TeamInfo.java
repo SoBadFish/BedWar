@@ -18,6 +18,7 @@ import org.sobadfish.bedwar.player.PlayerInfo;
 
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.GameRoom;
+import org.sobadfish.bedwar.tools.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -141,6 +142,7 @@ public class TeamInfo {
         return playerInfos;
     }
 
+
     public void echoVictory(){
         //TODO 当队伍胜利
         TeamVictoryEvent event = new TeamVictoryEvent(this,room,BedWarMain.getBedWarMain());
@@ -226,6 +228,7 @@ public class TeamInfo {
             echoDefeat();
             stop = true;
         }
+
     }
     public void placeBed(){
 //        if(!getTeamConfig().getBedPosition().getChunk().isLoaded()){
