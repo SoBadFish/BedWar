@@ -39,67 +39,72 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
 
     @Override
     public void run() {
-        if(isClose){
-            ThreadManager.cancel(this);
-        }
-
-        if(BedWarMain.getBedWarMain().isDisabled()){
-            isClose = true;
-            return;
-        }
-        List<GameRoom> gameRooms = new CopyOnWriteArrayList<>(BedWarMain.getRoomManager().getRooms().values());
-        for(GameRoom room: gameRooms){
-            long t1 = System.currentTimeMillis();
-            if(BedWarMain.getRoomManager().getRoom(room.getRoomConfig().name) == null){
-                RoomManager.LOCK_GAME.remove(room.getRoomConfig());
-                BedWarMain.getRoomManager().getRooms().remove(room.getRoomConfig().name);
-                continue;
+        try {
+            if (isClose) {
+                ThreadManager.cancel(this);
             }
 
-            if(room.close || room.getWorldInfo().getConfig().getGameWorld() == null){
-                continue;
+            if (BedWarMain.getBedWarMain().isDisabled()) {
+                isClose = true;
+                return;
             }
-            room.onUpdate();
-            for(PlayerInfo playerInfo:room.getPlayerInfos()){
-                if(playerInfo.cancel || playerInfo.isLeave){
-                    playerInfo.removeScoreBoard();
-
-                }else{
-                    playerInfo.onUpdate();
+            List<GameRoom> gameRooms = new CopyOnWriteArrayList<>(BedWarMain.getRoomManager().getRooms().values());
+            for (GameRoom room : gameRooms) {
+                long t1 = System.currentTimeMillis();
+                if (BedWarMain.getRoomManager().getRoom(room.getRoomConfig().name) == null) {
+                    RoomManager.LOCK_GAME.remove(room.getRoomConfig());
+                    BedWarMain.getRoomManager().getRooms().remove(room.getRoomConfig().name);
+                    continue;
                 }
 
-            }
+                if (room.close || room.getWorldInfo().getConfig().getGameWorld() == null) {
+                    continue;
+                }
+                room.onUpdate();
+                for (PlayerInfo playerInfo : room.getPlayerInfos()) {
+                    if (playerInfo.cancel || playerInfo.isLeave) {
+                        playerInfo.removeScoreBoard();
 
-            if(room.loadTime > 0) {
-                if(!room.getEventControl().hasEvent()){
-                    room.loadTime--;
+                    } else {
+                        playerInfo.onUpdate();
+                    }
+
                 }
 
-            }
-            try{
-                if(room.worldInfo != null){
-                    if(!room.worldInfo.isClose()){
-                        room.worldInfo.onUpdate();
+                if (room.loadTime > 0) {
+                    if (!room.getEventControl().hasEvent()) {
+                        room.loadTime--;
+                    }
+
+                }
+                try {
+                    if (room.worldInfo != null) {
+                        if (!room.worldInfo.isClose()) {
+                            room.worldInfo.onUpdate();
+                        }
+                    }
+                } catch (Exception ignore) {
+                }
+                for (FloatTextInfo floatTextInfo : room.getFloatTextInfos()) {
+                    if (!floatTextInfo.stringUpdate(room)) {
+                        break;
                     }
                 }
-            }catch (Exception ignore){}
-            for(FloatTextInfo floatTextInfo:room.getFloatTextInfos()){
-                if(!floatTextInfo.stringUpdate(room)){
-                    break;
-                }
-            }
-            if(room.worldInfo != null) {
-                for (ShopVillage shopVillage : room.getShopInfo().getShopVillages()) {
-                    if (shopVillage.isClosed()) {
-                        ShopVillage respawnVillage = new ShopVillage(room.getRoomConfig(), shopVillage.getInfoConfig(), shopVillage.getChunk(), Entity.getDefaultNBT(shopVillage));
-                        respawnVillage.yaw = shopVillage.yaw;
-                        respawnVillage.spawnToAll();
-                        room.getShopInfo().getShopVillages().remove(shopVillage);
-                        room.getShopInfo().getShopVillages().add(respawnVillage);
+                if (room.worldInfo != null) {
+                    for (ShopVillage shopVillage : room.getShopInfo().getShopVillages()) {
+                        if (shopVillage.isClosed()) {
+                            ShopVillage respawnVillage = new ShopVillage(room.getRoomConfig(), shopVillage.getInfoConfig(), shopVillage.getChunk(), Entity.getDefaultNBT(shopVillage));
+                            respawnVillage.yaw = shopVillage.yaw;
+                            respawnVillage.spawnToAll();
+                            room.getShopInfo().getShopVillages().remove(shopVillage);
+                            room.getShopInfo().getShopVillages().add(respawnVillage);
+                        }
                     }
                 }
+                time.put(room.getRoomConfig().name, System.currentTimeMillis() - t1);
             }
-            time.put(room.getRoomConfig().name,System.currentTimeMillis() - t1);
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
     }

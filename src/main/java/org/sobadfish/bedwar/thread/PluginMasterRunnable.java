@@ -38,42 +38,47 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
 
     @Override
     public void run() {
-        if(isClose){
-            ThreadManager.cancel(this);
-        }
         long t1 = System.currentTimeMillis();
-        if(BedWarMain.getBedWarMain().isDisabled()){
-            isClose = true;
-            return;
-        }
-        for (Player player : new ArrayList<>(Server.getInstance().getOnlinePlayers().values())) {
-            for (BedWarFloatText floatText : new ArrayList<>(FloatTextManager.floatTextList)) {
-                if (floatText == null) {
-                    continue;
-                }
-                if (floatText.isFinalClose) {
-                    FloatTextManager.removeFloatText(floatText);
-                    continue;
-                }
-                if(floatText.player.contains(player)){
-                    if(!player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName()) || !player.isOnline()) {
-                        if (!floatText.closed) {
-                            floatText.close();
-                        }
-                        floatText.player.remove(player);
-                    }
-                }
-                if(player.getLevel() == floatText.getPosition().getLevel()){
-                    floatText.player.add(player);
-                }
-
-                floatText.disPlayers();
-
+        try {
+            if (isClose) {
+                ThreadManager.cancel(this);
             }
 
-        }
-        worldReset();
+            if (BedWarMain.getBedWarMain().isDisabled()) {
+                isClose = true;
+                return;
+            }
+            for (Player player : new ArrayList<>(Server.getInstance().getOnlinePlayers().values())) {
+                for (BedWarFloatText floatText : new ArrayList<>(FloatTextManager.floatTextList)) {
+                    if (floatText == null) {
+                        continue;
+                    }
+                    if (floatText.isFinalClose) {
+                        FloatTextManager.removeFloatText(floatText);
+                        continue;
+                    }
+                    if (floatText.player.contains(player)) {
+                        if (!player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName()) || !player.isOnline()) {
+                            if (!floatText.closed) {
+                                floatText.close();
+                            }
+                            floatText.player.remove(player);
+                        }
+                    }
+                    if (player.getLevel() == floatText.getPosition().getLevel()) {
+                        floatText.player.add(player);
+                    }
 
+                    floatText.disPlayers();
+
+                }
+
+            }
+            worldReset();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         loadTime = System.currentTimeMillis() - t1;
     }
 

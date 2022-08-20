@@ -25,31 +25,34 @@ public class TopRunnable extends ThreadManager.AbstractBedWarRunnable {
 
     @Override
     public void run() {
-        long t1 = System.currentTimeMillis();
-        if(isClose){
-            ThreadManager.cancel(this);
-        }
-
-        if(BedWarMain.getBedWarMain().isDisabled()){
-            isClose = true;
-            return;
-        }
-        for(TopItemInfo topItem: BedWarMain.getTopManager().topItemInfos){
-            if(!BedWarMain.getTopManager().dataList.contains(topItem.topItem)){
-                topItem.floatText.toClose();
-                BedWarMain.getTopManager().topItemInfos.remove(topItem);
-                continue;
+        try {
+            long t1 = System.currentTimeMillis();
+            if (isClose) {
+                ThreadManager.cancel(this);
             }
-            if(topItem.floatText != null ){
-                if(topItem.floatText.player == null){
+
+            if (BedWarMain.getBedWarMain().isDisabled()) {
+                isClose = true;
+                return;
+            }
+            for (TopItemInfo topItem : BedWarMain.getTopManager().topItemInfos) {
+                if (!BedWarMain.getTopManager().dataList.contains(topItem.topItem)) {
+                    topItem.floatText.toClose();
+                    BedWarMain.getTopManager().topItemInfos.remove(topItem);
                     continue;
                 }
-                topItem.floatText.setText(topItem.topItem.getListText());
-            }else{
-                BedWarMain.getTopManager().topItemInfos.remove(topItem);
+                if (topItem.floatText != null) {
+                    if (topItem.floatText.player == null) {
+                        continue;
+                    }
+                    topItem.floatText.setText(topItem.topItem.getListText());
+                } else {
+                    BedWarMain.getTopManager().topItemInfos.remove(topItem);
+                }
             }
+            time = t1 - System.currentTimeMillis();
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        time = t1 - System.currentTimeMillis();
-
     }
 }

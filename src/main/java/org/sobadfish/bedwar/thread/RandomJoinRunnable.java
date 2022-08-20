@@ -36,16 +36,20 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
 
     @Override
     public void run() {
-        int size = RandomJoinManager.newInstance().playerInfos.size();
-        List<RandomJoinManager.IPlayerInfo> copy = new ArrayList<>(RandomJoinManager.newInstance().playerInfos);
-        for(int i = 0;i < size ;i++){
-            RandomJoinManager.IPlayerInfo iPlayerInfo = copy.get(i);
-            if(joinRandomRoom(iPlayerInfo)){
-                RandomJoinManager.newInstance().playerInfos.remove(iPlayerInfo);
+        try {
+            int size = RandomJoinManager.newInstance().playerInfos.size();
+            List<RandomJoinManager.IPlayerInfo> copy = new ArrayList<>(RandomJoinManager.newInstance().playerInfos);
+            for (int i = 0; i < size; i++) {
+                RandomJoinManager.IPlayerInfo iPlayerInfo = copy.get(i);
+                if (joinRandomRoom(iPlayerInfo)) {
+                    RandomJoinManager.newInstance().playerInfos.remove(iPlayerInfo);
+                }
             }
-        }
-        RandomJoinManager.newInstance().playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info));
+            RandomJoinManager.newInstance().playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info));
 
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public boolean joinRandomRoom(RandomJoinManager.IPlayerInfo i){
         if(i == null){
