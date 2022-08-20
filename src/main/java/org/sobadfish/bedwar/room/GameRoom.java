@@ -171,12 +171,8 @@ public class GameRoom {
                 onWait();
                 break;
             case START:
-                for(FloatTextInfoConfig config: roomConfig.floatTextInfoConfigs){
-                    FloatTextInfo info = new FloatTextInfo(config).init();
-                    if(info != null){
-                        floatTextInfos.add(info);
-                    }
-                }
+
+
                 eventControl.enable = true;
                 worldInfo.isStart = true;
                 onStart();
@@ -230,6 +226,12 @@ public class GameRoom {
         hasStart = true;
         eventControl.run();
         if(loadTime == -1 && teamAll){
+            for(FloatTextInfoConfig config: roomConfig.floatTextInfoConfigs){
+                FloatTextInfo info = new FloatTextInfo(config).init();
+                if(info != null){
+                    floatTextInfos.add(info);
+                }
+            }
             //TODO 当房间开始
             for(TeamInfo t:teamInfos){
                 t.placeBed();
