@@ -4,9 +4,12 @@ package org.sobadfish.bedwar.room;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.*;
+import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
+import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.level.format.anvil.Chunk;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
@@ -821,6 +824,11 @@ public class GameRoom {
                 }
             }
             String level = worldInfo.getConfig().getLevel();
+            Level level1 = getWorldInfo().getConfig().getGameWorld();
+            for(Entity entity: level1.getEntities()){
+                entity.close();
+            }
+            level1.unloadChunks();
             worldInfo.setClose(true);
             worldInfo = null;
             WorldResetManager.RESET_QUEUE.put(getRoomConfig(),level);

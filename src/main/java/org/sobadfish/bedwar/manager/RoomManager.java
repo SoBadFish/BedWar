@@ -479,11 +479,17 @@ public class RoomManager implements Listener {
                     return;
                 } else {
                     if (block instanceof BlockTNT) {
-                        event.setCancelled();
-                        ((BlockTNT) block).prime(40);
-                        Item i2 = item.clone();
-                        i2.setCount(1);
-                        event.getPlayer().getInventory().removeItem(i2);
+                        try{
+                            event.setCancelled();
+                            ((BlockTNT) block).prime(40);
+                            Item i2 = item.clone();
+                            i2.setCount(1);
+                            event.getPlayer().getInventory().removeItem(i2);
+                        }catch (Exception e){
+                            event.setCancelled();
+                            return;
+                        }
+
                         return;
                     }
 
