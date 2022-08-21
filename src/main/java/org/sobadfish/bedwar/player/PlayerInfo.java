@@ -84,6 +84,7 @@ public class PlayerInfo {
 
     public PlayerEnderChestInventory eInventory;
 
+
     private LinkedHashMap<Integer,Item> armor = new LinkedHashMap<Integer,Item>(){
         {
             put(0,new ItemHelmetLeather());

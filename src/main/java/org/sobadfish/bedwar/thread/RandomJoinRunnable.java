@@ -113,7 +113,11 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
             }
             i.name = names.get(0);
             if (names.size() > 1) {
-                i.name = names.get(Utils.rand(0, names.size()));
+                int r = Utils.rand(0, names.size());
+                if(r >= names.size()){
+                    r = names.size() - 1;
+                }
+                i.name = names.get(r);
                 if (roomManager.hasRoom(i.name)) {
                     if (roomManager.getStrings().size() == names.size()) {
                         return false;
