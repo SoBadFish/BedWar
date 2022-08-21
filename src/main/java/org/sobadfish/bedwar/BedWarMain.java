@@ -74,9 +74,11 @@ public class BedWarMain extends PluginBase {
                 sendMessageToConsole("&c"+s+" 插件未加载，部分功能可能无法实现");
                 continue;
             }
-            updata.AutoData.defaultUpData(this, this.getFile(), "Sobadfish", "BedWar");
+            try{
+                Class.forName("updata.AutoData");
+                updata.AutoData.defaultUpData(this, this.getFile(), "Sobadfish", "BedWar");
 
-
+            }catch (Exception ignore){}
             sendMessageToConsole("&a检测到 "+s+" 插件");
             if(s.equalsIgnoreCase("RsNPC") || s.equalsIgnoreCase("RsNPCX")){
                 sendMessageToConsole("&7正在对接 "+s+" 插件");
