@@ -55,6 +55,7 @@ public class BedWarMain extends PluginBase {
     public void onEnable() {
         bedWarMain = this;
         //  TODO 初始化文件
+
         checkServer();
         this.getLogger().info(TextFormat.colorize('&',"&b   ____           ___          __"));
         this.getLogger().info(TextFormat.colorize('&',"&b  |  _ \\         | \\ \\        / /"));
@@ -66,6 +67,24 @@ public class BedWarMain extends PluginBase {
         this.getLogger().info(TextFormat.colorize('&',"&e正在加载BedWar 起床战争插件 本版本为&av"+this.getDescription().getVersion()+"&e 开源版本"));
         this.getLogger().info(TextFormat.colorize('&',"&c插件作者:&b sobadfish(某吃瓜咸鱼) &aQQ：&e1586235767"));
         this.getLogger().info(TextFormat.colorize('&',"&c本插件为原创插件 部分源代码出处已标明原作者"));
+        sendMessageToConsole("&a正在检查相应的依赖");
+        for(String s : this.getDescription().getSoftDepend()){
+            Plugin plugin = getServer().getPluginManager().getPlugin(s);
+            if(plugin == null){
+                sendMessageToConsole("&c"+s+" 插件未加载，部分功能可能无法实现");
+                continue;
+            }
+            updata.AutoData.defaultUpData(this, this.getFile(), "Sobadfish", "BedWar");
+
+
+            sendMessageToConsole("&a检测到 "+s+" 插件");
+            if(s.equalsIgnoreCase("RsNPC") || s.equalsIgnoreCase("RsNPCX")){
+                sendMessageToConsole("&7正在对接 "+s+" 插件");
+                BedWarVariable.init();
+                sendMessageToConsole("&a对接 "+s+" 插件完成");
+                break;
+            }
+        }
         Entity.registerEntity("FireBall", EntityFireBall.class);
         Entity.registerEntity(EntityBlueWitherSkull.class.getSimpleName(), EntityBlueWitherSkull.class);
         Entity.registerEntity(IronGolem.class.getSimpleName(), IronGolem.class);
@@ -86,24 +105,7 @@ public class BedWarMain extends PluginBase {
 
         sendMessageToConsole("&e当前内置 &a"+RoomEventManager.EVENT.size()+" &e个事件");
 
-        sendMessageToConsole("&a正在检查相应的依赖");
-        for(String s : this.getDescription().getSoftDepend()){
-            Plugin plugin = getServer().getPluginManager().getPlugin(s);
-            if(plugin == null){
-                sendMessageToConsole("&c"+s+" 插件未加载，部分功能可能无法实现");
-                continue;
-            }
-            updata.AutoData.defaultUpData(this, this.getFile(), "Sobadfish", "BedWar");
 
-
-            sendMessageToConsole("&a检测到 "+s+" 插件");
-            if(s.equalsIgnoreCase("RsNPC") || s.equalsIgnoreCase("RsNPCX")){
-                sendMessageToConsole("&7正在对接 "+s+" 插件");
-                BedWarVariable.init();
-                sendMessageToConsole("&a对接 "+s+" 插件完成");
-                break;
-            }
-        }
 
         ThreadManager.init();
         this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
