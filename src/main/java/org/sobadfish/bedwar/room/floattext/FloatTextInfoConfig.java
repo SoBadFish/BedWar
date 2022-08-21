@@ -11,11 +11,11 @@ public class FloatTextInfoConfig {
 
     public String name;
 
-    public Position position;
+    public String position;
 
     public String text;
 
-    public FloatTextInfoConfig(String name,Position position,String text){
+    public FloatTextInfoConfig(String name,String position,String text){
         this.name = name;
         this.position = position;
         this.text = text;
@@ -38,14 +38,14 @@ public class FloatTextInfoConfig {
         if(pos.equalsIgnoreCase("") || name.equalsIgnoreCase("")){
             return null;
         }
-        Position position = WorldInfoConfig.getPositionByString(pos);
-        return new FloatTextInfoConfig(name,position,text);
+//        Position position = WorldInfoConfig.getPositionByString(pos);
+        return new FloatTextInfoConfig(name,pos,text);
     }
 
     public Map<String,Object> toConfig(){
         Map<String,Object> conf = new LinkedHashMap<>();
         conf.put("name", name);
-        conf.put("position", WorldInfoConfig.positionToString(position));
+        conf.put("position", position);
         conf.put("text", text);
         return conf;
     }

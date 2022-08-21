@@ -190,11 +190,11 @@ public class WorldInfoConfig {
     public static Position getPositionByString(String str){
         String[] pos = str.split(":");
         Level level = Server.getInstance().getLevelByName(pos[3]);
-        if(level == null){
-            if(Server.getInstance().loadLevel(pos[3])){
-                level = Server.getInstance().getLevelByName(pos[3]);
-            }
-        }
+//        if(level == null){
+//            if(Server.getInstance().loadLevel(pos[3])){
+//                level = Server.getInstance().getLevelByName(pos[3]);
+//            }
+//        }
         return new Position(
                 Integer.parseInt(pos[0]),
                 Integer.parseInt(pos[1]),
@@ -207,11 +207,11 @@ public class WorldInfoConfig {
     public static Location getLocationByString(String str){
         String[] pos = str.split(":");
         Level level = Server.getInstance().getLevelByName(pos[3]);
-        if(level == null){
-            if(Server.getInstance().loadLevel(pos[3])){
-                level = Server.getInstance().getLevelByName(pos[3]);
-            }
-        }
+//        if(level == null){
+//            if(Server.getInstance().loadLevel(pos[3])){
+//                level = Server.getInstance().getLevelByName(pos[3]);
+//            }
+//        }
         return new Location(
                 Integer.parseInt(pos[0]),
                 Integer.parseInt(pos[1]),

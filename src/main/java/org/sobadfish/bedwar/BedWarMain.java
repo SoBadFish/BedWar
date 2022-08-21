@@ -22,9 +22,11 @@ import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.event.*;
 import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.variable.BedWarVariable;
+import updata.utils.UpData;
 
 import java.io.File;
 import java.util.LinkedHashMap;
+
 
 /**
  *   ____           ___          __
@@ -91,6 +93,9 @@ public class BedWarMain extends PluginBase {
                 sendMessageToConsole("&c"+s+" 插件未加载，部分功能可能无法实现");
                 continue;
             }
+            updata.AutoData.defaultUpData(this, this.getFile(), "Sobadfish", "BedWar");
+
+
             sendMessageToConsole("&a检测到 "+s+" 插件");
             if(s.equalsIgnoreCase("RsNPC") || s.equalsIgnoreCase("RsNPCX")){
                 sendMessageToConsole("&7正在对接 "+s+" 插件");
@@ -99,6 +104,7 @@ public class BedWarMain extends PluginBase {
                 break;
             }
         }
+
         ThreadManager.init();
         this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
 

@@ -9,6 +9,7 @@ import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfo;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,13 +92,16 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
                     }
                 }
                 if (room.worldInfo != null) {
-                    for (ShopVillage shopVillage : room.getShopInfo().getShopVillages()) {
-                        if (shopVillage.isClosed()) {
-                            ShopVillage respawnVillage = new ShopVillage(room.getRoomConfig(), shopVillage.getInfoConfig(), shopVillage.getChunk(), Entity.getDefaultNBT(shopVillage));
-                            respawnVillage.yaw = shopVillage.yaw;
-                            respawnVillage.spawnToAll();
-                            room.getShopInfo().getShopVillages().remove(shopVillage);
-                            room.getShopInfo().getShopVillages().add(respawnVillage);
+                    if(room.getType() != GameRoom.GameType.END || room.getType() != GameRoom.GameType.CLOSE) {
+
+                        for (ShopVillage shopVillage : new ArrayList<>(room.getShopInfo().getShopVillages())) {
+                            if (shopVillage.isClosed()) {
+                                ShopVillage respawnVillage = new ShopVillage(room.getRoomConfig(), shopVillage.getInfoConfig(), shopVillage.getChunk(), Entity.getDefaultNBT(shopVillage));
+                                respawnVillage.yaw = shopVillage.yaw;
+                                respawnVillage.spawnToAll();
+                                room.getShopInfo().getShopVillages().remove(shopVillage);
+                                room.getShopInfo().getShopVillages().add(respawnVillage);
+                            }
                         }
                     }
                 }

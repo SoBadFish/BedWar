@@ -13,6 +13,7 @@ import org.sobadfish.bedwar.room.GameRoomCreater;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.bedwar.top.TopItem;
+import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.util.LinkedHashMap;
 
@@ -127,7 +128,7 @@ public class BedWarAdminCommand extends Command {
                        commandSender.sendMessage("房间 "+strings[2]+" 不存在");
                        return false;
                    }
-                   if(strings[1].equalsIgnoreCase("remove")){
+                   if("remove".equalsIgnoreCase(strings[1])){
                        if(!roomConfig.hasFloatText(strings[3])){
                            commandSender.sendMessage("浮空字 "+strings[3]+" 不存在");
                            return false;
@@ -141,7 +142,7 @@ public class BedWarAdminCommand extends Command {
                            return false;
                        }
                        if(!roomConfig.hasFloatText(strings[3])){
-                           roomConfig.floatTextInfoConfigs.add(new FloatTextInfoConfig(strings[3],((Player) commandSender).getPosition(),strings[4]));
+                           roomConfig.floatTextInfoConfigs.add(new FloatTextInfoConfig(strings[3], WorldInfoConfig.positionToString(((Player) commandSender).getPosition()),strings[4]));
                            commandSender.sendMessage("成功添加浮空字");
                        }else{
                            commandSender.sendMessage("房间存在 "+strings[3]+"的浮空字");

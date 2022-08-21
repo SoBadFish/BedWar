@@ -1,11 +1,13 @@
 package org.sobadfish.bedwar.room.floattext;
 
+import cn.nukkit.level.Position;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.item.ItemInfo;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
+import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.io.IOException;
 
@@ -26,7 +28,8 @@ public class FloatTextInfo {
 //
 //        }
         try{
-            bedWarFloatText = BedWarFloatText.showFloatText(floatTextInfoConfig.name,floatTextInfoConfig.position,"");
+            Position position = WorldInfoConfig.getPositionByString(floatTextInfoConfig.position);
+            bedWarFloatText = BedWarFloatText.showFloatText(floatTextInfoConfig.name,position,"");
         }catch (Exception e){
             return null;
         }

@@ -49,6 +49,8 @@ public class GameRoom {
 
     private boolean hasStart;
 
+
+
     /**
      * 地图配置
      * */
@@ -419,6 +421,9 @@ public class GameRoom {
         if(roomConfig.getWorldInfo().getGameWorld() == null){
             return null;
         }
+        if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig)){
+            return null;
+        }
         return new GameRoom(roomConfig);
     }
 
@@ -452,6 +457,7 @@ public class GameRoom {
     }
 
     public JoinType joinPlayerInfo(PlayerInfo info,boolean sendMessage){
+
         if(info.getGameRoom() == null){
             if(info.getPlayer() instanceof Player) {
                 if(!((Player) info.getPlayer()).isOnline()){
@@ -826,6 +832,14 @@ public class GameRoom {
             String level = worldInfo.getConfig().getLevel();
             Level level1 = getWorldInfo().getConfig().getGameWorld();
             for(Entity entity: level1.getEntities()){
+                if(entity instanceof Player){
+                    entity.teleport(Server.getInstance().getDefaultLevel().getSpawnLocation());
+                    BedWarMain.getRoomManager().playerJoin.remove(entity.getName());
+                    ((Player) entity).setGamemode(0);
+                    entity.removeAllEffects();
+                    ((Player) entity).getInventory().clearAll();
+                    continue;
+                }
                 entity.close();
             }
             level1.unloadChunks();

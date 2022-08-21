@@ -81,7 +81,7 @@ public class RoomManager implements Listener {
     }
 
     private GameRoom getGameRoomByLevel(Level level){
-        for(GameRoom room : rooms.values()){
+        for(GameRoom room : new ArrayList<>(rooms.values())){
             if(room.getRoomConfig().worldInfo.getGameWorld() == null){
                 continue;
             }
@@ -418,6 +418,8 @@ public class RoomManager implements Listener {
         }
 
     }
+
+
     @EventHandler
     public void onCraft(CraftItemEvent event){
         Player player = event.getPlayer();
