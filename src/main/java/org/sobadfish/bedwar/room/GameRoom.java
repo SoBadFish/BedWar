@@ -457,7 +457,9 @@ public class GameRoom {
     }
 
     public JoinType joinPlayerInfo(PlayerInfo info,boolean sendMessage){
-
+        if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig)){
+            return JoinType.NO_JOIN;
+        }
         if(info.getGameRoom() == null){
             if(info.getPlayer() instanceof Player) {
                 if(!((Player) info.getPlayer()).isOnline()){
