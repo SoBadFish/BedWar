@@ -4,7 +4,7 @@
 
     <groupId>org.sobadfish.bedwar</groupId>
     <artifactId>BedWar</artifactId>
-    <version>1.7.1</version>
+    <version>1.7.2</version>
 
     <dependencies>
         <dependency>
@@ -35,6 +35,13 @@
             <version>1.2.3</version>
             <scope>system</scope>
             <systemPath> ${project.basedir}/lib/AutoUpData_v1.2.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.sakura</groupId>
+            <artifactId>Sakura</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath> ${project.basedir}/lib/Sakura-1.0.4-Release.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.smallaswater.npc</groupId>

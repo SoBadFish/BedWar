@@ -30,6 +30,7 @@ public class FireBall implements INbtItem{
             double f = 1.8D;
             double yaw = player.yaw;
             double pitch = player.pitch;
+            playerInfo.isSpawnFire = true;
             Location pos = new Location(player.x - Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 1.5D, player.y + (double) player.getEyeHeight(), player.z + Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 1.5D, yaw, pitch, player.level);
             EntityFireBall fireBall = new EntityFireBall(player.chunk, Entity.getDefaultNBT(pos));
             fireBall.setExplode(true);
@@ -37,6 +38,7 @@ public class FireBall implements INbtItem{
             fireBall.setMotion(new Vector3(-Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * f * f, -Math.sin(Math.toRadians(pitch)) * f * f, Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * f * f));
             fireBall.spawnToAll();
             player.getInventory().removeItem(item);
+            playerInfo.isSpawnFire = false;
         }
         return true;
     }

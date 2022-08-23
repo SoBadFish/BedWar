@@ -75,6 +75,8 @@ public class PlayerInfo {
 
     public int damageTime = 0;
 
+    public boolean isSpawnFire = false;
+
 
     /**
      *

@@ -8,6 +8,7 @@ import cn.nukkit.level.Position;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
+import org.sobadfish.bedwar.room.GameRoom;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +21,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class Platform implements INbtItem {
 
-    public static Timer timer = new Timer();
 
     @Override
     public String getName() {
@@ -51,16 +51,25 @@ public class Platform implements INbtItem {
             }
 
         }
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                for(Position block: new ArrayList<>(spawn.keySet())){
-                    if(info.getGameRoom().worldInfo.onChangeBlock(block.getLevelBlock(),false)){
-                        block.getLevel().setBlock(block,new BlockAir());
+        Timer timer = new Timer();
+        try{
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    for(Position block: new ArrayList<>(spawn.keySet())){
+                        if(info.getGameRoom() == null || info.getGameRoom().getType() != GameRoom.GameType.START){
+                            return;
+                        }
+                        if(info.getGameRoom().worldInfo.onChangeBlock(block.getLevelBlock(),false)){
+                            block.getLevel().setBlock(block,new BlockAir());
+                        }
                     }
                 }
-            }
-        },5000);
+            },5000);
+        }catch (Exception ignore){
+
+        }
+
 
         player.getInventory().removeItem(item);
     }

@@ -110,6 +110,8 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
         }
     }
 
+
+
     @Override
     public boolean attack(EntityDamageEvent source) {
         if (source instanceof EntityDamageByEntityEvent && ((EntityDamageByEntityEvent)source).getDamager() instanceof Player) {

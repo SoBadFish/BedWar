@@ -18,6 +18,7 @@ import org.sobadfish.bedwar.manager.*;
 import org.sobadfish.bedwar.manager.data.PlayerDataManager;
 import org.sobadfish.bedwar.manager.data.PlayerTopManager;
 import org.sobadfish.bedwar.panel.lib.AbstractFakeInventory;
+import org.sobadfish.bedwar.plugin.OtherListener;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.event.*;
 import org.sobadfish.bedwar.tools.Utils;
@@ -86,6 +87,11 @@ public class BedWarMain extends PluginBase {
                 sendMessageToConsole("&a对接 "+s+" 插件完成");
                 break;
             }
+            try{
+                Class.forName("et.catrainbow.sakura.event.PlayerCheatEvent");
+                this.getServer().getPluginManager().registerEvents(new OtherListener(),this);
+
+            }catch (Exception ignore){}
         }
         Entity.registerEntity("FireBall", EntityFireBall.class);
         Entity.registerEntity(EntityBlueWitherSkull.class.getSimpleName(), EntityBlueWitherSkull.class);
