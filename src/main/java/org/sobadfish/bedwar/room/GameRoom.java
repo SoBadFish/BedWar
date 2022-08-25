@@ -504,19 +504,19 @@ public class GameRoom {
 
         }else {
             if(info.getGameRoom().getType() != GameType.END && info.getGameRoom() == this){
-                if(info.getGameRoom().getType() != GameType.WAIT){
-                    info.getGameRoom().quitPlayerInfo(info,false);
-                    return JoinType.CAN_WATCH;
-                }
-                if(info.getTeamInfo() != null){
-                    info.death(null);
-                }else{
-                    info.getGameRoom().quitPlayerInfo(info,false);
-                    return JoinType.CAN_WATCH;
-                }
-
+                return JoinType.NO_JOIN;
+//                if(info.getGameRoom().getType() != GameType.WAIT){
+//                    info.getGameRoom().quitPlayerInfo(info,false);
+//                    return JoinType.CAN_WATCH;
+//                }
+//                if(info.getTeamInfo() != null){
+//                    info.death(null);
+//                }else{
+//                    info.getGameRoom().quitPlayerInfo(info,false);
+//                    return JoinType.CAN_WATCH;
+//                }
             }else{
-                info.getGameRoom().quitPlayerInfo(info,false);
+                info.getGameRoom().quitPlayerInfo(info,true);
                 return JoinType.CAN_WATCH;
             }
         }

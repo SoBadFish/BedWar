@@ -174,8 +174,9 @@ public class RoomManager implements Listener {
                         player.sendForceMessage("&c该房间开始后不允许旁观");
                     }else{
 
-                        if(player.getGameRoom() != null){
+                        if(player.getGameRoom() != null && !player.isWatch()){
                             player.sendForceMessage("&c你无法进入此房间");
+                            return false;
                         }else{
                             room.joinWatch(player);
                             return true;

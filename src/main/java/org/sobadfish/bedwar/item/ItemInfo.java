@@ -77,6 +77,7 @@ public class ItemInfo {
 
     public static EntityItem getEntityItem(Item item,Position position){
         try{
+
             CompoundTag itemTag = NBTIO.putItemHelper(item);
             itemTag.setName("Item");
             Position position1 = position.add(0.5,0.5,0.5);
@@ -111,17 +112,16 @@ public class ItemInfo {
             tick = 0;
             itemInfoConfig.getPositions().forEach(position -> {
 
-                ArrayList<EntityItem> entityItems = new ArrayList<>();
                 for (Entity entity : position.getLevel().getChunkEntities(position.getChunkX(), position.getChunkZ()).values()) {
                     if (entity instanceof EntityItem) {
                         if (((EntityItem) entity).getItem().equals(getItemInfoConfig().getMoneyItemInfoConfig().getItem())) {
-                            entityItems.add((EntityItem) entity);
+                            if(((EntityItem) entity).getItem().getCount() > 20){
+                                return;
+                            }
                         }
                     }
                 }
-                if (entityItems.size() > 10) {
-                    return;
-                }
+
                 try{
                     Item item = getItemInfoConfig().getMoneyItemInfoConfig().getItem();
                     EntityItem entityItem = getEntityItem(item, position);

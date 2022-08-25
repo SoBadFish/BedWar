@@ -448,9 +448,11 @@ public class PlayerInfo {
      * */
     public void cancel(){
         leave();
+
         cancel = true;
         disable = true;
         getGameRoom().getPlayerInfos().remove(this);
+        setGameRoom(null);
     }
 
 
