@@ -157,6 +157,10 @@ public class TeamInfo {
 
     }
 
+    public void sendActionBar(String msg){
+        teamPlayers.forEach(playerInfo ->
+                playerInfo.sendActionBar(msg));
+    }
 
     public void sendTip(String msg){
         teamPlayers.forEach(playerInfo ->

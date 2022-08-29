@@ -87,7 +87,7 @@ public class PlayerInfo {
     public PlayerEnderChestInventory eInventory;
 
 
-    public LinkedHashMap<Integer,Item> armor = new LinkedHashMap<Integer,Item>(){
+    private LinkedHashMap<Integer,Item> armor = new LinkedHashMap<Integer,Item>(){
         {
             put(0,new ItemHelmetLeather());
             put(1,new ItemChestplateLeather());
@@ -429,6 +429,18 @@ public class PlayerInfo {
             }
         }
 
+    }
+
+    /**
+     * 发送信息
+     * */
+    public void sendActionBar(String msg){
+        if(cancel || isLeave){
+            return;
+        }
+        if(getPlayer() instanceof Player) {
+            ((Player) getPlayer()).sendActionBar(msg);
+        }
     }
 
     /**

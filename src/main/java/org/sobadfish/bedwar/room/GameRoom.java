@@ -804,6 +804,12 @@ public class GameRoom {
         }
     }
 
+    public void sendActionBar(String msg){
+        for(PlayerInfo info: getPlayerInfos()){
+            info.sendActionBar(msg);
+        }
+    }
+
 
     /**
      * 关闭房间

@@ -231,6 +231,7 @@ public class BedWarMain extends PluginBase {
             bedWarMain.getLogger().info(message);
         }
     }
+    
 
     public static RoomManager getRoomManager() {
         return roomManager;

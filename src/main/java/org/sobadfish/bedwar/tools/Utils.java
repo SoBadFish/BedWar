@@ -30,6 +30,7 @@ import java.util.*;
  * 2022/1/8
  */
 public class Utils {
+
     private static final SplittableRandom RANDOM = new SplittableRandom(System.currentTimeMillis());
 
     public static int rand(int min, int max) {
@@ -327,7 +328,4 @@ public class Utils {
         }
 
     }
-
-
-
 }

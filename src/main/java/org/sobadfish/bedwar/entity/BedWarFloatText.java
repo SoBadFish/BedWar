@@ -104,8 +104,10 @@ public class BedWarFloatText extends Entity {
     private void toDisplay(){
         for(Player player: Server.getInstance().getOnlinePlayers().values()){
             if(!this.player.contains(player)) {
-                this.player.add(player);
-                spawnTo(player);
+                if(player.getLevel() == getLevel()){
+                    this.player.add(player);
+                    spawnTo(player);
+                }
             }
 
         }
