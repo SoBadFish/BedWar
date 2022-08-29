@@ -5,6 +5,7 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.item.ItemInfo;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
+import org.sobadfish.bedwar.manager.FloatTextManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
@@ -47,6 +48,10 @@ public class FloatTextInfo {
                     .replace("%"+config.getName()+"-time%", PlayerInfo.formatTime1((moneyItemInfoConfig.getResetTick() - moneyItemInfoConfig.getTick()))+"");
         }
         if(bedWarFloatText != null){
+            if(bedWarFloatText.isClosed()){
+                FloatTextManager.removeFloatText(bedWarFloatText);
+                init();
+            }
             bedWarFloatText.setText(text);
         }
         return true;

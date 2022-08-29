@@ -39,6 +39,7 @@ public class WorldInfoMasterThread extends PluginTask<BedWarMain> {
             }
             for (FloatTextInfo floatTextInfo : room.getFloatTextInfos()) {
                 if (!floatTextInfo.stringUpdate(room)) {
+
                     break;
                 }
             }
