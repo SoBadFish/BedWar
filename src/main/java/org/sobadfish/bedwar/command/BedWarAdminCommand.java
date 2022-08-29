@@ -26,7 +26,7 @@ public class BedWarAdminCommand extends Command {
 
     public BedWarAdminCommand(String name) {
         super(name);
-        this.usageMessage = "/bw help 查看指令帮助";
+        this.usageMessage = "/bd help 查看指令帮助";
         this.setPermission("op");
     }
 
