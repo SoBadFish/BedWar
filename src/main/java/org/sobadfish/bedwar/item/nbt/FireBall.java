@@ -6,6 +6,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.level.Location;
 import cn.nukkit.math.Vector3;
 import net.catrainbow.sakura.SakuraAPI;
+import net.catrainbow.sakura.SakuraAPIAB;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.EntityFireBall;
 import org.sobadfish.bedwar.player.PlayerInfo;
@@ -33,15 +34,9 @@ public class FireBall implements INbtItem{
             try{
                 //减小误判
                 Class.forName("et.catrainbow.sakura.SakuraAPI");
-                SakuraAPI sakuraAPI = new SakuraAPI();
-                /*淦..混淆的编译器 没法编译通过
-                SakuraAPI sakuraAPI = new SakuraAPI();
+
+                SakuraAPIAB sakuraAPI = new SakuraAPI();
                 sakuraAPI.addBypassTime((Player) playerInfo.getPlayer(),"KillAura",2);
-                */
-                Class<SakuraAPI> sakuraAPIClass = SakuraAPI.class;
-                Method method = sakuraAPIClass.getMethod("addBypassTime",Player.class,String.class,int.class);
-                method.setAccessible(true);
-                method.invoke(sakuraAPI, ((Player)playerInfo.getPlayer()),"KillAura",2);
 
             }catch (Exception ignore){}
             double f = 1.8D;
