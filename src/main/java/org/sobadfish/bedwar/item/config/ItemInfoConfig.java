@@ -25,7 +25,7 @@ public class ItemInfoConfig {
 
     private int spawnTick;
 
-    private ArrayList<String> positions;
+    private final ArrayList<String> positions;
 
 
     public ItemInfoConfig(MoneyItemInfoConfig moneyItemInfoConfig,ArrayList<String> positions,int spawnTick){

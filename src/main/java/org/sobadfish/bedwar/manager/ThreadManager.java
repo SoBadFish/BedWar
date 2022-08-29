@@ -17,7 +17,6 @@ import java.util.concurrent.*;
 public class ThreadManager {
 
 
-
     public static final List<AbstractBedWarRunnable> RUNNABLES = new CopyOnWriteArrayList<>();
 
     // 线程池核心线程数

@@ -30,6 +30,7 @@ import cn.nukkit.inventory.PlayerInventory;
 import cn.nukkit.inventory.transaction.InventoryTransaction;
 import cn.nukkit.inventory.transaction.action.InventoryAction;
 import cn.nukkit.item.Item;
+import cn.nukkit.item.ItemColorArmor;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
@@ -1153,6 +1154,18 @@ public class RoomManager implements Listener {
                     info.sendMessage("&c你已经加入了 "+teamInfo.toString());
                 }else{
                     info.sendMessage("&a加入了&r"+teamInfo.toString()+" &a成功");
+                    player.getInventory().setItem(0,teamInfo.getTeamConfig().getTeamConfig().getBlockWoolColor());
+                    for (Map.Entry<Integer, Item> entry : info.armor.entrySet()) {
+                        Item item;
+                        if(entry.getValue() instanceof ItemColorArmor){
+                            ItemColorArmor colorArmor = (ItemColorArmor) entry.getValue();
+                            colorArmor.setColor(teamInfo.getTeamConfig().getRgb());
+                            item = colorArmor;
+                        }else{
+                            item = entry.getValue();
+                        }
+                        player.getInventory().setArmorItem(entry.getKey(), item);
+                    }
                 }
             }
             return;
