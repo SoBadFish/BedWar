@@ -111,7 +111,6 @@ public class ItemInfo {
         if(resetTick > 0 && tick == resetTick || resetTick == -1 && tick == itemInfoConfig.getSpawnTick()){
             tick = 0;
             itemInfoConfig.getPositions().forEach(position -> {
-
                 for (Entity entity : position.getLevel().getChunkEntities(position.getChunkX(), position.getChunkZ()).values()) {
                     if (entity instanceof EntityItem) {
                         if (((EntityItem) entity).getItem().equals(getItemInfoConfig().getMoneyItemInfoConfig().getItem())) {

@@ -176,8 +176,6 @@ public class GameRoom {
                 onWait();
                 break;
             case START:
-
-
                 eventControl.enable = true;
                 worldInfo.isStart = true;
                 onStart();

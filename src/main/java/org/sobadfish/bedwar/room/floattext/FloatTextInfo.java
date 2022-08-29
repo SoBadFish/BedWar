@@ -22,11 +22,6 @@ public class FloatTextInfo {
     }
 
     public FloatTextInfo init(){
-//        if(!floatTextInfoConfig.position.getChunk().isLoaded()){
-//            floatTextInfoConfig.position.getLevel().loadChunk(floatTextInfoConfig.position.getChunkX(),floatTextInfoConfig.position.getChunkZ());
-//
-//
-//        }
         try{
             Position position = WorldInfoConfig.getPositionByString(floatTextInfoConfig.position);
             bedWarFloatText = BedWarFloatText.showFloatText(floatTextInfoConfig.name,position,"");

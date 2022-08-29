@@ -77,7 +77,6 @@ public class WorldInfo {
     }
 
     /**
-     * 20 tick 为1秒
      * 定时任务
      * */
     public boolean onUpdate(){

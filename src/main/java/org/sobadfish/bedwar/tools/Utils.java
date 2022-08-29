@@ -73,7 +73,7 @@ public class Utils {
         for (Entity player1 : player.level.getEntities()) {
 
             if (player1.x < player.x + size && player1.x > player.x - size && player1.z < player.z + size && player1.z > player.z - size && player1.y < player.y + size && player1.y > player.y - size) {
-                if (!isEntity && player instanceof Player) {
+                if (!isEntity && player instanceof Player && ((Player) player).getGamemode() != 3) {
                     explodePlayer.add(player1);
                 } else if (isEntity && !(player1 instanceof BaseEntity)) {
                     explodePlayer.add(player1);

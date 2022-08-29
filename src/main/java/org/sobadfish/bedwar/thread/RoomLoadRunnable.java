@@ -1,5 +1,6 @@
 package org.sobadfish.bedwar.thread;
 
+import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.ShopVillage;
@@ -81,30 +82,13 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
                 try {
                     if (room.worldInfo != null) {
                         if (!room.worldInfo.isClose()) {
-                            room.worldInfo.onUpdate();
+                            //把掉落物啥的扔回主线程
+                            Server.getInstance().getScheduler().scheduleTask(BedWarMain.getBedWarMain(),new WorldInfoMasterThread(room,room.worldInfo,BedWarMain.getBedWarMain()));
                         }
                     }
                 } catch (Exception ignore) {
                 }
-                for (FloatTextInfo floatTextInfo : room.getFloatTextInfos()) {
-                    if (!floatTextInfo.stringUpdate(room)) {
-                        break;
-                    }
-                }
-                if (room.worldInfo != null) {
-                    if(room.getType() != GameRoom.GameType.END || room.getType() != GameRoom.GameType.CLOSE) {
 
-                        for (ShopVillage shopVillage : new ArrayList<>(room.getShopInfo().getShopVillages())) {
-                            if (shopVillage.isClosed()) {
-                                ShopVillage respawnVillage = new ShopVillage(room.getRoomConfig(), shopVillage.getInfoConfig(), shopVillage.getChunk(), Entity.getDefaultNBT(shopVillage));
-                                respawnVillage.yaw = shopVillage.yaw;
-                                respawnVillage.spawnToAll();
-                                room.getShopInfo().getShopVillages().remove(shopVillage);
-                                room.getShopInfo().getShopVillages().add(respawnVillage);
-                            }
-                        }
-                    }
-                }
                 time.put(room.getRoomConfig().name, System.currentTimeMillis() - t1);
             }
         }catch (Exception e){
