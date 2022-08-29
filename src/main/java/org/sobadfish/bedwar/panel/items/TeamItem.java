@@ -88,7 +88,8 @@ public class TeamItem extends BasePlayPanelItemInstance {
             rc = (int) oInfo.getExp();
         }
         if (room.getRoomConfig().isExp()) {
-            u = info.reduceExp(count * level * rc);
+            //由于扣除经验落后一个等级
+            u = info.reduceExp(count * (level + 1)  * rc);
             errorMessage = "经验不足";
         } else {
             u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count * level);
