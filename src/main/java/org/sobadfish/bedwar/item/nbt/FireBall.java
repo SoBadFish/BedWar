@@ -1,14 +1,10 @@
 package org.sobadfish.bedwar.item.nbt;
 
 import cn.nukkit.Player;
-import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Location;
 import cn.nukkit.math.Vector3;
-import com.smallaswater.npc.RsNPC;
-import com.smallaswater.npc.command.RsNPCCommand;
-import com.smallaswater.npc.data.RsNpcConfig;
 import net.catrainbow.sakura.SakuraAPIAB;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.EntityFireBall;

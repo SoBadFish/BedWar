@@ -5,9 +5,9 @@ package org.sobadfish.bedwar.item.team;
  */
 public class TeamUp extends BaseTeamEffect{
 
-    private int[] delTime;
+    private final int[] delTime;
 
-    private String updateItem;
+    private final String updateItem;
 
 
     public TeamUp(int maxLevel

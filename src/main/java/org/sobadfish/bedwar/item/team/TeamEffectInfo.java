@@ -1,7 +1,5 @@
 package org.sobadfish.bedwar.item.team;
 
-import lombok.Data;
-
 /**
  * @author SoBadFish
  * 2022/1/6
@@ -9,7 +7,7 @@ import lombok.Data;
 
 public class TeamEffectInfo {
 
-    private BaseTeamEffect effect;
+    private final BaseTeamEffect effect;
 
     private int level = 1;
     public TeamEffectInfo(BaseTeamEffect effect){

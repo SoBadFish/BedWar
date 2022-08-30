@@ -8,7 +8,7 @@ import org.sobadfish.bedwar.panel.items.BasePlayPanelItemInstance;
  */
 public class ShopButton {
 
-    private BasePlayPanelItemInstance itemInstance;
+    private final BasePlayPanelItemInstance itemInstance;
 
     public ShopButton(BasePlayPanelItemInstance itemInstance){
         this.itemInstance = itemInstance;

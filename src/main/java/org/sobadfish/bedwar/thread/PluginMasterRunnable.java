@@ -2,21 +2,20 @@ package org.sobadfish.bedwar.thread;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.network.protocol.RemoveEntityPacket;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
-import org.sobadfish.bedwar.manager.*;
+import org.sobadfish.bedwar.manager.FloatTextManager;
+import org.sobadfish.bedwar.manager.RoomManager;
+import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.manager.WorldResetManager;
-import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
-import org.sobadfish.bedwar.room.WorldRoom;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
-import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
 
@@ -53,15 +52,19 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                     if (floatText == null) {
                         continue;
                     }
+
                     if (floatText.isFinalClose) {
                         FloatTextManager.removeFloatText(floatText);
                         continue;
                     }
                     if (floatText.player.contains(player)) {
                         if (!player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName()) || !player.isOnline()) {
-                            if (!floatText.closed) {
-                                floatText.close();
-                            }
+//                            if (!floatText.closed) {
+//                                floatText.close();
+//                            }
+                            RemoveEntityPacket entityPacket = new RemoveEntityPacket();
+                            entityPacket.eid = floatText.getId();
+                            player.dataPacket(entityPacket);
                             floatText.player.remove(player);
                         }
                     }

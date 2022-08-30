@@ -7,10 +7,11 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.network.protocol.RemoveEntityPacket;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.manager.FloatTextManager;
+import org.sobadfish.bedwar.room.GameRoom;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -21,6 +22,9 @@ public class BedWarFloatText extends Entity {
     public boolean isFinalClose;
 
     public String text = "";
+
+    //如果不为null 就是房间内的浮空字 到时候需要移除
+    public GameRoom room;
 
     public List<Player> player = new CopyOnWriteArrayList<>();
 
@@ -36,8 +40,6 @@ public class BedWarFloatText extends Entity {
     protected float getGravity() {
         return 0;
     }
-
-
 
 
     @Override
@@ -97,7 +99,14 @@ public class BedWarFloatText extends Entity {
 
     public void disPlayers(){
         for(Player player: player){
-            spawnTo(player);
+            if(player.getLevel() == getLevel()){
+                this.player.add(player);
+                spawnTo(player);
+            }else{
+                RemoveEntityPacket entityPacket = new RemoveEntityPacket();
+                entityPacket.eid = getId();
+                player.dataPacket(entityPacket);
+            }
         }
     }
 

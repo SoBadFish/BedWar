@@ -15,12 +15,9 @@ import org.sobadfish.bedwar.event.TeamVictoryEvent;
 import org.sobadfish.bedwar.item.team.TeamEffectInfo;
 import org.sobadfish.bedwar.item.team.TeamTrap;
 import org.sobadfish.bedwar.player.PlayerInfo;
-
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.GameRoom;
-import org.sobadfish.bedwar.tools.Utils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -40,7 +37,7 @@ public class TeamInfo {
 
     private boolean close;
 
-    private GameRoom room;
+    private final GameRoom room;
 
     private ArrayList<PlayerInfo> teamPlayers = new ArrayList<>();
 
@@ -50,7 +47,7 @@ public class TeamInfo {
     }
 
 
-    private ArrayList<TeamEffectInfo> teamEffects = new ArrayList<>();
+    private final ArrayList<TeamEffectInfo> teamEffects = new ArrayList<>();
 
 
 
@@ -235,17 +232,20 @@ public class TeamInfo {
 
     }
     public void placeBed(){
-//        if(!getTeamConfig().getBedPosition().getChunk().isLoaded()){
-////            try {
-////                getTeamConfig().getBedPosition().getChunk().load();
-////            } catch (IOException e) {
-////                e.printStackTrace();
-////            }
-//            getTeamConfig().getBedPosition().getLevel().loadChunk(getTeamConfig().getBedPosition().getChunkX(),getTeamConfig().getBedPosition().getChunkZ());
-//        }
-//        if(!getTeamConfig().getSpawnPosition().getChunk().isLoaded()){
-//            getTeamConfig().getSpawnPosition().getLevel().loadChunk(getTeamConfig().getSpawnPosition().getChunkX(),getTeamConfig().getSpawnPosition().getChunkZ());
-//        }
+        //尝试修复床透明的问题
+        if(!getTeamConfig().getBedPosition().getChunk().isLoaded()){
+//            try {
+//                getTeamConfig().getBedPosition().getChunk().load();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+            getTeamConfig().getBedPosition().getLevel().loadChunk(getTeamConfig().getBedPosition().getChunkX(),getTeamConfig().getBedPosition().getChunkZ());
+        }
+        if(!getTeamConfig().getSpawnPosition().getChunk().isLoaded()){
+            getTeamConfig().getSpawnPosition().getLevel().loadChunk(getTeamConfig().getSpawnPosition().getChunkX(),getTeamConfig().getSpawnPosition().getChunkZ());
+        }
+
+        BlockBed blockBed = new BlockBed();
         getTeamConfig().getBedPosition().getLevel().setBlock(getTeamConfig().getBedPosition(),Block.get(26,0),true,true);
         Position pos2 = getTeamConfig().getBedPosition().getSide(getTeamConfig().getBedFace());
         getTeamConfig().getBedPosition().getLevel().setBlock(pos2,Block.get(26,getTeamConfig().getBedFace().getHorizontalIndex()|8),true,true);

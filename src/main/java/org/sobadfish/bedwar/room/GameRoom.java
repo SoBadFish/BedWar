@@ -3,13 +3,14 @@ package org.sobadfish.bedwar.room;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.block.*;
+import cn.nukkit.block.Block;
+import cn.nukkit.block.BlockBed;
+import cn.nukkit.block.BlockChest;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
-import cn.nukkit.level.format.anvil.Chunk;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
@@ -31,7 +32,10 @@ import org.sobadfish.bedwar.shop.ShopInfo;
 import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.world.WorldInfo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -230,7 +234,7 @@ public class GameRoom {
         eventControl.run();
         if(loadTime == -1 && teamAll){
             for(FloatTextInfoConfig config: roomConfig.floatTextInfoConfigs){
-                FloatTextInfo info = new FloatTextInfo(config).init();
+                FloatTextInfo info = new FloatTextInfo(config).init(this);
                 if(info != null){
                     floatTextInfos.add(info);
                 }
@@ -825,6 +829,7 @@ public class GameRoom {
             GameCloseEvent event = new GameCloseEvent(this, BedWarMain.getBedWarMain());
             Server.getInstance().getPluginManager().callEvent(event);
             worldInfo.setClose(true);
+
             //TODO 房间被关闭 释放一些资源
             for (PlayerInfo info : playerInfos) {
                 info.clear();
@@ -835,6 +840,11 @@ public class GameRoom {
                     info.getTeamInfo().breakBed();
                 }
             }
+            //浮空字释放
+            for(FloatTextInfo floatTextInfo: floatTextInfos){
+                floatTextInfo.bedWarFloatText.toClose();
+            }
+
             String level = worldInfo.getConfig().getLevel();
             Level level1 = getWorldInfo().getConfig().getGameWorld();
             for(Entity entity: level1.getEntities()){
