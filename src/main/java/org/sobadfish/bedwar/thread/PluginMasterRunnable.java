@@ -2,7 +2,6 @@ package org.sobadfish.bedwar.thread;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.scheduler.PluginTask;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.manager.FloatTextManager;
@@ -32,7 +31,12 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
         if(isClose){
             color = "&7";
         }
-        return color+"插件主进程  浮空字 &7("+ FloatTextManager.floatTextList.size() +") &a"+loadTime+" ms";
+        StringBuilder s = new StringBuilder(color + "插件主进程  浮空字 &7(" + FloatTextManager.floatTextList.size() + ") &a" + loadTime + " ms\n");
+        for(BedWarFloatText floatText:FloatTextManager.floatTextList){
+            s.append("&r - ").append(floatText.name).append(" &7pos=(").append(floatText.getFloorX()).append(":").append(floatText.getFloorY()).append(":").append(floatText.getFloorZ()).append("-").append(floatText.getLevel().getFolderName()).append(")\n");
+        }
+
+        return s.toString();
     }
 
     @Override
@@ -65,10 +69,13 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                             floatText.player.remove(player);
                         }
                     }
-                    if (player.getLevel() == floatText.getPosition().getLevel()) {
-                        floatText.player.add(player);
+                    if (player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName())) {
+                        if(!floatText.player.contains(player)){
+                            floatText.player.add(player);
+                        }
+
                     }
-                    Server.getInstance().getScheduler().scheduleTask(BedWarMain.getBedWarMain(), new MasterFloatRunnable(BedWarMain.getBedWarMain(),floatText));
+                    floatText.disPlayers();
                 }
 
             }
@@ -80,22 +87,6 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
         loadTime = System.currentTimeMillis() - t1;
     }
 
-    private static class MasterFloatRunnable extends PluginTask<BedWarMain>{
-
-        private BedWarFloatText floatText;
-
-        public MasterFloatRunnable(BedWarMain bedWarMain,BedWarFloatText floatText) {
-            super(bedWarMain);
-            this.floatText = floatText;
-        }
-
-        @Override
-        public void onRun(int i) {
-            if(floatText != null && !floatText.isClosed()){
-                floatText.disPlayers();
-            }
-        }
-    }
 
     public void worldReset() {
         List<GameRoomConfig> bufferQueue = new ArrayList<>();

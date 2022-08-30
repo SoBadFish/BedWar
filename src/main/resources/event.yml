@@ -5,6 +5,6 @@
 # eventTime 为事件倒计时 单位为秒
 eventLists:
   - type: "custom"
-    display: "升级"
+    display: ""
     eventTime: 220
     value: "foreach:0-4"
