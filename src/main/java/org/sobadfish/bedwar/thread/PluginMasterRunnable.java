@@ -2,7 +2,7 @@ package org.sobadfish.bedwar.thread;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.network.protocol.RemoveEntityPacket;
+import cn.nukkit.scheduler.PluginTask;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.manager.FloatTextManager;
@@ -32,7 +32,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
         if(isClose){
             color = "&7";
         }
-        return color+"插件主进程  浮空字数量&7("+ FloatTextManager.floatTextList.size() +") &a"+loadTime+" ms";
+        return color+"插件主进程  浮空字 &7("+ FloatTextManager.floatTextList.size() +") &a"+loadTime+" ms";
     }
 
     @Override
@@ -59,21 +59,16 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                     }
                     if (floatText.player.contains(player)) {
                         if (!player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName()) || !player.isOnline()) {
-//                            if (!floatText.closed) {
-//                                floatText.close();
-//                            }
-                            RemoveEntityPacket entityPacket = new RemoveEntityPacket();
-                            entityPacket.eid = floatText.getId();
-                            player.dataPacket(entityPacket);
+                            if (!floatText.closed) {
+                                floatText.close();
+                            }
                             floatText.player.remove(player);
                         }
                     }
                     if (player.getLevel() == floatText.getPosition().getLevel()) {
                         floatText.player.add(player);
                     }
-
-                    floatText.disPlayers();
-
+                    Server.getInstance().getScheduler().scheduleTask(BedWarMain.getBedWarMain(), new MasterFloatRunnable(BedWarMain.getBedWarMain(),floatText));
                 }
 
             }
@@ -83,6 +78,23 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
             e.printStackTrace();
         }
         loadTime = System.currentTimeMillis() - t1;
+    }
+
+    private static class MasterFloatRunnable extends PluginTask<BedWarMain>{
+
+        private BedWarFloatText floatText;
+
+        public MasterFloatRunnable(BedWarMain bedWarMain,BedWarFloatText floatText) {
+            super(bedWarMain);
+            this.floatText = floatText;
+        }
+
+        @Override
+        public void onRun(int i) {
+            if(floatText != null && !floatText.isClosed()){
+                floatText.disPlayers();
+            }
+        }
     }
 
     public void worldReset() {

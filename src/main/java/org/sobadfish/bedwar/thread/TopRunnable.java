@@ -50,7 +50,7 @@ public class TopRunnable extends ThreadManager.AbstractBedWarRunnable {
                     BedWarMain.getTopManager().topItemInfos.remove(topItem);
                 }
             }
-            time = t1 - System.currentTimeMillis();
+            time = System.currentTimeMillis() - t1;
         }catch (Exception e){
             e.printStackTrace();
         }

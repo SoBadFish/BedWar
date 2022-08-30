@@ -100,12 +100,12 @@ public class BedWarFloatText extends Entity {
     public void disPlayers(){
         for(Player player: player){
             if(player.getLevel() == getLevel()){
-                this.player.add(player);
                 spawnTo(player);
             }else{
-                RemoveEntityPacket entityPacket = new RemoveEntityPacket();
-                entityPacket.eid = getId();
-                player.dataPacket(entityPacket);
+                this.player.remove(player);
+                RemoveEntityPacket dp = new RemoveEntityPacket();
+                dp.eid = getId();
+                player.dataPacket(dp);
             }
         }
     }
