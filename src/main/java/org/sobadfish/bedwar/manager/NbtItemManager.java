@@ -26,6 +26,7 @@ public class NbtItemManager {
         NBT_MANAGER.put("线",new Line());
         NBT_MANAGER.put("指南针",new PointPlayer());
         NBT_MANAGER.put("护卫",new SpawnMob());
+
         NBT_MANAGER.put("火球",new FireBall());
         NBT_MANAGER.put("凋零弓",new DieBow());
 

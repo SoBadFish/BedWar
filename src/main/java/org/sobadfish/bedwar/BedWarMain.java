@@ -52,6 +52,8 @@ public class BedWarMain extends PluginBase {
 
     public static UiType uiType;
 
+
+
     @Override
     public void onEnable() {
         bedWarMain = this;
@@ -80,6 +82,7 @@ public class BedWarMain extends PluginBase {
                 updata.AutoData.defaultUpData(this, this.getFile(), "Sobadfish", "BedWar");
 
             }catch (Exception ignore){}
+
             sendMessageToConsole("&a检测到 "+s+" 插件");
             if(s.equalsIgnoreCase("RsNPC") || s.equalsIgnoreCase("RsNPCX")){
                 sendMessageToConsole("&7正在对接 "+s+" 插件");
@@ -231,7 +234,7 @@ public class BedWarMain extends PluginBase {
             bedWarMain.getLogger().info(message);
         }
     }
-    
+
 
     public static RoomManager getRoomManager() {
         return roomManager;

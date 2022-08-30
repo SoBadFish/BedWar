@@ -1,17 +1,20 @@
 package org.sobadfish.bedwar.item.nbt;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Location;
 import cn.nukkit.math.Vector3;
-import net.catrainbow.sakura.SakuraAPI;
+import com.smallaswater.npc.RsNPC;
+import com.smallaswater.npc.command.RsNPCCommand;
+import com.smallaswater.npc.data.RsNpcConfig;
 import net.catrainbow.sakura.SakuraAPIAB;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.EntityFireBall;
 import org.sobadfish.bedwar.player.PlayerInfo;
 
-import java.lang.reflect.Method;
+
 
 
 /**
@@ -31,14 +34,16 @@ public class FireBall implements INbtItem{
     public boolean onClick(Item item, Player player) {
         PlayerInfo playerInfo = BedWarMain.getRoomManager().getPlayerInfo(player);
         if(playerInfo != null) {
-            try{
-                //减小误判
-                Class.forName("et.catrainbow.sakura.SakuraAPI");
+            try {
+                Class c = Class.forName("net.catrainbow.sakura.SakuraAPI");
+                SakuraAPIAB sakuraAPI = (SakuraAPIAB) c.newInstance();
+//                            net.catrainbow.sakura.SakuraAPIAB sakuraAPI = new net.catrainbow.sakura.SakuraAPI();
+                sakuraAPI.addBypassTime((Player) playerInfo.getPlayer(), "KillAura", 2);
+            } catch (Throwable ignore) {
+            }
 
-                SakuraAPIAB sakuraAPI = new SakuraAPI();
-                sakuraAPI.addBypassTime((Player) playerInfo.getPlayer(),"KillAura",2);
 
-            }catch (Exception ignore){}
+
             double f = 1.8D;
             double yaw = player.yaw;
             double pitch = player.pitch;
