@@ -99,7 +99,7 @@ public class BedWarFloatText extends Entity {
 
     public void disPlayers(){
         for(Player player: player){
-            if(player.getLevel() == getLevel()){
+            if(player.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())){
                 spawnTo(player);
             }else{
                 this.player.remove(player);
@@ -113,7 +113,7 @@ public class BedWarFloatText extends Entity {
     private void toDisplay(){
         for(Player player: Server.getInstance().getOnlinePlayers().values()){
             if(!this.player.contains(player)) {
-                if(player.getLevel() == getLevel()){
+                if(player.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())){
                     this.player.add(player);
                     spawnTo(player);
                 }

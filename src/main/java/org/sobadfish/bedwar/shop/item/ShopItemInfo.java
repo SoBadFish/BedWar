@@ -14,9 +14,9 @@ import java.util.ArrayList;
  */
 public class ShopItemInfo {
 
-    private String shopName;
+    private final String shopName;
 
-    private ArrayList<ShopInfoConfig> shopInfoConfigs;
+    private final ArrayList<ShopInfoConfig> shopInfoConfigs;
 
     private ShopItemInfo(String shopName, ArrayList<ShopInfoConfig> shopInfoConfigs){
         this.shopName = shopName;

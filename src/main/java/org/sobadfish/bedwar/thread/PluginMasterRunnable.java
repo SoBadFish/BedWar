@@ -2,6 +2,7 @@ package org.sobadfish.bedwar.thread;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.network.protocol.RemoveEntityPacket;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.manager.FloatTextManager;
@@ -31,9 +32,14 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
         if(isClose){
             color = "&7";
         }
-        StringBuilder s = new StringBuilder(color + "插件主进程  浮空字 &7(" + FloatTextManager.floatTextList.size() + ") &a" + loadTime + " ms\n");
+        StringBuilder s = new StringBuilder(color + "插件主进程  浮空字 &7(" +
+                FloatTextManager.floatTextList.size() + ") &a" + loadTime + " ms\n");
         for(BedWarFloatText floatText:FloatTextManager.floatTextList){
-            s.append("&r - ").append(floatText.name).append(" &7pos=(").append(floatText.getFloorX()).append(":").append(floatText.getFloorY()).append(":").append(floatText.getFloorZ()).append("-").append(floatText.getLevel().getFolderName()).append(")\n");
+            s.append("&r   - ").append(floatText.name).append(" &7pos=(")
+                    .append(floatText.getFloorX()).append(":")
+                    .append(floatText.getFloorY()).append(":")
+                    .append(floatText.getFloorZ()).append(":")
+                    .append(floatText.getLevel().getFolderName()).append(")\n");
         }
 
         return s.toString();
@@ -64,7 +70,9 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                     if (floatText.player.contains(player)) {
                         if (!player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName()) || !player.isOnline()) {
                             if (!floatText.closed) {
-                                floatText.close();
+                                RemoveEntityPacket rp = new RemoveEntityPacket();
+                                rp.eid = floatText.getId();
+                                player.dataPacket(rp);
                             }
                             floatText.player.remove(player);
                         }

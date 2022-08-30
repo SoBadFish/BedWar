@@ -21,11 +21,11 @@ public class ShopInfoConfig {
     /**
      * 分类
      * */
-    private ShopItemClassify classify;
+    private final ShopItemClassify classify;
 
     //TODO 转换为窗口
 
-    private ArrayList<BasePlayPanelItemInstance> shopItems;
+    private final ArrayList<BasePlayPanelItemInstance> shopItems;
 
     ShopInfoConfig(ShopItemClassify classify, ArrayList<BasePlayPanelItemInstance> shopItems){
         this.classify = classify;
