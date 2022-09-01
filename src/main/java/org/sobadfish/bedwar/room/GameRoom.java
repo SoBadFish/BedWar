@@ -868,6 +868,7 @@ public class GameRoom {
             WorldResetManager.RESET_QUEUE.put(getRoomConfig(),level);
         }else{
             worldInfo.setClose(true);
+            worldInfo = null;
             BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().name);
             RoomManager.LOCK_GAME.remove(getRoomConfig());
         }
