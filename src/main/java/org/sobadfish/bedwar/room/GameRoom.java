@@ -847,7 +847,7 @@ public class GameRoom {
 
             String level = worldInfo.getConfig().getLevel();
             Level level1 = getWorldInfo().getConfig().getGameWorld();
-            for(Entity entity: level1.getEntities()){
+            for(Entity entity: new CopyOnWriteArrayList<>(level1.getEntities())){
                 if(entity instanceof Player){
                     entity.teleport(Server.getInstance().getDefaultLevel().getSpawnLocation());
                     BedWarMain.getRoomManager().playerJoin.remove(entity.getName());
@@ -856,17 +856,18 @@ public class GameRoom {
                     ((Player) entity).getInventory().clearAll();
                     continue;
                 }
-                entity.close();
+                if(entity != null && !entity.isClosed()){
+                    entity.close();
+                }
+
             }
-            level1.unloadChunks();
+            //卸载区块就炸...
+//            level1.unloadChunks();
             worldInfo.setClose(true);
             worldInfo = null;
             WorldResetManager.RESET_QUEUE.put(getRoomConfig(),level);
         }else{
-
             worldInfo.setClose(true);
-            worldInfo = null;
-
             BedWarMain.getRoomManager().getRooms().remove(getRoomConfig().name);
             RoomManager.LOCK_GAME.remove(getRoomConfig());
         }
