@@ -27,6 +27,9 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
 
     private long loadTime = 0;
 
+    private int update = 0;
+
+
     @Override
     public GameRoom getRoom() {
         return null;
@@ -54,6 +57,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
     @Override
     public void run() {
         long t1 = System.currentTimeMillis();
+        update ++;
         try {
             if (isClose) {
                 ThreadManager.cancel(this);
@@ -89,7 +93,11 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                         }
 
                     }
-                    floatText.disPlayers();
+                    if(update > 5){
+                        floatText.disPlayers();
+                        update = 0;
+                    }
+
                 }
 
             }
