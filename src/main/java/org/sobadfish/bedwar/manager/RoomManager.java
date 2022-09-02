@@ -1085,8 +1085,13 @@ public class RoomManager implements Listener {
             String roomName = playerJoin.get(player.getName());
             GameRoom room = getRoom(roomName);
             if (room != null) {
+                if(room.getType() == GameType.WAIT){
+                    event.setCancelled();
+                    return;
+                }
                 Item item = event.getItem();
-                if (item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem") || item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")) {
+                if (item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem") || item.hasCompoundTag()
+                        || item.getNamedTag().getBoolean("choseTeam") || item.getNamedTag().getBoolean("follow")) {
                     event.setCancelled();
                 }
             }
