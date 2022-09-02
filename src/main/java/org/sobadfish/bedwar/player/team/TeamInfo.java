@@ -209,7 +209,7 @@ public class TeamInfo {
         }
         if(teamEffects.contains(new TeamEffectInfo(new TeamTrap(1)))){
             for(PlayerInfo playerInfo: room.getPlayerInfos()){
-                if( !playerInfo.isLive() || playerInfo.getPlayerType() == PlayerInfo.PlayerType.WATCH || playerInfo.getTeamInfo().equals(this) ){
+                if( !playerInfo.isLive() || playerInfo.isWatch() || playerInfo.getTeamInfo() == null || playerInfo.getTeamInfo().equals(this) ){
                     continue;
                 }
                 if(playerInfo.getPlayer().distance(getTeamConfig().getBedPosition()) <= 5){

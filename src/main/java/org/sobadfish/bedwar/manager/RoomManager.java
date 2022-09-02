@@ -18,7 +18,6 @@ import cn.nukkit.event.entity.*;
 import cn.nukkit.event.inventory.CraftItemEvent;
 import cn.nukkit.event.inventory.InventoryPickupItemEvent;
 import cn.nukkit.event.inventory.InventoryTransactionEvent;
-import cn.nukkit.event.level.ChunkUnloadEvent;
 import cn.nukkit.event.level.WeatherChangeEvent;
 import cn.nukkit.event.player.*;
 import cn.nukkit.form.element.ElementButton;
@@ -37,6 +36,7 @@ import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.command.BedWarCommand;
 import org.sobadfish.bedwar.entity.EntityFireBall;
+import org.sobadfish.bedwar.entity.ShopVillage;
 import org.sobadfish.bedwar.event.*;
 import org.sobadfish.bedwar.item.ItemIDSunName;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
@@ -58,7 +58,6 @@ import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.GameRoom.GameType;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
-import org.sobadfish.bedwar.entity.ShopVillage;
 import org.sobadfish.bedwar.tools.Utils;
 
 import java.io.File;
@@ -616,8 +615,12 @@ public class RoomManager implements Listener {
                             }
 
                         }else{
+                            if(info.isWatch() || info.getTeamInfo() == null){
+                                room1.joinWatch(info);
+                            }else{
+                                info.death(null);
+                            }
 
-                            info.death(null);
                         }
                     }else{
                         reset(player);
@@ -637,6 +640,7 @@ public class RoomManager implements Listener {
     }
 
     private void reset(Player player){
+        player.setNameTag(player.getName());
         playerJoin.remove(player.getName());
         player.setHealth(player.getMaxHealth());
         player.getInventory().clearAll();

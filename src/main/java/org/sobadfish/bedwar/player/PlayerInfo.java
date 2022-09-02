@@ -3,12 +3,10 @@ package org.sobadfish.bedwar.player;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
-
 import cn.nukkit.inventory.PlayerEnderChestInventory;
 import cn.nukkit.inventory.PlayerInventory;
 import cn.nukkit.item.*;
@@ -36,7 +34,6 @@ import org.sobadfish.bedwar.item.team.TeamEnchant;
 import org.sobadfish.bedwar.player.message.ScoreBoardMessage;
 import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
-import org.sobadfish.bedwar.room.config.GameRoomEventConfig;
 import org.sobadfish.bedwar.room.event.IGameRoomEvent;
 
 import java.text.SimpleDateFormat;
@@ -686,6 +683,7 @@ public class PlayerInfo {
     }
 
     public void death(EntityDamageEvent event){
+
         player.setHealth(player.getMaxHealth());
         if(player instanceof Player){
             ((Player) player).removeAllWindows();
