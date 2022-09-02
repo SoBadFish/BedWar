@@ -60,9 +60,10 @@ public class BedWarFloatText extends Entity {
 
     @Override
     public void close() {
+        super.close();
         if(isFinalClose){
             FloatTextManager.removeFloatText(this);
-            super.close();
+
         }
 
     }
@@ -78,6 +79,7 @@ public class BedWarFloatText extends Entity {
 
     @Override
     public boolean onUpdate(int i) {
+
         return super.onUpdate(i);
     }
 
@@ -100,6 +102,9 @@ public class BedWarFloatText extends Entity {
     public void disPlayers(){
         for(Player player: player){
             if(player.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())){
+                if(this.hasSpawned.containsValue(player)){
+                    this.despawnFrom(player);
+                }
                 spawnTo(player);
             }else{
                 this.player.remove(player);
