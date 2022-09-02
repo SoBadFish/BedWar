@@ -60,9 +60,9 @@ public class BedWarFloatText extends Entity {
 
     @Override
     public void close() {
-        super.close();
         if(isFinalClose){
             FloatTextManager.removeFloatText(this);
+            super.close();
         }
 
     }

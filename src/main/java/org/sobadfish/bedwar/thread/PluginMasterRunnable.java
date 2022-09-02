@@ -2,6 +2,7 @@ package org.sobadfish.bedwar.thread;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.level.Position;
 import cn.nukkit.network.protocol.RemoveEntityPacket;
 import cn.nukkit.scheduler.AsyncTask;
 import org.sobadfish.bedwar.BedWarMain;
@@ -17,6 +18,7 @@ import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Sobadfish
@@ -62,7 +64,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 return;
             }
             for (Player player : new ArrayList<>(Server.getInstance().getOnlinePlayers().values())) {
-                for (BedWarFloatText floatText : new ArrayList<>(FloatTextManager.floatTextList)) {
+                for (BedWarFloatText floatText : new CopyOnWriteArrayList<>(FloatTextManager.floatTextList)) {
                     if (floatText == null) {
                         continue;
                     }
