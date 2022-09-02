@@ -92,7 +92,7 @@ public class TeamItem extends BasePlayPanelItemInstance {
             u = info.reduceExp(count * (level + 1)  * rc);
             errorMessage = "经验不足";
         } else {
-            u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count * level);
+            u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count * (level + 1));
         }
 
         if (u) {
