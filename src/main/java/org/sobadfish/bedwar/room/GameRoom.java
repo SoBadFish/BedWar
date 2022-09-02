@@ -548,6 +548,10 @@ public class GameRoom {
                 }
             }
         }
+        if(teamInfos.size() == 1){
+            TeamInfo teamInfo = teamInfos.get(0);
+            noTeam.addAll(teamInfo.getTeamPlayers());
+        }
         while(noTeam.size() > 0){
             for (TeamInfo manager: teamInfos){
                 if(manager.getTeamPlayers().size() == 0

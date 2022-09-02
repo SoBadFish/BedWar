@@ -110,25 +110,29 @@ public class ItemInfo {
     public void toUpdate(){
         if(resetTick > 0 && tick == resetTick || resetTick == -1 && tick == itemInfoConfig.getSpawnTick()){
             tick = 0;
+
             itemInfoConfig.getPositions().forEach(position -> {
+                boolean canDrop = true;
                 for (Entity entity : position.getLevel().getChunkEntities(position.getChunkX(), position.getChunkZ()).values()) {
                     if (entity instanceof EntityItem) {
                         if (((EntityItem) entity).getItem().equals(getItemInfoConfig().getMoneyItemInfoConfig().getItem())) {
                             if(((EntityItem) entity).getItem().getCount() > 20){
-                                return;
+                                canDrop = false;
                             }
                         }
                     }
                 }
 
                 try{
-                    Item item = getItemInfoConfig().getMoneyItemInfoConfig().getItem();
-                    EntityItem entityItem = getEntityItem(item, position);
-                    if (entityItem != null) {
-                        entityItem.spawnToAll();
+                    if(canDrop) {
+                        Item item = getItemInfoConfig().getMoneyItemInfoConfig().getItem();
+                        EntityItem entityItem = getEntityItem(item, position);
+                        if (entityItem != null) {
+                            entityItem.spawnToAll();
+                        }
                     }
-                }catch (Exception e){
-                    throw new NullPointerException();
+                }catch (Exception ignore){
+
                 }
 
             });
