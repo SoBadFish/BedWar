@@ -575,7 +575,7 @@ public class PlayerInfo {
             lore.add("击杀数: &a"+killCount);
             lore.add("最终击杀数: &a"+endKillCount);
             lore.add("破坏床数: &a"+bedBreakCount);
-            lore.add("      ");
+            lore.add("       ");
         }
         Object obj = BedWarMain.getBedWarMain().getConfig().get("game-logo");
         if(obj instanceof List){
