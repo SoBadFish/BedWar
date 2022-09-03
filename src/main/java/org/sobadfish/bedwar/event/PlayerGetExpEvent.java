@@ -1,10 +1,9 @@
 package org.sobadfish.bedwar.event;
 
-import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.HandlerList;
 
-public class PlayerGetExpEvent extends Event implements Cancellable {
+public class PlayerGetExpEvent extends Event  {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -14,7 +13,7 @@ public class PlayerGetExpEvent extends Event implements Cancellable {
 
     private final String playerName;
 
-    private int exp;
+    private final int exp;
 
     private final String cause;
 
@@ -36,9 +35,6 @@ public class PlayerGetExpEvent extends Event implements Cancellable {
         return playerName;
     }
 
-    public void setExp(int exp) {
-        this.exp = exp;
-    }
 
 
 }

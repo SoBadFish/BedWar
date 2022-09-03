@@ -293,15 +293,20 @@ public class RoomManager implements Listener {
             player.sendMessage(TextFormat.colorize('&',"&b +"+event.getExp()+" ("+event.getCause()+")"));
             PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
             PlayerData data = BedWarMain.getDataManager().getData(playerName);
-            if(info.getGameRoom() == null){
+
+            if(info == null || info.getGameRoom() == null){
+                BedWarMain.sendTipMessageToObject(Utils.writeLine(21,"&a■"),player);
                 String line = String.format("%20s","");
                 player.sendMessage(line);
-                String inputTitle = "&b&l起床战争经验";
-                player.sendMessage(Utils.getCentontString(inputTitle,20));
-                player.sendMessage("&b等级 "+data.level+String.format("%"+inputTitle.length()+"s","")+" 等级 "+(data.level + 1));
-                player.sendMessage(data.getExpLine(20));
-                String d = String.format("%.1f",data.getExpPercent() * 100);
-                player.sendMessage(Utils.getCentontString("&b"+data.exp+" &7/ &a"+data.getNextLevelExp()+" &7("+d+"％)",20));
+                String inputTitle = "&b&l起床战争经验\n";
+                BedWarMain.sendTipMessageToObject(Utils.getCentontString(inputTitle,30),player);
+                BedWarMain.sendTipMessageToObject(Utils.getCentontString("&b等级 "+data.level+String.format("%"+inputTitle.length()+"s","")+" 等级 "+(data.level + 1)+"\n",30),player);
+
+                BedWarMain.sendTipMessageToObject("&7["+data.getExpLine(20)+"&7]\n",player);
+
+                String d = (int)(data.getExpPercent() * 100)+"";
+                BedWarMain.sendTipMessageToObject(Utils.getCentontString("&b"+data.exp+" &7/ &a"+data.getNextLevelExp()+" &7("+d+"％)",40)+"\n",player);
+                BedWarMain.sendTipMessageToObject(Utils.writeLine(21,"&a■"),player);
 
             }
         }

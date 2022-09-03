@@ -22,6 +22,7 @@ import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.event.*;
 import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.variable.BedWarVariable;
+import org.sobadfish.bedwar.variable.TipVariable;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -83,13 +84,15 @@ public class BedWarMain extends PluginBase {
 
             }catch (Exception ignore){}
 
-            sendMessageToConsole("&a检测到 "+s+" 插件");
-            if(s.equalsIgnoreCase("RsNPC") || s.equalsIgnoreCase("RsNPCX")){
-                sendMessageToConsole("&7正在对接 "+s+" 插件");
+            try{
+                Class.forName("com.smallaswater.npc.variable.BaseVariableV2");
                 BedWarVariable.init();
-                sendMessageToConsole("&a对接 "+s+" 插件完成");
-                break;
-            }
+            }catch (Exception ignore){}
+            try{
+                Class.forName("tip.utils.variables.BaseVariable");
+                TipVariable.init();
+            }catch (Exception ignore){}
+
 
         }
         Entity.registerEntity("FireBall", EntityFireBall.class);

@@ -487,7 +487,7 @@ public class PlayerInfo {
             teamName = "&7[旁观]";
         }
 
-        return data.getLevelString()+" "+teamName+playerName;
+        return "&7["+data.getLevelString()+"&7]&r "+teamName+playerName;
     }
 
     public TeamInfo getTeamInfo() {

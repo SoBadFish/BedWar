@@ -38,14 +38,7 @@ public class PlayerData {
 
 
     public void addExp(int exp,String cause,boolean event){
-        if(event) {
-            PlayerGetExpEvent expEvent = new PlayerGetExpEvent(name, exp,cause);
-            Server.getInstance().getPluginManager().callEvent(expEvent);
-            if (expEvent.isCancelled()) {
-                return;
-            }
-            exp = expEvent.getExp();
-        }
+
         this.exp += exp;
         if(this.exp >= getNextLevelExp()){
             this.exp -= getNextLevelExp();
@@ -60,12 +53,16 @@ public class PlayerData {
                 addExp(nExp,null,false);
             }
         }
+        if(event) {
+            PlayerGetExpEvent expEvent = new PlayerGetExpEvent(name, exp,cause);
+            Server.getInstance().getPluginManager().callEvent(expEvent);
+        }
     }
 
     public double getExpPercent(){
         double r = 0;
         if(this.exp > 0){
-            r = (double) this.exp / getNextLevelExp();
+            r = (double) this.exp / (double) getNextLevelExp();
         }
         return r;
     }
@@ -74,7 +71,19 @@ public class PlayerData {
         double r = getExpPercent();
         int l = (int) (size * r);
         int other = size - l;
-        return String.format("%"+l+"s","&b■")+String.format("%"+other+"s","&7■");
+        StringBuilder ls = new StringBuilder();
+        if(l > 0){
+            for(int i = 0;i < l;i++){
+                ls.append("&b■");
+            }
+        }
+        StringBuilder others = new StringBuilder();
+        if(other > 0){
+            for(int i = 0;i < other;i++){
+                others.append("&7■");
+            }
+       }
+        return ls.toString()+others.toString();
     }
 
     public String getColorByLevel(int level){
@@ -88,14 +97,16 @@ public class PlayerData {
     }
 
     public String getLevelString(){
-        return "&7["+getColorByLevel(level)+"☆&7]&r";
+        String str = "☆";
+        if(level > 1000){
+            str = "✪";
+        }
+        return getColorByLevel(level)+str;
     }
 
     public int getNextLevelExp(){
         double l = level;
-        if(l == 0){
-            l = 1;
-        }
+         l+= 1;
         if(l > 100){
             l = l / 100.0;
             l = l - (int) l;

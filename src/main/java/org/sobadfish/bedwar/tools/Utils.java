@@ -13,15 +13,15 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.scheduler.AsyncTask;
 import cn.nukkit.utils.DyeColor;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.baselib.BaseEntity;
-import org.sobadfish.bedwar.manager.ThreadManager;
-
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Random;
+import java.util.SplittableRandom;
 
 /**
  * 感谢MobPlugin插件开发组提供的AI算法
@@ -155,6 +155,15 @@ public class Utils {
         input = input.replace(' ','.');
         return justify(input,lineWidth,'c').replace('.',' ');
     }
+
+    public static String writeLine(int size,String line){
+        StringBuilder s = new StringBuilder();
+        for(int i = 0;i< size;i++){
+            s.append(line);
+        }
+        return s.toString();
+    }
+
     /**
      * 字符串居中算法
      *

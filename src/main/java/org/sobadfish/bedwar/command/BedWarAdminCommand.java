@@ -75,7 +75,7 @@ public class BedWarAdminCommand extends Command {
             commandSender.sendMessage("/bd tsl 读取模板的队伍数据与商店物品数据");
             commandSender.sendMessage("/bd see 查看所有加载的房间");
             commandSender.sendMessage("/bd close [名称] 关闭房间");
-            commandSender.sendMessage("/bd exp [玩家] [数量] 增加玩家经验");
+            commandSender.sendMessage("/bd exp [玩家] [数量] <由来> 增加玩家经验");
             commandSender.sendMessage("/bd status 查看线程状态");
             commandSender.sendMessage("/bd end 停止模板预设");
             commandSender.sendMessage("/bd float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字");
@@ -187,9 +187,13 @@ public class BedWarAdminCommand extends Command {
                 try {
                     exp = Integer.parseInt(expString);
                 }catch (Exception ignore){}
+                String cause = "指令给予";
+                if(strings.length > 3){
+                    cause = strings[3];
+                }
                 if(exp > 0){
                     PlayerData playerData = BedWarMain.getDataManager().getData(playerName);
-                    playerData.addExp(exp,"指令给予");
+                    playerData.addExp(exp,cause);
                     commandSender.sendMessage("成功给予玩家 "+playerName+" "+exp+" 点经验");
                 }else{
                     commandSender.sendMessage("经验必须大于0");
