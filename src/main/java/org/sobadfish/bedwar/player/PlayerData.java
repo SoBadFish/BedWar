@@ -1,5 +1,10 @@
 package org.sobadfish.bedwar.player;
 
+import cn.nukkit.Server;
+import org.sobadfish.bedwar.BedWarMain;
+import org.sobadfish.bedwar.event.PlayerGetExpEvent;
+import org.sobadfish.bedwar.event.PlayerLevelChangeEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -7,6 +12,11 @@ import java.util.Objects;
 public class PlayerData {
 
     public String name = "";
+
+    public int exp;
+
+    public int level;
+
 
     public List<RoomData> roomData = new ArrayList<>();
 
@@ -17,6 +27,86 @@ public class PlayerData {
         }
         return c;
     }
+
+    public int getExp() {
+        return exp;
+    }
+
+    public void addExp(int exp,String cause){
+        addExp(exp,cause,true);
+    }
+
+
+    public void addExp(int exp,String cause,boolean event){
+        if(event) {
+            PlayerGetExpEvent expEvent = new PlayerGetExpEvent(name, exp,cause);
+            Server.getInstance().getPluginManager().callEvent(expEvent);
+            if (expEvent.isCancelled()) {
+                return;
+            }
+            exp = expEvent.getExp();
+        }
+        this.exp += exp;
+        if(this.exp >= getNextLevelExp()){
+            this.exp -= getNextLevelExp();
+            PlayerLevelChangeEvent event1 = new PlayerLevelChangeEvent(name,level,1);
+            Server.getInstance().getPluginManager().callEvent(event1);
+            if(event1.isCancelled()){
+                return;
+            }
+            level += event1.getNewLevel();
+            int nExp = this.exp - getNextLevelExp();
+            if(nExp > 0){
+                addExp(nExp,null,false);
+            }
+        }
+    }
+
+    public double getExpPercent(){
+        double r = 0;
+        if(this.exp > 0){
+            r = (double) this.exp / getNextLevelExp();
+        }
+        return r;
+    }
+
+    public String getExpLine(int size){
+        double r = getExpPercent();
+        int l = (int) (size * r);
+        int other = size - l;
+        return String.format("%"+l+"s","&b■")+String.format("%"+other+"s","&7■");
+    }
+
+    public String getColorByLevel(int level){
+        String[] color = new String[]{"&7","&f","&6","&b","&2","&3","&4","&d","&6","&e"};
+        if(level < 100){
+            return color[0];
+        }else{
+            return color[(level / 100) % 10];
+        }
+
+    }
+
+    public String getLevelString(){
+        return "&7["+getColorByLevel(level)+"☆&7]&r";
+    }
+
+    public int getNextLevelExp(){
+        double l = level;
+        if(l == 0){
+            l = 1;
+        }
+        if(l > 100){
+            l = l / 100.0;
+            l = l - (int) l;
+            l *= 100;
+            if(l <= 0){
+                l = 1;
+            }
+        }
+       return (int)l * BedWarMain.getUpExp();
+    }
+
 
 
     public static class RoomData{

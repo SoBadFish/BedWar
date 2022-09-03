@@ -27,6 +27,11 @@ public class RandomJoinManager {
 
     public List<IPlayerInfo> playerInfos = new CopyOnWriteArrayList<>();
 
+    public void nextJoin(PlayerInfo info){
+        //TODO 匹配下一局 程序分配
+        info.getGameRoom().quitPlayerInfo(info,true);
+        join(info,null);
+    }
 
     public void join(PlayerInfo info, String name){
         if(info.getGameRoom() != null && info.getGameRoom().getType() != GameRoom.GameType.END){

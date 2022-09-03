@@ -11,6 +11,10 @@ save-playerInventory:  true
 # ui 强制箱子界面
 shop-ui: auto
 
+# 递增经验
+# 每下一级的经验为 up-exp * 等级
+up-exp: 500
+
 game-logo:
   - "&l&cB&6e&ed&aW&ba&9r"
 

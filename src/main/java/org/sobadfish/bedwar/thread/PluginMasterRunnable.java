@@ -2,7 +2,6 @@ package org.sobadfish.bedwar.thread;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.level.Position;
 import cn.nukkit.network.protocol.RemoveEntityPacket;
 import cn.nukkit.scheduler.AsyncTask;
 import org.sobadfish.bedwar.BedWarMain;
@@ -27,6 +26,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
 
     private long loadTime = 0;
 
+    //浮空字一秒更新一次会跳
     private int update = 0;
 
 

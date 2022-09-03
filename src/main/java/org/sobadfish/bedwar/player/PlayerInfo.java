@@ -52,6 +52,8 @@ public class PlayerInfo {
 
     public int deathCount = 0;
 
+    public int updateTime = 0;
+
     private EntityHuman player;
 
     private PlayerType playerType;
@@ -475,16 +477,17 @@ public class PlayerInfo {
     }
     @Override
     public String toString(){
+        PlayerData data = BedWarMain.getDataManager().getData(getName());
         String teamName = "&r";
         String playerName = "&7"+player.getName();
-
         if(teamInfo != null && !isWatch()){
             teamName = "&7[&r"+teamInfo.getTeamConfig().getNameColor()+teamInfo.getTeamConfig().getName()+"&7]&r";
             playerName = teamInfo.getTeamConfig().getNameColor()+" &7"+player.getName();
         }else if(isWatch()){
             teamName = "&7[旁观]";
         }
-        return teamName+playerName;
+
+        return data.getLevelString()+" "+teamName+playerName;
     }
 
     public TeamInfo getTeamInfo() {
@@ -595,6 +598,7 @@ public class PlayerInfo {
         if(gameRoom != null && gameRoom.getType() == GameRoom.GameType.END){
             return;
         }
+        updateTime++;
         if(isWatch()){
             if(player instanceof Player){
                 if(((Player) player).getGamemode() != 3){
@@ -609,6 +613,12 @@ public class PlayerInfo {
                     }
                 }
 
+            }
+        }else{
+            if(updateTime % 60 == 0){
+                //每 60s 增加25经验
+                PlayerData data = BedWarMain.getDataManager().getData(getName());
+                data.addExp(25,"时长奖励");
             }
         }
         if(damageTime > 0){

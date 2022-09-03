@@ -1,6 +1,7 @@
 package org.sobadfish.bedwar.command;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.utils.TextFormat;
@@ -74,6 +75,7 @@ public class BedWarAdminCommand extends Command {
             commandSender.sendMessage("/bd tsl 读取模板的队伍数据与商店物品数据");
             commandSender.sendMessage("/bd see 查看所有加载的房间");
             commandSender.sendMessage("/bd close [名称] 关闭房间");
+            commandSender.sendMessage("/bd exp [玩家] [数量] 增加玩家经验");
             commandSender.sendMessage("/bd status 查看线程状态");
             commandSender.sendMessage("/bd end 停止模板预设");
             commandSender.sendMessage("/bd float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字");
@@ -168,6 +170,30 @@ public class BedWarAdminCommand extends Command {
                     }else{
                         BedWarMain.sendMessageToObject("&c"+config.getName()+" (未启动)",commandSender);
                     }
+                }
+                break;
+            case "exp":
+                if(strings.length < 3){
+                    commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
+                    return false;
+                }
+                String playerName = strings[1];
+                Player player = Server.getInstance().getPlayer(playerName);
+                if(player != null){
+                    playerName = player.getName();
+                }
+                String expString = strings[2];
+                int exp = 0;
+                try {
+                    exp = Integer.parseInt(expString);
+                }catch (Exception ignore){}
+                if(exp > 0){
+                    PlayerData playerData = BedWarMain.getDataManager().getData(playerName);
+                    playerData.addExp(exp,"指令给予");
+                    commandSender.sendMessage("成功给予玩家 "+playerName+" "+exp+" 点经验");
+                }else{
+                    commandSender.sendMessage("经验必须大于0");
+                    return false;
                 }
                 break;
             case "tsl":

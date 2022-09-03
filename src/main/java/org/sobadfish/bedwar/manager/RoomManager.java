@@ -277,12 +277,35 @@ public class RoomManager implements Listener {
             room.getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
             if(event.getRoom().getRoomConfig().isAutomaticNextRound){
                 info.sendMessage("&7即将自动进行下一局");
-                RandomJoinManager.joinManager.join(info,null);
+                RandomJoinManager.joinManager.nextJoin(info);
 //                ThreadManager.addThread(new AutoJoinGameRoomRunnable(5,info,event.getRoom(),null));
 
             }
 
         }
+    }
+
+    @EventHandler
+    public void onGetExp(PlayerGetExpEvent event){
+        String playerName = event.getPlayerName();
+        Player player = Server.getInstance().getPlayer(playerName);
+        if(player != null){
+            player.sendMessage(TextFormat.colorize('&',"&b +"+event.getExp()+" ("+event.getCause()+")"));
+            PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
+            PlayerData data = BedWarMain.getDataManager().getData(playerName);
+            if(info.getGameRoom() == null){
+                String line = String.format("%20s","");
+                player.sendMessage(line);
+                String inputTitle = "&b&l起床战争经验";
+                player.sendMessage(Utils.getCentontString(inputTitle,20));
+                player.sendMessage("&b等级 "+data.level+String.format("%"+inputTitle.length()+"s","")+" 等级 "+(data.level + 1));
+                player.sendMessage(data.getExpLine(20));
+                String d = String.format("%.1f",data.getExpPercent() * 100);
+                player.sendMessage(Utils.getCentontString("&b"+data.exp+" &7/ &a"+data.getNextLevelExp()+" &7("+d+"％)",20));
+
+            }
+        }
+
     }
 
     @EventHandler

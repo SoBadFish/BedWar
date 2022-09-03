@@ -206,15 +206,6 @@ public class GameRoom {
     private void onEnd(){
         if(loadTime == -1){
             loadTime = 10;
-
-            //房间结束后的执行逻辑
-            if(getRoomConfig().isAutomaticNextRound){
-                sendMessage("&7即将自动进行下一局");
-                for(PlayerInfo playerInfo: getInRoomPlayers()){
-                    RandomJoinManager.joinManager.join(playerInfo,null);
-                }
-            }
-
         }
 
         for(PlayerInfo playerInfo:getLivePlayers()){
@@ -833,15 +824,23 @@ public class GameRoom {
             GameCloseEvent event = new GameCloseEvent(this, BedWarMain.getBedWarMain());
             Server.getInstance().getPluginManager().callEvent(event);
             worldInfo.setClose(true);
-
-            //TODO 房间被关闭 释放一些资源
-            for (PlayerInfo info : playerInfos) {
-                info.clear();
-                if (info.getPlayer() instanceof Player) {
-                    quitPlayerInfo(info, true);
+            //房间结束后的执行逻辑
+            if(getRoomConfig().isAutomaticNextRound){
+                sendMessage("&7即将自动进行下一局");
+                for(PlayerInfo playerInfo: getInRoomPlayers()){
+                    RandomJoinManager.joinManager.nextJoin(playerInfo);
                 }
-                if (info.getTeamInfo() != null) {
-                    info.getTeamInfo().breakBed();
+            }else {
+                //TODO 房间被关闭 释放一些资源
+                for (PlayerInfo info : playerInfos) {
+                    info.clear();
+                    if (info.getPlayer() instanceof Player) {
+                        quitPlayerInfo(info, true);
+                    }
+                    //没必要破坏床
+//                    if (info.getTeamInfo() != null) {
+//                        info.getTeamInfo().breakBed();
+//                    }
                 }
             }
             //浮空字释放
@@ -853,6 +852,7 @@ public class GameRoom {
             Level level1 = getWorldInfo().getConfig().getGameWorld();
             for(Entity entity: new CopyOnWriteArrayList<>(level1.getEntities())){
                 if(entity instanceof Player){
+                    //这里出现的玩家就是没有清出地图的玩家
                     entity.teleport(Server.getInstance().getDefaultLevel().getSpawnLocation());
                     BedWarMain.getRoomManager().playerJoin.remove(entity.getName());
                     ((Player) entity).setGamemode(0);

@@ -11,7 +11,6 @@ import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.command.BedWarAdminCommand;
 import org.sobadfish.bedwar.command.BedWarCommand;
 import org.sobadfish.bedwar.command.BedWarSpeakCommand;
-import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.entity.EntityBlueWitherSkull;
 import org.sobadfish.bedwar.entity.EntityFireBall;
 import org.sobadfish.bedwar.entity.IronGolem;
@@ -50,6 +49,8 @@ public class BedWarMain extends PluginBase {
     private static PlayerTopManager topManager;
 
     public static UiType uiType;
+
+    public static int upExp;
 
 
 
@@ -125,6 +126,7 @@ public class BedWarMain extends PluginBase {
         saveDefaultConfig();
         reloadConfig();
         uiType = Utils.loadUiTypeByName(getConfig().getString("shop-ui","auto"));
+        upExp = getConfig().getInt("up-exp",500);
         NbtItemManager.init();
         File mainFileDir = new File(this.getDataFolder()+File.separator+"rooms");
         if(!mainFileDir.exists()){
@@ -151,6 +153,10 @@ public class BedWarMain extends PluginBase {
         }
 
 
+    }
+
+    public static int getUpExp(){
+        return upExp;
     }
 
     public static PlayerTopManager getTopManager() {
