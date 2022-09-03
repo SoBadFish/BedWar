@@ -101,7 +101,7 @@ public class PlayerData {
         if(level > 1000){
             str = "✪";
         }
-        return getColorByLevel(level)+str;
+        return getColorByLevel(level)+level+str;
     }
 
     public int getNextLevelExp(){
