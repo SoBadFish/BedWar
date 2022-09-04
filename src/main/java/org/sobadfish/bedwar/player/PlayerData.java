@@ -97,7 +97,7 @@ public class PlayerData {
     }
 
     public String getLevelString(){
-        String str = "☆";
+        String str = "✫";
         if(level > 1000){
             str = "✪";
         }
