@@ -1,5 +1,6 @@
 package org.sobadfish.bedwar.thread;
 
+import cn.nukkit.Player;
 import cn.nukkit.Server;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.manager.*;
@@ -43,6 +44,23 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
                 RandomJoinManager.IPlayerInfo iPlayerInfo = copy.get(i);
                 if (joinRandomRoom(iPlayerInfo)) {
                     RandomJoinManager.newInstance().playerInfos.remove(iPlayerInfo);
+                }
+            }
+            for(RandomJoinManager.IPlayerInfo info: RandomJoinManager.newInstance().playerInfos){
+                if(info.cancel){
+                    RandomJoinManager.newInstance().playerInfos.remove(info);
+                    continue;
+                }
+                if(!joinRandomRoom(info)){
+                    if(info.isNext){
+                        if(info.getPlayerInfo().getPlayer() instanceof Player) {
+                            info.getPlayerInfo().clear();
+                            info.getPlayerInfo().getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+
+                        }
+                    }
+                    RandomJoinManager.newInstance().playerInfos.remove(info);
+
                 }
             }
             RandomJoinManager.newInstance().playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info));

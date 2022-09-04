@@ -104,6 +104,21 @@ public class PlayerData {
         return getColorByLevel(level)+level+str;
     }
 
+    public String getExpString(int exp){
+        double e = exp;
+        e /= 1000;
+        if(e < 10){
+            return String.format("%.1f",e)+"k";
+        }else{
+            e /= 10;
+            if(e < 1000){
+                return String.format("%.1f",e)+"w";
+            }else{
+                return String.format("%.1f",e)+"bill";
+            }
+        }
+    }
+
     public int getNextLevelExp(){
         double l = level;
          l+= 1;

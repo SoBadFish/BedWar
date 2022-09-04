@@ -211,6 +211,12 @@ public class GameRoom {
         for(PlayerInfo playerInfo:getLivePlayers()){
             Utils.spawnFirework(playerInfo.getPosition());
         }
+        if(getRoomConfig().isAutomaticNextRound){
+            sendMessage("&7即将自动进行下一局");
+            for(PlayerInfo playerInfo: getInRoomPlayers()){
+                RandomJoinManager.joinManager.nextJoin(playerInfo);
+            }
+        }
 
         if(loadTime == 0){
             type = GameType.CLOSE;
@@ -825,24 +831,19 @@ public class GameRoom {
             Server.getInstance().getPluginManager().callEvent(event);
             worldInfo.setClose(true);
             //房间结束后的执行逻辑
-            if(getRoomConfig().isAutomaticNextRound){
-                sendMessage("&7即将自动进行下一局");
-                for(PlayerInfo playerInfo: getInRoomPlayers()){
-                    RandomJoinManager.joinManager.nextJoin(playerInfo);
+            //TODO 房间被关闭 释放一些资源
+            for (PlayerInfo info : playerInfos) {
+                info.clear();
+                if (info.getPlayer() instanceof Player) {
+                    quitPlayerInfo(info, true);
                 }
-            }else {
-                //TODO 房间被关闭 释放一些资源
-                for (PlayerInfo info : playerInfos) {
-                    info.clear();
-                    if (info.getPlayer() instanceof Player) {
-                        quitPlayerInfo(info, true);
-                    }
-                    //没必要破坏床
+                //没必要破坏床
 //                    if (info.getTeamInfo() != null) {
 //                        info.getTeamInfo().breakBed();
 //                    }
-                }
             }
+
+
             //浮空字释放
             for(FloatTextInfo floatTextInfo: floatTextInfos){
                 floatTextInfo.bedWarFloatText.toClose();

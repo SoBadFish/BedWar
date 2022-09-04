@@ -290,7 +290,7 @@ public class RoomManager implements Listener {
         String playerName = event.getPlayerName();
         Player player = Server.getInstance().getPlayer(playerName);
         if(player != null){
-            player.sendMessage(TextFormat.colorize('&',"&b +"+event.getExp()+" ("+event.getCause()+")"));
+            player.sendMessage(TextFormat.colorize('&',"&b +"+event.getExp()+" 经验("+event.getCause()+")"));
             PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
             PlayerData data = BedWarMain.getDataManager().getData(playerName);
 
@@ -305,7 +305,7 @@ public class RoomManager implements Listener {
                 BedWarMain.sendTipMessageToObject("&7["+data.getExpLine(20)+"&7]\n",player);
 
                 String d = (int)(data.getExpPercent() * 100)+"";
-                BedWarMain.sendTipMessageToObject(Utils.getCentontString("&b"+data.exp+" &7/ &a"+data.getNextLevelExp()+" &7("+d+"％)",40)+"\n",player);
+                BedWarMain.sendTipMessageToObject(Utils.getCentontString("&b"+data.getExpString(data.exp)+" &7/ &a"+data.getExpString(data.getNextLevelExp())+" &7("+d+"％)",40)+"\n",player);
                 BedWarMain.sendTipMessageToObject(Utils.writeLine(21,"&a■"),player);
 
             }

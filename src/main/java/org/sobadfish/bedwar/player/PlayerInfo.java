@@ -928,6 +928,7 @@ public class PlayerInfo {
                 player.getEnderChestInventory().clearAll();
                 player.getInventory().clearAll();
                 ((Player) player).getFoodData().reset();
+                player.removeAllEffects();
             }
         }
 

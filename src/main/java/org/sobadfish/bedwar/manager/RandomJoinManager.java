@@ -1,6 +1,8 @@
 package org.sobadfish.bedwar.manager;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
+import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 
@@ -29,19 +31,35 @@ public class RandomJoinManager {
 
     public void nextJoin(PlayerInfo info){
         //TODO 匹配下一局 程序分配
-        info.getGameRoom().quitPlayerInfo(info,true);
-        join(info,null);
+        info.clear();
+        if(info.getGameRoom() != null){
+            info.getGameRoom().getPlayerInfos().remove(info);
+        }
+        info.setGameRoom(null);
+        BedWarMain.getRoomManager().playerJoin.remove(info.getName());
+        join(new PlayerInfo(info.getPlayer()),null,true);
+
+
     }
 
     public void join(PlayerInfo info, String name){
+        join(info, name,false);
+    }
+
+    public void join(PlayerInfo info, String name,boolean isNext){
         if(info.getGameRoom() != null && info.getGameRoom().getType() != GameRoom.GameType.END){
             return;
         }
         IPlayerInfo iPlayerInfo = new IPlayerInfo();
         iPlayerInfo.playerInfo = info;
+        iPlayerInfo.isNext = isNext;
         if(playerInfos.contains(iPlayerInfo)){
             info.sendForceMessage("&c取消匹配");
             playerInfos.remove(iPlayerInfo);
+            if(isNext){
+                info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSpawnLocation());
+                info.clear();
+            }
             return;
         }
 
@@ -61,6 +79,8 @@ public class RandomJoinManager {
         public String name;
 
         public Date time;
+
+        public boolean isNext;
 
         public boolean cancel;
 

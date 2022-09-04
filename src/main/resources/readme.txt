@@ -85,3 +85,6 @@ value: "give @p 264 1"
 %bd-nextExp% 玩家下一级经验
 %bd-line% 玩家经验条
 %bd-per% 玩家经验百分比
+%bd-kill% 玩家击杀总数量
+%bd-victory% 玩家胜利场数
+%bd-bed% 玩家破坏床
