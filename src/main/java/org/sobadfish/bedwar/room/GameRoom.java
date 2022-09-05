@@ -498,16 +498,6 @@ public class GameRoom {
         }else {
             if(info.getGameRoom().getType() != GameType.END && info.getGameRoom() == this){
                 return JoinType.NO_JOIN;
-//                if(info.getGameRoom().getType() != GameType.WAIT){
-//                    info.getGameRoom().quitPlayerInfo(info,false);
-//                    return JoinType.CAN_WATCH;
-//                }
-//                if(info.getTeamInfo() != null){
-//                    info.death(null);
-//                }else{
-//                    info.getGameRoom().quitPlayerInfo(info,false);
-//                    return JoinType.CAN_WATCH;
-//                }
             }else{
                 info.getGameRoom().quitPlayerInfo(info,true);
                 return JoinType.CAN_WATCH;
@@ -581,6 +571,8 @@ public class GameRoom {
         return noTeam;
     }
 
+
+
     /**
      * 玩家离开游戏
      * */
@@ -589,7 +581,6 @@ public class GameRoom {
 
             if (info.getPlayer() instanceof Player) {
                 if (playerInfos.contains(info)) {
-                    info.setLeave(true);
                     PlayerQuitRoomEvent event = new PlayerQuitRoomEvent(info, this, BedWarMain.getBedWarMain());
                     Server.getInstance().getPluginManager().callEvent(event);
                     if (teleport) {
@@ -598,13 +589,10 @@ public class GameRoom {
                     info.cancel();
                     info.getPlayer().removeAllEffects();
                     ((Player) info.getPlayer()).setExperience(0, 0);
-                    if (((Player) info.getPlayer()).isOnline()) {
-                        BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
-                    }
+                    BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
                 } else {
-                    if (((Player) info.getPlayer()).isOnline()) {
-                        BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
-                    }
+                    BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
+
                 }
             } else {
                 info.getPlayer().close();
@@ -830,19 +818,19 @@ public class GameRoom {
                 for(PlayerInfo playerInfo: getInRoomPlayers()){
                     RandomJoinManager.joinManager.nextJoin(playerInfo);
                 }
-            }else {
-                //TODO 房间被关闭 释放一些资源
-                for (PlayerInfo info : playerInfos) {
-                    info.clear();
-                    if (info.getPlayer() instanceof Player) {
-                        quitPlayerInfo(info, true);
-                    }
-                    //没必要破坏床
+            }
+            //TODO 房间被关闭 释放一些资源
+            for (PlayerInfo info : playerInfos) {
+                info.clear();
+                if (info.getPlayer() instanceof Player) {
+                    quitPlayerInfo(info, true);
+                }
+                //没必要破坏床
 //                    if (info.getTeamInfo() != null) {
 //                        info.getTeamInfo().breakBed();
 //                    }
-                }
             }
+
             //浮空字释放
             for(FloatTextInfo floatTextInfo: floatTextInfos){
                 floatTextInfo.bedWarFloatText.toClose();

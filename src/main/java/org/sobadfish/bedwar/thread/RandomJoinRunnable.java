@@ -3,17 +3,17 @@ package org.sobadfish.bedwar.thread;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import org.sobadfish.bedwar.BedWarMain;
-import org.sobadfish.bedwar.manager.*;
+import org.sobadfish.bedwar.manager.PlayerHasChoseRoomManager;
+import org.sobadfish.bedwar.manager.RandomJoinManager;
+import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.WorldRoom;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.tools.Utils;
-import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -56,7 +56,6 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
                         if(info.getPlayerInfo().getPlayer() instanceof Player) {
                             info.getPlayerInfo().clear();
                             info.getPlayerInfo().getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
-
                         }
                     }
                     RandomJoinManager.newInstance().playerInfos.remove(info);

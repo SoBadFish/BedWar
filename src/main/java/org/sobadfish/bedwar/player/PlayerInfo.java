@@ -111,7 +111,6 @@ public class PlayerInfo {
     }
 
     public void setLeave(boolean leave) {
-
         isLeave = leave;
         if(leave){
             playerType = PlayerType.LEAVE;
@@ -484,7 +483,7 @@ public class PlayerInfo {
             teamName = "&7[&r"+teamInfo.getTeamConfig().getNameColor()+teamInfo.getTeamConfig().getName()+"&7]&r";
             playerName = teamInfo.getTeamConfig().getNameColor()+" &7"+player.getName();
         }else if(isWatch()){
-            teamName = "&7[旁观]";
+            teamName = "&7[旁观] ";
         }
 
         return "&7["+data.getLevelString()+"&7]&r "+teamName+playerName;
@@ -595,9 +594,10 @@ public class PlayerInfo {
      * 定时任务
      * */
     public void onUpdate(){
-        if(gameRoom != null && gameRoom.getType() == GameRoom.GameType.END){
+        if(gameRoom == null ||  gameRoom.getType() == GameRoom.GameType.END){
             return;
         }
+
         updateTime++;
         if(isWatch()){
             if(player instanceof Player){
@@ -639,9 +639,13 @@ public class PlayerInfo {
             }else{
                 if(spawnTime == 0 && !isSendkey){
                     isSendkey = true;
-                    sendTitle("&c你死了",gameRoom.reSpawnTime);
+                    if(gameRoom != null) {
+                        sendTitle("&c你死了", gameRoom.reSpawnTime);
+                    }
                 }
-                sendSubTitle((gameRoom.reSpawnTime - spawnTime)+" 秒后复活");
+                if(gameRoom != null) {
+                    sendSubTitle((gameRoom.reSpawnTime - spawnTime) + " 秒后复活");
+                }
                 spawnTime++;
             }
 
@@ -854,20 +858,7 @@ public class PlayerInfo {
     }
 
     private void leave(){
-        if(player instanceof Player){
-            if(((Player) player).isOnline()){
-                player.setNameTag(player.getName());
-                player.getInventory().clearAll();
-                ((Player) player).sendExperience(0);
-                if(inventory != null && eInventory != null){
-                    player.getInventory().setContents(inventory.getContents());
-                    player.getEnderChestInventory().setContents(eInventory.getContents());
-                }
-                if(getPlayer() instanceof Player) {
-                    ((Player) getPlayer()).setGamemode(0);
-                }
-            }
-        }
+        clear();
         if(getTeamInfo() != null){
             getTeamInfo().quit(this);
         }
@@ -922,16 +913,19 @@ public class PlayerInfo {
 
     public void clear(){
         if(player instanceof Player){
-            if(((Player) player).isOnline()) {
-                ((Player) player).setExperience(0,0);
-                ((Player) player).getUIInventory().clearAll();
-                player.getEnderChestInventory().clearAll();
+            if(((Player) player).isOnline()){
+                player.setNameTag(player.getName());
                 player.getInventory().clearAll();
-                ((Player) player).getFoodData().reset();
-                player.removeAllEffects();
+                ((Player) player).sendExperience(0);
+                if(inventory != null && eInventory != null){
+                    player.getInventory().setContents(inventory.getContents());
+                    player.getEnderChestInventory().setContents(eInventory.getContents());
+                }
+                if(getPlayer() instanceof Player) {
+                    ((Player) getPlayer()).setGamemode(0);
+                }
             }
         }
-
     }
 
     public void putEffect(ArrayList<TeamEffectInfo> effects){

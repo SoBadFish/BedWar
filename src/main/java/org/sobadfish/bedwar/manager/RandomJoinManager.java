@@ -29,16 +29,24 @@ public class RandomJoinManager {
 
     public void nextJoin(PlayerInfo info){
         //TODO 匹配下一局 程序分配
-//        info.getGameRoom().quitPlayerInfo(info,true);
-        join(info,null);
+        GameRoom gameRoom = info.getGameRoom();
+        if(gameRoom != null){
+            gameRoom.quitPlayerInfo(info,false);
+        }
+        join(info,null,true);
     }
 
     public void join(PlayerInfo info, String name){
+        join(info, name,false);
+    }
+
+    public void join(PlayerInfo info, String name,boolean isNext){
         if(info.getGameRoom() != null && info.getGameRoom().getType() != GameRoom.GameType.END){
             return;
         }
         IPlayerInfo iPlayerInfo = new IPlayerInfo();
         iPlayerInfo.playerInfo = info;
+        iPlayerInfo.isNext = isNext;
         if(playerInfos.contains(iPlayerInfo)){
             info.sendForceMessage("&c取消匹配");
             playerInfos.remove(iPlayerInfo);
@@ -63,6 +71,8 @@ public class RandomJoinManager {
         public Date time;
 
         public boolean cancel;
+
+        public boolean isNext;
 
         public PlayerInfo getPlayerInfo() {
             if(playerInfo != null && playerInfo.getPlayer() instanceof Player && !playerInfo.getPlayer().closed){
