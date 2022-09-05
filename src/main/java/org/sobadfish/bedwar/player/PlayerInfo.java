@@ -632,12 +632,13 @@ public class PlayerInfo {
 
             }
         }else{
-
-            if(gameRoom.getRoomConfig().minutesExp >0) {
-                if (updateTime % 60 == 0) {
-                    //每 60s 增加25经验
-                    PlayerData data = BedWarMain.getDataManager().getData(getName());
-                    data.addExp(gameRoom.getRoomConfig().minutesExp, "时长奖励");
+            if(gameRoom.getType() == GameRoom.GameType.START) {
+                if (gameRoom.getRoomConfig().minutesExp > 0) {
+                    if (updateTime % 60 == 0) {
+                        //每 60s 增加25经验
+                        PlayerData data = BedWarMain.getDataManager().getData(getName());
+                        data.addExp(gameRoom.getRoomConfig().minutesExp, "时长奖励");
+                    }
                 }
             }
         }
@@ -854,7 +855,7 @@ public class PlayerInfo {
             info.killCount++;
         }else{
             info.endKillCount++;
-            info.killCount++;
+//            info.killCount++;
         }
         if(!info.getPlayer().closed){
             if(isInRoom()){
@@ -882,6 +883,9 @@ public class PlayerInfo {
         }
         //助攻累计
         for(PlayerInfo playerInfo: assistsPlayers.keySet()){
+            if(playerInfo.equals(info)){
+                continue;
+            }
             playerInfo.assists++;
         }
     }
