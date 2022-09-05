@@ -602,8 +602,7 @@ public class RoomManager implements Listener {
                 if(!room.toBreakBlock(info,block)){
                     event.setCancelled();
                 }else{
-                    //防止一些无敌方块
-                    event.getBlock().getLevel().setBlock(event.getBlock(),Block.get(0),true);
+                    event.setCancelled(false);
                 }
 
             }
@@ -910,6 +909,22 @@ public class RoomManager implements Listener {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onProjectileHitEvent(ProjectileHitEvent event){
+        Entity entity = event.getMovingObjectPosition().entityHit;
+        Entity d = event.getEntity();
+        if(d instanceof EntityFireBall){
+            if(entity instanceof Player){
+                if(((EntityFireBall) d).getMaster() != null && ((EntityFireBall) d).getMaster().equals(new PlayerInfo((EntityHuman) entity))){
+                    event.setCancelled();
+                }
+                //照样爆炸
+                ((EntityFireBall) d).explode();
+            }
+
         }
     }
 
