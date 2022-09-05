@@ -708,7 +708,7 @@ public class GameRoom {
             Block block = info1.getTeamConfig().getBedPosition().getLevelBlock();
             if (block instanceof BlockBed) {
                 //TODO 判断一下床是否被保护的严实
-                if(isProtect(position)){
+                if(isProtect((BlockBed)position)){
                     info.sendMessage("&c这个床被方块包围，你至少要挖开一角");
                     return false;
                 }
@@ -729,11 +729,12 @@ public class GameRoom {
         return false;
     }
 
-    private boolean isProtect(Position block) {
+    private boolean isProtect(BlockBed block) {
         List<Block> blocks = new ArrayList<>();
-
+        Block block2 = block.getSide(block.getBlockFace());
         for(BlockFace fence: BlockFace.values()){
-            blocks.add(block.getLevelBlock().getSide(fence));
+            blocks.add(block.getSide(fence));
+            blocks.add(block2.getSide(fence));
         }
         for(Block block1: blocks){
             if(block1.getId() == 0){
