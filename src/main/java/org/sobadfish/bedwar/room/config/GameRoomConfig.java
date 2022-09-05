@@ -136,6 +136,11 @@ public class GameRoomConfig implements Cloneable{
     public int minutesExp = 25;
 
     /**
+     * 每分钟获得的经验
+     */
+    public int deathIcon = 20;
+
+    /**
      * 禁用指令
      * */
     public ArrayList<String> banCommand = new ArrayList<>();
@@ -308,6 +313,14 @@ public class GameRoomConfig implements Cloneable{
         this.waitTime = waitTime;
     }
 
+    public void setDeathIcon(int deathIcon) {
+        this.deathIcon = deathIcon;
+    }
+
+    public int getDeathIcon() {
+        return deathIcon;
+    }
+
     public void setMaxPlayerSize(int maxPlayerSize) {
         this.maxPlayerSize = maxPlayerSize;
     }
@@ -418,6 +431,7 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.victoryCommand = new ArrayList<>(room.getStringList("victoryCmd"));
                 roomConfig.defeatCommand = new ArrayList<>(room.getStringList("defeatCmd"));
                 roomConfig.minutesExp = room.getInt("minutesExp",25);
+                roomConfig.deathIcon = room.getInt("deathIcon",18);
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
                 if(room.exists("floatSpawnPos")){
                     for(Map map: room.getMapList("floatSpawnPos")){
@@ -502,6 +516,7 @@ public class GameRoomConfig implements Cloneable{
         config.set("defeatCmd",defeatCommand);
         config.set("victoryCmd",victoryCommand);
         config.set("minutesExp",minutesExp);
+        config.set("deathIcon",deathIcon);
         config.set("roomStartMessage",gameStartMessage);
         List<Map<String,Object>> pos = new ArrayList<>();
         for(FloatTextInfoConfig floatTextInfoConfig: floatTextInfoConfigs){

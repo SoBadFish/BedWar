@@ -24,6 +24,7 @@ AutomaticNextRound: true
 victoryCmd: []
 defeatCmd: []
 minutesExp: 25
+deathIcon: 20
 
 floatSpawnPos: []
 

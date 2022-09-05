@@ -339,7 +339,7 @@ public class RoomManager implements Listener {
         event.getRoom().sendTipMessage(Utils.getCentontString("&b游戏结束",line.length()));
         event.getRoom().sendTipMessage("");
         for(PlayerInfo playerInfo: event.getTeamInfo().getInRoomPlayer()){
-            event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getKillCount()+playerInfo.getEndKillCount())+" 破坏床数: "+playerInfo.getBedBreakCount()+" 助攻: "+playerInfo.getAssists(),line.length()));
+            event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getKillCount())+" 破坏床数: "+playerInfo.getBedBreakCount()+" 助攻: "+playerInfo.getAssists(),line.length()));
         }
         event.getRoom().sendTipMessage("&a"+line);
         for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {

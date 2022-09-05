@@ -16,6 +16,7 @@ import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
+import cn.nukkit.network.protocol.OnScreenTextureAnimationPacket;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.TextFormat;
 import de.theamychan.scoreboard.api.ScoreboardAPI;
@@ -750,6 +751,9 @@ public class PlayerInfo {
         }
 
         if(event != null) {
+            OnScreenTextureAnimationPacket packet = new OnScreenTextureAnimationPacket();
+            packet.effectId = getGameRoom().getRoomConfig().deathIcon;
+            ((Player)getPlayer()).dataPacket(packet);
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
                 if(damageByInfo != null){
                     gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 推入虚空。"+(end?" &b&l最终击杀!":""));
@@ -806,6 +810,8 @@ public class PlayerInfo {
 
             }
 
+
+
         }
         if(end && getGameRoom().getType() != GameRoom.GameType.END){
             gameRoom.sendMessage(this + " &e淘汰了");
@@ -855,7 +861,7 @@ public class PlayerInfo {
             info.killCount++;
         }else{
             info.endKillCount++;
-//            info.killCount++;
+            info.killCount++;
         }
         if(!info.getPlayer().closed){
             if(isInRoom()){
