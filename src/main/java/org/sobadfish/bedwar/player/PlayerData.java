@@ -73,8 +73,8 @@ public class PlayerData {
             level += event1.getNewLevel();
 
             int nExp = this.exp - getNextLevelExp();
-            this.exp -= getNextLevelExp();
             if(nExp > 0){
+                this.exp -= getNextLevelExp();
                 addExp(nExp,null,false);
             }
         }
