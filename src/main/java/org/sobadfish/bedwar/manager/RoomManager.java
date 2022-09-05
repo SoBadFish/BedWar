@@ -228,6 +228,7 @@ public class RoomManager implements Listener {
 
             GameRoom room = GameRoom.enableRoom(config);
             if(room == null){
+                RoomManager.LOCK_GAME.remove(config);
                 return false;
             }
             rooms.put(config.getName(),room);
