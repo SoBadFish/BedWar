@@ -83,8 +83,6 @@ public class BedWarFloatText extends Entity {
         return super.onUpdate(i);
     }
 
-    public int spawnTick = 0;
-
 
     public static BedWarFloatText showFloatText(String name,Position position, String text){
         BedWarFloatText text1;
