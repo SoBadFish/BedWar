@@ -182,7 +182,16 @@ public class GameRoom {
             case START:
                 eventControl.enable = true;
                 worldInfo.isStart = true;
-                onStart();
+                try {
+                    onStart();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    for(PlayerInfo playerInfo: new ArrayList<>(playerInfos)){
+                        playerInfo.sendForceMessage("房间出现异常 请联系服主/管理员修复");
+                    }
+                    onDisable();
+                    return;
+                }
 
                 break;
             case END:
@@ -233,9 +242,20 @@ public class GameRoom {
             //TODO 当房间开始
             for(TeamInfo t:teamInfos){
                 t.placeBed();
-                for(PlayerInfo i : t.getTeamPlayers()){
+
+            }
+            for(PlayerInfo i : getPlayerInfos()){
 //                    i.clear();
+                try {
                     i.spawn();
+                }catch (Exception e){
+                    i.sendForceMessage("&c出现未知原因影响导致无法正常传送 正在重新将你移动中");
+                    try {
+                        i.spawn();
+                    }catch (Exception e1){
+                        i.sendForceMessage("&c移动失败 请尝试重新进入游戏");
+                        quitPlayerInfo(i,true);
+                    }
                 }
             }
             sendTitle("&c游戏开始");

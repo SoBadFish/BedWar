@@ -889,8 +889,15 @@ public class PlayerInfo {
         player.getInventory().clearAll();
         this.exp = 0;
 
-        player.teleport(gameRoom.getRoomConfig().worldInfo.getGameWorld().getSpawnLocation());
-        player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
+        boolean teleport;
+        try {
+            teleport = player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
+        }catch (Exception e){
+            teleport = false;
+        }
+        if(!teleport){
+            throw new NullPointerException("无法将玩家传送到队伍出生点");
+        }
         if (getPlayer() instanceof Player) {
             ((Player) getPlayer()).setGamemode(0);
             if(gameRoom.getRoomConfig().isExp()){
