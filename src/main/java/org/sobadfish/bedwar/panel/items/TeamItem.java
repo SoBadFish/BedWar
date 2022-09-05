@@ -64,6 +64,7 @@ public class TeamItem extends BasePlayPanelItemInstance {
     private void onLevelUp(PlayerInfo info) {
         Player player = (Player) info.getPlayer();
         int level = getTeamInfoLevel(info);
+
         GameRoom room = info.getGameRoom();
         if (level == effect.getMaxLevel() && effect.equals(new TeamTrap(1))) {
             info.sendMessage("&c当前团队存在 &r" + getItem().getCustomName());
@@ -77,6 +78,7 @@ public class TeamItem extends BasePlayPanelItemInstance {
         // player.getInventory()) > count * level){
 
         // }
+        level++;
         if (level == 0) {
             level = 1;
         }
@@ -89,10 +91,10 @@ public class TeamItem extends BasePlayPanelItemInstance {
         }
         if (room.getRoomConfig().isExp()) {
             //由于扣除经验落后一个等级
-            u = info.reduceExp(count * (level + 1)  * rc);
+            u = info.reduceExp(count * (level)  * rc);
             errorMessage = "经验不足";
         } else {
-            u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count * (level + 1));
+            u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count * (level));
         }
 
         if (u) {

@@ -211,12 +211,6 @@ public class GameRoom {
         for(PlayerInfo playerInfo:getLivePlayers()){
             Utils.spawnFirework(playerInfo.getPosition());
         }
-        if(getRoomConfig().isAutomaticNextRound){
-            sendMessage("&7即将自动进行下一局");
-            for(PlayerInfo playerInfo: getInRoomPlayers()){
-                RandomJoinManager.joinManager.nextJoin(playerInfo);
-            }
-        }
 
         if(loadTime == 0){
             type = GameType.CLOSE;
@@ -726,7 +720,7 @@ public class GameRoom {
             Block block = info1.getTeamConfig().getBedPosition().getLevelBlock();
             if (block instanceof BlockBed) {
                 //TODO 判断一下床是否被保护的严实
-                if(isProtect((BlockBed) position)){
+                if(isProtect(position)){
                     info.sendMessage("&c这个床被方块包围，你至少要挖开一角");
                     return false;
                 }
@@ -747,12 +741,11 @@ public class GameRoom {
         return false;
     }
 
-    private boolean isProtect(BlockBed block) {
+    private boolean isProtect(Position block) {
         List<Block> blocks = new ArrayList<>();
-        Block block2 = block.getSide(block.getBlockFace());
+
         for(BlockFace fence: BlockFace.values()){
-            blocks.add(block.getSide(fence));
-            blocks.add(block2.getSide(fence));
+            blocks.add(block.getLevelBlock().getSide(fence));
         }
         for(Block block1: blocks){
             if(block1.getId() == 0){
@@ -832,19 +825,24 @@ public class GameRoom {
             Server.getInstance().getPluginManager().callEvent(event);
             worldInfo.setClose(true);
             //房间结束后的执行逻辑
-            //TODO 房间被关闭 释放一些资源
-            for (PlayerInfo info : playerInfos) {
-                info.clear();
-                if (info.getPlayer() instanceof Player) {
-                    quitPlayerInfo(info, true);
+            if(getRoomConfig().isAutomaticNextRound){
+                sendMessage("&7即将自动进行下一局");
+                for(PlayerInfo playerInfo: getInRoomPlayers()){
+                    RandomJoinManager.joinManager.nextJoin(playerInfo);
                 }
-                //没必要破坏床
+            }else {
+                //TODO 房间被关闭 释放一些资源
+                for (PlayerInfo info : playerInfos) {
+                    info.clear();
+                    if (info.getPlayer() instanceof Player) {
+                        quitPlayerInfo(info, true);
+                    }
+                    //没必要破坏床
 //                    if (info.getTeamInfo() != null) {
 //                        info.getTeamInfo().breakBed();
 //                    }
+                }
             }
-
-
             //浮空字释放
             for(FloatTextInfo floatTextInfo: floatTextInfos){
                 floatTextInfo.bedWarFloatText.toClose();
