@@ -826,10 +826,6 @@ public class GameRoom {
                 if (info.getPlayer() instanceof Player) {
                     quitPlayerInfo(info, true);
                 }
-                //没必要破坏床
-//                    if (info.getTeamInfo() != null) {
-//                        info.getTeamInfo().breakBed();
-//                    }
             }
 
             //浮空字释放
@@ -847,6 +843,8 @@ public class GameRoom {
                     ((Player) entity).setGamemode(0);
                     entity.removeAllEffects();
                     ((Player) entity).getInventory().clearAll();
+                    ((Player) entity).getEnderChestInventory().clearAll();
+                    ((Player) entity).getFoodData().reset();
                     continue;
                 }
                 if(entity != null && !entity.isClosed()){

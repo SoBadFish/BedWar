@@ -728,7 +728,7 @@ public class PlayerInfo {
         if(event != null) {
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
                 if(damageByInfo != null){
-                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 推入虚空。"+(playerType==PlayerType.WATCH?"&b&l最终击杀!":""));
+                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 推入虚空。"+(playerType==PlayerType.WATCH?" &b&l最终击杀!":""));
                     addKill(damageByInfo);
                 }
                 gameRoom.sendMessage(this + "&e掉入虚空");
@@ -743,15 +743,15 @@ public class PlayerInfo {
                     }
                     if (info != null) {
                         addKill(info);
-                        gameRoom.sendMessage(this + " &e被 &r" + info + " "+killInfo+"了。"+(playerType==PlayerType.WATCH?"&b&l最终击杀!":""));
+                        gameRoom.sendMessage(this + " &e被 &r" + info + " "+killInfo+"了。"+(playerType==PlayerType.WATCH?" &b&l最终击杀!":""));
                     }
                 } else {
-                    gameRoom.sendMessage(this + " &e被 &r" + entity.getName() + " 击败了"+(playerType==PlayerType.WATCH?"&b&l最终击杀!":""));
+                    gameRoom.sendMessage(this + " &e被 &r" + entity.getName() + " 击败了"+(playerType==PlayerType.WATCH?" &b&l最终击杀!":""));
                 }
             } else {
                 if(damageByInfo != null){
                     addKill(damageByInfo);
-                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 击败了"+(playerType==PlayerType.WATCH?"&b&l最终击杀!":""));
+                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 击败了"+(playerType==PlayerType.WATCH?" &b&l最终击杀!":""));
                 }else {
                     String deathInfo = "&e死了";
                     switch (event.getCause()){

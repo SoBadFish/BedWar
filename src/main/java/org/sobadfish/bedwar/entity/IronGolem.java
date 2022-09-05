@@ -39,6 +39,7 @@ public class IronGolem extends BaseEntityMove {
         this.setMaxHealth(30);
         super.initEntity();
 
+
     }
 
     @Override

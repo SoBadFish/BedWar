@@ -10,15 +10,18 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.EntityFireBall;
 import org.sobadfish.bedwar.player.PlayerInfo;
 
-
+import java.util.LinkedHashMap;
 
 
 /**
+ * todo 加个冷却机制
  * @author SoBadFish
  * 2022/1/8
  */
 public class FireBall implements INbtItem{
 
+
+    private LinkedHashMap<PlayerInfo,Long> clickTime = new LinkedHashMap<>();
 
 
     @Override
@@ -37,8 +40,15 @@ public class FireBall implements INbtItem{
                 sakuraAPI.addBypassTime((Player) playerInfo.getPlayer(), "KillAura", 2);
             } catch (Throwable ignore) {
             }
-
-
+            if(!clickTime.containsKey(playerInfo)){
+                clickTime.put(playerInfo,System.currentTimeMillis());
+            }
+            if(System.currentTimeMillis() - clickTime.get(playerInfo) < 1500){
+                playerInfo.sendMessage("&c使用太频繁了 请过一会再试吧");
+                return true;
+            }else{
+                clickTime.put(playerInfo,System.currentTimeMillis());
+            }
 
             double f = 1.8D;
             double yaw = player.yaw;
