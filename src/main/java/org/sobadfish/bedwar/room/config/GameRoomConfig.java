@@ -460,12 +460,12 @@ public class GameRoomConfig implements Cloneable{
     public static ArrayList<String> defaultGameStartMessage(){
         ArrayList<String> strings = new ArrayList<>();
 
-        strings.add("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        strings.add("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
         strings.add("&f起床战争");
         strings.add("&e");
         strings.add("&e保护你的床并摧毁敌人的床。收集铜锭，金锭，钻石和绿宝石");
         strings.add("&e来升级，使自身和队伍变得更强");
-        strings.add("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        strings.add("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
         return strings;
     }
 

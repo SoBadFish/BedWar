@@ -333,7 +333,7 @@ public class RoomManager implements Listener {
     @EventHandler
     public void onTeamVictory(TeamVictoryEvent event){
         event.getTeamInfo().sendTitle("&e&l胜利!",5);
-        String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■";
+        String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■";
         event.getRoom().sendTipMessage("&a"+line);
         event.getRoom().sendTipMessage(Utils.getCentontString("&b游戏结束",line.length()));
         event.getRoom().sendTipMessage("");
