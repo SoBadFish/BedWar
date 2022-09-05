@@ -810,6 +810,11 @@ public class PlayerInfo {
             ((Player)getPlayer()).getFoodData().reset();
         }
         getPlayer().getInventory().clearAll();
+        getPlayer().getEnderChestInventory().clearAll();
+        if(getPlayer() instanceof Player){
+            ((Player) getPlayer()).removeAllWindows();
+            ((Player) getPlayer()).setExperience(0,0);
+        }
         //TODO 给玩家物品
         getPlayer().getInventory().setHeldItemSlot(0);
     }
@@ -916,7 +921,10 @@ public class PlayerInfo {
             if(((Player) player).isOnline()){
                 player.setNameTag(player.getName());
                 player.getInventory().clearAll();
-                ((Player) player).sendExperience(0);
+                player.getEnderChestInventory().clearAll();
+                ((Player) player).getFoodData().reset();
+                player.setHealth(player.getMaxHealth());
+                ((Player) player).setExperience(0,0);
                 if(inventory != null && eInventory != null){
                     player.getInventory().setContents(inventory.getContents());
                     player.getEnderChestInventory().setContents(eInventory.getContents());

@@ -234,7 +234,7 @@ public class GameRoom {
             for(TeamInfo t:teamInfos){
                 t.placeBed();
                 for(PlayerInfo i : t.getTeamPlayers()){
-                    i.clear();
+//                    i.clear();
                     i.spawn();
                 }
             }
