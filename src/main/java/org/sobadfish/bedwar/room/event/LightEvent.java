@@ -1,13 +1,9 @@
 package org.sobadfish.bedwar.room.event;
 
-import cn.nukkit.Server;
+
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.weather.EntityLightning;
-import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
-import cn.nukkit.event.entity.EntityDamageByEntityEvent;
-import cn.nukkit.event.entity.EntityDamageEvent;
-import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.config.GameRoomEventConfig;
