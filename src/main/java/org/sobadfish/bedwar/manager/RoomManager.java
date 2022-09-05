@@ -954,6 +954,7 @@ public class RoomManager implements Listener {
                     String roomName = playerJoin.get(player.getName());
                     GameRoom room = getRoom(roomName);
                     if (room != null) {
+                        PlayerInfo playerInfo = room.getPlayerInfo(player);
                         Item item = event.getBow();
                         if (item.hasCompoundTag() && item.getNamedTag().contains(NbtDefaultItem.TAG)) {
                             String name = item.getNamedTag().getString(NbtDefaultItem.TAG);
@@ -964,6 +965,9 @@ public class RoomManager implements Listener {
                                     ((DieBow) iNbtItem).onSend(player);
                                 }
                             }
+                        }
+                        if(room.getEventControl().hasResidentEvent("die")){
+                            Utils.launchWitherSkull(playerInfo);
                         }
                     }
                 }

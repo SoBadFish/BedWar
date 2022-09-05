@@ -581,7 +581,7 @@ public class PlayerInfo {
             for(Object s : (List)obj){
                 lore.add(s.toString());
             }
-        }else if(obj instanceof String){
+        }else{
             lore.add(BedWarMain.getBedWarMain().getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
         }
         return lore;

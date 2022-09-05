@@ -6,6 +6,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityFirework;
 import cn.nukkit.item.ItemFirework;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.NBTIO;
@@ -15,7 +16,9 @@ import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.utils.DyeColor;
 import org.sobadfish.bedwar.BedWarMain;
+import org.sobadfish.bedwar.entity.EntityBlueWitherSkull;
 import org.sobadfish.bedwar.entity.baselib.BaseEntity;
+import org.sobadfish.bedwar.player.PlayerInfo;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -271,10 +274,6 @@ public class Utils {
             }
 
         }
-
-
-
-
         return true;
     }
 
@@ -336,5 +335,18 @@ public class Utils {
             }
         }
 
+    }
+
+    public static void launchWitherSkull(PlayerInfo playerInfo){
+        Entity player = playerInfo.getPlayer();
+        double f = 1.2D;
+        double yaw = player.yaw;
+        double pitch = player.pitch;
+        Location pos = new Location(player.x - Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 1.5D, player.y + (double) player.getEyeHeight(), player.z + Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 1.5D, yaw, pitch, player.level);
+        EntityBlueWitherSkull fireBall = new EntityBlueWitherSkull(player.chunk, Entity.getDefaultNBT(pos));
+        fireBall.setExplode(true);
+        fireBall.setMaster(playerInfo);
+        fireBall.setMotion(new Vector3(-Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * f * f, -Math.sin(Math.toRadians(pitch)) * f * f, Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * f * f));
+        fireBall.spawnToAll();
     }
 }

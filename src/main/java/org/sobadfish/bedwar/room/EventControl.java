@@ -4,6 +4,7 @@ package org.sobadfish.bedwar.room;
 import org.sobadfish.bedwar.manager.RoomEventManager;
 import org.sobadfish.bedwar.room.config.GameRoomEventConfig;
 import org.sobadfish.bedwar.room.event.CustomEvent;
+import org.sobadfish.bedwar.room.event.IEventDurationTime;
 import org.sobadfish.bedwar.room.event.IGameRoomEvent;
 
 import java.util.ArrayList;
@@ -25,6 +26,9 @@ public class EventControl {
     public IGameRoomEvent lastEvent;
 
     public IGameRoomEvent thisEvent;
+
+    //常驻事件
+    public List<IGameRoomEvent> residentEvent = new ArrayList<>();
 
     /**
      * 备选事件
@@ -97,12 +101,26 @@ public class EventControl {
                         thisEvent = null;
                         event.onStart(room);
                     }
+
                 }
 
             }else{
                 loadTime = 0;
             }
-
+            if(thisEvent != null && thisEvent instanceof IEventDurationTime){
+                ((IEventDurationTime) thisEvent).update();
+                if(((IEventDurationTime) thisEvent).isOutTime()){
+                    thisEvent = null;
+                }
+            }
+            for(IGameRoomEvent event: new ArrayList<>(residentEvent)){
+                if(event instanceof IEventDurationTime){
+                    ((IEventDurationTime) event).update();
+                    if(((IEventDurationTime) event).isOutTime()){
+                        residentEvent.remove(event);
+                    }
+                }
+            }
         }
     }
 
@@ -138,5 +156,22 @@ public class EventControl {
             return  events.get(position).item;
         }
         return null;
+    }
+
+    public void addResidentEvent(IGameRoomEvent event){
+        residentEvent.add(event);
+    }
+
+    public void removeResidentEvent(IGameRoomEvent event){
+        residentEvent.remove(event);
+    }
+
+    public boolean hasResidentEvent(String name){
+        for(IGameRoomEvent event: residentEvent){
+            if(event.getEventItem().eventType.equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
     }
 }

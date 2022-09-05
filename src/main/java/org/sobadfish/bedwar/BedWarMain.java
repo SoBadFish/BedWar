@@ -112,6 +112,7 @@ public class BedWarMain extends PluginBase {
         RoomEventManager.register("command", CommandEvent.class);
         RoomEventManager.register("chicken",ChickBeautifulEvent.class);
         RoomEventManager.register("light",LightEvent.class);
+        RoomEventManager.register("die", DiwBowEvent.class);
 
         sendMessageToConsole("&e当前内置 &a"+RoomEventManager.EVENT.size()+" &e个事件");
 
