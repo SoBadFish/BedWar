@@ -6,7 +6,6 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.MoneyItemInfo;
 import org.sobadfish.bedwar.item.NbtItemInfo;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
-import org.sobadfish.bedwar.manager.RoomEventManager;
 import org.sobadfish.bedwar.player.team.config.TeamConfig;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
@@ -130,6 +129,11 @@ public class GameRoomConfig implements Cloneable{
      * 道具商店NPC的生物ID
      */
     public int itemShopEntityId = 15;
+
+    /**
+     * 每分钟获得的经验
+     */
+    public int minutesExp = 25;
 
     /**
      * 禁用指令
@@ -413,6 +417,7 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.quitRoomCommand = new ArrayList<>(room.getStringList("QuitRoom"));
                 roomConfig.victoryCommand = new ArrayList<>(room.getStringList("victoryCmd"));
                 roomConfig.defeatCommand = new ArrayList<>(room.getStringList("defeatCmd"));
+                roomConfig.minutesExp = room.getInt("minutesExp",25);
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
                 if(room.exists("floatSpawnPos")){
                     for(Map map: room.getMapList("floatSpawnPos")){
@@ -494,8 +499,9 @@ public class GameRoomConfig implements Cloneable{
         config.set("fireballKnockBack", fireballKnockBack);
         config.set("hasWatch", hasWatch);
         config.set("AutomaticNextRound",isAutomaticNextRound);
-        config.set("victoryCmd",victoryCommand);
         config.set("defeatCmd",defeatCommand);
+        config.set("victoryCmd",victoryCommand);
+        config.set("minutesExp",minutesExp);
         config.set("roomStartMessage",gameStartMessage);
         List<Map<String,Object>> pos = new ArrayList<>();
         for(FloatTextInfoConfig floatTextInfoConfig: floatTextInfoConfigs){

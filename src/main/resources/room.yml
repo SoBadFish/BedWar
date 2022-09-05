@@ -23,6 +23,7 @@ QuitRoom: []
 AutomaticNextRound: true
 victoryCmd: []
 defeatCmd: []
+minutesExp: 25
 
 floatSpawnPos: []
 

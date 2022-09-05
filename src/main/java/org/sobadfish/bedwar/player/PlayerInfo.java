@@ -615,10 +615,13 @@ public class PlayerInfo {
 
             }
         }else{
-            if(updateTime % 60 == 0){
-                //每 60s 增加25经验
-                PlayerData data = BedWarMain.getDataManager().getData(getName());
-                data.addExp(25,"时长奖励");
+
+            if(gameRoom.getRoomConfig().minutesExp >0) {
+                if (updateTime % 60 == 0) {
+                    //每 60s 增加25经验
+                    PlayerData data = BedWarMain.getDataManager().getData(getName());
+                    data.addExp(gameRoom.getRoomConfig().minutesExp, "时长奖励");
+                }
             }
         }
         if(damageTime > 0){
@@ -717,19 +720,16 @@ public class PlayerInfo {
         player.teleport(new Position(player.x,teamInfo.getTeamConfig().getBedPosition().y + 64,player.z,getLevel()));
         sendTitle("&c你死了");
         deathCount++;
-        if(teamInfo.isBadExists()){
-            playerType = PlayerType.DEATH;
-        }else{
-            //TODO 死亡后的观察模式
-           playerType = PlayerType.WATCH;
-
+        boolean end = false;
+        if(!teamInfo.isBadExists()){
+            end = true;
         }
 
         if(event != null) {
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
                 if(damageByInfo != null){
-                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 推入虚空。"+(playerType==PlayerType.WATCH?" &b&l最终击杀!":""));
-                    addKill(damageByInfo);
+                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 推入虚空。"+(end?" &b&l最终击杀!":""));
+                    addKill(damageByInfo,end);
                 }
                 gameRoom.sendMessage(this + "&e掉入虚空");
 
@@ -742,16 +742,16 @@ public class PlayerInfo {
                         killInfo = "射杀";
                     }
                     if (info != null) {
-                        addKill(info);
-                        gameRoom.sendMessage(this + " &e被 &r" + info + " "+killInfo+"了。"+(playerType==PlayerType.WATCH?" &b&l最终击杀!":""));
+                        addKill(info,end);
+                        gameRoom.sendMessage(this + " &e被 &r" + info + " "+killInfo+"了。"+(end?" &b&l最终击杀!":""));
                     }
                 } else {
-                    gameRoom.sendMessage(this + " &e被 &r" + entity.getName() + " 击败了"+(playerType==PlayerType.WATCH?" &b&l最终击杀!":""));
+                    gameRoom.sendMessage(this + " &e被 &r" + entity.getName() + " 击败了"+(end?" &b&l最终击杀!":""));
                 }
             } else {
                 if(damageByInfo != null){
-                    addKill(damageByInfo);
-                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 击败了"+(playerType==PlayerType.WATCH?" &b&l最终击杀!":""));
+                    addKill(damageByInfo,end);
+                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 击败了"+(end?" &b&l最终击杀!":""));
                 }else {
                     String deathInfo = "&e死了";
                     switch (event.getCause()){
@@ -776,15 +776,22 @@ public class PlayerInfo {
                 Entity last = ((EntityDamageByEntityEvent) player.getLastDamageCause()).getDamager();
                 if(last instanceof IronGolem){
                     PlayerInfo dem = ((IronGolem) last).getMaster();
-                    addKill(dem);
+                    addKill(dem,end);
 
                 }
 
             }
 
         }
-        if(playerType == PlayerType.WATCH && getGameRoom().getType() != GameRoom.GameType.END){
+        if(end && getGameRoom().getType() != GameRoom.GameType.END){
             gameRoom.sendMessage(this + " &e淘汰了");
+        }
+        if(teamInfo.isBadExists()){
+            playerType = PlayerType.DEATH;
+        }else{
+            //TODO 死亡后的观察模式
+            playerType = PlayerType.WATCH;
+
         }
         damageByInfo = null;
         player.getInventory().clearAll();
@@ -819,8 +826,8 @@ public class PlayerInfo {
         getPlayer().getInventory().setHeldItemSlot(0);
     }
 
-    private void addKill(PlayerInfo info){
-        if(playerType != PlayerType.DEATH) {
+    private void addKill(PlayerInfo info,boolean end){
+        if(!end) {
             info.killCount++;
         }else{
             info.endKillCount++;
