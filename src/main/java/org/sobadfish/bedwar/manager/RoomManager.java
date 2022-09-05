@@ -304,7 +304,7 @@ public class RoomManager implements Listener {
 
                 BedWarMain.sendTipMessageToObject("&7["+data.getExpLine(20)+"&7]\n",player);
 
-                String d = (int)(data.getExpPercent() * 100)+"";
+                String d = String.format("%.1f",data.getExpPercent() * 100.0);
                 BedWarMain.sendTipMessageToObject(Utils.getCentontString("&b"+data.getExpString(data.exp)+" &7/ &a"+data.getExpString(data.getNextLevelExp())+" &7("+d+"％)",40)+"\n",player);
                 BedWarMain.sendTipMessageToObject(Utils.writeLine(21,"&a■"),player);
 
@@ -563,9 +563,7 @@ public class RoomManager implements Listener {
                             room.sendMessage(info+" &f>>&r "+msg);
                         }
                     }
-
                 }
-
                 event.setCancelled();
             }
         }

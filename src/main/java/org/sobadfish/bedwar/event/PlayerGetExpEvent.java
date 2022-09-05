@@ -15,11 +15,14 @@ public class PlayerGetExpEvent extends Event  {
 
     private final int exp;
 
+    private final int newExp;
+
     private final String cause;
 
-    public PlayerGetExpEvent(String playerName,int exp,String cause){
+    public PlayerGetExpEvent(String playerName,int exp,int newExp,String cause){
         this.playerName = playerName;
         this.exp = exp;
+        this.newExp = newExp;
         this.cause = cause;
     }
 
@@ -29,6 +32,10 @@ public class PlayerGetExpEvent extends Event  {
 
     public int getExp() {
         return exp;
+    }
+
+    public int getNewExp() {
+        return newExp;
     }
 
     public String getPlayerName() {

@@ -155,8 +155,8 @@ public class Utils {
     }
 
     public static String getCentontString(String input,int lineWidth){
-        input = input.replace(' ','.');
-        return justify(input,lineWidth,'c').replace('.',' ');
+        input = input.replace(' ','$');
+        return justify(input,lineWidth,'c').replace('$',' ');
     }
 
     public static String writeLine(int size,String line){

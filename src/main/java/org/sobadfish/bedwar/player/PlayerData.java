@@ -48,13 +48,15 @@ public class PlayerData {
                 return;
             }
             level += event1.getNewLevel();
+
             int nExp = this.exp - getNextLevelExp();
+            this.exp -= getNextLevelExp();
             if(nExp > 0){
                 addExp(nExp,null,false);
             }
         }
         if(event) {
-            PlayerGetExpEvent expEvent = new PlayerGetExpEvent(name, exp,cause);
+            PlayerGetExpEvent expEvent = new PlayerGetExpEvent(name, exp,this.exp,cause);
             Server.getInstance().getPluginManager().callEvent(expEvent);
         }
     }
