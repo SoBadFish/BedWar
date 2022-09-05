@@ -300,12 +300,12 @@ public class RoomManager implements Listener {
                 player.sendMessage(line);
                 String inputTitle = "&b&l起床战争经验\n";
                 BedWarMain.sendTipMessageToObject(Utils.getCentontString(inputTitle,30),player);
-                BedWarMain.sendTipMessageToObject(Utils.getCentontString("&b等级 "+data.level+String.format("%"+inputTitle.length()+"s","")+" 等级 "+(data.level + 1)+"\n",30),player);
+                BedWarMain.sendTipMessageToObject(Utils.getCentontString("&b等级 "+data.getLevel()+String.format("%"+inputTitle.length()+"s","")+" 等级 "+(data.getLevel() + 1)+"\n",30),player);
 
                 BedWarMain.sendTipMessageToObject("&7["+data.getExpLine(20)+"&7]\n",player);
 
                 String d = String.format("%.1f",data.getExpPercent() * 100.0);
-                BedWarMain.sendTipMessageToObject(Utils.getCentontString("&b"+data.getExpString(data.exp)+" &7/ &a"+data.getExpString(data.getNextLevelExp())+" &7("+d+"％)",40)+"\n",player);
+                BedWarMain.sendTipMessageToObject(Utils.getCentontString("&b"+data.getExpString(data.getExp())+" &7/ &a"+data.getExpString(data.getNextLevelExp())+" &7("+d+"％)",40)+"\n",player);
                 BedWarMain.sendTipMessageToObject(Utils.writeLine(21,"&a■"),player);
 
             }
@@ -338,7 +338,7 @@ public class RoomManager implements Listener {
         event.getRoom().sendTipMessage(Utils.getCentontString("&b游戏结束",line.length()));
         event.getRoom().sendTipMessage("");
         for(PlayerInfo playerInfo: event.getTeamInfo().getInRoomPlayer()){
-            event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀： - "+(playerInfo.getKillCount()+playerInfo.getEndKillCount())+" 破坏床数: - "+playerInfo.getBedBreakCount(),line.length()));
+            event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getKillCount()+playerInfo.getEndKillCount())+" 破坏床数: "+playerInfo.getBedBreakCount()+" 助攻: "+playerInfo.getAssists(),line.length()));
         }
         event.getRoom().sendTipMessage("&a"+line);
         for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {

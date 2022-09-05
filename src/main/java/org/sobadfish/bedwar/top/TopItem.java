@@ -2,7 +2,6 @@ package org.sobadfish.bedwar.top;
 
 import cn.nukkit.level.Position;
 import org.sobadfish.bedwar.BedWarMain;
-import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.player.PlayerData;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
@@ -21,7 +20,6 @@ public class TopItem {
     public String title = "";
 
     public String room;
-
 
 
     public TopItem(String name,PlayerData.DataType topType,Position position,String title){
@@ -88,7 +86,18 @@ public class TopItem {
                 } else {
                     num = data.getFinalData(getTopType());
                 }
-                builder.append("&7[").append(topColor).append("TOP").append(top).append("&7]&r ").append(data.name).append(" ").append("  &a").append(num).append("\n");
+                builder.append("&7[")
+                        .append(topColor)
+                        .append("TOP")
+                        .append(top)
+                        .append("&7]&r ")
+                        .append(data.getLevelString())
+                        .append(" ")
+                        .append(data.getName())
+                        .append(" ")
+                        .append("  &a")
+                        .append(num)
+                        .append("\n");
                 top++;
             }
         }else{

@@ -24,8 +24,6 @@ public class WorldInfo {
 
     public boolean isStart;
 
-
-
     private WorldInfoConfig config;
 
     private ArrayList<Block> placeBlock = new ArrayList<>();

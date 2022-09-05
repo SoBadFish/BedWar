@@ -11,11 +11,17 @@ import java.util.Objects;
 
 public class PlayerData {
 
-    public String name = "";
+    private String name = "";
 
-    public int exp;
+    private int exp;
 
-    public int level;
+    private int level;
+
+    public PlayerData(String name){
+        this.name = name;
+    }
+
+    public PlayerData(){}
 
 
     public List<RoomData> roomData = new ArrayList<>();
@@ -29,16 +35,33 @@ public class PlayerData {
     }
 
     public int getExp() {
+        if(exp < 0){
+            exp = 0;
+        }
         return exp;
     }
 
-    public void addExp(int exp,String cause){
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void addExp(int exp, String cause){
         addExp(exp,cause,true);
     }
 
 
     public void addExp(int exp,String cause,boolean event){
-
+        if(this.exp < 0){
+            this.exp = 0;
+        }
         this.exp += exp;
         if(this.exp >= getNextLevelExp()){
             this.exp -= getNextLevelExp();
@@ -155,6 +178,8 @@ public class PlayerData {
 
         public int victoryCount = 0;
 
+        public int assist = 0;
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -196,6 +221,9 @@ public class PlayerData {
                 case GAME:
                     c += gameCount;
                     break;
+                case ASSISTS:
+                    c += assist;
+                    break;
 
             }
 
@@ -222,6 +250,7 @@ public class PlayerData {
         data.deathCount += info.deathCount;
         data.killCount += info.killCount;
         data.endCont += info.endKillCount;
+        data.assist += info.assists;
     }
 
     @Override
@@ -257,6 +286,10 @@ public class PlayerData {
          * 最终击杀
          * */
         END_KILL("最终击杀"),
+        /**
+         * 助攻
+         * */
+        ASSISTS("助攻"),
 
         /**
          * 游戏次数

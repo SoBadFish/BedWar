@@ -53,8 +53,6 @@ public class BedWarMain extends PluginBase {
 
     public static int upExp;
 
-
-
     @Override
     public void onEnable() {
         bedWarMain = this;

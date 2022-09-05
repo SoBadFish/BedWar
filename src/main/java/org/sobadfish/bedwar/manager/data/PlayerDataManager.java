@@ -15,8 +15,8 @@ public class PlayerDataManager extends BaseDataWriterGetterManager<PlayerData> {
     }
 
     public PlayerData getData(String player){
-        PlayerData data = new PlayerData();
-        data.name = player;
+        PlayerData data = new PlayerData(player);
+
         if(!dataList.contains(data)){
             dataList.add(data);
         }

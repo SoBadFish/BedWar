@@ -54,6 +54,8 @@ public class PlayerInfo {
 
     public int updateTime = 0;
 
+    public int assists = 0;
+
     private EntityHuman player;
 
     private PlayerType playerType;
@@ -69,6 +71,10 @@ public class PlayerInfo {
     public boolean isLeave;
 
     private PlayerInfo damageByInfo = null;
+
+    public LinkedHashMap<PlayerInfo,Long> assistsPlayers = new LinkedHashMap<>();
+
+
 
     public PlayerInventory inventory;
 
@@ -218,6 +224,7 @@ public class PlayerInfo {
         if(damageByInfo != null) {
             this.damageByInfo = damageByInfo;
             damageTime = 5;
+            assistsPlayers.put(damageByInfo,System.currentTimeMillis());
         }
     }
 
@@ -255,6 +262,14 @@ public class PlayerInfo {
 
     public void setKillCount(int killCount) {
         this.killCount = killCount;
+    }
+
+    public void setAssists(int assists) {
+        this.assists = assists;
+    }
+
+    public int getAssists() {
+        return assists;
     }
 
     public void setArmor(LinkedHashMap<Integer, Item> armor) {
@@ -570,11 +585,13 @@ public class PlayerInfo {
                     lore.add("◎ "+teamInfo.toString()+": &r   &c✘ "+me);
                 }
             }
-            lore.add("     ");
+            lore.add("      ");
             lore.add("击杀数: &a"+killCount);
             lore.add("最终击杀数: &a"+endKillCount);
+            lore.add("助攻数: &a"+assists);
             lore.add("破坏床数: &a"+bedBreakCount);
-            lore.add("       ");
+
+            lore.add("        ");
         }
         Object obj = BedWarMain.getBedWarMain().getConfig().get("game-logo");
         if(obj instanceof List){
@@ -631,6 +648,12 @@ public class PlayerInfo {
         }
         if(damageByInfo != null){
             sendTip(damageByInfo+"  &a"+damageByInfo.getPlayer().getHealth()+" / "+damageByInfo.getPlayer().getMaxHealth());
+        }
+        //助攻间隔
+        for(Map.Entry<PlayerInfo,Long> entry: assistsPlayers.entrySet()){
+            if(System.currentTimeMillis() - entry.getValue() > 3000){
+                assistsPlayers.remove(entry.getKey());
+            }
         }
         if(playerType == PlayerType.DEATH){
             if(spawnTime >= 5){
@@ -856,6 +879,10 @@ public class PlayerInfo {
                     }
                 }
             }
+        }
+        //助攻累计
+        for(PlayerInfo playerInfo: assistsPlayers.keySet()){
+            playerInfo.assists++;
         }
     }
 
