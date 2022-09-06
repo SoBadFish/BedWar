@@ -46,7 +46,6 @@ import org.sobadfish.bedwar.item.nbt.DieBow;
 import org.sobadfish.bedwar.item.nbt.INbtItem;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
-import org.sobadfish.bedwar.panel.DisPlayerPanel;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
 import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
@@ -587,6 +586,12 @@ public class RoomManager implements Listener {
                     event.setCancelled();
                 }
             }else{
+                if(!room.toBreakBlock(info,block)){
+                    event.setCancelled();
+                }else{
+                    //出现了没有掉落物情况..修复
+                    event.setDrops(event.getBlock().getDrops(Item.get(278)));
+                }
                 if(block instanceof BlockEnderChest){
                     event.setDrops(new Item[0]);
                 }
@@ -597,12 +602,6 @@ public class RoomManager implements Listener {
                 }
                 if(block instanceof BlockBed){
                     event.setDrops(new Item[0]);
-                }
-
-                if(!room.toBreakBlock(info,block)){
-                    event.setCancelled();
-                }else{
-                    event.setCancelled(false);
                 }
 
             }
@@ -1106,10 +1105,10 @@ public class RoomManager implements Listener {
 
     private void disPlayUI(PlayerInfo info,GameRoom room){
         //WIN10 玩家 故障，，，，
-        DisPlayerPanel playerPanel = new DisPlayerPanel();
-        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
+//        DisPlayerPanel playerPanel = new DisPlayerPanel();
+//        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
 
-//        disPlayProtect(info, room);
+        disPlayProtect(info, room);
     }
 
     private boolean quitRoomItem(Player player, String roomName, GameRoom room) {
