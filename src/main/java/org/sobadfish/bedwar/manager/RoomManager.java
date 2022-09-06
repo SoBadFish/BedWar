@@ -158,7 +158,7 @@ public class RoomManager implements Listener {
                     if(room.getWorldInfo().getConfig().getGameWorld() == null){
                         return false;
                     }
-                    if(room.getType() == GameType.END){
+                    if(room.getType() == GameType.END ||room.getType() == GameType.CLOSE){
                         player.sendForceMessage("&c" + roomName + " 结算中");
                         return false;
                     }

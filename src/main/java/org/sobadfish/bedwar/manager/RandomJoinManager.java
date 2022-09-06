@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 房间匹配队列
+ * @author Sobadfish
  * */
 public class RandomJoinManager {
 

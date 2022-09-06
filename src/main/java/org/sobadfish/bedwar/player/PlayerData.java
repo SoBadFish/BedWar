@@ -108,7 +108,7 @@ public class PlayerData {
                 others.append("&7■");
             }
        }
-        return ls.toString()+others.toString();
+        return ls +others.toString();
     }
 
     public String getColorByLevel(int level){

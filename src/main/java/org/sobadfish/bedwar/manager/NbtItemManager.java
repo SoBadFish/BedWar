@@ -32,9 +32,9 @@ public class NbtItemManager {
 
     }
 
-    public static Item build(String name, Map map){
+    public static Item build(String name, Map<?,?> map){
         ArrayList<String> lore = new ArrayList<>();
-        for(Object o:(List)map.get("lore")){
+        for(Object o:(List<?>)map.get("lore")){
             lore.add(TextFormat.colorize('&',o.toString()));
         }
 
