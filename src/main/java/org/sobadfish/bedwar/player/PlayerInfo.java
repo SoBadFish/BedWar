@@ -866,19 +866,23 @@ public class PlayerInfo {
                     int e = (int) (exp * getGameRoom().getRoomConfig().killItem);
                     if(e > 0){
                         info.addExp(e);
+                        info.sendMessage("&a +"+e+" Exp(击杀奖励)");
                     }
                 }else{
                     for(ItemInfoConfig config: getGameRoom().getRoomConfig().getWorldInfo().getItemInfos()){
                         MoneyItemInfoConfig moneyItemInfoConfig = config.getMoneyItemInfoConfig();
-                        int c = ItemInfo.getCountByInventory(moneyItemInfoConfig,player.getInventory());
-                        int g = 0;
+                        double c = ItemInfo.getCountByInventory(moneyItemInfoConfig,player.getInventory());
+                        double g = 0;
                         if(c > 0){
-                            g = (int) (c * getGameRoom().getRoomConfig().killItem);
+                            g = (c * getGameRoom().getRoomConfig().getKillItem());
                         }
                         if(g > 0){
                             Item item = moneyItemInfoConfig.getItem();
-                            item.setCount(g);
+                            item.setCount((int)g);
                             info.getPlayer().getInventory().addItem(item);
+                            String name = moneyItemInfoConfig.getCustomName();
+                            String color = name.substring(0,2);
+                            info.sendMessage(color + " + "+((int)g)+" "+name);
                         }
                     }
                 }
