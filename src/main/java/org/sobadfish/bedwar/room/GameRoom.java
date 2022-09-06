@@ -497,7 +497,8 @@ public class GameRoom {
                 return JoinType.NO_JOIN;
             }
 
-            sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
+            //sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
+            sendMessage("&l&f"+info+"&r&e已加入"+"&7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
             info.init();
             info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(),TeamChoseItem.get());
             info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());

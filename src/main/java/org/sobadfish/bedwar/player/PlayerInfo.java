@@ -499,7 +499,7 @@ public class PlayerInfo {
             teamName = "&7[&r"+teamInfo.getTeamConfig().getNameColor()+teamInfo.getTeamConfig().getName()+"&7]&r";
             playerName = teamInfo.getTeamConfig().getNameColor()+" &7"+player.getName();
         }else if(isWatch()){
-            teamName = "&7[旁观] ";
+            teamName = "&7[观战] ";
         }
 
         return "&7["+data.getLevelString()+"&7]&r "+teamName+playerName;
@@ -547,19 +547,19 @@ public class PlayerInfo {
 
     private ArrayList<String> getLore(boolean isWait){
         ArrayList<String> lore = new ArrayList<>();
-        lore.add("");
+        //lore.add("");
         String levelName = BedWarMain.getMenuRoomManager().getNameByRoom(gameRoom.getRoomConfig());
         if(levelName == null){
             levelName = " -- ";
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         lore.add("&7"+format.format(new Date()));
-        lore.add("游戏模式: &a"+levelName);
+        //lore.add("游戏模式: &a"+levelName);
 
         lore.add(" ");
         if(isWait){
-            lore.add("玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize());
-            lore.add("等待中....");
+            lore.add(" 玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize()+" ");
+            lore.add(" 等待中....");
             lore.add("   ");
 
         }else{
@@ -569,13 +569,13 @@ public class PlayerInfo {
                 lore.add("    ");
             }else{
 
-                lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime));
+                lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime)+" ");
             }
 
             for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
                 String me = "";
                 if(getTeamInfo() != null && getTeamInfo().equals(teamInfo)){
-                    me = "&7(我)";
+                    me = "&7<- 你";
                 }
                 if(teamInfo.isBadExists() && teamInfo.isLoading()){
 
@@ -587,9 +587,9 @@ public class PlayerInfo {
                 }
             }
             lore.add("      ");
-            lore.add("&b击杀数: &a"+killCount);
+            lore.add("&b杀敌数: &a"+killCount);
             lore.add("&e助攻数: &a"+assists);
-            lore.add("&d破坏床数: &a"+bedBreakCount);
+            lore.add("&d摧毁床数: &a"+bedBreakCount);
 
             lore.add("        ");
         }
@@ -617,7 +617,7 @@ public class PlayerInfo {
 
         updateTime++;
         if(isWatch()){
-            sendActionBar("&c你当前是一名观察者 &b/bw quit 离开房间");
+            sendActionBar("&3你当前是一名观战者 \n&3你可以输入 &b/hub &3立即&a返回大厅");
             if(player instanceof Player){
                 if(((Player) player).getGamemode() != 3){
                     ((Player) player).setGamemode(3);
