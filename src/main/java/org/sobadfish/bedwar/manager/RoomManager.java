@@ -46,6 +46,7 @@ import org.sobadfish.bedwar.item.nbt.DieBow;
 import org.sobadfish.bedwar.item.nbt.INbtItem;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
+import org.sobadfish.bedwar.panel.DisPlayerPanel;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
 import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
@@ -1105,10 +1106,10 @@ public class RoomManager implements Listener {
 
     private void disPlayUI(PlayerInfo info,GameRoom room){
         //WIN10 玩家 故障，，，，
-//        DisPlayerPanel playerPanel = new DisPlayerPanel();
-//        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
+        DisPlayerPanel playerPanel = new DisPlayerPanel();
+        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
 
-        disPlayProtect(info, room);
+//        disPlayProtect(info, room);
     }
 
     private boolean quitRoomItem(Player player, String roomName, GameRoom room) {

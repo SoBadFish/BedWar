@@ -453,7 +453,7 @@ public class PlayerInfo {
             return;
         }
         if(getPlayer() instanceof Player) {
-            ((Player) getPlayer()).sendActionBar(msg);
+            ((Player) getPlayer()).sendActionBar(TextFormat.colorize('&',msg));
         }
     }
 
@@ -587,10 +587,9 @@ public class PlayerInfo {
                 }
             }
             lore.add("      ");
-            lore.add("击杀数: &a"+killCount);
-            lore.add("最终击杀数: &a"+endKillCount);
-            lore.add("助攻数: &a"+assists);
-            lore.add("破坏床数: &a"+bedBreakCount);
+            lore.add("&b击杀数: &a"+killCount);
+            lore.add("&e助攻数: &a"+assists);
+            lore.add("&d破坏床数: &a"+bedBreakCount);
 
             lore.add("        ");
         }

@@ -1,11 +1,9 @@
 package org.sobadfish.bedwar.panel.items;
 
 import cn.nukkit.Player;
-import cn.nukkit.block.Block;
 import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.item.Item;
-import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.item.ItemIDSunName;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
@@ -31,8 +29,8 @@ public class PlayerItem extends BasePlayPanelItemInstance{
 
     @Override
     public Item getItem() {
-
-        return null;
+        Item item = new Item(397,3);
+        return item;
     }
 
     @Override
@@ -47,7 +45,7 @@ public class PlayerItem extends BasePlayPanelItemInstance{
 
     @Override
     public Item getPanelItem(PlayerInfo i, int index) {
-        Item item = new Item(397,3);
+        Item item = getItem().clone();
         item.setCustomName(TextFormat.colorize('&',"&r"+info.toString()));
         //todo 这里似乎可以画个lore
         List<String> lore = new ArrayList<>();
