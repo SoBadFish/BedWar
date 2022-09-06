@@ -866,7 +866,7 @@ public class PlayerInfo {
                     int e = (int) (exp * getGameRoom().getRoomConfig().killItem);
                     if(e > 0){
                         info.addExp(e);
-                        info.sendMessage("&a +"+e+" Exp(击杀奖励)");
+                        info.sendMessage("&a +"+e+" Exp");
                     }
                 }else{
                     for(ItemInfoConfig config: getGameRoom().getRoomConfig().getWorldInfo().getItemInfos()){
