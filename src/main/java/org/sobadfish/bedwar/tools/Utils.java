@@ -177,7 +177,7 @@ public class Utils {
      * @return 对齐的字符串
     * */
     public static String justify(String input, int lineWidth, char just) {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         char[] inputText = input.toCharArray();
         ArrayList<String> words = new ArrayList<>();
         for (int i = 0; i < inputText.length; i++) {
@@ -187,7 +187,7 @@ public class Utils {
                 inputText[i] = '\n';
                 words.add(sb.toString());
                 //clear content
-                sb = new StringBuffer("");
+                sb = new StringBuilder("");
             }
         }
         //add last word because the last char is not space/'\n'.
@@ -199,9 +199,9 @@ public class Utils {
         }
         char[] output = null;
         StringBuilder sb2 = new StringBuilder("");
-        StringBuilder line = null;
+        StringBuilder line;
         for (String word : words) {
-            line = new StringBuilder("");
+            line = new StringBuilder();
             for (int i = 0; i < lineWidth; i++) {
                 line.append(" ");
             }

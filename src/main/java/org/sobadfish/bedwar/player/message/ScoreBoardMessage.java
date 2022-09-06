@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class ScoreBoardMessage {
 
-    private String title;
+    private final String title;
 
     private ArrayList<String> lore;
 

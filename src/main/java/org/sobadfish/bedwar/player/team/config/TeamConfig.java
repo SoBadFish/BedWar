@@ -1,7 +1,6 @@
 package org.sobadfish.bedwar.player.team.config;
 
 
-import cn.nukkit.block.Block;
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.BlockColor;
 
@@ -45,10 +44,10 @@ public class TeamConfig {
         return nameColor;
     }
 
-    public static TeamConfig getInstance(Map map){
+    public static TeamConfig getInstance(Map<?,?> map){
         String name = map.get("name").toString();
         String nameColor = map.get("nameColor").toString();
-        Map m = (Map) map.get("rgb");
+        Map<?,?> m = (Map<?,?>) map.get("rgb");
         int r = Integer.parseInt(m.get("r").toString());
         int g = Integer.parseInt(m.get("g").toString());
         int b = Integer.parseInt(m.get("b").toString());

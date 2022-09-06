@@ -1,6 +1,5 @@
 package org.sobadfish.bedwar.player.team.config;
 
-import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.utils.BlockColor;
@@ -56,12 +55,12 @@ public class TeamInfoConfig {
         return WorldInfoConfig.getPositionByString(spawnPosition);
     }
 
-    public static TeamInfoConfig getInfoByMap(TeamConfig teamConfig, Map map){
+    public static TeamInfoConfig getInfoByMap(TeamConfig teamConfig, Map<?,?> map){
 //        Position bedPosition = WorldInfoConfig.getPositionByString();
 //        Position spawnPosition = WorldInfoConfig.getPositionByString(.toString());
         BlockFace face = BlockFace.valueOf(map.get("bedFace").toString().toUpperCase());
         LinkedHashMap<String,String> village = new LinkedHashMap<>();
-        Map m2 = (Map) map.get("village");
+        Map<?,?> m2 = (Map<?,?>) map.get("village");
         for(Object o: m2.keySet()){
             village.put(o.toString(),m2.get(o).toString());
         }
