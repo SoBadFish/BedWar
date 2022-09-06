@@ -13,6 +13,10 @@ import java.util.Arrays;
 import java.util.List;
 
 
+/**
+ * JSON数据文件读写类
+  @author Sobadfish
+ */
 public class BaseDataWriterGetterManager<T>{
 
     public List<T> dataList;
@@ -24,7 +28,7 @@ public class BaseDataWriterGetterManager<T>{
         this.file = file;
     }
 
-    public static <T> BaseDataWriterGetterManager asFile(File file,String fileName, Class<T> tClass,Class<? extends BaseDataWriterGetterManager> baseClass){
+    public static <T> BaseDataWriterGetterManager<?> asFile(File file,String fileName, Class<T> tClass,Class<? extends BaseDataWriterGetterManager<?>> baseClass){
         Gson gson = new Gson();
         InputStreamReader reader = null;
         try {
@@ -32,12 +36,12 @@ public class BaseDataWriterGetterManager<T>{
                 BedWarMain.getBedWarMain().saveResource(fileName,false);
             }
             reader = new InputStreamReader(new FileInputStream(file));
-            T[] data = (T[]) gson.fromJson(reader, tClass);
-            Constructor constructor = baseClass.getConstructor(List.class,File.class);
+            Object[] data = (Object[]) gson.fromJson(reader, tClass);
+            Constructor<?> constructor = baseClass.getConstructor(List.class,File.class);
             if(data != null){
-                return (BaseDataWriterGetterManager) constructor.newInstance(new ArrayList<T>(Arrays.asList(data)),file);
+                return (BaseDataWriterGetterManager<?>) constructor.newInstance(new ArrayList<>(Arrays.asList(data)),file);
             }else{
-                return (BaseDataWriterGetterManager) constructor.newInstance(new ArrayList<>(),file);
+                return (BaseDataWriterGetterManager<?>) constructor.newInstance(new ArrayList<>(),file);
             }
 
 

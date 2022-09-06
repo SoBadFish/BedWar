@@ -2,6 +2,7 @@ package org.sobadfish.bedwar.room.config;
 
 
 import cn.nukkit.utils.Config;
+import lombok.Data;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.MoneyItemInfo;
 import org.sobadfish.bedwar.item.NbtItemInfo;
@@ -24,6 +25,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author SoBadFish
  * 2022/1/2
  */
+@Data
 public class GameRoomConfig implements Cloneable{
     /**
      * 房间名
@@ -136,7 +138,7 @@ public class GameRoomConfig implements Cloneable{
     public int minutesExp = 25;
 
     /**
-     * 每分钟获得的经验
+     * 死亡提示的图标
      */
     public int deathIcon = 20;
 
@@ -231,7 +233,7 @@ public class GameRoomConfig implements Cloneable{
     public static void loadTeamShopConfig(GameRoomConfig roomConfig){
         Config team = new Config(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+roomConfig.name+"/team.yml",Config.YAML);
         LinkedHashMap<String,TeamConfig> teamConfigs = new LinkedHashMap<>();
-        for(Map map : team.getMapList("team")){
+        for(Map<?,?> map : team.getMapList("team")){
             TeamConfig teamConfig = TeamConfig.getInstance(map);
             teamConfigs.put(teamConfig.getName(),teamConfig);
         }
@@ -243,122 +245,28 @@ public class GameRoomConfig implements Cloneable{
         roomConfig.setMoneyItem(itemInfo);
     }
 
-    public boolean hasFloatText(String name){
+    public boolean notHasFloatText(String name){
         for(FloatTextInfoConfig config: floatTextInfoConfigs){
             if(config.name.equalsIgnoreCase(name)){
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public void removeFloatText(String name){
         floatTextInfoConfigs.removeIf(config -> config.name.equalsIgnoreCase(name));
     }
 
-    public void setNbtItemInfo(NbtItemInfo nbtItemInfo) {
-        this.nbtItemInfo = nbtItemInfo;
-    }
-
-    public NbtItemInfo getNbtItemInfo() {
-        return nbtItemInfo;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public int getWaitTime() {
-        return waitTime;
-    }
-
-    public ArrayList<TeamInfoConfig> getTeamConfigs() {
-        return teamConfigs;
-    }
-
-    public int getMaxPlayerSize() {
-        return maxPlayerSize;
-    }
-
-    public int getMaxWaitTime() {
-        return maxWaitTime;
-    }
-
-    public int getMinPlayerSize() {
-        return minPlayerSize;
-    }
-
-    public LinkedHashMap<String, ShopItemInfo> getShops() {
-        return shops;
-    }
-
-    public WorldInfoConfig getWorldInfo() {
-        return worldInfo;
-    }
 
 
-    public void setTime(int time) {
-        this.time = time;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setWaitTime(int waitTime) {
-        this.waitTime = waitTime;
-    }
-
-    public void setDeathIcon(int deathIcon) {
-        this.deathIcon = deathIcon;
-    }
-
-    public int getDeathIcon() {
-        return deathIcon;
-    }
-
-    public void setMaxPlayerSize(int maxPlayerSize) {
-        this.maxPlayerSize = maxPlayerSize;
-    }
-
-    public void setMaxWaitTime(int maxWaitTime) {
-        this.maxWaitTime = maxWaitTime;
-    }
-
-    public void setMinPlayerSize(int minPlayerSize) {
-        this.minPlayerSize = minPlayerSize;
-    }
-
-    public void setShops(LinkedHashMap<String, ShopItemInfo> shops) {
-        this.shops = shops;
-    }
-
-    public void setTeamConfigs(ArrayList<TeamInfoConfig> teamConfigs) {
-        this.teamConfigs = teamConfigs;
-    }
-
-    public void setWorldInfo(WorldInfoConfig worldInfo) {
-        this.worldInfo = worldInfo;
-    }
-
-    public void setTeamCfg(LinkedHashMap<String, TeamConfig> teamCfg) {
-        this.teamCfg = teamCfg;
-    }
-
-    public LinkedHashMap<String, TeamConfig> getTeamCfg() {
-        return teamCfg;
-    }
 
     public static GameRoomConfig getGameRoomConfigByFile(String name, File file){
         if(file.isDirectory()){
             try {
                 Config team = new Config(file+"/team.yml",Config.YAML);
                 LinkedHashMap<String,TeamConfig> teamConfigs = new LinkedHashMap<>();
-                for(Map map : team.getMapList("team")){
+                for(Map<?,?> map : team.getMapList("team")){
                     TeamConfig teamConfig = TeamConfig.getInstance(map);
                     teamConfigs.put(teamConfig.getName(),teamConfig);
                 }
@@ -388,7 +296,7 @@ public class GameRoomConfig implements Cloneable{
                 int minPlayerSize = room.getInt("minPlayerSize");
                 int maxPlayerSize =  room.getInt("maxPlayerSize");
                 ArrayList<TeamInfoConfig> teamInfoConfigs = new ArrayList<>();
-                for(Map map: room.getMapList("teamSpawn")){
+                for(Map<?,?> map: room.getMapList("teamSpawn")){
                     teamInfoConfigs.add(TeamInfoConfig.getInfoByMap(
                             teamConfigs.get(map.get("name").toString()),map));
                 }
@@ -431,10 +339,10 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.victoryCommand = new ArrayList<>(room.getStringList("victoryCmd"));
                 roomConfig.defeatCommand = new ArrayList<>(room.getStringList("defeatCmd"));
                 roomConfig.minutesExp = room.getInt("minutesExp",25);
-                roomConfig.deathIcon = room.getInt("deathIcon",18);
+                roomConfig.deathIcon = room.getInt("deathIcon",20);
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
                 if(room.exists("floatSpawnPos")){
-                    for(Map map: room.getMapList("floatSpawnPos")){
+                    for(Map<?,?> map: room.getMapList("floatSpawnPos")){
                         FloatTextInfoConfig config = FloatTextInfoConfig.build(map);
                         if(config != null){
                             configs.add(config);
@@ -468,7 +376,7 @@ public class GameRoomConfig implements Cloneable{
     }
 
     public boolean isExp(){
-        return gameRoomMoney.equalsIgnoreCase("exp");
+        return "exp".equalsIgnoreCase(gameRoomMoney);
     }
 
     public static ArrayList<String> defaultGameStartMessage(){

@@ -579,11 +579,11 @@ public class PlayerInfo {
                 }
                 if(teamInfo.isBadExists() && teamInfo.isLoading()){
 
-                    lore.add("◎ "+teamInfo.toString()+":&r    &a✔ "+me);
+                    lore.add("◎ "+ teamInfo +":&r    &a✔ "+me);
                 }else if(!teamInfo.isBadExists() && teamInfo.isLoading()){
-                    lore.add("◎ "+teamInfo.toString()+": &r   &c"+teamInfo.getLivePlayer().size()+" "+me);
+                    lore.add("◎ "+ teamInfo +": &r   &c"+teamInfo.getLivePlayer().size()+" "+me);
                 }else{
-                    lore.add("◎ "+teamInfo.toString()+": &r   &c✘ "+me);
+                    lore.add("◎ "+ teamInfo +": &r   &c✘ "+me);
                 }
             }
             lore.add("      ");
@@ -596,7 +596,7 @@ public class PlayerInfo {
         }
         Object obj = BedWarMain.getBedWarMain().getConfig().get("game-logo");
         if(obj instanceof List){
-            for(Object s : (List)obj){
+            for(Object s : (List<?>)obj){
                 lore.add(s.toString());
             }
         }else{
@@ -618,6 +618,7 @@ public class PlayerInfo {
 
         updateTime++;
         if(isWatch()){
+            sendActionBar("&c你当前是一名观察者 &b/bw quit 离开房间");
             if(player instanceof Player){
                 if(((Player) player).getGamemode() != 3){
                     ((Player) player).setGamemode(3);
@@ -745,10 +746,7 @@ public class PlayerInfo {
         player.teleport(new Position(player.x,teamInfo.getTeamConfig().getBedPosition().y + 64,player.z,getLevel()));
         sendTitle("&c你死了");
         deathCount++;
-        boolean end = false;
-        if(!teamInfo.isBadExists()){
-            end = true;
-        }
+        boolean end = !teamInfo.isBadExists();
 
         if(event != null) {
             OnScreenTextureAnimationPacket packet = new OnScreenTextureAnimationPacket();

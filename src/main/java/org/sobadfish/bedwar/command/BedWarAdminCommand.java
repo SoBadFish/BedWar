@@ -131,7 +131,7 @@ public class BedWarAdminCommand extends Command {
                        return false;
                    }
                    if("remove".equalsIgnoreCase(strings[1])){
-                       if(!roomConfig.hasFloatText(strings[3])){
+                       if(roomConfig.notHasFloatText(strings[3])){
                            commandSender.sendMessage("浮空字 "+strings[3]+" 不存在");
                            return false;
                        }
@@ -143,7 +143,7 @@ public class BedWarAdminCommand extends Command {
                            commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
                            return false;
                        }
-                       if(!roomConfig.hasFloatText(strings[3])){
+                       if(roomConfig.notHasFloatText(strings[3])){
                            roomConfig.floatTextInfoConfigs.add(new FloatTextInfoConfig(strings[3], WorldInfoConfig.positionToString(((Player) commandSender).getPosition()),strings[4]));
                            commandSender.sendMessage("成功添加浮空字");
                        }else{
@@ -212,7 +212,7 @@ public class BedWarAdminCommand extends Command {
                     String name = strings[2];
 
 
-                    if (strings[1].equalsIgnoreCase("add")) {
+                    if ("add".equalsIgnoreCase(strings[1])) {
                         if(strings.length < 4){
                             commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
                             return false;
