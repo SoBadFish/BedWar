@@ -4,6 +4,8 @@ import cn.nukkit.Player;
 import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.form.window.FormWindowSimple;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
 import org.sobadfish.bedwar.panel.from.button.ShopButton;
@@ -18,6 +20,8 @@ import java.util.ArrayList;
  * @author SoBadFish
  * 2022/1/11
  */
+@Getter
+@Setter
 public class ShopFrom {
 
     private int id;
@@ -46,57 +50,6 @@ public class ShopFrom {
         this.player = player;
     }
 
-    public void setShopItemClassify(ShopInfoConfig.ShopItemClassify shopItemClassify) {
-        this.shopItemClassify = shopItemClassify;
-    }
-
-    public ShopInfoConfig.ShopItemClassify getShopItemClassify() {
-        return shopItemClassify;
-    }
-
-    public void setBreak(boolean aBreak) {
-        isBreak = aBreak;
-    }
-
-    public boolean isBreak() {
-        return isBreak;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setLastFrom(ShopFrom lastFrom) {
-        this.lastFrom = lastFrom;
-    }
-
-    public ShopFrom getLastFrom() {
-        return lastFrom;
-    }
-
-    public GameRoomConfig getRoomConfig() {
-        return roomConfig;
-    }
-
-    public ShopItemInfo getShopItemInfo() {
-        return shopItemInfo;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setShopButtons(ArrayList<ShopButton> shopButtons) {
-        this.shopButtons = shopButtons;
-    }
-
-    public ArrayList<ShopButton> getShopButtons() {
-        return shopButtons;
-    }
 
     public void disPlay(String title,boolean isBack){
         setTitle(title);
@@ -115,7 +68,6 @@ public class ShopFrom {
         DisPlayWindowsFrom.SHOP.put(player.getName(),this);
 
     }
-
 
 
     @Override
