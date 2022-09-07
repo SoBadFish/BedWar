@@ -91,7 +91,7 @@ public class BedWarCommand extends Command {
                         if (strings.length > 1) {
                             String name = strings[1];
                             if (BedWarMain.getRoomManager().joinRoom(playerInfo, name)) {
-                                playerInfo.sendForceMessage("&a成功加入房间: &r"+name);
+                                //playerInfo.sendForceMessage("&a成功加入房间: &r"+name);
                             }
                         } else {
                             playerInfo.sendForceMessage("&c请输入房间名");
