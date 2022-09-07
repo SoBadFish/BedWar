@@ -547,7 +547,6 @@ public class PlayerInfo {
 
     private ArrayList<String> getLore(boolean isWait){
         ArrayList<String> lore = new ArrayList<>();
-        //lore.add("");
         String levelName = BedWarMain.getMenuRoomManager().getNameByRoom(gameRoom.getRoomConfig());
         if(levelName == null){
             levelName = " -- ";

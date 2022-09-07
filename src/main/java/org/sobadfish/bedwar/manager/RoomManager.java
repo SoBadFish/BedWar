@@ -209,7 +209,7 @@ public class RoomManager implements Listener {
         return rooms;
     }
 
-    private Map<String, GameRoom> rooms = new LinkedHashMap<>();
+    private final Map<String, GameRoom> rooms = new LinkedHashMap<>();
 
     public boolean hasRoom(String room){
         return roomConfig.containsKey(room);
@@ -296,7 +296,7 @@ public class RoomManager implements Listener {
             PlayerData data = BedWarMain.getDataManager().getData(playerName);
 
             if(info == null || info.getGameRoom() == null){
-                BedWarMain.sendTipMessageToObject(Utils.writeLine(21,"&a■"),player);
+                BedWarMain.sendTipMessageToObject("&l"+Utils.writeLine(19,"&a⎓"),player);
                 String line = String.format("%20s","");
                 player.sendMessage(line);
                 String inputTitle = "&b&l起床战争经验\n";
@@ -307,7 +307,7 @@ public class RoomManager implements Listener {
 
                 String d = String.format("%.1f",data.getExpPercent() * 100.0);
                 BedWarMain.sendTipMessageToObject(Utils.getCentontString("&b"+data.getExpString(data.getExp())+" &7/ &a"+data.getExpString(data.getNextLevelExp())+" &7("+d+"％)",40)+"\n",player);
-                BedWarMain.sendTipMessageToObject(Utils.writeLine(21,"&a■"),player);
+                BedWarMain.sendTipMessageToObject("&l"+Utils.writeLine(19,"&a⎓"),player);
 
             }
         }
@@ -413,8 +413,8 @@ public class RoomManager implements Listener {
             if (BedWarMain.getRoomManager().hasGameRoom(roomName)) {
                 GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
                 if (room.getType() != GameRoom.GameType.END && room.getPlayerInfos().contains(info)) {
-                    if (room.getPlayerInfo((Player) info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.WATCH ||
-                            room.getPlayerInfo((Player) info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.LEAVE) {
+                    if (room.getPlayerInfo(info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.WATCH ||
+                            room.getPlayerInfo(info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.LEAVE) {
                         if(event.isSend()) {
                             info.sendForceMessage("&c你已经在游戏房间内了");
                         }
@@ -598,10 +598,6 @@ public class RoomManager implements Listener {
                 if(info.isWatch()){
                     player.sendMessage("&c观察状态下不能破坏方块");
                     event.setCancelled();
-                    return;
-                }
-                if(block instanceof BlockBed){
-                    event.setDrops(new Item[0]);
                 }
 
             }
@@ -1057,7 +1053,7 @@ public class RoomManager implements Listener {
         FormWindowSimple simple = new FormWindowSimple("请选择队伍","");
         for(TeamInfo teamInfoConfig: room.getTeamInfos()){
             Item wool = teamInfoConfig.getTeamConfig().getTeamConfig().getBlockWoolColor();
-            simple.addButton(new ElementButton(TextFormat.colorize('&',teamInfoConfig.toString()+" &r"+teamInfoConfig.getTeamPlayers().size()+" / "+(room.getRoomConfig().getMaxPlayerSize() / room.getTeamInfos().size())),
+            simple.addButton(new ElementButton(TextFormat.colorize('&', teamInfoConfig +" &r"+teamInfoConfig.getTeamPlayers().size()+" / "+(room.getRoomConfig().getMaxPlayerSize() / room.getTeamInfos().size())),
                     new ElementButtonImageData("path",
                             ItemIDSunName.getIDByPath(wool.getId(),wool.getDamage()))));
         }
@@ -1206,9 +1202,9 @@ public class RoomManager implements Listener {
                 TeamInfo teamInfo = info.getGameRoom().getTeamInfos().get(((FormResponseSimple) event.getResponse())
                         .getClickedButtonId());
                 if(!teamInfo.join(info)){
-                    info.sendMessage("&c你已经加入了 "+teamInfo.toString());
+                    info.sendMessage("&c你已经加入了 "+ teamInfo);
                 }else{
-                    info.sendMessage("&a加入了&r"+teamInfo.toString()+" &a成功");
+                    info.sendMessage("&a加入了&r"+ teamInfo +" &a成功");
                     player.getInventory().setItem(0,teamInfo.getTeamConfig().getTeamConfig().getBlockWoolColor());
                     for (Map.Entry<Integer, Item> entry : info.armor.entrySet()) {
                         Item item;
