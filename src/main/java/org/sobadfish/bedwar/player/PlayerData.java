@@ -132,15 +132,17 @@ public class PlayerData {
     public String getExpString(int exp){
         double e = exp;
         e /= 1000;
-        if(e < 10){
+        if(e < 10 && e >= 1){
             return String.format("%.1f",e)+"k";
-        }else{
+        }else if(e > 10){
             e /= 10;
             if(e < 1000){
                 return String.format("%.1f",e)+"w";
             }else{
                 return String.format("%.1f",e)+"bill";
             }
+        }else{
+            return String.format("%.1f",(double)exp);
         }
     }
 
@@ -224,6 +226,7 @@ public class PlayerData {
                 case ASSISTS:
                     c += assist;
                     break;
+                default:break;
 
             }
 

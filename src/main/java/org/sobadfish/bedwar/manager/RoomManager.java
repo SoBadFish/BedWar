@@ -296,7 +296,7 @@ public class RoomManager implements Listener {
             PlayerData data = BedWarMain.getDataManager().getData(playerName);
 
             if(info == null || info.getGameRoom() == null){
-                BedWarMain.sendTipMessageToObject(Utils.writeLine(21,"&a■"),player);
+                BedWarMain.sendTipMessageToObject("&l"+Utils.writeLine(19,"&a⎓"),player);
                 String line = String.format("%20s","");
                 player.sendMessage(line);
                 String inputTitle = "&b&l起床战争经验\n";
@@ -307,7 +307,7 @@ public class RoomManager implements Listener {
 
                 String d = String.format("%.1f",data.getExpPercent() * 100.0);
                 BedWarMain.sendTipMessageToObject(Utils.getCentontString("&b"+data.getExpString(data.getExp())+" &7/ &a"+data.getExpString(data.getNextLevelExp())+" &7("+d+"％)",40)+"\n",player);
-                BedWarMain.sendTipMessageToObject(Utils.writeLine(21,"&a■"),player);
+                BedWarMain.sendTipMessageToObject("&l"+Utils.writeLine(19,"&a⎓"),player);
 
             }
         }
