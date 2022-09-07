@@ -154,10 +154,7 @@ public class Utils {
         entity.spawnToAll();
     }
 
-    public static String getCentontString(String input,int lineWidth){
-        input = input.replace(' ','$');
-        return justify(input,lineWidth,'c').replace('$',' ');
-    }
+
 
     public static String writeLine(int size,String line){
         StringBuilder s = new StringBuilder();
@@ -167,6 +164,10 @@ public class Utils {
         return s.toString();
     }
 
+    public static String getCentontString(String input,int lineWidth){
+        input = input.replace(' ','$');
+        return justify(input,lineWidth,'c').replace('$',' ');
+    }
     /**
      * 字符串居中算法
      *
@@ -217,7 +218,7 @@ public class Utils {
                     int rest = lineWidth - word.length();
                     int begin = 0;
                     if (rest % 2 != 0) {
-                        begin = (int) (rest / 2) + 1;
+                        begin = (rest / 2) + 1;
                     } else {
                         begin = rest / 2;
                     }

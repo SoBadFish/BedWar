@@ -3,12 +3,8 @@ package org.sobadfish.bedwar.manager;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.utils.Config;
 import org.sobadfish.bedwar.BedWarMain;
-import org.sobadfish.bedwar.player.PlayerInfo;
-import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.WorldRoom;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
-import org.sobadfish.bedwar.thread.BaseTimerRunnable;
-import org.sobadfish.bedwar.tools.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -27,7 +23,7 @@ public class MenuRoomManager {
         read(config);
     }
     private void read(Config config){
-        Map map = (Map) config.get("join-menu");
+        Map<?,?> map = (Map<?,?>) config.get("join-menu");
         for(Object os : map.keySet()){
             String oname = os.toString();
             ArrayList<GameRoomConfig> roomConfigs = new ArrayList<>();
