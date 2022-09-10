@@ -1067,6 +1067,9 @@ public class RoomManager implements Listener {
 
     private void followPlayer(PlayerInfo info,GameRoom room){
         info.sendMessage("选择要传送的玩家");
+        if (room == null){
+            return;
+        }
         switch(room.getRoomConfig().uiType){
             case UI:
                 disPlayUI(info, room);
