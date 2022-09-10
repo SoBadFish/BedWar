@@ -365,7 +365,8 @@ public class RoomManager implements Listener {
             data.setInfo(info);
             GameRoom room = event.getRoom();
             info.clear();
-            if(info.getPlayer() instanceof Player){
+
+            if(info.getPlayer() instanceof Player && ((Player) info.getPlayer()).isOnline()){
                 ((Player)info.getPlayer()).setFoodEnabled(false);
                 room.getRoomConfig().quitRoomCommand.forEach(cmd-> Server.getInstance().dispatchCommand(((Player)info.getPlayer()),cmd));
             }
