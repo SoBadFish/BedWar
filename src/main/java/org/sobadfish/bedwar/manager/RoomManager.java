@@ -1275,7 +1275,6 @@ public class RoomManager implements Listener {
 
     @EventHandler
     public void onItemChange(InventoryTransactionEvent event) {
-
         InventoryTransaction transaction = event.getTransaction();
         for (InventoryAction action : transaction.getActions()) {
             for (Inventory inventory : transaction.getInventories()) {
@@ -1291,6 +1290,19 @@ public class RoomManager implements Listener {
                             ((ChestInventoryPanel) inventory).clickSolt = index;
                             item.onClick((ChestInventoryPanel) inventory,player);
                             ((ChestInventoryPanel) inventory).update();
+                        }
+                    }
+
+                }
+                if(inventory instanceof PlayerInventory){
+                    EntityHuman player =((PlayerInventory) inventory).getHolder();
+                    PlayerInfo playerInfo = getPlayerInfo(player);
+                    if(playerInfo != null){
+                        GameRoom gameRoom = playerInfo.getGameRoom();
+                        if(gameRoom != null){
+                            if(gameRoom.getType() == GameType.WAIT){
+                                event.setCancelled();
+                            }
                         }
                     }
 
