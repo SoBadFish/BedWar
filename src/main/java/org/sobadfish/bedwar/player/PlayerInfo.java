@@ -223,9 +223,12 @@ public class PlayerInfo {
 
     public void setDamageByInfo(PlayerInfo damageByInfo) {
         if(damageByInfo != null) {
+
             this.damageByInfo = damageByInfo;
             damageTime = 5;
             assistsPlayers.put(damageByInfo,System.currentTimeMillis());
+            //现身
+            getPlayer().removeEffect(14);
         }
     }
 
