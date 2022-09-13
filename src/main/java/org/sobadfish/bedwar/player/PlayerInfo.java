@@ -474,7 +474,6 @@ public class PlayerInfo {
      * */
     public void cancel(){
         leave();
-
         cancel = true;
         disable = true;
         getGameRoom().getPlayerInfos().remove(this);
@@ -651,7 +650,8 @@ public class PlayerInfo {
             sendTip(damageByInfo+"  &a"+damageByInfo.getPlayer().getHealth()+" / "+damageByInfo.getPlayer().getMaxHealth());
         }
         //助攻间隔
-        for(Map.Entry<PlayerInfo,Long> entry: assistsPlayers.entrySet()){
+        LinkedHashMap<PlayerInfo,Long> ass = new LinkedHashMap<>(assistsPlayers);
+        for(Map.Entry<PlayerInfo,Long> entry: ass.entrySet()){
             if(System.currentTimeMillis() - entry.getValue() > 3000){
                 assistsPlayers.remove(entry.getKey());
             }

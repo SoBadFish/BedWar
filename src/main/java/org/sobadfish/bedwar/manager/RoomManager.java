@@ -365,7 +365,8 @@ public class RoomManager implements Listener {
             data.setInfo(info);
             GameRoom room = event.getRoom();
             info.clear();
-            if(info.getPlayer() instanceof Player){
+
+            if(info.getPlayer() instanceof Player && ((Player) info.getPlayer()).isOnline()){
                 ((Player)info.getPlayer()).setFoodEnabled(false);
                 room.getRoomConfig().quitRoomCommand.forEach(cmd-> Server.getInstance().dispatchCommand(((Player)info.getPlayer()),cmd));
             }
@@ -1067,6 +1068,9 @@ public class RoomManager implements Listener {
 
     private void followPlayer(PlayerInfo info,GameRoom room){
         info.sendMessage("选择要传送的玩家");
+        if (room == null){
+            return;
+        }
         switch(room.getRoomConfig().uiType){
             case UI:
                 disPlayUI(info, room);
@@ -1271,7 +1275,6 @@ public class RoomManager implements Listener {
 
     @EventHandler
     public void onItemChange(InventoryTransactionEvent event) {
-
         InventoryTransaction transaction = event.getTransaction();
         for (InventoryAction action : transaction.getActions()) {
             for (Inventory inventory : transaction.getInventories()) {
@@ -1287,6 +1290,19 @@ public class RoomManager implements Listener {
                             ((ChestInventoryPanel) inventory).clickSolt = index;
                             item.onClick((ChestInventoryPanel) inventory,player);
                             ((ChestInventoryPanel) inventory).update();
+                        }
+                    }
+
+                }
+                if(inventory instanceof PlayerInventory){
+                    EntityHuman player =((PlayerInventory) inventory).getHolder();
+                    PlayerInfo playerInfo = getPlayerInfo(player);
+                    if(playerInfo != null){
+                        GameRoom gameRoom = playerInfo.getGameRoom();
+                        if(gameRoom != null){
+                            if(gameRoom.getType() == GameType.WAIT){
+                                event.setCancelled();
+                            }
                         }
                     }
 

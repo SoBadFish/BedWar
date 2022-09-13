@@ -604,12 +604,14 @@ public class GameRoom {
                 if (playerInfos.contains(info)) {
                     PlayerQuitRoomEvent event = new PlayerQuitRoomEvent(info, this, BedWarMain.getBedWarMain());
                     Server.getInstance().getPluginManager().callEvent(event);
-                    if (teleport) {
-                        info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+                    if(((Player) info.getPlayer()).isOnline()) {
+                        if (teleport) {
+                            info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+                        }
+                        info.getPlayer().removeAllEffects();
+                        ((Player) info.getPlayer()).setExperience(0, 0);
                     }
                     info.cancel();
-                    info.getPlayer().removeAllEffects();
-                    ((Player) info.getPlayer()).setExperience(0, 0);
                     BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
                 } else {
                     BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
