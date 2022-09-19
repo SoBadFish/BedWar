@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Main-Class: C:\Users\29347\Desktop\新建文件夹 (2)\BedWar-master\src
- \main\java\org\sobadfish\bedwar\BedWarMain.java
+Main-Class: C:\Users\29347\Documents\GitHub\NukkitX-BedWar\src\main\java
+ \org\sobadfish\bedwar\BedWarMain.java
 

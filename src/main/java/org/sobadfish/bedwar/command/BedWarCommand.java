@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
- * @author SoBadFish
+ * @author SoBadFish&GouDan888
  * 2022/1/12
  */
 public class BedWarCommand extends Command {
@@ -43,9 +43,15 @@ public class BedWarCommand extends Command {
                 if(i != null){
                     info = i;
                 }
-                BedWarFrom simple = new BedWarFrom(BedWarMain.getTitle(), "请选择地图", DisPlayWindowsFrom.getId(51530, 99810));
+                BedWarFrom simple = new BedWarFrom("§c起床§e战争§r - 国际版",
+                        "《起床战争》是一款脍炙人口小游戏玩法\n" +
+                               "你需要在资源点收集资源购买道具\n" +
+                               "并在保护本队床的同时让自身队伍变得更强。\n" +
+                               "§e我们提供多种《起床战争》的游戏模式》\n" +
+                               "§e当然,如果你不清楚游戏规则,可以试一试经典的4v4v4v4模式。", DisPlayWindowsFrom.getId(51530, 99810));
                 PlayerInfo finalInfo = info;
-                simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
+                //simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
+                simple.add(new BaseIButtom(new ElementButton("§l§5随机匹配")) {
                     @Override
                     public void onClick(Player player) {
                         RandomJoinManager.joinManager.join(finalInfo,null);
@@ -60,7 +66,8 @@ public class BedWarCommand extends Command {
                             size += room.getPlayerInfos().size();
                         }
                     }
-                    simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&', wname + " &2" + size + " &r位玩家正在游玩\n&r房间数量: &a" + worldRoom.getRoomConfigs().size()), worldRoom.getImageData())) {
+                    //simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&', wname + " &2" + size + " &r位玩家正在游玩\n&r房间数量: &a" + worldRoom.getRoomConfigs().size()), worldRoom.getImageData())) {
+                    simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&', "&c起床&e战争 &r- &l&5国际版 "+wname+" \n&r\uE105 "+size))) {
                         @Override
                         public void onClick(Player player) {
                             disPlayRoomsFrom(player, wname);
@@ -133,10 +140,12 @@ public class BedWarCommand extends Command {
     }
     private void disPlayRoomsFrom(Player player,String name){
         FROM.remove(player.getName());
-        BedWarFrom simple = new BedWarFrom(BedWarMain.getTitle(), "请选择房间",DisPlayWindowsFrom.getId(51530,99810));
+        //BedWarFrom simple = new BedWarFrom(BedWarMain.getTitle(), "请选择房间",DisPlayWindowsFrom.getId(51530,99810));
+        BedWarFrom simple = new BedWarFrom("§c起床§e战争§r 的房间列表", "请选择房间点击进入：\n§e注意：由于房间人数及状态变动极快,部分房间可能已开始游戏,你将以观战者模式进入",DisPlayWindowsFrom.getId(51530,99810));
         WorldRoom worldRoom = BedWarMain.getMenuRoomManager().getRoom(name);
         PlayerInfo info = new PlayerInfo(player);
-        simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
+        //simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
+        simple.add(new BaseIButtom(new ElementButton("§5随机匹配")) {
             @Override
             public void onClick(Player player) {
                 RandomJoinManager.joinManager.join(info,null);
@@ -145,13 +154,13 @@ public class BedWarCommand extends Command {
         });
         for (GameRoomConfig roomConfig: worldRoom.getRoomConfigs()) {
             int size = 0;
-            String type = "&a空闲";
+            String type = "&l&5等待中 &r&e可加入";
             GameRoom room = BedWarMain.getRoomManager().getRoom(roomConfig.name);
             if(room != null){
                 size = room.getPlayerInfos().size();
                 switch (room.getType()){
                     case START:
-                        type = "&c已开始";
+                        type = "&l&2游戏中 &r&b可观战";
                         break;
                     case END:
                         type = "&c等待房间结束";
@@ -160,7 +169,8 @@ public class BedWarCommand extends Command {
                 }
             }
 
-            simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&',roomConfig.name+" &r状态:"+type + "&r\n人数: "+size+" / " + roomConfig.getMaxPlayerSize()), worldRoom.getImageData())) {
+            //simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&',roomConfig.name+" &r状态:"+type + "&r\n人数: "+size+" / " + roomConfig.getMaxPlayerSize()), worldRoom.getImageData())) {
+            simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&',type + "\n&r&4玩家数: "+size+"/" + roomConfig.getMaxPlayerSize()+"  &r&1地图： "+ roomConfig.name))) {
                 @Override
                 public void onClick(Player player) {
                     PlayerInfo playerInfo = new PlayerInfo(player);
