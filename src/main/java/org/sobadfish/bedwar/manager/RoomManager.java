@@ -756,18 +756,46 @@ public class RoomManager implements Listener {
     public void onLevelTransfer(EntityLevelChangeEvent event){
         Entity entity = event.getEntity();
         GameRoom room = getGameRoomByLevel(event.getTarget());
-        if(room != null){
-            if(room.getType() == GameRoom.GameType.START){
-                //防止错杀玩家
-                if(entity instanceof Player){
-                    PlayerInfo info = room.getPlayerInfo((Player) entity);
-                    if(info != null){
-                        return;
-                    }
+        if(entity instanceof EntityHuman) {
+            if (room != null) {
+                PlayerInfo info = getPlayerInfo((EntityHuman) entity);
+                if(info == null){
+                    info = new PlayerInfo((EntityHuman) entity);
+                }
+                GameRoom.JoinType type = room.joinPlayerInfo(info,true);
+                boolean isCancel = true;
+                switch (type) {
+                    case CAN_WATCH:
+                        if (!room.getRoomConfig().hasWatch) {
+                            info.sendForceMessage("&c该房间开始后不允许旁观");
+
+                        } else {
+                            if (info.getGameRoom() != null && !info.isWatch()) {
+                                info.sendForceMessage("&c你无法进入此房间");
+                                isCancel = false;
+                            } else {
+                                room.joinWatch(info);
+                            }
+                        }
+                        break;
+                    case NO_LEVEL:
+                        info.sendForceMessage("&c这个房间正在准备中，稍等一会吧");
+                        break;
+                    case NO_ONLINE:
+                        break;
+                    case NO_JOIN:
+                        info.sendForceMessage("&c该房间不允许加入");
+                        break;
+                    default:
+                        //可以加入
+                        isCancel = false;
+                        break;
+                }
+                if(isCancel){
+                    event.setCancelled();
+                    BedWarMain.sendMessageToObject("&c你无法进入该地图",entity);
                 }
 
-                event.setCancelled();
-                BedWarMain.sendMessageToObject("&c你无法进入该地图",entity);
             }
         }
 

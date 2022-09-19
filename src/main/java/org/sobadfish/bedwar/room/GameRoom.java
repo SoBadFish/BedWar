@@ -77,6 +77,8 @@ public class GameRoom {
 
     private final ArrayList<FloatTextInfo> floatTextInfos = new ArrayList<>();
 
+    private final LinkedHashMap<PlayerInfo, Scoreboard> scoreboards = new LinkedHashMap<>();
+
     /**
      * 复活时间
      * */
@@ -376,7 +378,7 @@ public class GameRoom {
     }
 
 
-    private final LinkedHashMap<PlayerInfo, Scoreboard> scoreboards = new LinkedHashMap<>();
+
 
     /**
      * 离开游戏的玩家们
