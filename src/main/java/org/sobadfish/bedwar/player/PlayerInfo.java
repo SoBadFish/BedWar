@@ -325,7 +325,16 @@ public class PlayerInfo {
         if(cancel || isLeave){
             return;
         }
-        getPlayer().getLevel().addSound(getPlayer(),sound);
+        addSound(sound,1.0f,1.0f);
+    }
+    /**
+     * 发送音效
+     * */
+    public void addSound(Sound sound,float v1,float v2){
+        if(cancel || isLeave){
+            return;
+        }
+        getPlayer().getLevel().addSound(getPlayer(),sound,v1,v2,(Player) getPlayer());
     }
 
     /**
