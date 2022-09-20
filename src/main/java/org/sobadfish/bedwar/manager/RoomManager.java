@@ -755,7 +755,8 @@ public class RoomManager implements Listener {
     @EventHandler
     public void onLevelTransfer(EntityLevelChangeEvent event){
         Entity entity = event.getEntity();
-        GameRoom room = getGameRoomByLevel(event.getTarget());
+        Level level = event.getTarget();
+        GameRoom room = getGameRoomByLevel(level);
         if(entity instanceof EntityHuman) {
             PlayerInfo info = getPlayerInfo((EntityHuman) entity);
             if(info == null){
@@ -788,11 +789,14 @@ public class RoomManager implements Listener {
                             info.getPlayer().teleport(info.getPlayer().getLevel().getSafeSpawn());
                         }
                         break;
+                    default:break;
                 }
 
             }else{
-                if(info.getGameRoom() != null){
-                    info.getGameRoom().quitPlayerInfo(info,false);
+                if(info.getGameRoom() != null ){
+                    if(!info.getGameRoom().getWorldInfo().getConfig().getWaitPosition().getLevel().getFolderName().equalsIgnoreCase(level.getFolderName())) {
+                        info.getGameRoom().quitPlayerInfo(info, false);
+                    }
                 }
             }
         }
