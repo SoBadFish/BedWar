@@ -329,8 +329,8 @@ public class GameRoom {
             sendTip("&e距离开始还剩 &a " + loadTime + " &e秒");
             if(loadTime <= 5){
                 switch (loadTime){
-                    case 5: sendTitle("&a5");break;
-                    case 4: sendTitle("&e4");break;
+                    //case 5: sendTitle("&a5");break;
+                    //case 4: sendTitle("&e4");break;
                     case 3: sendTitle("&63");break;
                     case 2: sendTitle("&42");break;
                     case 1: sendTitle("&41");break;
@@ -339,7 +339,12 @@ public class GameRoom {
 
                 }
                 //音效
-                addSound(Sound.RANDOM_CLICK);
+                //addSound(Sound.RANDOM_CLICK);
+
+            }
+            if(loadTime <= 3){
+                //音效
+                addSound(Sound.RANDOM_TOAST);
 
             }
             if(loadTime == 1){
