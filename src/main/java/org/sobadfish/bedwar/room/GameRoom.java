@@ -600,7 +600,7 @@ public class GameRoom {
      * */
     public boolean quitPlayerInfo(PlayerInfo info,boolean teleport){
         if(info != null) {
-
+            info.isLeave = true;
             if (info.getPlayer() instanceof Player) {
                 if (playerInfos.contains(info)) {
                     PlayerQuitRoomEvent event = new PlayerQuitRoomEvent(info, this, BedWarMain.getBedWarMain());
