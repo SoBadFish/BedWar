@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: C:\Users\29347\Documents\GitHub\NukkitX-BedWar\src\main\java
+ \org\sobadfish\bedwar\BedWarMain.java
+
