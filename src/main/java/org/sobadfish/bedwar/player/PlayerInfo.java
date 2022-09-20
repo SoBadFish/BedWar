@@ -325,7 +325,7 @@ public class PlayerInfo {
         if(cancel || isLeave){
             return;
         }
-        addSound(sound,1.0f,1.0f);
+        addSound(sound,1f,1f);
     }
     /**
      * 发送音效
@@ -334,8 +334,18 @@ public class PlayerInfo {
         if(cancel || isLeave){
             return;
         }
-        getPlayer().getLevel().addSound(getPlayer(),sound,v1,v2,(Player) getPlayer());
+        getPlayer().getLevel().addSound(getPlayer(),sound,v1,v2,(Player)getPlayer());
     }
+    /**
+     * 发送音效
+     * */
+    public void addSound(cn.nukkit.level.sound.Sound sound){
+        if(cancel || isLeave){
+            return;
+        }
+        getPlayer().getLevel().addSound(sound,(Player) getPlayer());
+    }
+
 
     /**
      * 增加效果
