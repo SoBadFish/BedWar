@@ -498,7 +498,8 @@ public class GameRoom {
             if(event.isCancelled()){
                 return JoinType.NO_JOIN;
             }
-
+            info.sendForceTitle("",1);
+            info.sendForceSubTitle("");
             sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
             info.init();
             info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(),TeamChoseItem.get());
