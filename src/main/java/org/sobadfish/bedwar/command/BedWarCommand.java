@@ -67,7 +67,7 @@ public class BedWarCommand extends Command {
                         }
                     }
                     //simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&', wname + " &2" + size + " &r位玩家正在游玩\n&r房间数量: &a" + worldRoom.getRoomConfigs().size()), worldRoom.getImageData())) {
-                    simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&', "&c起床&e战争 &r- &l&5国际版 "+wname+" \n&r\uE105 "+size))) {
+                    simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&', "&c起床&e战争 &r- &l&5国际版 "+wname+" \n&r\uE175 "+size))) {
                         @Override
                         public void onClick(Player player) {
                             disPlayRoomsFrom(player, wname);

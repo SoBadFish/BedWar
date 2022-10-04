@@ -1,6 +1,8 @@
 team:
   - name: "绿队"
     nameColor: "&a"
+    nameUnicode: ""
+    nameKill: ""
     blockWoolColor: "35:13"
     rgb:
       r: 0
@@ -8,6 +10,8 @@ team:
       b: 0
   - name: "红队"
     nameColor: "&c"
+    nameUnicode: ""
+    nameKill: ""
     blockWoolColor: "35:14"
     rgb:
       r: 255
@@ -15,6 +19,8 @@ team:
       b: 0
   - name: "蓝队"
     nameColor: "&9"
+    nameUnicode: ""
+    nameKill: ""
     blockWoolColor: "35:11"
     rgb:
       r: 0
@@ -22,6 +28,8 @@ team:
       b: 255
   - name: "黄队"
     nameColor: "&e"
+    nameUnicode: ""
+    nameKill: ""
     blockWoolColor: "35:4"
     rgb:
       r: 255

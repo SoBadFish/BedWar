@@ -13,8 +13,8 @@ import java.util.Map;
 
 
 /**
- * @author SoBadFish
- * 2022/1/3
+ * @author SoBadFish&GouDan888
+ * 2022/10/
  */
 @Data
 public class TeamInfoConfig {
@@ -77,6 +77,14 @@ public class TeamInfoConfig {
 
     public String getNameColor(){
         return teamConfig.getNameColor();
+    }
+
+    public String getNameUnicode(){
+        return teamConfig.getnameUnicode();
+    }
+
+    public String getNameKillUnicode(){
+        return teamConfig.getnameKillUnicode();
     }
 
     public BlockColor getRgb(){

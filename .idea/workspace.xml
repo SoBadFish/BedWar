@@ -5,8 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf502496-aa89-4db6-a5f1-e64ef4f704b4" name="默认变更列表" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/BedWar_jar/BedWar.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BedWar_jar/BedWar.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/command/BedWarCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/command/BedWarCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/item/button/FollowItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/item/button/FollowItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/item/button/RoomQuitItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/item/button/RoomQuitItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/item/button/TeamChoseItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/item/button/TeamChoseItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/player/PlayerInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/player/PlayerInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/player/team/config/TeamConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/player/team/config/TeamConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/player/team/config/TeamInfoConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/player/team/config/TeamInfoConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/room/GameRoom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/room/GameRoom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/thread/RandomJoinRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sobadfish/bedwar/thread/RandomJoinRunnable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/team.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/team.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,9 +35,9 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../NukkitX-WarBridge" />
-    <property name="project.structure.last.edited" value="工件" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../NukkitX-HungerGame" />
+    <property name="project.structure.last.edited" value="项目" />
+    <property name="project.structure.proportion" value="0.20031546" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />

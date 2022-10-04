@@ -25,12 +25,12 @@ public class RoomQuitItem {
     }
 
     public static Item get(){
-        Item item = Item.get(324);
+        Item item = Item.get(437);
         item.addEnchantment(Enchantment.get(9));
         CompoundTag tag = item.getNamedTag();
         tag.putBoolean("quitItem",true);
         item.setNamedTag(tag);
-        item.setCustomName(TextFormat.colorize('&',"&r&l&e点我退出游戏"));
+        item.setCustomName(TextFormat.colorize('&',"&r&7[使用]&l&e返回大厅"));
         return item;
 
     }

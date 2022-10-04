@@ -16,12 +16,12 @@ public class TeamChoseItem {
     public static ArrayList<Player> clickAgain = new ArrayList<>();
 
     public static int getIndex(){
-        return 6;
+        return 4;
     }
 
     public static Item get(){
-        Item item = Item.get(69);
-        item.setCustomName(TextFormat.colorize('&',"&r&l&e点我选择队伍"));
+        Item item = Item.get(450);
+        item.setCustomName(TextFormat.colorize('&',"&r&7[使用]&l&e选择队伍"));
         CompoundTag tag = item.getNamedTag();
         tag.putBoolean("choseTeam",true);
         item.setNamedTag(tag);

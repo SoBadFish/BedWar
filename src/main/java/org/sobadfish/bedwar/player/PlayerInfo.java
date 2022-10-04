@@ -55,6 +55,8 @@ public class PlayerInfo {
 
     public int updateTime = 0;
 
+    public int loadWaitTime = 0;
+
     public int assists = 0;
 
     private EntityHuman player;
@@ -575,53 +577,94 @@ public class PlayerInfo {
             levelName = " -- ";
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-        lore.add("&7"+format.format(new Date()));
+        //lore.add("&7"+format.format(new Date()));
         //lore.add("游戏模式: &a"+levelName);
 
-        lore.add(" ");
+        //lore.add(" ");
         if(isWait){
+            /*lore.add("&7"+format.format(new Date()));
             lore.add(" 玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize()+" ");
             lore.add(" 等待中....");
-            lore.add("   ");
+            lore.add("   ");*/
+            lore.add("\uE175 "+gameRoom.getPlayerInfos().size()+"&7/"+gameRoom.getRoomConfig().getMaxPlayerSize());
 
         }else{
-            IGameRoomEvent event = getGameRoom().getEventControl().getNextEvent();
-            if(event != null){
-                lore.add(event.display()+" &a"+formatTime1(event.getEventTime() - getGameRoom().getEventControl().loadTime));
-                lore.add("    ");
-            }else{
+            //日期
+            //lore.add("&7   "+format.format(new Date())+" "+getLevel().getName());
 
-                lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime)+" ");
-            }
+
+            StringBuilder s = new StringBuilder();
 
             for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
+
+                /*if(!teamInfo.isClose()){
+
+                    s.append(teamInfo.getTeamConfig().getNameUnicode());
+                }*/
+
+                if(teamInfo.isBadExists() && teamInfo.isLoading()){
+
+                    s.append(teamInfo.getTeamConfig().getNameUnicode());
+                }else if(!teamInfo.isBadExists() && teamInfo.isLoading()){
+                    s.append(teamInfo.getTeamConfig().getNameKillUnicode());
+                }
+            }
+
+            if(this.teamInfo != null){
+                //显示队伍
+                //lore.add(this.teamInfo+"队".toString());
+                lore.add(this.teamInfo.getTeamConfig().getNameUnicode() + " "
+                        + teamInfo.getTeamConfig().getNameColor()
+                        + teamInfo);
+            }else{
+                lore.add("\uE18E 吃瓜小分队");
+            }
+            lore.add(s.toString());
+
+
+            lore.add("\uE184 "+killCount);
+            IGameRoomEvent event = getGameRoom().getEventControl().getNextEvent();
+            if(event != null){
+                lore.add("\uE182 "+event.display()+formatTime1(event.getEventTime() - getGameRoom().getEventControl().loadTime));
+               // lore.add("1Test\uE182 " + formatTime1(getGameRoom().loadTime));
+                //lore.add("    ");
+            }else{
+                //游戏结束
+                lore.add("\uE182 "+formatTime1(getGameRoom().loadTime));
+            }
+
+           /* for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
                 String me = "";
                 if(getTeamInfo() != null && getTeamInfo().equals(teamInfo)){
                     me = "&7<- 你";
                 }
                 if(teamInfo.isBadExists() && teamInfo.isLoading()){
 
-                    lore.add("◎ "+ teamInfo +":&r    &a✔ "+me);
+                    lore.add(teamInfo.getTeamConfig().getNameUnicode() +" "+ teamInfo +"&r:  &a✔ "+me);
                 }else if(!teamInfo.isBadExists() && teamInfo.isLoading()){
-                    lore.add("◎ "+ teamInfo +": &r   &c"+teamInfo.getLivePlayer().size()+" "+me);
+                    lore.add(teamInfo.getTeamConfig().getNameKillUnicode() +" "+ teamInfo +"&r:  &c"+teamInfo.getLivePlayer().size()+" "+me);
                 }else{
-                    lore.add("◎ "+ teamInfo +": &r   &c✘ "+me);
+                    lore.add(teamInfo.getTeamConfig().getNameKillUnicode()+" " + teamInfo +"&r:  &c✘ "+me);
                 }
-            }
-            lore.add("      ");
-            lore.add("&b杀敌数: &a"+killCount);
-            lore.add("&e助攻数: &a"+assists);
-            lore.add("&d摧毁床数: &a"+bedBreakCount);
+            }*/
 
-            lore.add("        ");
+            //lore.add("      ");
+            //lore.add("3\uE182 " + formatTime1(getGameRoom().loadTime));
+            //lore.add("\uE184 "+killCount);
+            //lore.add("\uE182 " + formatTime1(getGameRoom().loadTime));
+
+            //lore.add("&e助攻数: &a"+assists);
+            //lore.add("&d摧毁床数: &a"+bedBreakCount);
+
+            //lore.add("        ");
         }
         Object obj = BedWarMain.getBedWarMain().getConfig().get("game-logo");
         if(obj instanceof List){
             for(Object s : (List<?>)obj){
-                lore.add(s.toString());
+                //lore.add(s.toString());
             }
         }else{
-            lore.add(BedWarMain.getBedWarMain().getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
+            //lore.add(BedWarMain.getBedWarMain().getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
         }
         return lore;
     }
@@ -636,7 +679,6 @@ public class PlayerInfo {
         if(gameRoom == null ||  gameRoom.getType() == GameRoom.GameType.END){
             return;
         }
-
 
         updateTime++;
         if(isWatch()){
@@ -750,6 +792,8 @@ public class PlayerInfo {
 
     public void death(EntityDamageEvent event){
 
+
+        //TODO 玩家死亡后可以做一些逻辑处理
         player.setHealth(player.getMaxHealth());
         if(player instanceof Player){
             ((Player) player).removeAllWindows();
@@ -757,6 +801,10 @@ public class PlayerInfo {
         }
         PlayerGameDeathEvent event1 = new PlayerGameDeathEvent(this,getGameRoom(),BedWarMain.getBedWarMain());
         Server.getInstance().getPluginManager().callEvent(event1);
+
+        //         mob.guardian.death
+        gameRoom.addSound(Sound.MOB_GUARDIAN_DEATH);
+
         if(getPlayer() instanceof Player) {
             ((Player) getPlayer()).setGamemode(3);
         }
