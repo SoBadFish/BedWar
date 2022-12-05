@@ -3,7 +3,6 @@ package org.sobadfish.bedwar.player.team;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockAir;
-import cn.nukkit.block.BlockBed;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.potion.Effect;
@@ -245,7 +244,6 @@ public class TeamInfo {
             getTeamConfig().getSpawnPosition().getLevel().loadChunk(getTeamConfig().getSpawnPosition().getChunkX(),getTeamConfig().getSpawnPosition().getChunkZ());
         }
 
-        BlockBed blockBed = new BlockBed();
         getTeamConfig().getBedPosition().getLevel().setBlock(getTeamConfig().getBedPosition(),Block.get(26,0),true,true);
         Position pos2 = getTeamConfig().getBedPosition().getSide(getTeamConfig().getBedFace());
         getTeamConfig().getBedPosition().getLevel().setBlock(pos2,Block.get(26,getTeamConfig().getBedFace().getHorizontalIndex()|8),true,true);

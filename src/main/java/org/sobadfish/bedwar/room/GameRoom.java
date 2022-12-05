@@ -458,14 +458,19 @@ public class GameRoom {
     }
 
     public boolean toBreakBlock(PlayerInfo info,Block block){
+        if(block instanceof BlockBed){
+            if(!isBreadBed(info, block)){
+                TeamInfo teamInfo = info.getTeamInfo();
+                if(teamInfo != null){
+                    teamInfo.placeBed();
+                }
+                return false;
+            }else{
+                return true;
+            }
+        }
         if(worldInfo.getPlaceBlock().contains(block)){
             return worldInfo.onChangeBlock(block, false);
-
-
-        }else{
-            if(block instanceof BlockBed){
-                return isBreadBed(info, block);
-            }
         }
         return false;
 

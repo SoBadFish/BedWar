@@ -577,7 +577,7 @@ public class RoomManager implements Listener {
 
 
     @EventHandler(ignoreCancelled = true)
-    public void onBlockBreak(BlockBreakEvent event){
+    public void onBlockBreak(final BlockBreakEvent event){
         Level level = event.getBlock().level;
         Block block = event.getBlock();
         Player player = event.getPlayer();
