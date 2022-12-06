@@ -3,7 +3,6 @@ package org.sobadfish.bedwar.thread;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.network.protocol.RemoveEntityPacket;
-import cn.nukkit.scheduler.AsyncTask;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.manager.FloatTextManager;
@@ -88,12 +87,12 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                         }
                     }
                     if (player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName())) {
-                        if(!floatText.player.contains(player)){
+                        if (!floatText.player.contains(player)) {
                             floatText.player.add(player);
                         }
 
                     }
-                    if(update > 5){
+                    if (update > 5) {
                         floatText.disPlayers();
                         update = 0;
                     }
@@ -101,36 +100,31 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 }
 
             }
-            Server.getInstance().getScheduler().scheduleAsyncTask(BedWarMain.getBedWarMain(), new AsyncTask() {
-                @Override
-                public void onRun() {
-                    List<GameRoomConfig> bufferQueue = new ArrayList<>();
-                    try {
-                        for(Map.Entry<GameRoomConfig,String> map: WorldResetManager.RESET_QUEUE.entrySet()){
-                            if (WorldInfoConfig.toPathWorld(map.getKey().getName(), map.getValue())) {
-                                BedWarMain.sendMessageToConsole("&a" + map.getKey().getName() + " 地图已还原");
-                            }
-                            Server.getInstance().loadLevel(map.getValue());
-                            BedWarMain.sendMessageToConsole("&r释放房间 " + map.getKey().getName());
-                            BedWarMain.sendMessageToConsole("&r房间 " + map.getKey().getName() + " 已回收");
-                            bufferQueue.add(map.getKey());
-                        }
-                        //TODO 从列表中移除
-                        for(GameRoomConfig config: bufferQueue){
-                            BedWarMain.getRoomManager().getRooms().remove(config.getName());
-                            RoomManager.LOCK_GAME.remove(config);
-                            WorldResetManager.RESET_QUEUE.remove(config);
-                        }
-                    } catch (Exception e) {
-                        BedWarMain.sendMessageToConsole("&c释放房间出现了一个小问题，导致无法正常释放,已将这个房间暂时锁定");
+            List<GameRoomConfig> bufferQueue = new ArrayList<>();
+            try {
+                for (Map.Entry<GameRoomConfig, String> map : WorldResetManager.RESET_QUEUE.entrySet()) {
+                    if (WorldInfoConfig.toPathWorld(map.getKey().getName(), map.getValue())) {
+                        BedWarMain.sendMessageToConsole("&a" + map.getKey().getName() + " 地图已还原");
                     }
+                    Server.getInstance().loadLevel(map.getValue());
+                    BedWarMain.sendMessageToConsole("&r释放房间 " + map.getKey().getName());
+                    BedWarMain.sendMessageToConsole("&r房间 " + map.getKey().getName() + " 已回收");
+                    bufferQueue.add(map.getKey());
                 }
-            });
-
+                //TODO 从列表中移除
+                for (GameRoomConfig config : bufferQueue) {
+                    BedWarMain.getRoomManager().getRooms().remove(config.getName());
+                    RoomManager.LOCK_GAME.remove(config);
+                    WorldResetManager.RESET_QUEUE.remove(config);
+                }
+            } catch (Exception e) {
+                BedWarMain.sendMessageToConsole("&c释放房间出现了一个小问题，导致无法正常释放,已将这个房间暂时锁定");
+            }
 
         }catch (Exception e){
             e.printStackTrace();
         }
+
         loadTime = System.currentTimeMillis() - t1;
     }
 
