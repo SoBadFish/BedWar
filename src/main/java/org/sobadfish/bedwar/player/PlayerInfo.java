@@ -705,7 +705,9 @@ public class PlayerInfo {
                 if(loadTime < 5){
                     loadTime++;
                 }else{
-                    ((Player) player).getFoodData().useHunger(1);
+                    if(gameRoom.getRoomConfig().enableFood) {
+                        ((Player) player).getFoodData().useHunger(1);
+                    }
                     loadTime = 0;
                 }
 
@@ -944,7 +946,8 @@ public class PlayerInfo {
             isSendkey = false;
         }
         if (player instanceof Player) {
-            ((Player) player).setFoodEnabled(true);
+            ((Player) player).setFoodEnabled(gameRoom.getRoomConfig().enableFood);
+
             ((Player) player).getFoodData().reset();
 
             if (!((Player) player).isOnline()) {

@@ -104,6 +104,10 @@ public class GameRoomConfig implements Cloneable{
      * 是否允许旁观
      * */
     public boolean hasWatch = true;
+    /**
+     * 是否启用饥饿
+     * */
+    public boolean enableFood = false;
 
 
     /**
@@ -340,6 +344,7 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.defeatCommand = new ArrayList<>(room.getStringList("defeatCmd"));
                 roomConfig.minutesExp = room.getInt("minutesExp",25);
                 roomConfig.deathIcon = room.getInt("deathIcon",20);
+                roomConfig.enableFood = room.getBoolean("enable-food",false);
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
                 if(room.exists("floatSpawnPos")){
                     for(Map<?,?> map: room.getMapList("floatSpawnPos")){
@@ -397,7 +402,7 @@ public class GameRoomConfig implements Cloneable{
         config.set("world",worldInfo.getLevel());
         config.set("roomMoney", gameRoomMoney);
         config.set("gameTime",time);
-
+        config.set("enable-food",enableFood);
         config.set("callbackY",callbackY);
         config.set("entity.team",teamShopEntityId);
         config.set("entity.item",itemShopEntityId);

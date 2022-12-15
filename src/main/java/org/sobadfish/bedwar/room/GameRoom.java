@@ -477,6 +477,10 @@ public class GameRoom {
     }
 
     public JoinType joinPlayerInfo(PlayerInfo info,boolean sendMessage){
+        Position pos = getWorldInfo().getConfig().getWaitPosition();
+        if(pos == null || !pos.getChunk().isLoaded()){
+            return JoinType.NO_JOIN;
+        }
         if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig)){
             return JoinType.NO_JOIN;
         }
@@ -515,7 +519,7 @@ public class GameRoom {
                 BedWarMain.getRoomManager().playerJoin.put(info.getPlayer().getName(),getRoomConfig().name);
             }
             playerInfos.add(info);
-            info.getPlayer().teleport(getWorldInfo().getConfig().getWaitPosition());
+            info.getPlayer().teleport(pos);
             if(info.getPlayer() instanceof Player) {
                 ((Player)info.getPlayer()).setGamemode(2);
             }
