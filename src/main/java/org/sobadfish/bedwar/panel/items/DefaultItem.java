@@ -135,32 +135,37 @@ public class DefaultItem extends BasePlayPanelItemInstance {
                 u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
             }
             // boolean u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
-
+            Item i = getItem();
+            if(info.buyArmorId.contains(i.getId())){
+                u = false;
+                errorMessage = "已经购买过此盔甲了";
+            }
             if (u) {
-                if(getItem() instanceof ItemArmor){
-                    if(getItem().isHelmet() && player.getInventory().getArmorItem(0).getId() != 0) {
-                        info.getArmor().put(0,getItem());
-                        player.getInventory().setArmorItem(0,getItem());
-                    }else if(getItem().isChestplate() && player.getInventory().getArmorItem(1).getId() != 0){
-                        player.getInventory().setArmorItem(1,getItem());
-                        info.getArmor().put(1,getItem());
-                    }else if(getItem().isLeggings() && player.getInventory().getArmorItem(2).getId() != 0){
-                        player.getInventory().setArmorItem(2,getItem());
-                        info.getArmor().put(2,getItem());
-                    }else if(getItem() .isBoots() && player.getInventory().getArmorItem(3).getId() != 0){
-                        player.getInventory().setArmorItem(3,getItem());
-                        info.getArmor().put(3,getItem());
+                if(i instanceof ItemArmor){
+                    info.buyArmorId.add(i.getId());
+                    if(i.isHelmet() && player.getInventory().getArmorItem(0).getId() != 0) {
+                        info.getArmor().put(0,i);
+                        player.getInventory().setArmorItem(0,i);
+                    }else if(i.isChestplate() && player.getInventory().getArmorItem(1).getId() != 0){
+                        player.getInventory().setArmorItem(1,i);
+                        info.getArmor().put(1,i);
+                    }else if(i.isLeggings() && player.getInventory().getArmorItem(2).getId() != 0){
+                        player.getInventory().setArmorItem(2,i);
+                        info.getArmor().put(2,i);
+                    }else if(i .isBoots() && player.getInventory().getArmorItem(3).getId() != 0){
+                        player.getInventory().setArmorItem(3,i);
+                        info.getArmor().put(3,i);
                     }else{
-                        player.getInventory().addItem(getItem());
+                        player.getInventory().addItem(i);
                     }
                 }else {
-                    if (getItem().getId() == 35) {
-                        int c = getItem().getCount();
+                    if (i.getId() == 35) {
+                        int c =i.getCount();
                         Item i2 = info.getTeamInfo().getTeamConfig().getTeamConfig().getBlockWoolColor().clone();
                         i2.setCount(c);
                         player.getInventory().addItem(i2);
                     }else {
-                        player.getInventory().addItem(getItem());
+                        player.getInventory().addItem(i);
                     }
                 }
                 player.getLevel().addSound(player.getPosition(),Sound.RANDOM_ORB);

@@ -73,7 +73,7 @@ public class PlayerInfo {
 
     public LinkedHashMap<PlayerInfo,Long> assistsPlayers = new LinkedHashMap<>();
 
-
+    public List<Integer> buyArmorId = new ArrayList<>();
 
     public Map<Integer,Item> inventory;
 
