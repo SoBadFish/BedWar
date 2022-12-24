@@ -509,7 +509,7 @@ public class GameRoom {
             }
             info.sendForceTitle("",1);
             info.sendForceSubTitle("");
-            sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
+            sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+" / "+getRoomConfig().getMaxPlayerSize()+")");
             info.init();
             info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(),TeamChoseItem.get());
             info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());

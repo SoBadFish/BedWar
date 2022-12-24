@@ -596,7 +596,7 @@ public class RoomManager implements Listener {
                     //出现了没有掉落物情况..修复
                     event.setDrops(event.getBlock().getDrops(Item.get(278)));
                 }
-                if(block instanceof BlockEnderChest){
+                if(block instanceof BlockEnderChest || block instanceof BlockBed){
                     event.setDrops(new Item[0]);
                 }
                 if(info.isWatch()){
