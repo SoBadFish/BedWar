@@ -607,9 +607,9 @@ public class PlayerInfo {
                 }
             }
             lore.add("      ");
-            lore.add("&b击杀数: &a"+killCount);
-            lore.add("&e助攻数: &a"+assists);
-            lore.add("&d破坏床数: &a"+bedBreakCount);
+            lore.add("击杀数: &a"+killCount);
+            lore.add("助攻数: &a"+assists);
+            lore.add("破坏床数: &a"+bedBreakCount);
 
             lore.add("        ");
         }
