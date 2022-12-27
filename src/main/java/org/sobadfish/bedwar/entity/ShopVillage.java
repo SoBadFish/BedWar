@@ -1,19 +1,15 @@
 package org.sobadfish.bedwar.entity;
 
 import cn.nukkit.Player;
-import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCreature;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
-
-
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
 import org.sobadfish.bedwar.panel.DisPlayerPanel;
 import org.sobadfish.bedwar.player.PlayerInfo;
-import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.shop.config.ShopInfoConfig;
 import org.sobadfish.bedwar.shop.item.ShopItemInfo;
@@ -51,10 +47,10 @@ public class ShopVillage extends EntityCreature {
         this.room = room;
         this.setNameTagAlwaysVisible();
         this.setNameTagVisible();
-        String str = "&b团队商店\n&e点击购买";
+        String str = "&bTeam Shop\n&eClick";
         entityId = room.teamShopEntityId;
         if("defaultShop".equalsIgnoreCase(infoConfig.getShopName())){
-            str = "&b道具商店\n&e点击购买";
+            str = "&bItem Shop\n&eClick";
             entityId = room.itemShopEntityId;
         }
         this.setNameTag(TextFormat.colorize('&',str));

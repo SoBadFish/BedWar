@@ -23,14 +23,14 @@ public class BedWarSpeakCommand extends Command {
         if(commandSender instanceof Player){
             PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo((Player) commandSender);
             if(info == null){
-                new PlayerInfo((Player)commandSender).sendForceMessage("&c你不在游戏房间内!");
+                new PlayerInfo((Player)commandSender).sendForceMessage("&cYou weren't in the game room!");
                 return false;
             }else{
                 if(strings.length > 0){
-                    info.getGameRoom().sendFaceMessage("&l&7(全体消息)&r "+info+"&r >> "+strings[0]);
+                    info.getGameRoom().sendFaceMessage("&l&7(ALL)&r "+info+"&r >> "+strings[0]);
 
                 }else{
-                    info.sendForceMessage("&c指令:/bws <你要说的内容> 全体消息");
+                    info.sendForceMessage("&cCommand :/bws <msg> all message");
                 }
             }
 
