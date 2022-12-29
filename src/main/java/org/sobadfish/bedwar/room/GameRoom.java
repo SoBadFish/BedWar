@@ -554,7 +554,7 @@ public class GameRoom {
         // TODO 检测是否一个队伍里有太多的人 拆掉多余的人
         for (TeamInfo manager: teamInfos){
             if(manager.getTeamPlayers().size() > t){
-                int size = t - manager.getTeamPlayers().size();
+                int size =  manager.getTeamPlayers().size() - t;
                 for(int i = 0;i < size;i++){
                     PlayerInfo info = manager.getTeamPlayers().remove(manager.getTeamPlayers().size()-1);
                     noTeam.add(info);
