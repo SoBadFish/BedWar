@@ -1,8 +1,5 @@
 package org.sobadfish.bedwar.room;
 
-import cn.nukkit.Player;
-import cn.nukkit.level.Location;
-import cn.nukkit.level.Position;
 import cn.nukkit.math.BlockFace;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
 import org.sobadfish.bedwar.player.PlayerInfo;
@@ -41,29 +38,29 @@ public class GameRoomCreater {
 
     private WorldInfoConfig worldInfoConfig;
 
-    private LinkedHashMap<String,Integer> moneyItemSize = new LinkedHashMap<>();
+    private final LinkedHashMap<String,Integer> moneyItemSize = new LinkedHashMap<>();
 
     /**
      * 队伍出生点
      * */
-    private LinkedHashMap<String, String> team = new LinkedHashMap<>();
+    private final LinkedHashMap<String, String> team = new LinkedHashMap<>();
     /**
      * 队伍床
      * */
-    private LinkedHashMap<String, String> teamBed = new LinkedHashMap<>();
+    private final LinkedHashMap<String, String> teamBed = new LinkedHashMap<>();
     /**
      * 队伍床
      * */
-    private LinkedHashMap<String, BlockFace> teamBedFace = new LinkedHashMap<>();
+    private final LinkedHashMap<String, BlockFace> teamBedFace = new LinkedHashMap<>();
 
-    private LinkedHashMap<String, String> teamShop = new LinkedHashMap<>();
+    private final LinkedHashMap<String, String> teamShop = new LinkedHashMap<>();
 
-    private LinkedHashMap<String, String> teamShop2 = new LinkedHashMap<>();
+    private final LinkedHashMap<String, String> teamShop2 = new LinkedHashMap<>();
 
     /**
      * 物品刷新点
      * */
-    private LinkedHashMap<String, ArrayList<String>> itemPosition = new LinkedHashMap<>();
+    private final LinkedHashMap<String, ArrayList<String>> itemPosition = new LinkedHashMap<>();
 
     public GameRoomCreater(PlayerInfo player){
         this.creater = player;

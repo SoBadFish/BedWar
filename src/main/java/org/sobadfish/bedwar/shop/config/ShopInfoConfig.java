@@ -58,8 +58,8 @@ public class ShopInfoConfig {
         TOOLS(Item.get(278),"工具"),
         ITEMS(Item.get(46),"小道具"),
         EFFECT(Item.get(373),"药水");
-        protected Item item;
-        protected String disPlayerName;
+        private final Item item;
+        private final String disPlayerName;
 
         ShopItemClassify(Item item,String disPlayerName){
             this.item = item;

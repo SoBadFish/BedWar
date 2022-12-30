@@ -9,8 +9,6 @@ import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.manager.RandomJoinManager;
-import org.sobadfish.bedwar.manager.RoomManager;
-import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
 import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
@@ -19,7 +17,6 @@ import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.WorldRoom;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
@@ -118,7 +115,7 @@ public class BedWarCommand extends Command {
                             RandomJoinManager.joinManager.join(info,finalName);
 
                         }else{
-                            commandSender.sendMessage("请在控制台执行");
+                            commandSender.sendMessage("请不要在控制台执行");
                         }
 
                         break;

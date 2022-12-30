@@ -12,7 +12,7 @@ import java.util.Map;
  * 2022/1/3
  */
 public class MoneyItemInfo {
-    private LinkedHashMap<String, MoneyItemInfoConfig> items;
+    private final LinkedHashMap<String, MoneyItemInfoConfig> items;
 
     private MoneyItemInfo(LinkedHashMap<String, MoneyItemInfoConfig> items){
         this.items = items;
@@ -20,7 +20,7 @@ public class MoneyItemInfo {
 
     public static MoneyItemInfo getMoneyItemInfoByFile(Config config){
         LinkedHashMap<String, MoneyItemInfoConfig> configLinkedHashMap = new LinkedHashMap<>();
-        for(Map map:config.getMapList("money")){
+        for(Map<?,?> map:config.getMapList("money")){
             configLinkedHashMap.put(map.get("name").toString(),MoneyItemInfoConfig.getInstance(map));
         }
         return new MoneyItemInfo(configLinkedHashMap);

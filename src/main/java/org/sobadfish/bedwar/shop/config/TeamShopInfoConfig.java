@@ -1,7 +1,6 @@
 package org.sobadfish.bedwar.shop.config;
 
 import org.sobadfish.bedwar.panel.items.BasePlayPanelItemInstance;
-import org.sobadfish.bedwar.panel.items.DefaultItem;
 import org.sobadfish.bedwar.panel.items.TeamItem;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class TeamShopInfoConfig extends ShopInfoConfig{
         //TODO 构建团队商店
         ArrayList<BasePlayPanelItemInstance> arrayList = new ArrayList<>();
         //TODO 构建商店信息
-        for(Map map1: map){
+        for(Map<?,?> map1: map){
             TeamItem teamItem = TeamItem.build(s,map1);
             if(teamItem != null){
                 arrayList.add(teamItem);
