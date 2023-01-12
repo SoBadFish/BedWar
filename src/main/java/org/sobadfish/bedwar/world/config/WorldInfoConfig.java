@@ -9,13 +9,10 @@ import cn.nukkit.utils.Config;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.MoneyItemInfo;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
-import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.tools.Utils;
-
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -146,6 +143,7 @@ public class WorldInfoConfig {
                 if(Server.getInstance().isLevelLoaded(levelName)) {
                     Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName), true);
                 }
+                Utils.toDelete(f2);
                 Utils.copyFiles(world, f2);
                 return true;
             }
