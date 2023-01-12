@@ -81,6 +81,8 @@ public class PlayerInfo {
 
     public boolean isSpawnFire = false;
 
+    public String playerName;
+
 
     /**
      *
@@ -102,6 +104,7 @@ public class PlayerInfo {
 
     public PlayerInfo(EntityHuman player){
         this.player = player;
+        this.playerName = player.getName();
     }
 
 

@@ -368,12 +368,14 @@ public class RoomManager implements Listener {
 
             if(info.getPlayer() instanceof Player && ((Player) info.getPlayer()).isOnline()){
                 ((Player)info.getPlayer()).setFoodEnabled(false);
-                room.getRoomConfig().quitRoomCommand.forEach(cmd-> Server.getInstance().dispatchCommand(((Player)info.getPlayer()),cmd));
+                if(info.getPlayer() != null) {
+                    room.getRoomConfig().quitRoomCommand.forEach(cmd -> Server.getInstance().dispatchCommand(((Player) info.getPlayer()), cmd));
+                }
             }
             if(info.isWatch()){
                 return;
             }
-            room.sendMessage("&c玩家 "+event.getPlayerInfo().getPlayer().getName()+" 离开了游戏");
+            room.sendMessage("&c玩家 "+event.getPlayerInfo().playerName+" 离开了游戏");
         }
     }
 
