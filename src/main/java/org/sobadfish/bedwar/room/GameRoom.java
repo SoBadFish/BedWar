@@ -436,7 +436,7 @@ public class GameRoom {
         if(roomConfig.getWorldInfo().getGameWorld() == null){
             return null;
         }
-        if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig)){
+        if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig.getName())){
             return null;
         }
         return new GameRoom(roomConfig);
@@ -481,7 +481,7 @@ public class GameRoom {
         if(pos == null || !pos.getChunk().isLoaded()){
             return JoinType.NO_JOIN;
         }
-        if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig)){
+        if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig.getName())){
             return JoinType.NO_JOIN;
         }
         if(info.getGameRoom() == null){
@@ -895,7 +895,7 @@ public class GameRoom {
 //            level1.unloadChunks();
             worldInfo.setClose(true);
             worldInfo = null;
-            WorldResetManager.RESET_QUEUE.put(getRoomConfig(),level);
+            WorldResetManager.RESET_QUEUE.put(getRoomConfig().getName(),level);
         }else{
             worldInfo.setClose(true);
             worldInfo = null;

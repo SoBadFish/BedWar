@@ -100,21 +100,26 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 }
 
             }
-            List<GameRoomConfig> bufferQueue = new ArrayList<>();
+            List<String> bufferQueue = new ArrayList<>();
             try {
-                for (Map.Entry<GameRoomConfig, String> map : WorldResetManager.RESET_QUEUE.entrySet()) {
-                    if (WorldInfoConfig.toPathWorld(map.getKey().getName(), map.getValue())) {
-                        BedWarMain.sendMessageToConsole("&a" + map.getKey().getName() + " 地图已还原");
+                for (Map.Entry<String, String> map : WorldResetManager.RESET_QUEUE.entrySet()) {
+                    if (WorldInfoConfig.toPathWorld(map.getKey(), map.getValue())) {
+                        BedWarMain.sendMessageToConsole("&a" + map.getKey()+ " 地图已还原");
                     }
                     Server.getInstance().loadLevel(map.getValue());
-                    BedWarMain.sendMessageToConsole("&r释放房间 " + map.getKey().getName());
-                    BedWarMain.sendMessageToConsole("&r房间 " + map.getKey().getName() + " 已回收");
+                    BedWarMain.sendMessageToConsole("&r释放房间 " + map.getKey());
+                    BedWarMain.sendMessageToConsole("&r房间 " + map.getKey() + " 已回收");
+
                     bufferQueue.add(map.getKey());
                 }
                 //TODO 从列表中移除
-                for (GameRoomConfig config : bufferQueue) {
-                    BedWarMain.getRoomManager().getRooms().remove(config.getName());
-                    RoomManager.LOCK_GAME.remove(config);
+                for (String config : bufferQueue) {
+                    BedWarMain.getRoomManager().getRooms().remove(config);
+                    GameRoomConfig roomConfig = BedWarMain.getRoomManager().getRoomConfig(config);
+                    if(roomConfig != null){
+                        RoomManager.LOCK_GAME.remove(roomConfig);
+                    }
+
                     WorldResetManager.RESET_QUEUE.remove(config);
                 }
             } catch (Exception e) {
