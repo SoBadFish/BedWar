@@ -24,7 +24,9 @@ public class WorldInfoMasterThread extends PluginTask<BedWarMain> {
     @Override
     public void onRun(int i) {
         if (worldInfo != null){
-            worldInfo.onUpdate();
+            if(!worldInfo.onUpdate()){
+                return;
+            }
             if(room.getType() != GameRoom.GameType.END || room.getType() != GameRoom.GameType.CLOSE) {
 
                 for (ShopVillage shopVillage : new ArrayList<>(room.getShopInfo().getShopVillages())) {
