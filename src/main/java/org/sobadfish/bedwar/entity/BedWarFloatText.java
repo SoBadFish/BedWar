@@ -106,9 +106,7 @@ public class BedWarFloatText extends Entity {
                 spawnTo(player);
             }else{
                 this.player.remove(player);
-                RemoveEntityPacket dp = new RemoveEntityPacket();
-                dp.eid = getId();
-                player.dataPacket(dp);
+                close();
             }
         }
     }
