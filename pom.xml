@@ -4,7 +4,7 @@
 
     <groupId>org.sobadfish.bedwar</groupId>
     <artifactId>BedWar</artifactId>
-    <version>1.8.11-test</version>
+    <version>1.8.12</version>
 
     <dependencies>
         <dependency>
