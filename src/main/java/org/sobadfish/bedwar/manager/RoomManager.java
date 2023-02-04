@@ -653,8 +653,15 @@ public class RoomManager implements Listener {
                 //TODO 无房间回到出生点
                reset(player);
             }
-        }else if(player.getGamemode() == 3){
-            player.setGamemode(0);
+        }else {
+            for(GameRoomConfig gameRoomConfig: getRoomConfigs()){
+                if(gameRoomConfig.getWorldInfo().getGameWorld() ==  player.level){
+                    reset(player);
+                }
+            }
+            if(player.getGamemode() == 3) {
+                player.setGamemode(0);
+            }
         }
 
     }
