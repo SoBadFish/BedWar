@@ -121,25 +121,28 @@ public class DefaultItem extends BasePlayPanelItemInstance {
             Player player = (Player) info.getPlayer();
 
             GameRoom room = info.getGameRoom();
-            boolean u;
+            boolean u = true;
             int rc = 1;
             String errorMessage = moneyItem+"不足";
             if(room.getRoomConfig().moneyItem.containsKey(moneyItem)){
                 MoneyItemInfoConfig oInfo = room.getRoomConfig().moneyItem.get(moneyItem);
                 rc = (int) oInfo.getExp();
             }
-            if(room.getRoomConfig().isExp()){
-                u = info.reduceExp(count * rc);
-                errorMessage = "经验不足";
-            }else{
-                u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
-            }
-            // boolean u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
             Item i = getItem();
             if(info.buyArmorId.contains(i.getId())){
                 u = false;
                 errorMessage = "已经购买过此盔甲了";
             }
+            if(u) {
+                if (room.getRoomConfig().isExp()) {
+                    u = info.reduceExp(count * rc);
+                    errorMessage = "经验不足";
+                } else {
+                    u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
+                }
+            }
+            // boolean u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
+
             if (u) {
                 if(i instanceof ItemArmor){
                     info.buyArmorId.add(i.getId());

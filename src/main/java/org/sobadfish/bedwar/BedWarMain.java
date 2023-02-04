@@ -130,6 +130,7 @@ public class BedWarMain extends PluginBase {
         uiType = Utils.loadUiTypeByName(getConfig().getString("shop-ui","auto"));
         upExp = getConfig().getInt("up-exp",500);
         NbtItemManager.init();
+        dataManager = PlayerDataManager.asFile(new File(this.getDataFolder()+File.separator+"player.json"));
         File mainFileDir = new File(this.getDataFolder()+File.separator+"rooms");
         if(!mainFileDir.exists()){
             if(!mainFileDir.mkdirs()){
@@ -147,7 +148,7 @@ public class BedWarMain extends PluginBase {
         menuRoomManager = new MenuRoomManager(getConfig());
 
 
-        dataManager = PlayerDataManager.asFile(new File(this.getDataFolder()+File.separator+"player.json"));
+
         //初始化排行榜
         topManager = PlayerTopManager.asFile(new File(this.getDataFolder()+File.separator+"top.json"));
         if(topManager != null){

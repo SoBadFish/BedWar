@@ -91,10 +91,7 @@ public class RandomJoinManager {
             return false;
         }
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(playerInfo, name, time, cancel);
-        }
+
     }
 
 }

@@ -605,14 +605,9 @@ public class RoomManager implements Listener {
                     player.sendMessage("&c观察状态下不能破坏方块");
                     event.setCancelled();
                 }
-
             }
         }
-
     }
-
-
-
 
 
 
@@ -627,6 +622,7 @@ public class RoomManager implements Listener {
             if(hasGameRoom(room)){
                 GameRoom room1 = getRoom(room);
                 if(room1 == null){
+                    reset(player);
                     playerJoin.remove(player.getName());
                     player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
                     return;
@@ -637,11 +633,7 @@ public class RoomManager implements Listener {
                         info.setPlayer(player);
                         info.setLeave(false);
                         if(room1.getType() == GameRoom.GameType.WAIT){
-                            if(room1.worldInfo.getConfig().getGameWorld() != null){
-                                player.teleport(room1.worldInfo.getConfig().getGameWorld().getSafeSpawn());
-                                player.teleport(room1.getWorldInfo().getConfig().getWaitPosition());
-                            }
-
+                            room1.quitPlayerInfo(info,true);
                         }else{
                             if(info.isWatch() || info.getTeamInfo() == null){
                                 room1.joinWatch(info);
@@ -668,13 +660,18 @@ public class RoomManager implements Listener {
     }
 
     private void reset(Player player){
+        PlayerInfo info = getPlayerInfo(player);
         player.setNameTag(player.getName());
         playerJoin.remove(player.getName());
         player.setHealth(player.getMaxHealth());
         player.getInventory().clearAll();
+        player.getEnderChestInventory().clearAll();
+        if(info != null){
+            player.getInventory().setContents(info.inventory);
+            player.getEnderChestInventory().setContents(info.eInventory);
+        }
         player.removeAllEffects();
         player.setGamemode(0);
-        player.getEnderChestInventory().clearAll();
         player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
     }
 

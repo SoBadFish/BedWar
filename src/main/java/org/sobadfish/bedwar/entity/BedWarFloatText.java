@@ -26,7 +26,7 @@ public class BedWarFloatText extends Entity {
     //如果不为null 就是房间内的浮空字 到时候需要移除
     public GameRoom room;
 
-    public List<Player> player = new CopyOnWriteArrayList<>();
+    public List<String> player = new CopyOnWriteArrayList<>();
 
     public BedWarFloatText(String name,FullChunk fullChunk, CompoundTag compoundTag) {
         super(fullChunk, compoundTag);
@@ -98,26 +98,29 @@ public class BedWarFloatText extends Entity {
     }
 
     public void disPlayers(){
-        for(Player player: player){
-            if(player.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())){
-                if(this.hasSpawned.containsValue(player)){
-                    this.despawnFrom(player);
-                }
-                spawnTo(player);
-            }else{
+        for(String player: player){
+            Player player1 = Server.getInstance().getPlayer(player);
+            if(player1 == null){
                 this.player.remove(player);
-                RemoveEntityPacket dp = new RemoveEntityPacket();
-                dp.eid = getId();
-                player.dataPacket(dp);
+            }else {
+                if (player1.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())) {
+                    if (this.hasSpawned.containsValue(player1)) {
+                        this.despawnFrom(player1);
+                    }
+                    spawnTo(player1);
+                } else {
+                    this.player.remove(player);
+                    close();
+                }
             }
         }
     }
 
     private void toDisplay(){
         for(Player player: Server.getInstance().getOnlinePlayers().values()){
-            if(!this.player.contains(player)) {
+            if(!this.player.contains(player.getName())) {
                 if(player.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())){
-                    this.player.add(player);
+                    this.player.add(player.getName());
                     spawnTo(player);
                 }
             }

@@ -201,6 +201,9 @@ public class PlayerData {
 
         public int getInt(DataType type){
             int c = 0;
+            if(type == null){
+                return c;
+            }
             switch (type){
                 case BED_BREAK:
                     c += breakCount;
