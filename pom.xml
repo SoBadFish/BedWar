@@ -7,6 +7,13 @@
     <version>1.8.12</version>
 
     <dependencies>
+         <dependency>
+             <groupId>org.projectlombok</groupId>
+             <artifactId>lombok</artifactId>
+             <version>1.18.26</version>
+             <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>de.theamychan</groupId>
             <artifactId>ScoreboardAPI</artifactId>
