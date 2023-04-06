@@ -24,7 +24,7 @@ public class GameRoomCreater {
 
     private int flag = 1;
 
-    private int setFlag = 1;
+    public int setFlag = 1;
 
     private String roomName = null;
 
