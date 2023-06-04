@@ -37,11 +37,13 @@ public class PointPlayer implements INbtItem{
         }
         List<Map.Entry<PlayerInfo, Double>> list = new ArrayList<>(dis.entrySet());
         list.sort(Comparator.comparingInt(o -> o.getValue().intValue()));
-        target = list.get(0).getKey();
+        if(list.size() > 0) {
+            target = list.get(0).getKey();
 
-        if(target != null){
-            info.sendTip("&a找到"+target+"\n"+"&c距离: &r"+String.format("%.2f",list.get(0).getValue())+" 米");
+            if (target != null) {
+                info.sendTip("&a找到" + target + "\n" + "&c距离: &r" + String.format("%.2f", list.get(0).getValue()) + " 米");
 
+            }
         }
         return true;
 
