@@ -43,13 +43,7 @@
             <scope>system</scope>
             <systemPath> ${project.basedir}/lib/Sakura-1.0.4-Release.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>com.smallaswater.npc</groupId>
-            <artifactId>RsNPCX</artifactId>
-            <version>1.0-SNAPSHOT</version>
-           <scope>system</scope>
-           <systemPath> ${project.basedir}/lib/RsNPCX-1.8.8-PNX.jar</systemPath>
-        </dependency>
+
         <dependency>
             <groupId>com.smallaswater.tips</groupId>
             <artifactId>Tips</artifactId>

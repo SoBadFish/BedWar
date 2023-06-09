@@ -581,6 +581,7 @@ public class PlayerInfo {
 
         lore.add(" ");
         if(isWait){
+            //玩家等待时的计分板显示内容
             lore.add("玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize());
             lore.add("等待中....");
             lore.add("   ");
