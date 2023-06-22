@@ -3,7 +3,7 @@ package org.sobadfish.bedwar.player.team.config;
 
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.BlockColor;
-import org.sobadfish.bedwar.proxy.ItemProxy;
+
 
 import java.util.Map;
 
@@ -52,7 +52,7 @@ public class TeamConfig {
         int r = Integer.parseInt(m.get("r").toString());
         int g = Integer.parseInt(m.get("g").toString());
         int b = Integer.parseInt(m.get("b").toString());
-        return new TeamConfig(name,nameColor,ItemProxy.getItem(map.get("blockWoolColor").toString())
+        return new TeamConfig(name,nameColor,Item.fromString(map.get("blockWoolColor").toString())
                 ,new BlockColor(r,g,b));
     }
 

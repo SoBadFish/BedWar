@@ -18,7 +18,6 @@ import org.sobadfish.bedwar.manager.*;
 import org.sobadfish.bedwar.manager.data.PlayerDataManager;
 import org.sobadfish.bedwar.manager.data.PlayerTopManager;
 import org.sobadfish.bedwar.panel.lib.AbstractFakeInventory;
-import org.sobadfish.bedwar.proxy.ItemProxy;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.event.*;
 import org.sobadfish.bedwar.tools.Utils;
@@ -71,7 +70,7 @@ public class BedWarMain extends PluginBase {
         this.getLogger().info(TextFormat.colorize('&',"&c插件作者:&b sobadfish(某吃瓜咸鱼) &aQQ：&e1586235767"));
         this.getLogger().info(TextFormat.colorize('&',"&c本插件为原创插件 部分源代码出处已标明原作者"));
         sendMessageToConsole("&a正在检查相应的依赖");
-        ItemProxy.init();
+
         for(String s : this.getDescription().getSoftDepend()){
             Plugin plugin = getServer().getPluginManager().getPlugin(s);
             if(plugin == null){

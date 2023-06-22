@@ -55,7 +55,7 @@ import org.sobadfish.bedwar.panel.items.PlayerItem;
 import org.sobadfish.bedwar.player.PlayerData;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
-import org.sobadfish.bedwar.proxy.ItemProxy;
+
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.GameRoom.GameType;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
@@ -1098,19 +1098,10 @@ public class RoomManager implements Listener {
         FormWindowSimple simple = new FormWindowSimple("请选择队伍","");
         for(TeamInfo teamInfoConfig: room.getTeamInfos()){
             Item wool = teamInfoConfig.getTeamConfig().getTeamConfig().getBlockWoolColor();
-            //得随时翻译回来
-            String ws = ItemProxy.asNewWool(wool.getId()+"");
-            int id,damage;
-            if(ws != null){
-                id = Integer.parseInt(ws.split(":")[0]);
-                damage = Integer.parseInt(ws.split(":")[1]);
-            }else{
-                id = wool.getId();
-                damage = wool.getDamage();
-            }
+
             simple.addButton(new ElementButton(TextFormat.colorize('&', teamInfoConfig +" &r"+teamInfoConfig.getTeamPlayers().size()+" / "+(room.getRoomConfig().getMaxPlayerSize() / room.getTeamInfos().size())),
                     new ElementButtonImageData("path",
-                            ItemIDSunName.getIDByPath(id,damage))));
+                            ItemIDSunName.getIDByPath(wool.getId(),wool.getDamage()))));
         }
         player.showFormWindow(simple,102);
         TeamChoseItem.clickAgain.remove(player);
