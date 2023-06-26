@@ -1225,16 +1225,18 @@ public class RoomManager implements Listener {
         Player player = event.getPlayer();
         if(DisPlayWindowsFrom.CUSTOM.containsKey(player.getName())){
             BedWarFrom simple = DisPlayWindowsFrom.CUSTOM.get(player.getName());
-            if (onBedWarFrom(event, player, simple)) {
-                return;
+            if (!onBedWarFrom(event, player, simple)) {
+                DisPlayWindowsFrom.CUSTOM.remove(player.getName());
             }
+            return;
 
         }
         if(BedWarCommand.FROM.containsKey(player.getName())){
             BedWarFrom simple = BedWarCommand.FROM.get(player.getName());
-            if (onBedWarFrom(event, player, simple)) {
-                return;
+            if (!onBedWarFrom(event, player, simple)) {
+                BedWarCommand.FROM.remove(player.getName());
             }
+            return;
 
         }
 
