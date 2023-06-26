@@ -56,15 +56,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="Maven: com.smallaswater.npc:RsNPCX:1.0-SNAPSHOT">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/RsNPCX-1.8.8-PNX.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
       <library name="Maven: com.smallaswater.tips:Tips:2.1.3-MOT-SNAPSHOT">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/Tips-2.1.3-MOT-SNAPSHOT.jar!/" />
