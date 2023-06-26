@@ -1220,9 +1220,6 @@ public class RoomManager implements Listener {
     @EventHandler
     public void onFrom(PlayerFormRespondedEvent event){
         if(event.wasClosed()){
-            DisPlayWindowsFrom.SHOP.remove(event.getPlayer().getName());
-            BedWarCommand.FROM.remove(event.getPlayer().getName());
-            DisPlayWindowsFrom.CUSTOM.remove(event.getPlayer().getName());
             return;
         }
         Player player = event.getPlayer();
