@@ -1353,4 +1353,11 @@ public class RoomManager implements Listener {
             }
         }
     }
+    @EventHandler
+    public void onWorldReloadEvent(ReloadWorldEvent event) {
+        Server.getInstance().loadLevel(event.world);
+        BedWarMain.sendMessageToConsole("&r释放房间 " + event.world);
+        BedWarMain.sendMessageToConsole("&r房间 " + event.world + " 已回收");
+
+    }
 }
