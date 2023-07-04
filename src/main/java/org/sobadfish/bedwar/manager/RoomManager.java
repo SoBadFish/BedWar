@@ -1220,26 +1220,23 @@ public class RoomManager implements Listener {
     @EventHandler
     public void onFrom(PlayerFormRespondedEvent event){
         if(event.wasClosed()){
-//            DisPlayWindowsFrom.SHOP.remove(event.getPlayer().getName());
-//            BedWarCommand.FROM.remove(event.getPlayer().getName());
-//            DisPlayWindowsFrom.CUSTOM.remove(event.getPlayer().getName());
             return;
         }
         Player player = event.getPlayer();
         if(DisPlayWindowsFrom.CUSTOM.containsKey(player.getName())){
             BedWarFrom simple = DisPlayWindowsFrom.CUSTOM.get(player.getName());
-            if (onBedWarFrom(event, player, simple)) {
-                return;
+            if (!onBedWarFrom(event, player, simple)) {
+                DisPlayWindowsFrom.CUSTOM.remove(player.getName());
             }
-            DisPlayWindowsFrom.CUSTOM.remove(player.getName());
+            return;
 
         }
         if(BedWarCommand.FROM.containsKey(player.getName())){
             BedWarFrom simple = BedWarCommand.FROM.get(player.getName());
-            if (onBedWarFrom(event, player, simple)) {
-                return;
+            if (!onBedWarFrom(event, player, simple)) {
+                BedWarCommand.FROM.remove(player.getName());
             }
-            BedWarCommand.FROM.remove(player.getName());
+            return;
 
         }
 
@@ -1296,8 +1293,9 @@ public class RoomManager implements Listener {
                             .getClickedButtonId()).getItemInstance().onClickButton(player, shopFrom);
 
                 }
+            }else{
+                DisPlayWindowsFrom.SHOP.remove(player.getName());
             }
-            DisPlayWindowsFrom.SHOP.remove(player.getName());
         }
     }
 
