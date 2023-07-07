@@ -8,7 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="17" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="Maven: de.theamychan:ScoreboardAPI:1.3-SNAPSHOT">
@@ -20,9 +20,9 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="Maven: cn.nukkit:Nukkit:1.0-SNAPSHOT">
+      <library name="Maven: cn.nukkit:Nukkit:MOT-SNAPSHOT">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/Nukkit-PM1E.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/Nukkit-MOT-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

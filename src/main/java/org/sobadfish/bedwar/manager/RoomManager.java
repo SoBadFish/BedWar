@@ -24,6 +24,7 @@ import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.form.response.FormResponseSimple;
 import cn.nukkit.form.window.FormWindowSimple;
+import cn.nukkit.inventory.EntityArmorInventory;
 import cn.nukkit.inventory.Inventory;
 import cn.nukkit.inventory.PlayerInventory;
 import cn.nukkit.inventory.transaction.InventoryTransaction;
@@ -55,7 +56,6 @@ import org.sobadfish.bedwar.panel.items.PlayerItem;
 import org.sobadfish.bedwar.player.PlayerData;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
-
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.GameRoom.GameType;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
@@ -1314,6 +1314,29 @@ public class RoomManager implements Listener {
         return false;
     }
 
+
+    @EventHandler
+    public void onPlayerConsumeItemEvent(PlayerItemConsumeEvent event){
+        //监听玩家使用隐身药水
+        if(event.getItem().getDamage() == 7 || event.getItem().getDamage() == 8){
+            //没收玩家身上装备
+            Player player = event.getPlayer();
+            PlayerInfo playerInfo = getPlayerInfo(player);
+            if(playerInfo != null) {
+                GameRoom gameRoom = playerInfo.getGameRoom();
+                if (gameRoom != null) {
+                    if (gameRoom.getType() == GameType.START) {
+                        playerInfo.armorInventory = player.getInventory().getArmorContents();
+                        playerInfo.isInvisibility = true;
+                        player.getInventory().setArmorContents(new Item[0]);
+                    }
+                }
+            }
+        }
+
+
+    }
+
     @EventHandler
     public void onItemChange(InventoryTransactionEvent event) {
         InventoryTransaction transaction = event.getTransaction();
@@ -1334,6 +1357,20 @@ public class RoomManager implements Listener {
                         }
                     }
 
+                }
+                //阻止玩家脱下盔甲
+                if(inventory instanceof EntityArmorInventory){
+                    Item i = action.getSourceItem();
+                    Player player = transaction.getSource();
+                    PlayerInfo playerInfo = getPlayerInfo(player);
+                    if(playerInfo != null){
+                        GameRoom gameRoom = playerInfo.getGameRoom();
+                        if(gameRoom != null){
+                            if(gameRoom.getType() == GameType.START){
+                                event.setCancelled();
+                            }
+                        }
+                    }
                 }
                 if(inventory instanceof PlayerInventory){
                     EntityHuman player =((PlayerInventory) inventory).getHolder();

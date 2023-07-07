@@ -3,8 +3,6 @@ package org.sobadfish.bedwar.panel.from;
 import cn.nukkit.Player;
 import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.utils.TextFormat;
-import lombok.Getter;
-import lombok.Setter;
 import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
 
 import java.util.ArrayList;
@@ -18,8 +16,7 @@ public class BedWarFrom {
 
     private final int id;
 
-    @Getter
-    @Setter
+
     private List<BaseIButtom> baseIButtoms = new ArrayList<>();
 
     private final String title;
@@ -29,6 +26,14 @@ public class BedWarFrom {
         this.title = title;
         this.context = context;
         this.id = id;
+    }
+
+    public List<BaseIButtom> getBaseIButtoms() {
+        return baseIButtoms;
+    }
+
+    public void setBaseIButtoms(List<BaseIButtom> baseIButtoms) {
+        this.baseIButtoms = baseIButtoms;
     }
 
     public int getId() {

@@ -98,6 +98,7 @@ public class BedWarMain extends PluginBase {
         Entity.registerEntity(EntityBlueWitherSkull.class.getSimpleName(), EntityBlueWitherSkull.class);
         Entity.registerEntity(IronGolem.class.getSimpleName(), IronGolem.class);
         loadBedWarConfig();
+
         //TODO 注册指令
         this.getServer().getCommandMap().register("badwar",new BedWarAdminCommand("bd"));
         this.getServer().getCommandMap().register("badwar",new BedWarCommand("bw"));

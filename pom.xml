@@ -18,9 +18,9 @@
         <dependency>
             <groupId>cn.nukkit</groupId>
             <artifactId>Nukkit</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>MOT-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath> ${project.basedir}/lib/Nukkit-PM1E.jar</systemPath>
+            <systemPath> ${project.basedir}/lib/Nukkit-MOT-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.smallaswater.npc</groupId>

@@ -83,6 +83,10 @@ public class PlayerInfo {
 
     public String playerName;
 
+    public Item[] armorInventory = new Item[0];
+
+    public boolean isInvisibility = false;
+
 
     /**
      *
@@ -229,6 +233,9 @@ public class PlayerInfo {
             damageTime = 5;
             assistsPlayers.put(damageByInfo,System.currentTimeMillis());
             //现身
+            if(isInvisibility){
+                player.getInventory().setArmorContents(armorInventory);
+            }
             getPlayer().removeEffect(14);
         }
     }
