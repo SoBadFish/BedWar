@@ -1390,9 +1390,20 @@ public class RoomManager implements Listener {
     }
     @EventHandler
     public void onWorldReloadEvent(ReloadWorldEvent event) {
-        Server.getInstance().loadLevel(event.world);
-        BedWarMain.sendMessageToConsole("&r释放房间 " + event.world);
-        BedWarMain.sendMessageToConsole("&r房间 " + event.world + " 已回收");
+        GameRoomConfig config = event.getRoomConfig();
+        Server.getInstance().getScheduler().scheduleTask(BedWarMain.getBedWarMain(), new Runnable() {
+            @Override
+            public void run() {
+                Server.getInstance().loadLevel(config.getWorldInfo().getLevel());
+                BedWarMain.getRoomManager().getRooms().remove(config.getName());
+                RoomManager.LOCK_GAME.remove(config);
+                WorldResetManager.RESET_QUEUE.remove(config.name);
+                BedWarMain.sendMessageToConsole("&r释放房间 " + config.name);
+                BedWarMain.sendMessageToConsole("&r房间 " + config.name + " 已回收");
+
+            }
+        });
+
 
     }
 }

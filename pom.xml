@@ -6,6 +6,7 @@
     <artifactId>BedWar</artifactId>
     <version>1.8.17</version>
 
+
     <dependencies>
         <dependency>
             <groupId>de.theamychan</groupId>
@@ -18,9 +19,9 @@
         <dependency>
             <groupId>cn.nukkit</groupId>
             <artifactId>Nukkit</artifactId>
-            <version>MOT-SNAPSHOT</version>
+            <version>PM1E</version>
             <scope>system</scope>
-            <systemPath> ${project.basedir}/lib/Nukkit-MOT-SNAPSHOT.jar</systemPath>
+            <systemPath> ${project.basedir}/lib/Nukkit-PM1E-MOT-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.smallaswater.npc</groupId>

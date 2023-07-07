@@ -3,6 +3,7 @@ package org.sobadfish.bedwar.event;
 import cn.nukkit.event.HandlerList;
 import cn.nukkit.event.plugin.PluginEvent;
 import cn.nukkit.plugin.Plugin;
+import org.sobadfish.bedwar.room.config.GameRoomConfig;
 
 /**
  * @author Sobadfish
@@ -16,10 +17,14 @@ public class ReloadWorldEvent extends PluginEvent {
         return HANDLERS;
     }
 
-    public String world;
+    public GameRoomConfig roomConfig;
 
-    public ReloadWorldEvent(Plugin plugin, String world) {
+    public ReloadWorldEvent(Plugin plugin, GameRoomConfig roomConfig) {
         super(plugin);
-        this.world = world;
+        this.roomConfig = roomConfig;
+    }
+
+    public GameRoomConfig getRoomConfig() {
+        return roomConfig;
     }
 }

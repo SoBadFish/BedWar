@@ -8,15 +8,12 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.event.ReloadWorldEvent;
 import org.sobadfish.bedwar.manager.FloatTextManager;
-import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.manager.WorldResetManager;
 import org.sobadfish.bedwar.room.GameRoom;
-import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -98,28 +95,20 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                         floatText.disPlayers();
                         update = 0;
                     }
-
                 }
-
             }
             Server.getInstance().getScheduler().scheduleAsyncTask(BedWarMain.getBedWarMain(), new AsyncTask() {
                 @Override
                 public void onRun() {
-                    List<GameRoomConfig> bufferQueue = new ArrayList<>();
                     try {
                         for(Map.Entry<String,String> map: WorldResetManager.RESET_QUEUE.entrySet()){
                             if (WorldInfoConfig.toPathWorld(map.getKey(), map.getValue())) {
                                 BedWarMain.sendMessageToConsole("&a" + map.getKey() + " 地图已还原");
                             }
-                            Server.getInstance().getPluginManager().callEvent(new ReloadWorldEvent(BedWarMain.getBedWarMain(), map.getKey()));
-                            bufferQueue.add(BedWarMain.getRoomManager().getRoomConfig(map.getKey()));
+                            Server.getInstance().getPluginManager().callEvent(new ReloadWorldEvent(BedWarMain.getBedWarMain(), BedWarMain.getRoomManager().getRoomConfig(map.getKey())));
+
                         }
-                        //TODO 从列表中移除
-                        for(GameRoomConfig config: bufferQueue){
-                            BedWarMain.getRoomManager().getRooms().remove(config.getName());
-                            RoomManager.LOCK_GAME.remove(config);
-                            WorldResetManager.RESET_QUEUE.remove(config.name);
-                        }
+
                     } catch (Exception e) {
                         BedWarMain.sendMessageToConsole("&c释放房间出现了一个小问题，导致无法正常释放,已将这个房间暂时锁定");
                     }
