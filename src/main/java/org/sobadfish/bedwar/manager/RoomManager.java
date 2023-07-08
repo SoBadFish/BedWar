@@ -24,7 +24,6 @@ import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.form.response.FormResponseSimple;
 import cn.nukkit.form.window.FormWindowSimple;
-import cn.nukkit.inventory.EntityArmorInventory;
 import cn.nukkit.inventory.Inventory;
 import cn.nukkit.inventory.PlayerInventory;
 import cn.nukkit.inventory.transaction.InventoryTransaction;
@@ -831,15 +830,16 @@ public class RoomManager implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event){
+
         if(event.getEntity() instanceof ShopVillage) {
             if(event instanceof EntityDamageByEntityEvent){
-                Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
-                if(entity == null){
+                Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+                if(damager == null){
                     return;
                 }
-                if(entity instanceof Player) {
-                    if(entity.distance(event.getEntity()) <= 4 && event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK){
-                        PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo((Player) entity);
+                if(damager instanceof Player) {
+                    if(damager.distance(event.getEntity()) <= 4 && event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK){
+                        PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo((Player) damager);
                         if (info.isWatch()) {
                             event.setCancelled();
                             return;
@@ -852,6 +852,8 @@ public class RoomManager implements Listener {
             event.setCancelled();
             return;
         }
+
+
         if(event.getEntity() instanceof Player){
             PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
             if(playerInfo != null) {
@@ -1329,6 +1331,12 @@ public class RoomManager implements Listener {
                         playerInfo.armorInventory = player.getInventory().getArmorContents();
                         playerInfo.isInvisibility = true;
                         player.getInventory().setArmorContents(new Item[0]);
+                        //由于出现了玩家消失的情况 所以显示给全部玩家
+                        for(Player pl: player.level.getPlayers().values()) {
+                            if(!pl.equals(player)){
+                                pl.showPlayer(player);
+                            }
+                        }
                     }
                 }
             }
@@ -1358,20 +1366,7 @@ public class RoomManager implements Listener {
                     }
 
                 }
-                //阻止玩家脱下盔甲
-                if(inventory instanceof EntityArmorInventory){
-                    Item i = action.getSourceItem();
-                    Player player = transaction.getSource();
-                    PlayerInfo playerInfo = getPlayerInfo(player);
-                    if(playerInfo != null){
-                        GameRoom gameRoom = playerInfo.getGameRoom();
-                        if(gameRoom != null){
-                            if(gameRoom.getType() == GameType.START){
-                                event.setCancelled();
-                            }
-                        }
-                    }
-                }
+
                 if(inventory instanceof PlayerInventory){
                     EntityHuman player =((PlayerInventory) inventory).getHolder();
                     PlayerInfo playerInfo = getPlayerInfo(player);
@@ -1389,6 +1384,21 @@ public class RoomManager implements Listener {
         }
     }
     @EventHandler
+    public void onArmorChange(EntityArmorChangeEvent event){
+        Entity entity = event.getEntity();
+        if(entity instanceof Player){
+            PlayerInfo playerInfo = getPlayerInfo((EntityHuman) entity);
+            if(playerInfo != null){
+                GameRoom gameRoom = playerInfo.getGameRoom();
+                if(gameRoom != null && gameRoom.getType() == GameType.START){
+                    event.setCancelled();
+                }
+            }
+        }
+    }
+
+
+    @EventHandler
     public void onWorldReloadEvent(ReloadWorldEvent event) {
         GameRoomConfig config = event.getRoomConfig();
         Server.getInstance().getScheduler().scheduleTask(BedWarMain.getBedWarMain(), new Runnable() {
@@ -1403,7 +1413,6 @@ public class RoomManager implements Listener {
 
             }
         });
-
 
     }
 }
