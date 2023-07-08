@@ -150,7 +150,10 @@ public class DefaultItem extends BasePlayPanelItemInstance {
 
                     }
                     compoundTag.putString("bd_master",player.getName());
+                    //无限耐久
+                    compoundTag.putByte("Unbreakable",1);
                     i.setNamedTag(compoundTag);
+
 
                     info.buyArmorId.add(i.getId());
                     if(i.isHelmet()) {

@@ -14,6 +14,7 @@ import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
+import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.OnScreenTextureAnimationPacket;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.TextFormat;
@@ -996,6 +997,13 @@ public class PlayerInfo {
             }else{
                 item = entry.getValue();
             }
+            CompoundTag compoundTag = item.getNamedTag();
+            if(compoundTag == null){
+                compoundTag = new CompoundTag();
+            }
+            //无限耐久
+            compoundTag.putByte("Unbreakable",1);
+            item.setNamedTag(compoundTag);
 
             player.getInventory().setArmorItem(entry.getKey(), item);
         }
