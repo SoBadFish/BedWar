@@ -1368,7 +1368,15 @@ public class RoomManager implements Listener {
                 }
 
                 if(inventory instanceof PlayerInventory){
+                    Item item = action.getSourceItem();
+
                     EntityHuman player =((PlayerInventory) inventory).getHolder();
+                    //阻止其他玩家拿装备
+                    if(item.hasCompoundTag() && item.getNamedTag().contains("bd_master")){
+                        if(!player.getName().equalsIgnoreCase(item.getNamedTag().getString("bd_master"))){
+                            event.setCancelled();
+                        }
+                    }
                     PlayerInfo playerInfo = getPlayerInfo(player);
                     if(playerInfo != null){
                         GameRoom gameRoom = playerInfo.getGameRoom();
@@ -1383,19 +1391,9 @@ public class RoomManager implements Listener {
             }
         }
     }
-    @EventHandler
-    public void onArmorChange(EntityArmorChangeEvent event){
-        Entity entity = event.getEntity();
-        if(entity instanceof Player){
-            PlayerInfo playerInfo = getPlayerInfo((EntityHuman) entity);
-            if(playerInfo != null){
-                GameRoom gameRoom = playerInfo.getGameRoom();
-                if(gameRoom != null && gameRoom.getType() == GameType.START){
-                    event.setCancelled();
-                }
-            }
-        }
-    }
+
+
+
 
 
     @EventHandler

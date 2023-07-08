@@ -7,16 +7,15 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemArmor;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Sound;
+import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.ItemIDSunName;
 import org.sobadfish.bedwar.item.ItemInfo;
-import org.sobadfish.bedwar.item.MoneyItemInfo;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
 import org.sobadfish.bedwar.item.nbt.INbtItem;
 import org.sobadfish.bedwar.manager.NbtItemManager;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
-import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
@@ -145,17 +144,25 @@ public class DefaultItem extends BasePlayPanelItemInstance {
 
             if (u) {
                 if(i instanceof ItemArmor){
+                    CompoundTag compoundTag = i.getNamedTag();
+                    if(compoundTag == null){
+                        compoundTag = new CompoundTag();
+
+                    }
+                    compoundTag.putString("bd_master",player.getName());
+                    i.setNamedTag(compoundTag);
+
                     info.buyArmorId.add(i.getId());
-                    if(i.isHelmet() && player.getInventory().getArmorItem(0).getId() != 0) {
+                    if(i.isHelmet()) {
                         info.getArmor().put(0,i);
                         player.getInventory().setArmorItem(0,i);
-                    }else if(i.isChestplate() && player.getInventory().getArmorItem(1).getId() != 0){
+                    }else if(i.isChestplate()){
                         player.getInventory().setArmorItem(1,i);
                         info.getArmor().put(1,i);
-                    }else if(i.isLeggings() && player.getInventory().getArmorItem(2).getId() != 0){
+                    }else if(i.isLeggings()){
                         player.getInventory().setArmorItem(2,i);
                         info.getArmor().put(2,i);
-                    }else if(i .isBoots() && player.getInventory().getArmorItem(3).getId() != 0){
+                    }else if(i .isBoots()){
                         player.getInventory().setArmorItem(3,i);
                         info.getArmor().put(3,i);
                     }else{
