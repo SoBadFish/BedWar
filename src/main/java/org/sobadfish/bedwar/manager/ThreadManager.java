@@ -1,12 +1,20 @@
 package org.sobadfish.bedwar.manager;
 
-import cn.nukkit.Server;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.room.GameRoom;
-import org.sobadfish.bedwar.thread.*;
+import org.sobadfish.bedwar.thread.PluginMasterRunnable;
+import org.sobadfish.bedwar.thread.RandomJoinRunnable;
+import org.sobadfish.bedwar.thread.RoomLoadRunnable;
+import org.sobadfish.bedwar.thread.TopRunnable;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author SoBadFish
@@ -21,7 +29,7 @@ public class ThreadManager {
     private final static Integer CORE_POOLSIZE = 5;
 
 
-    private static final ScheduledThreadPoolExecutor SCHEDULED = new ScheduledThreadPoolExecutor(CORE_POOLSIZE,new ThreadPoolExecutor.AbortPolicy());
+    public static final ScheduledThreadPoolExecutor SCHEDULED = new ScheduledThreadPoolExecutor(CORE_POOLSIZE,new ThreadPoolExecutor.AbortPolicy());
 
 
     public static void cancel(AbstractBedWarRunnable r) {
