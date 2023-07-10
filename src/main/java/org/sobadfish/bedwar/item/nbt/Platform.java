@@ -1,17 +1,17 @@
 package org.sobadfish.bedwar.item.nbt;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockAir;
+import cn.nukkit.block.BlockSlime;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import org.sobadfish.bedwar.BedWarMain;
-import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -32,7 +32,7 @@ public class Platform implements INbtItem {
         PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
 
         Position pos = info.getPlayer().add(0,-10);
-        LinkedHashMap<Position,Block> spawn = BedWarMain.spawnBlockByPosAndSize(pos,3,Block.get(165));
+        LinkedHashMap<Position,Block> spawn = BedWarMain.spawnBlockByPosAndSize(pos,3,new BlockSlime());
         spawnBlock(item, player, spawn);
         info.sendMessage("&a已生成平台");
         return true;
@@ -51,25 +51,16 @@ public class Platform implements INbtItem {
             }
 
         }
-        Timer timer = new Timer();
-        try{
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    for(Position block: new ArrayList<>(spawn.keySet())){
-                        if(info.getGameRoom() == null || info.getGameRoom().getType() != GameRoom.GameType.START){
-                            return;
-                        }
-                        if(info.getGameRoom().worldInfo.onChangeBlock(block.getLevelBlock(),false)){
-                            block.getLevel().setBlock(block,new BlockAir());
-                        }
-                    }
+        Server.getInstance().getScheduler().scheduleDelayedTask(() -> {
+            for(Position block: new ArrayList<>(spawn.keySet())){
+                if(info.getGameRoom() == null || info.getGameRoom().getType() != GameRoom.GameType.START){
+                    return;
                 }
-            },5000);
-        }catch (Exception ignore){
-
-        }
-
+                if(info.getGameRoom().worldInfo.onChangeBlock(block.getLevelBlock(),false)){
+                    block.getLevel().setBlock(block,new BlockAir());
+                }
+            }
+        },5000);
 
         player.getInventory().removeItem(item);
     }

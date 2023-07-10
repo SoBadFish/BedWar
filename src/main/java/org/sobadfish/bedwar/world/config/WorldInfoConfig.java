@@ -94,7 +94,7 @@ public class WorldInfoConfig {
         //主世界地图
         File world = new File(nameFile+File.separator+"world"+File.separator+levelName);
         if(world.exists() && world.isDirectory()){
-            if(toPathWorld(roomName, levelName)){
+            if(toPathWorld(roomName, levelName,true)){
                 Server.getInstance().loadLevel(levelName);
                 BedWarMain.sendMessageToConsole("&a地图 &e"+levelName+" &a初始化完成");
             }else{
@@ -126,7 +126,7 @@ public class WorldInfoConfig {
     }
 
 
-    public static boolean toPathWorld(String roomName,String levelName){
+    public static boolean toPathWorld(String roomName,String levelName,boolean isInit){
         try {
 
             File nameFile = new File(BedWarMain.getBedWarMain().getDataFolder() + File.separator + "rooms" + File.separator + roomName);
@@ -140,8 +140,13 @@ public class WorldInfoConfig {
                 f2.mkdirs();
             }
             if (files != null && files.length > 0) {
-                if(Server.getInstance().isLevelLoaded(levelName)) {
-                    Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName), true);
+                //扔到主线程
+                if(!isInit) {
+                    Server.getInstance().getScheduler().scheduleTask(BedWarMain.getBedWarMain(), () -> {
+                        if (Server.getInstance().isLevelLoaded(levelName)) {
+                            Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName), true);
+                        }
+                    });
                 }
                 Utils.toDelete(f2);
                 if (!f2.exists()) {
