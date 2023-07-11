@@ -51,6 +51,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
                     RandomJoinManager.newInstance().playerInfos.remove(info);
                     continue;
                 }
+                info.getPlayerInfo().sendSubTitle(PlayerInfo.formatTime((int)((System.currentTimeMillis() - info.time.getTime()) / 1000f)));
                 if(!joinRandomRoom(info)){
                     if(info.isNext){
                         if(info.getPlayerInfo().getPlayer() instanceof Player) {
@@ -62,6 +63,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
 
                 }
             }
+
             RandomJoinManager.newInstance().playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info));
 
         }catch (Exception e){
@@ -83,10 +85,11 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
             lock.add(roomManager);
         }
         if(roomManager.cancel){
+            info.sendForceTitle("匹配终止!");
             return true;
         }
         info.sendForceTitle("&6匹配中",100);
-        info.sendSubTitle(PlayerInfo.formatTime((int)(System.currentTimeMillis() - i.time.getTime()) / 1000));
+        info.sendSubTitle(PlayerInfo.formatTime((int)((System.currentTimeMillis() - i.time.getTime()) / 1000f)));
 
         String input = i.name;
         ArrayList<String> names = BedWarMain.getMenuRoomManager().getNames();
