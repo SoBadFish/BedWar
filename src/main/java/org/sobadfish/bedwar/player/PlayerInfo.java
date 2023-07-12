@@ -1018,6 +1018,7 @@ public class PlayerInfo {
                 player.setNameTag(player.getName());
                 player.getInventory().clearAll();
                 player.getEnderChestInventory().clearAll();
+                player.removeAllEffects();
                 ((Player) player).getFoodData().reset();
                 player.setHealth(player.getMaxHealth());
                 ((Player) player).setExperience(0,0);
