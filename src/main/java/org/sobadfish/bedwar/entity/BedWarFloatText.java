@@ -7,9 +7,11 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.network.protocol.RemoveEntityPacket;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.bedwar.item.ItemInfo;
+import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
 import org.sobadfish.bedwar.manager.FloatTextManager;
+import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 
 import java.util.List;
@@ -126,5 +128,26 @@ public class BedWarFloatText extends Entity {
             }
 
         }
+    }
+
+    public void stringUpdate(){
+        if(room == null){
+            return;
+        }
+        if(room.getWorldInfo() == null){
+            return;
+        }
+        for(ItemInfo moneyItemInfoConfig: room.getWorldInfo().getInfos()){
+            MoneyItemInfoConfig config = moneyItemInfoConfig.getItemInfoConfig().getMoneyItemInfoConfig();
+            text = text
+                    .replace("%"+config.getName()+"%",config.getCustomName())
+                    .replace("%"+config.getName()+"-time%", PlayerInfo.formatTime1((moneyItemInfoConfig.getResetTick() - moneyItemInfoConfig.getTick()))+"");
+        }
+        if(this.isClosed()){
+            FloatTextManager.removeFloatText(this);
+        }
+        this.setText(text);
+
+
     }
 }

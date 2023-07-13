@@ -94,6 +94,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                         floatText.disPlayers();
                         update = 0;
                     }
+                    floatText.stringUpdate();
                 }
             }
             try {

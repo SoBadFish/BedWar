@@ -5,7 +5,6 @@ import cn.nukkit.scheduler.PluginTask;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.ShopVillage;
 import org.sobadfish.bedwar.room.GameRoom;
-import org.sobadfish.bedwar.room.floattext.FloatTextInfo;
 import org.sobadfish.bedwar.world.WorldInfo;
 
 import java.util.ArrayList;
@@ -37,12 +36,6 @@ public class WorldInfoMasterThread extends PluginTask<BedWarMain> {
                         room.getShopInfo().getShopVillages().remove(shopVillage);
                         room.getShopInfo().getShopVillages().add(respawnVillage);
                     }
-                }
-            }
-            for (FloatTextInfo floatTextInfo : room.getFloatTextInfos()) {
-                if (!floatTextInfo.stringUpdate(room)) {
-
-                    break;
                 }
             }
         }
