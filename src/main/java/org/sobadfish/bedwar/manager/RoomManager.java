@@ -881,9 +881,12 @@ public class RoomManager implements Listener {
                     return;
                 }
                 if (event instanceof EntityDamageByEntityEvent) {
-                    if (((EntityDamageByEntityEvent) event).getDamager() instanceof EntityFireBall) {
-                        event.setDamage(2);
-                        ((EntityDamageByEntityEvent) event).setKnockBack(room.getRoomConfig().fireballKnockBack);
+                    if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
+                        if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityHuman){
+                            //TODO 证明是扔火球的玩家
+                            event.setDamage(2);
+                            ((EntityDamageByEntityEvent) event).setKnockBack(room.getRoomConfig().fireballKnockBack);
+                        }
                     }
                     if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityLightning){
                         event.setDamage(12);
