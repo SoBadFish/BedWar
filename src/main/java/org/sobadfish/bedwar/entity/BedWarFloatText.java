@@ -56,7 +56,13 @@ public class BedWarFloatText extends Entity {
 
 
     public void setText(String text) {
-        this.text = text;
+        this.setText(text,true);
+    }
+
+    public void setText(String text,boolean reset) {
+        if(reset) {
+            this.text = text;
+        }
         this.setNameTag(TextFormat.colorize('&',text));
     }
 
@@ -130,7 +136,6 @@ public class BedWarFloatText extends Entity {
         }
     }
 
-    public String lastText;
 
 
     public void stringUpdate(){
@@ -140,21 +145,17 @@ public class BedWarFloatText extends Entity {
         if(room.getWorldInfo() == null){
             return;
         }
-        if(lastText == null){
-            lastText = text;
-        }else{
-            text = lastText;
-        }
+        String uText = text;
         for(ItemInfo moneyItemInfoConfig: room.getWorldInfo().getInfos()){
             MoneyItemInfoConfig config = moneyItemInfoConfig.getItemInfoConfig().getMoneyItemInfoConfig();
-            text = text
+            uText = uText
                     .replace("%"+config.getName()+"%",config.getCustomName())
                     .replace("%"+config.getName()+"-time%", PlayerInfo.formatTime1((moneyItemInfoConfig.getResetTick() - moneyItemInfoConfig.getTick()))+"");
         }
         if(this.isClosed()){
             FloatTextManager.removeFloatText(this);
         }
-        this.setText(text);
+        this.setText(text,false);
 
 
     }
