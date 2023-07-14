@@ -130,12 +130,20 @@ public class BedWarFloatText extends Entity {
         }
     }
 
+    public String lastText;
+
+
     public void stringUpdate(){
         if(room == null){
             return;
         }
         if(room.getWorldInfo() == null){
             return;
+        }
+        if(lastText == null){
+            lastText = text;
+        }else{
+            text = lastText;
         }
         for(ItemInfo moneyItemInfoConfig: room.getWorldInfo().getInfos()){
             MoneyItemInfoConfig config = moneyItemInfoConfig.getItemInfoConfig().getMoneyItemInfoConfig();
