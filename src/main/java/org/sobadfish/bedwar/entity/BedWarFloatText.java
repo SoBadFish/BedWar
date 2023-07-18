@@ -155,7 +155,7 @@ public class BedWarFloatText extends Entity {
         if(this.isClosed()){
             FloatTextManager.removeFloatText(this);
         }
-        this.setText(text,false);
+        this.setText(uText,false);
 
 
     }
