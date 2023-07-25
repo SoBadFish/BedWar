@@ -43,7 +43,7 @@ public class FireBall implements INbtItem{
             if(!clickTime.containsKey(playerInfo)){
                 clickTime.put(playerInfo,System.currentTimeMillis());
             }
-            if(System.currentTimeMillis() - clickTime.get(playerInfo) < 1500){
+            if(System.currentTimeMillis() - clickTime.get(playerInfo) < 500){
                 playerInfo.sendMessage("&c使用太频繁了 请过一会再试吧");
                 return true;
             }else{
