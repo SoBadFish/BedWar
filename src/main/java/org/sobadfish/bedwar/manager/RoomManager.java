@@ -1331,15 +1331,16 @@ public class RoomManager implements Listener {
                 GameRoom gameRoom = playerInfo.getGameRoom();
                 if (gameRoom != null) {
                     if (gameRoom.getType() == GameType.START) {
-                        playerInfo.armorInventory = player.getInventory().getArmorContents();
-                        playerInfo.isInvisibility = true;
-                        player.getInventory().setArmorContents(new Item[0]);
-                        //由于出现了玩家消失的情况 所以显示给全部玩家
-                        for(Player pl: player.level.getPlayers().values()) {
-                            if(!pl.equals(player)){
-                                pl.showPlayer(player);
-                            }
-                        }
+//                        playerInfo.armorInventory = player.getInventory().getArmorContents();
+
+                        playerInfo.invisibilityArmor();
+//                        player.getInventory().setArmorContents(new Item[0]);
+//                        //由于出现了玩家消失的情况 所以显示给全部玩家
+//                        for(Player pl: player.level.getPlayers().values()) {
+//                            if(!pl.equals(player)){
+//                                pl.showPlayer(player);
+//                            }
+//                        }
                     }
                 }
             }

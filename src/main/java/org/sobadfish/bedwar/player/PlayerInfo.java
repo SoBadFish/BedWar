@@ -15,6 +15,8 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.network.protocol.DataPacket;
+import cn.nukkit.network.protocol.MobArmorEquipmentPacket;
 import cn.nukkit.network.protocol.OnScreenTextureAnimationPacket;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.TextFormat;
@@ -83,8 +85,6 @@ public class PlayerInfo {
     public boolean isSpawnFire = false;
 
     public String playerName;
-
-    public Item[] armorInventory = new Item[0];
 
     public boolean isInvisibility = false;
 
@@ -235,13 +235,11 @@ public class PlayerInfo {
             assistsPlayers.put(damageByInfo,System.currentTimeMillis());
             //现身
             if(isInvisibility){
-                isInvisibility = false;
-                putPlayerArmor();
+                visibilityArmor();
             }
             //攻击者也得现身
             if(damageByInfo.isInvisibility){
-                damageByInfo.isInvisibility = false;
-                damageByInfo.putPlayerArmor();
+                damageByInfo.visibilityArmor();
             }
             getPlayer().removeEffect(14);
         }
@@ -441,6 +439,44 @@ public class PlayerInfo {
                 }
 
             }
+        }
+    }
+
+    //玩家盔甲隐身
+    public void invisibilityArmor(){
+        isInvisibility = true;
+        MobArmorEquipmentPacket mobArmorEquipmentPacket = new MobArmorEquipmentPacket();
+        mobArmorEquipmentPacket.eid = player.getId();
+        for (int i = 0; i < 4; i++) {
+            mobArmorEquipmentPacket.slots[i] = Item.get(0);
+        }
+        sendPacketToOtherPlayer(mobArmorEquipmentPacket);
+
+    }
+    //玩家盔甲现身
+    public void visibilityArmor(){
+        isInvisibility = false;
+        MobArmorEquipmentPacket mobArmorEquipmentPacket = new MobArmorEquipmentPacket();
+        mobArmorEquipmentPacket.eid = player.getId();
+        for (int i = 0; i < 4; i++) {
+            mobArmorEquipmentPacket.slots[i] = player.getInventory().getArmorContents()[i];
+        }
+        sendPacketToOtherPlayer(mobArmorEquipmentPacket);
+
+    }
+
+    public void sendPacketToOtherPlayer(DataPacket dataPacket){
+        List<Player> sendPlayers = new ArrayList<>();
+        if(getGameRoom() != null && getGameRoom().getType() == GameRoom.GameType.START){
+            for(PlayerInfo playerInfo: getGameRoom().getPlayerInfos()){
+                if(playerInfo.player instanceof Player){
+                    if(!playerInfo.player.equals(player)) {
+                        sendPlayers.add((Player) playerInfo.player);
+                    }
+                }
+
+            }
+            Server.broadcastPacket(sendPlayers.toArray(new Player[0]),dataPacket);
         }
     }
 
@@ -700,11 +736,10 @@ public class PlayerInfo {
         //TODO 玩家身上隐身效果主动消失后 还原装备
         if(!player.hasEffect(14) && isInvisibility){
             //现身
-            isInvisibility = false;
-            putPlayerArmor();
+           visibilityArmor();
         }else if(player.hasEffect(14) && isInvisibility){
             //隐身没收玩家身上的盔甲
-            player.getInventory().setArmorContents(new Item[0]);
+            invisibilityArmor();
         }
         if(playerType == PlayerType.DEATH){
             if(spawnTime >= 5){
