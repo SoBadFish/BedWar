@@ -236,7 +236,12 @@ public class PlayerInfo {
             //现身
             if(isInvisibility){
                 isInvisibility = false;
-                player.getInventory().setArmorContents(armorInventory);
+                putPlayerArmor();
+            }
+            //攻击者也得现身
+            if(damageByInfo.isInvisibility){
+                damageByInfo.isInvisibility = false;
+                damageByInfo.putPlayerArmor();
             }
             getPlayer().removeEffect(14);
         }
