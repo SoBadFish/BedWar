@@ -696,7 +696,10 @@ public class PlayerInfo {
         if(!player.hasEffect(14) && isInvisibility){
             //现身
             isInvisibility = false;
-            player.getInventory().setArmorContents(armorInventory);
+            putPlayerArmor();
+        }else if(player.hasEffect(14) && isInvisibility){
+            //隐身没收玩家身上的盔甲
+            player.getInventory().setArmorContents(new Item[0]);
         }
         if(playerType == PlayerType.DEATH){
             if(spawnTime >= 5){
@@ -995,6 +998,13 @@ public class PlayerInfo {
             }
 
         }
+        putPlayerArmor();
+        player.getInventory().addItem(new ItemSwordWood());
+        playerType = PlayerType.START;
+
+    }
+
+    public void putPlayerArmor(){
         //TODO 初始装备
         for (Map.Entry<Integer, Item> entry : armor.entrySet()) {
             Item item;
@@ -1015,9 +1025,6 @@ public class PlayerInfo {
 
             player.getInventory().setArmorItem(entry.getKey(), item);
         }
-        player.getInventory().addItem(new ItemSwordWood());
-        playerType = PlayerType.START;
-
     }
 
     public void clear(){
