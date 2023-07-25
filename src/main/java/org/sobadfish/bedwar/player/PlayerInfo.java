@@ -235,6 +235,7 @@ public class PlayerInfo {
             assistsPlayers.put(damageByInfo,System.currentTimeMillis());
             //现身
             if(isInvisibility){
+                isInvisibility = false;
                 player.getInventory().setArmorContents(armorInventory);
             }
             getPlayer().removeEffect(14);
@@ -691,6 +692,12 @@ public class PlayerInfo {
                 assistsPlayers.remove(entry.getKey());
             }
         }
+        //TODO 玩家身上隐身效果主动消失后 还原装备
+        if(!player.hasEffect(14) && isInvisibility){
+            //现身
+            isInvisibility = false;
+            player.getInventory().setArmorContents(armorInventory);
+        }
         if(playerType == PlayerType.DEATH){
             if(spawnTime >= 5){
 
@@ -970,6 +977,7 @@ public class PlayerInfo {
 
         player.getInventory().clearAll();
         this.exp = 0;
+        isInvisibility = false;
 
         boolean teleport;
         try {
