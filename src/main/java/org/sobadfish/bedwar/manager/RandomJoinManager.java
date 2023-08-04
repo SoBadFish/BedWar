@@ -28,6 +28,11 @@ public class RandomJoinManager {
 
     public List<IPlayerInfo> playerInfos = new CopyOnWriteArrayList<>();
 
+
+    /**
+     * 当玩家在房间内时，调用这个方法匹配房间
+     * @param info 玩家
+     * */
     public void nextJoin(PlayerInfo info){
         //TODO 匹配下一局 程序分配
         GameRoom gameRoom = info.getGameRoom();
@@ -37,10 +42,23 @@ public class RandomJoinManager {
         join(info,null,true);
     }
 
+    /**
+     * 调用这个匹配房间
+     * 这个是进入匹配队列
+     * @param info 准备加入游戏房间的玩家
+     * @param name 游戏模式的名称
+     * */
     public void join(PlayerInfo info, String name){
         join(info, name,false);
     }
 
+    /**
+     * 调用这个匹配房间
+     * 这个是进入匹配队列
+     * @param info 准备加入游戏房间的玩家
+     * @param name 游戏模式的名称
+     * @param isNext 当进入房间失败后，是否传送回主大厅地图
+     * */
     public void join(PlayerInfo info, String name,boolean isNext){
         if(info.getGameRoom() != null && info.getGameRoom().getType() != GameRoom.GameType.END){
             return;
@@ -55,7 +73,7 @@ public class RandomJoinManager {
         }
 
         iPlayerInfo.name = name;
-        iPlayerInfo.time = new Date();
+        iPlayerInfo.time = System.currentTimeMillis();
         playerInfos.add(iPlayerInfo);
 
 
@@ -69,7 +87,7 @@ public class RandomJoinManager {
 
         public String name;
 
-        public Date time;
+        public Long time;
 
         public boolean cancel;
 
@@ -85,12 +103,14 @@ public class RandomJoinManager {
 
         @Override
         public boolean equals(Object o) {
+            if(o == null){
+                return false;
+            }
             if(o instanceof IPlayerInfo){
-                return ((IPlayerInfo) o).playerInfo.equals(playerInfo);
+                return ((IPlayerInfo) o).playerInfo.getName().equalsIgnoreCase(playerInfo.getName());
             }
             return false;
         }
-
 
     }
 
