@@ -625,7 +625,7 @@ public class GameRoom {
                             info.getPlayer().removeAllEffects();
                             ((Player) info.getPlayer()).setExperience(0, 0);
                         }
-                        info.cancel();
+
                         BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
                     }
 
@@ -633,6 +633,10 @@ public class GameRoom {
                     BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
 
                 }
+
+
+                info.cancel();
+                //清除玩家在游戏房间内的信息
                 playerInfos.remove(info);
 
 

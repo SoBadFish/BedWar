@@ -676,9 +676,9 @@ public class RoomManager implements Listener {
         if(info != null){
             player.getInventory().setContents(info.inventory);
             player.getEnderChestInventory().setContents(info.eInventory);
+            player.setGamemode(info.lastGameMode);
         }
         player.removeAllEffects();
-        player.setGamemode(0);
         player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
     }
 

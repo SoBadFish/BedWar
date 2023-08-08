@@ -88,6 +88,8 @@ public class PlayerInfo {
 
     public boolean isInvisibility = false;
 
+    public int lastGameMode = 0;
+
 
     /**
      *
@@ -551,7 +553,6 @@ public class PlayerInfo {
         leave();
         cancel = true;
         disable = true;
-        getGameRoom().getPlayerInfos().remove(this);
         setGameRoom(null);
     }
 
@@ -928,13 +929,15 @@ public class PlayerInfo {
         getPlayer().setHealth(getPlayer().getMaxHealth());
         if(getPlayer() instanceof Player) {
             ((Player)getPlayer()).getFoodData().reset();
+            ((Player) getPlayer()).removeAllWindows();
+            ((Player) getPlayer()).setExperience(0,0);
+            //记录信息
+            lastGameMode = ((Player) getPlayer()).getGamemode();
+
         }
         getPlayer().getInventory().clearAll();
         getPlayer().getEnderChestInventory().clearAll();
-        if(getPlayer() instanceof Player){
-            ((Player) getPlayer()).removeAllWindows();
-            ((Player) getPlayer()).setExperience(0,0);
-        }
+
         //TODO 给玩家物品
         getPlayer().getInventory().setHeldItemSlot(0);
     }
@@ -1082,7 +1085,7 @@ public class PlayerInfo {
                     player.getEnderChestInventory().setContents(eInventory);
                 }
                 if(getPlayer() instanceof Player) {
-                    ((Player) getPlayer()).setGamemode(0);
+                    ((Player) getPlayer()).setGamemode(lastGameMode);
                 }
             }
         }
