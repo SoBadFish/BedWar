@@ -616,6 +616,7 @@ public class GameRoom {
                     Server.getInstance().getPluginManager().callEvent(event);
                     if(info.getPlayer() == null){
                         BedWarMain.getRoomManager().playerJoin.remove(info.playerName);
+
                     }else{
                         if(((Player) info.getPlayer()).isOnline()) {
                             if (teleport) {
@@ -632,6 +633,10 @@ public class GameRoom {
                     BedWarMain.getRoomManager().playerJoin.remove(info.getPlayer().getName());
 
                 }
+                playerInfos.remove(info);
+
+
+
             } else {
                 info.getPlayer().close();
                 playerInfos.remove(info);
