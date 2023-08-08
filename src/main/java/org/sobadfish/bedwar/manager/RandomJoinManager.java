@@ -39,6 +39,7 @@ public class RandomJoinManager {
         if(gameRoom != null){
             gameRoom.quitPlayerInfo(info,false);
         }
+
         join(info,null,true);
     }
 
@@ -63,6 +64,7 @@ public class RandomJoinManager {
         if(info.getGameRoom() != null && info.getGameRoom().getType() != GameRoom.GameType.END){
             return;
         }
+        info = new PlayerInfo(info.getPlayer());
         IPlayerInfo iPlayerInfo = new IPlayerInfo();
         iPlayerInfo.playerInfo = info;
         iPlayerInfo.isNext = isNext;
