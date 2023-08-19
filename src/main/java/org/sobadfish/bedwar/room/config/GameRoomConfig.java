@@ -114,6 +114,11 @@ public class GameRoomConfig implements Cloneable{
      * */
     public int callbackY = 17;
 
+    /**
+     * 玩家身上的装备无限耐久
+     * */
+    public boolean inventoryUnBreakable = false;
+
 
 
 
@@ -306,6 +311,10 @@ public class GameRoomConfig implements Cloneable{
         return callbackY;
     }
 
+    public boolean isInventoryUnBreakable() {
+        return inventoryUnBreakable;
+    }
+
     public int getDeathIcon() {
         return deathIcon;
     }
@@ -412,6 +421,10 @@ public class GameRoomConfig implements Cloneable{
 
     public void setFloatTextInfoConfigs(List<FloatTextInfoConfig> floatTextInfoConfigs) {
         this.floatTextInfoConfigs = floatTextInfoConfigs;
+    }
+
+    public void setInventoryUnBreakable(boolean inventoryUnBreakable) {
+        this.inventoryUnBreakable = inventoryUnBreakable;
     }
 
     public void setHasWatch(boolean hasWatch) {
@@ -579,6 +592,7 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.teamShopEntityId = room.getInt("entity.team",15);
                 roomConfig.itemShopEntityId = room.getInt("entity.item",15);
                 roomConfig.callbackY = room.getInt("callbackY",17);
+                roomConfig.inventoryUnBreakable = room.getBoolean("inventory-unbreakable",true);
                 roomConfig.fireballKnockBack = (float) room.getDouble("fireballKnockBack",0.6f);
                 roomConfig.banCommand = new ArrayList<>(room.getStringList("ban-command"));
                 roomConfig.isAutomaticNextRound = room.getBoolean("AutomaticNextRound",true);

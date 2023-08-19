@@ -14,6 +14,9 @@ ui: auto
 entity:
   team: 15
   item: 15
+
+# 装备无限耐久
+inventory-unbreakable: true
 max-player-waitTime: 20
 minPlayerSize: 4
 maxPlayerSize: 16

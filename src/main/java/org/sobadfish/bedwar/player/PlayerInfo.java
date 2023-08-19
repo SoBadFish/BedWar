@@ -1062,9 +1062,15 @@ public class PlayerInfo {
             if(compoundTag == null){
                 compoundTag = new CompoundTag();
             }
-            //无限耐久
-            compoundTag.putByte("Unbreakable",1);
-            item.setNamedTag(compoundTag);
+            if(gameRoom != null){
+                if(gameRoom.getRoomConfig().isInventoryUnBreakable()){
+                    //无限耐久
+                    compoundTag.putByte("Unbreakable",1);
+                    item.setNamedTag(compoundTag);
+                }
+
+            }
+
 
             player.getInventory().setArmorItem(entry.getKey(), item);
         }
