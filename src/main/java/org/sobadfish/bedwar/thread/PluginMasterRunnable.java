@@ -12,7 +12,6 @@ import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Sobadfish
@@ -66,7 +65,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 if(!player.isOnline()){
                     continue;
                 }
-                for (BedWarFloatText floatText : new CopyOnWriteArrayList<>(FloatTextManager.floatTextList)) {
+                for (BedWarFloatText floatText : FloatTextManager.floatTextList) {
                     if (floatText == null) {
                         continue;
                     }
