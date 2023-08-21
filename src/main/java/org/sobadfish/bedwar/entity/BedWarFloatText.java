@@ -105,6 +105,10 @@ public class BedWarFloatText extends Entity {
         return text1;
     }
 
+    /**
+     * 显示给玩家，不过这个已经在
+     * 写好调用了，不需要再重复调用
+     * */
     public void disPlayers(){
         for(String player: player){
             Player player1 = Server.getInstance().getPlayer(player);
@@ -112,17 +116,38 @@ public class BedWarFloatText extends Entity {
                 this.player.remove(player);
             }else {
                 if (player1.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())) {
-                    if (this.hasSpawned.containsValue(player1)) {
-                        this.despawnFrom(player1);
+                    if (!this.hasSpawned.containsValue(player1)) {
+//                        this.despawnFrom(player1);
+                        spawnTo(player1);
                     }
-                    spawnTo(player1);
+//                    spawnTo(player1);
                 } else {
+                    this.despawnFrom(player1);
                     this.player.remove(player);
                     close();
+
                 }
             }
         }
     }
+//    public void disPlayers(){
+//        for(String player: player){
+//            Player player1 = Server.getInstance().getPlayer(player);
+//            if(player1 == null){
+//                this.player.remove(player);
+//            }else {
+//                if (player1.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())) {
+//                    if (this.hasSpawned.containsValue(player1)) {
+//                        this.despawnFrom(player1);
+//                    }
+//                    spawnTo(player1);
+//                } else {
+//                    this.player.remove(player);
+//                    close();
+//                }
+//            }
+//        }
+//    }
 
     private void toDisplay(){
         for(Player player: Server.getInstance().getOnlinePlayers().values()){

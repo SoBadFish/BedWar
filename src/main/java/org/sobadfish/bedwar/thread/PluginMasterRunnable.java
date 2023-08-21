@@ -2,7 +2,6 @@ package org.sobadfish.bedwar.thread;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.network.protocol.RemoveEntityPacket;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.event.ReloadWorldEvent;
@@ -76,16 +75,16 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                         FloatTextManager.removeFloatText(floatText);
                         continue;
                     }
-                    if (floatText.player.contains(player.getName())) {
-                        if (!player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName()) || !player.isOnline()) {
-                            if (!floatText.closed) {
-                                RemoveEntityPacket rp = new RemoveEntityPacket();
-                                rp.eid = floatText.getId();
-                                player.dataPacket(rp);
-                            }
-                            floatText.player.remove(player.getName());
-                        }
-                    }
+//                    if (floatText.player.contains(player.getName())) {
+//                        if (!player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName()) || !player.isOnline()) {
+//                            if (!floatText.closed) {
+//                                RemoveEntityPacket rp = new RemoveEntityPacket();
+//                                rp.eid = floatText.getId();
+//                                player.dataPacket(rp);
+//                            }
+//                            floatText.player.remove(player.getName());
+//                        }
+//                    }
                     if (player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName())) {
                         if (!floatText.player.contains(player.getName())) {
                             floatText.player.add(player.getName());

@@ -7,7 +7,6 @@ import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TopItem {
 
@@ -115,8 +114,4 @@ public class TopItem {
         return false;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, topType);
-    }
 }

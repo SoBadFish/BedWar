@@ -29,6 +29,7 @@ public class TopRunnable extends ThreadManager.AbstractBedWarRunnable {
             long t1 = System.currentTimeMillis();
             if (isClose) {
                 ThreadManager.cancel(this);
+                return;
             }
 
             if (BedWarMain.getBedWarMain().isDisabled()) {
