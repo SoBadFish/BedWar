@@ -18,6 +18,7 @@ import cn.nukkit.event.entity.*;
 import cn.nukkit.event.inventory.CraftItemEvent;
 import cn.nukkit.event.inventory.InventoryPickupItemEvent;
 import cn.nukkit.event.inventory.InventoryTransactionEvent;
+import cn.nukkit.event.level.ChunkUnloadEvent;
 import cn.nukkit.event.level.WeatherChangeEvent;
 import cn.nukkit.event.player.*;
 import cn.nukkit.form.element.ElementButton;
@@ -35,6 +36,7 @@ import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.command.BedWarCommand;
+import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.entity.EntityFireBall;
 import org.sobadfish.bedwar.entity.ShopVillage;
 import org.sobadfish.bedwar.event.*;
@@ -379,20 +381,20 @@ public class RoomManager implements Listener {
         }
     }
 
-//    /**
-//     * 阻止区块卸载 如果区块卸载会出现如下问题
-//     *
-//     * 1. 还原房间部分方块无法还原
-//     * 2. 导致后台循环报错空指针异常
-//     * */
-//    @EventHandler
-//    public void onChunkUnload(ChunkUnloadEvent event){
-//        GameRoom room = getGameRoomByLevel(event.getLevel());
-//        if(room != null && !room.close){
-//            event.setCancelled();
-//
-//        }
-//    }
+    /**
+     * 阻止区块卸载 如果区块卸载会出现如下问题
+     *
+     * 1. 还原房间部分方块无法还原
+     * 2. 导致后台循环报错空指针异常
+     * */
+    @EventHandler
+    public void onChunkUnload(ChunkUnloadEvent event){
+        for(Entity entity: event.getChunk().getEntities().values()){
+            if(entity instanceof BedWarFloatText){
+                event.setCancelled();
+            }
+        }
+    }
 
 
 
