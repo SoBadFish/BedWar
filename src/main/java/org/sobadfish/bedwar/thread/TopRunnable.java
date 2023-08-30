@@ -43,9 +43,9 @@ public class TopRunnable extends ThreadManager.AbstractBedWarRunnable {
                     continue;
                 }
                 if (topItem.floatText != null) {
-                    if (topItem.floatText.player == null) {
-                        continue;
-                    }
+//                    if (topItem.floatText.player == null) {
+//                        continue;
+//                    }
                     topItem.floatText.setText(topItem.topItem.getListText());
                 } else {
                     BedWarMain.getTopManager().topItemInfos.remove(topItem);
