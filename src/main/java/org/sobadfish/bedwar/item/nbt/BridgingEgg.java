@@ -46,6 +46,7 @@ public class BridgingEgg implements INbtItem{
         bridgingEgg.setMotion(bridgingEgg.getMotion().multiply(1.5f));
         bridgingEgg.shootingEntity = master;
         bridgingEgg.gameRoom = playerInfo.getGameRoom();
+        bridgingEgg.playerInfo = playerInfo;
         bridgingEgg.spawnToAll();
 
         player.getInventory().removeItem(item);
