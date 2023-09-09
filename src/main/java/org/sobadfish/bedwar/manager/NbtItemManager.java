@@ -28,6 +28,7 @@ public class NbtItemManager {
         NBT_MANAGER.put("护卫",new SpawnMob());
 
         NBT_MANAGER.put("火球",new FireBall());
+        NBT_MANAGER.put("搭桥蛋",new BridgingEgg());
         NBT_MANAGER.put("凋零弓",new DieBow());
 
     }

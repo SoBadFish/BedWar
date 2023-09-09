@@ -15,6 +15,9 @@ entity:
   team: 15
   item: 15
 
+# 快速搭路
+fast-place: false
+
 # 装备无限耐久
 inventory-unbreakable: true
 max-player-waitTime: 20

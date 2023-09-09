@@ -11,6 +11,7 @@ import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.command.BedWarAdminCommand;
 import org.sobadfish.bedwar.command.BedWarCommand;
 import org.sobadfish.bedwar.command.BedWarSpeakCommand;
+import org.sobadfish.bedwar.entity.BridgingEggEntity;
 import org.sobadfish.bedwar.entity.EntityBlueWitherSkull;
 import org.sobadfish.bedwar.entity.EntityFireBall;
 import org.sobadfish.bedwar.entity.IronGolem;
@@ -95,6 +96,7 @@ public class BedWarMain extends PluginBase {
 
         }
         Entity.registerEntity("FireBall", EntityFireBall.class);
+        Entity.registerEntity("BridgingEgg", BridgingEggEntity.class);
         Entity.registerEntity(EntityBlueWitherSkull.class.getSimpleName(), EntityBlueWitherSkull.class);
         Entity.registerEntity(IronGolem.class.getSimpleName(), IronGolem.class);
         loadBedWarConfig();

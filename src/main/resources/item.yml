@@ -53,3 +53,7 @@ nbtItem:
     customName: "&e凋零弓"
     lore: []
     item: "261:0"
+  "搭桥蛋":
+    customName: "&e搭桥蛋"
+    lore: [ ]
+    item: "344:0"
