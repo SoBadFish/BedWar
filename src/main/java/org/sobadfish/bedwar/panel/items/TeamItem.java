@@ -185,15 +185,16 @@ public class TeamItem extends BasePlayPanelItemInstance {
 
         ArrayList<String> lore = new ArrayList<>();
         String title;
+        MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
         if(info.getGameRoom().getRoomConfig().isExp()){
             int rc = 1;
             if(info.getGameRoom().getRoomConfig().moneyItem.containsKey(moneyItem)){
-                MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
+
                 rc = (int) oInfo.getExp();
             }
             title = "&rExp x " + count * rc * level;
         }else{
-            title = "&r" + moneyItem + " x " + count * level;
+            title = "&r" + oInfo.getCustomName() + "&r x&a " + count * level;
         }
 
         if (getTeamInfoLevel(info) == effect.getMaxLevel()) {
@@ -219,11 +220,12 @@ public class TeamItem extends BasePlayPanelItemInstance {
         if (effect.equals(new TeamTrap(1))) {
             txt = "购买 " + getItem().getCustomName();
         }
-        String title = "&r" + moneyItem + " x " + count * level;
+        MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
+        String title = "&r" + oInfo.getCustomName() + "&r x&a " + count * level;
         if(info.getGameRoom().getRoomConfig().isExp()){
             int rc = 1;
             if(info.getGameRoom().getRoomConfig().moneyItem.containsKey(moneyItem)){
-                MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
+
                 rc = (int) oInfo.getExp();
             }
             title = "&rExp x " + count * rc * level;

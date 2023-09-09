@@ -214,7 +214,8 @@ public class DefaultItem extends BasePlayPanelItemInstance {
             }
             lore.add(TextFormat.colorize('&',"&rExp x "+count * rc));
         }else{
-            lore.add(TextFormat.colorize('&',"&r"+moneyItem+" x "+count));
+            MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
+            lore.add(TextFormat.colorize('&',"&r"+oInfo.getCustomName()+" &rx&a "+count));
         }
 //
         item.setLore(lore.toArray(new String[0]));
@@ -229,11 +230,11 @@ public class DefaultItem extends BasePlayPanelItemInstance {
         if(path == null){
             path =ItemIDSunName.getIDByPath(getItem().getId());
         }
-        String btName = TextFormat.colorize('&',  itemString+" * "+getItem().getCount()+"\n&r价格: "+moneyItem+" * "+count);
+        MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
+        String btName = TextFormat.colorize('&',  itemString+" * "+getItem().getCount()+"\n&r价格: "+oInfo.getCustomName()+"&r *&a "+count);
         if(info.getGameRoom().getRoomConfig().isExp()){
             int rc = 1;
             if(info.getGameRoom().getRoomConfig().moneyItem.containsKey(moneyItem)){
-                MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
                 rc = (int) oInfo.getExp();
             }
             btName =TextFormat.colorize('&',  itemString+" * "+getItem().getCount()+"\n&r价格: Exp * "+count * rc);
