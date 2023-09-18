@@ -244,9 +244,9 @@ public class PlayerData {
         roomData.roomName = room;
         if(!this.roomData.contains(roomData)){
             this.roomData.add(roomData);
-        }else{
-            roomData = this.roomData.get(this.roomData.indexOf(roomData));
         }
+        roomData = this.roomData.get(this.roomData.indexOf(roomData));
+
         return roomData;
     }
 
@@ -257,6 +257,7 @@ public class PlayerData {
         data.killCount += info.killCount;
         data.endCont += info.endKillCount;
         data.assist += info.assists;
+
     }
 
     @Override
