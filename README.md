@@ -2,7 +2,7 @@
     <img src="https://img.shields.io/github/v/release/Sobadfish/BedWar?include_prereleases" alt="Latest release">
 </a>
 <div align="center">
-<img  src="./img/bed.png"></img>
+    <img src="./img/bed.png"/>
 </div>
 
 
@@ -58,10 +58,10 @@
 
 1. 执行/bd set 房间名称 开始预设模板 (请注意不要出错，不然只能执行/bd cancel重置了)
 
-| [![5.png](https://www.minebbs.com/data/attachments/32/32005-3ba26426d7dc34266a73953656cff814.jpg)](https://www.minebbs.com/attachments/5-png.29169/) | [![9.png](https://www.minebbs.com/data/attachments/32/32007-a0895f517fbf83b61359202a44057129.jpg)](https://www.minebbs.com/attachments/9-png.29171/) |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 根据提示去自定义设置内容                                     | 预设完成后找到生成的team.yml文件修改团队信息并执行 **/bd tsl 重载团队数据** |
-| [![6.png](https://www.minebbs.com/data/attachments/32/32006-cca5d927f2df02ffda45dab9c75d8740.jpg)](https://www.minebbs.com/attachments/6-png.29170/) | 之后执行/bd set 预设好物品的生成点数量，之后执行/bd即可开始房间的配置  **注意: 在设置的时候请不要出错，不然只能/bd cancel重置标志位。队伍的商店出生点顺序为team.yml 配置文件的顺序，请根据顺序进行设置操作。** |
+| ![本地路径](./img/5.png) |                                                                                                        |
+|----------------------|----------------------------------------------------------------------------------------------------------------------------|
+| 根据提示去自定义设置内容         | 预设完成后找到生成的team.yml文件修改团队信息并执行 **/bd tsl 重载团队数据**                                                                           |
+| ![本地路径](./img/6.png) | 之后执行/bd set 预设好物品的生成点数量，之后执行/bd即可开始房间的配置  **注意: 在设置的时候请不要出错，不然只能/bd cancel重置标志位。队伍的商店出生点顺序为team.yml 配置文件的顺序，请根据顺序进行设置操作。** |
 
 
 
@@ -128,9 +128,10 @@ item: "261:0"
 
 **六、游戏内效果:**
 
-| [![1652553447392.png](https://www.minebbs.com/data/attachments/31/31962-c856252311c8ff30b36d9ea38fbb513b.jpg)](https://www.minebbs.com/attachments/1652553447392-png.29126/) | [![1652553559144.png](https://www.minebbs.com/data/attachments/31/31963-01ca004ab0bbd3f5ff9ef34432f9ae50.jpg)](https://www.minebbs.com/attachments/1652553559144-png.29127/) |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [![587ea38e8e7bde6f.jpg](https://www.minebbs.com/data/attachments/31/31974-e6cf8d40ce3b206741a122235bc14883.jpg)](https://www.minebbs.com/attachments/587ea38e8e7bde6f-jpg.29138/) | [![-63bcdca7003b3114.jpg](https://www.minebbs.com/data/attachments/31/31973-27f41890f450874d89c221ce8056a8a4.jpg)](https://www.minebbs.com/attachments/63bcdca7003b3114-jpg.29137/) |
+| ![本地](./img/7.jpg)   | ![本地](./img/8.jpg)   |
+|----------------------|----------------------|
+| ![本地](./img/9.jpg)   | ![本地](./img/10.jpg)  |
+| ![本地](./img/11.jpeg) | ![本地](./img/12.jpeg) |
 
 
 
