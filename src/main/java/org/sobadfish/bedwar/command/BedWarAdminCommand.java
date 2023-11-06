@@ -6,7 +6,6 @@ import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
-import org.sobadfish.bedwar.entity.FloatBlock;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerData;
 import org.sobadfish.bedwar.player.PlayerInfo;
@@ -201,11 +200,7 @@ public class BedWarAdminCommand extends Command {
                     return false;
                 }
                 break;
-            case "tfb":
-                //TODO 测试浮空方块
-                FloatBlock.spawnToLocation(((Player)commandSender).getPosition(),strings[1]);
 
-                break;
             case "tsl":
                 teamShopLoad(commandSender);
                 break;

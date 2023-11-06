@@ -90,6 +90,8 @@ public class PlayerInfo {
 
     public int lastGameMode = 0;
 
+    public boolean fastPlace = true;
+
 
     /**
      *
@@ -803,6 +805,10 @@ public class PlayerInfo {
             sendScore(boardMessage);
         }else{
             sendScore(null);
+        }
+        //TODO 快速搭路提示
+        if(getGameRoom().getRoomConfig().fastPlace && player.getInventory().getItemInHand().getId() == 35){
+            sendTip("&e快速搭路模式: "+(fastPlace?"&a开启":"&c关闭"));
         }
     }
 

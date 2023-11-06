@@ -32,7 +32,9 @@ import cn.nukkit.inventory.transaction.action.InventoryAction;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemColorArmor;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.math.BlockFace;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.command.BedWarCommand;
@@ -542,11 +544,60 @@ public class RoomManager implements Listener {
                     info.sendMessage("&c你不能在这里放置方块");
 
                     event.setCancelled();
+                }else{
+                    //快速搭路放置方块
+                    if(room.getRoomConfig().fastPlace && info.fastPlace && info.getPlayer().getInventory().getItemInHand().getId() == 35){
+                        //TODO 快速搭路代码实现
+                        BlockFace face = getPlaceBlockFace(event.getBlockAgainst(),event.getBlockReplace());
+                        if(face != null){
+                            //多线程延时放置
+                            Block cache =  info.getPlayer().getInventory().getItemInHand().getBlock();
+                            facePlaceBlock(face,event.getBlockAgainst(),cache,room);
+                        }
+
+                    }
+
                 }
             }
         }
 
+    }
 
+    /**
+     * 快速放置方块
+     * @param face 方块朝向
+     * @param block 方块
+     * */
+    public void facePlaceBlock(BlockFace face,Block last,Block block,GameRoom room){
+        ThreadManager.SCHEDULED.execute(new Runnable() {
+            @Override
+            public void run() {
+                for(int i = 1;i <= 5;i++){
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Position pos = last.getSide(face,i);
+                    if(pos.level.getBlock(pos).getId() == 0){
+                        Block place = Block.get(block.getId(),block.getDamage(),last.getSide(face,i));
+                        last.level.setBlock(place,place);
+                        if(room != null){
+                            room.worldInfo.onChangeBlock(place, true);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public BlockFace getPlaceBlockFace(Block placeBlock,Block targetBlock){
+        for(BlockFace face: BlockFace.values()){
+            if(placeBlock.getSide(face).equals(targetBlock)){
+                return face;
+            }
+        }
+        return null;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -1042,10 +1093,27 @@ public class RoomManager implements Listener {
     }
 
 
+    public boolean debugFastPlace = false;
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event){
         Player player = event.getPlayer();
+        if(event.getAction() == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK || event.getAction() == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK){
+            //潜行左键切换模式
+
+            if (playerJoin.containsKey(player.getName())) {
+                String roomName = playerJoin.get(player.getName());
+                GameRoom room = getRoom(roomName);
+                if(room != null){
+                    if (player.isSneaking() && room.getRoomConfig().fastPlace) {
+                        PlayerInfo playerInfo = room.getPlayerInfo(player);
+                        playerInfo.fastPlace = !playerInfo.fastPlace;
+
+                    }
+                }
+
+            }
+        }
         if(event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             Item item = event.getItem();
             if(event.getBlock() instanceof BlockCraftingTable || event.getBlock() instanceof BlockBed){
@@ -1058,6 +1126,7 @@ public class RoomManager implements Listener {
                 String roomName = playerJoin.get(player.getName());
                 GameRoom room = getRoom(roomName);
                 if (room != null) {
+
                     if(item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem")){
                         event.setCancelled();
                         quitRoomItem(player, roomName, room);
