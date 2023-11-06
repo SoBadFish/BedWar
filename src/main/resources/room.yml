@@ -36,6 +36,11 @@ deathIcon: 20
 
 floatSpawnPos: []
 
+display-floatBlock:
+  - 金锭: "gold"
+  - 钻石: "diamond"
+  - 绿宝石: "Emerald"
+
 roomStartMessage:
   - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
   - "&f起床战争"

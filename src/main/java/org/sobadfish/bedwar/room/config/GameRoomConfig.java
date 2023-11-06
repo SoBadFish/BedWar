@@ -6,6 +6,7 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.MoneyItemInfo;
 import org.sobadfish.bedwar.item.NbtItemInfo;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
+import org.sobadfish.bedwar.manager.SkinManager;
 import org.sobadfish.bedwar.player.team.config.TeamConfig;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
@@ -194,6 +195,11 @@ public class GameRoomConfig implements Cloneable{
      * 游戏浮空字
      * */
     public List<FloatTextInfoConfig> floatTextInfoConfigs = new CopyOnWriteArrayList<>();
+
+    /**
+     * 浮空方块
+     * */
+    public LinkedHashMap<String, String> floatBlockConfig = new LinkedHashMap<>();
 
 
 
@@ -602,7 +608,23 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.minutesExp = room.getInt("minutesExp",25);
                 roomConfig.deathIcon = room.getInt("deathIcon",20);
                 roomConfig.enableFood = room.getBoolean("enable-food",false);
+                LinkedHashMap<String,String> floatBlocks = new LinkedHashMap<>();
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
+                //初始化浮空字方块
+                if(room.exists("display-floatBlock")){
+                    Object omap = room.get("isplay-floatBlock");
+                    if(omap instanceof Map){
+                        Map<?,?> map = (Map<?,?>)omap;
+                        for(Map.Entry<?,?> entry : map.entrySet()){
+                            if(itemInfo.containsKey(entry.getKey().toString()) && SkinManager.SKINS.containsKey(entry.getValue().toString())){
+                                floatBlocks.put(entry.getKey().toString(), entry.getValue().toString());
+                            }
+                        }
+                    }
+
+                }
+                roomConfig.floatBlockConfig = floatBlocks;
+
                 if(room.exists("floatSpawnPos")){
                     for(Map<?,?> map: room.getMapList("floatSpawnPos")){
                         FloatTextInfoConfig config = FloatTextInfoConfig.build(map);

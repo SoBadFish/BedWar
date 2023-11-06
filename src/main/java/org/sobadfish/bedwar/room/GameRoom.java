@@ -15,10 +15,12 @@ import cn.nukkit.math.BlockFace;
 import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
 import org.sobadfish.bedwar.BedWarMain;
+import org.sobadfish.bedwar.entity.FloatBlock;
 import org.sobadfish.bedwar.event.*;
 import org.sobadfish.bedwar.item.button.FollowItem;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
 import org.sobadfish.bedwar.item.button.TeamChoseItem;
+import org.sobadfish.bedwar.item.config.ItemInfoConfig;
 import org.sobadfish.bedwar.manager.RandomJoinManager;
 import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.manager.WorldResetManager;
@@ -32,10 +34,7 @@ import org.sobadfish.bedwar.shop.ShopInfo;
 import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.world.WorldInfo;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -245,6 +244,7 @@ public class GameRoom {
                 t.placeBed();
 
             }
+
             for(PlayerInfo i : getPlayerInfos()){
 //                    i.clear();
                 try {
@@ -264,6 +264,23 @@ public class GameRoom {
             shopInfo.init(getRoomConfig());
             loadTime = getRoomConfig().time;
             worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);
+            //生成浮空方块
+            for(Map.Entry<String, String> blockName: getRoomConfig().floatBlockConfig.entrySet()){
+                ItemInfoConfig itemInfo = null;
+                for(ItemInfoConfig info: getRoomConfig().worldInfo.getItemInfos()){
+                    if(info.getMoneyItemInfoConfig().getName().equals(blockName.getKey())){
+                        itemInfo = info;
+                    }
+                }
+                if(itemInfo != null){
+                    for(Position position: itemInfo.getPositions()){
+                        FloatBlock.spawnToLocation(position.add(0,2),blockName.getValue());
+                    }
+                }
+            }
+
+
+
             GameRoomStartEvent event = new GameRoomStartEvent(this,BedWarMain.getBedWarMain());
             Server.getInstance().getPluginManager().callEvent(event);
 

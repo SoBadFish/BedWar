@@ -38,6 +38,7 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.command.BedWarCommand;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
 import org.sobadfish.bedwar.entity.EntityFireBall;
+import org.sobadfish.bedwar.entity.FloatBlock;
 import org.sobadfish.bedwar.entity.ShopVillage;
 import org.sobadfish.bedwar.event.*;
 import org.sobadfish.bedwar.item.ItemIDSunName;
@@ -833,6 +834,9 @@ public class RoomManager implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event){
 
+        if(event.getEntity() instanceof FloatBlock){
+            event.setCancelled();
+        }
         if(event.getEntity() instanceof ShopVillage) {
             if(event instanceof EntityDamageByEntityEvent){
                 Entity damager = ((EntityDamageByEntityEvent) event).getDamager();

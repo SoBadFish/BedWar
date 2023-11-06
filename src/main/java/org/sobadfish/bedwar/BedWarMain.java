@@ -121,6 +121,32 @@ public class BedWarMain extends PluginBase {
 
 
         ThreadManager.init();
+
+        this.getLogger().info(TextFormat.colorize('&',"&d正在初始化方块模型"));
+        //初始化 皮肤
+        //方块列表
+        String[] blockList = {"diamond","emerald","gold","iron"};
+        //检测 skin 文件夹没有文件的时候初始化写入
+        File skinFile = new File(BedWarMain.getBedWarMain().getDataFolder()+"/skin");
+
+        if(!skinFile.exists()){
+            if(!skinFile.mkdirs()){
+                sendMessageToConsole("create skin directory failed!");
+            }
+            //写入皮肤文件
+            for(String skinName: blockList){
+                this.getLogger().info(TextFormat.colorize('&',"写入模型: "+skinName));
+
+                saveResource("blockskin/"+skinName+"/skin.json","/skin/"+skinName+"/skin.json",false);
+                saveResource("blockskin/"+skinName+"/skin.png","/skin/"+skinName+"/skin.png",false);
+            }
+        }
+
+
+        SkinManager.init();
+        this.getLogger().info(TextFormat.colorize('&',"&a方块模型初始化完成!"));
+
+
         this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
 
     }
