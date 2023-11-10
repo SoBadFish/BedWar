@@ -26,6 +26,7 @@ import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.form.response.FormResponseSimple;
 import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.inventory.Inventory;
+import cn.nukkit.inventory.PlayerEnderChestInventory;
 import cn.nukkit.inventory.PlayerInventory;
 import cn.nukkit.inventory.transaction.InventoryTransaction;
 import cn.nukkit.inventory.transaction.action.InventoryAction;
@@ -545,6 +546,11 @@ public class RoomManager implements Listener {
 
                     event.setCancelled();
                 }else{
+                    //记录队伍放置的末影箱
+                    if(block instanceof BlockEnderChest){
+                        info.getTeamInfo().placeEnderChest.add(block);
+                    }
+
                     //快速搭路放置方块
                     if(room.getRoomConfig().fastPlace && info.fastPlace && info.getPlayer().getInventory().getItemInHand().getId() == 35){
                         //TODO 快速搭路代码实现
@@ -649,6 +655,11 @@ public class RoomManager implements Listener {
                 if(!room.toBreakBlock(info,block)){
                     event.setCancelled();
                 }else{
+                    //移除记录的末影箱
+                    if(block instanceof BlockEnderChest){
+                        info.getTeamInfo().placeEnderChest.remove(block);
+                    }
+
                     //出现了没有掉落物情况..修复
                     event.setDrops(event.getBlock().getDrops(Item.get(278)));
                 }
@@ -1098,73 +1109,98 @@ public class RoomManager implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event){
         Player player = event.getPlayer();
-        if(event.getAction() == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK || event.getAction() == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK){
-            //潜行左键切换模式
+        if (playerJoin.containsKey(player.getName())) {
 
-            if (playerJoin.containsKey(player.getName())) {
-                String roomName = playerJoin.get(player.getName());
-                GameRoom room = getRoom(roomName);
-                if(room != null){
-                    if (player.isSneaking() && room.getRoomConfig().fastPlace) {
-                        PlayerInfo playerInfo = room.getPlayerInfo(player);
-                        playerInfo.fastPlace = !playerInfo.fastPlace;
-
+            String roomName = playerJoin.get(player.getName());
+            GameRoom room = getRoom(roomName);
+            if(room == null){
+                return;
+            }
+            PlayerInfo playerInfo = room.getPlayerInfo(player);
+            if(room.getType() == GameType.START){
+                //摸到 末影箱子时 替换为团队物品
+                if(event.getBlock() instanceof BlockEnderChest){
+                    BlockEnderChest enderChest = (BlockEnderChest) event.getBlock();
+                    // 检查是哪个队伍的末影箱 如果都不在队伍内就检查 哪个距离队伍出生点最近 （10格）
+                    TeamInfo enderChestMasterTeam = null;
+                    for(TeamInfo teamInfo: room.getTeamInfos()){
+                        if(teamInfo.placeEnderChest.contains(enderChest)){
+                            enderChestMasterTeam = teamInfo;
+                        }
                     }
+                    if(enderChestMasterTeam == null){
+                        for(TeamInfo teamInfo: room.getTeamInfos()){
+                           if(teamInfo.getTeamConfig().getSpawnPosition().distance(enderChest) < 10){
+                               enderChestMasterTeam = teamInfo;
+                               enderChestMasterTeam.placeEnderChest.add(enderChest);
+                           }
+                        }
+                    }
+
+                    if(playerInfo.getTeamInfo().equals(enderChestMasterTeam)){
+                        player.getEnderChestInventory().setContents(player.getEnderChestInventory().getContents());
+                    }else{
+                        event.setCancelled();
+                    }
+                }
+            }
+
+            if (event.getAction() == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK || event.getAction() == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+                //潜行左键切换模式
+                if (player.isSneaking() && room.getRoomConfig().fastPlace) {
+
+                    playerInfo.fastPlace = !playerInfo.fastPlace;
+
                 }
 
             }
-        }
-        if(event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-            Item item = event.getItem();
-            if(event.getBlock() instanceof BlockCraftingTable || event.getBlock() instanceof BlockBed){
-                if(BedWarMain.getRoomManager().getPlayerInfo(event.getPlayer()) != null){
+            if (event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+                Item item = event.getItem();
+                if (event.getBlock() instanceof BlockCraftingTable || event.getBlock() instanceof BlockBed) {
+                    if (BedWarMain.getRoomManager().getPlayerInfo(event.getPlayer()) != null) {
+                        event.setCancelled();
+                        return;
+                    }
+                }
+
+                if (item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem")) {
+                    event.setCancelled();
+                    quitRoomItem(player, roomName, room);
+                    return;
+                }
+                if (item.hasCompoundTag() && item.getNamedTag().getBoolean("follow")) {
+                    followPlayer(room.getPlayerInfo(player), room);
                     event.setCancelled();
                     return;
                 }
-            }
-            if (playerJoin.containsKey(player.getName())) {
-                String roomName = playerJoin.get(player.getName());
-                GameRoom room = getRoom(roomName);
-                if (room != null) {
 
-                    if(item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem")){
-                        event.setCancelled();
-                        quitRoomItem(player, roomName, room);
-                        return;
-                    }
-                    if(item.hasCompoundTag() && item.getNamedTag().getBoolean("follow")){
-                        followPlayer(room.getPlayerInfo(player),room);
-                        event.setCancelled();
-                        return;
-                    }
-
-                    if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
-                        event.setCancelled();
-                        choseteamItem(player, room);
-                        return;
-
-                    }
-                    if (item.hasCompoundTag() && item.getNamedTag().contains(NbtDefaultItem.TAG)) {
-                        String name = item.getNamedTag().getString(NbtDefaultItem.TAG);
-
-                        if(event.getBlock() instanceof BlockChest){
-                            if(!room.getClickChest().contains((BlockChest) event.getBlock())) {
-                                room.getClickChest().add((BlockChest) event.getBlock());
-                            }
-                            return;
-                        }
-                        Item r = item.clone();
-                        r.setCount(1);
-                        if (room.getRoomConfig().nbtItemInfo.items.containsKey(name)) {
-                            INbtItem iNbtItem = room.getRoomConfig().nbtItemInfo.items.get(name).name;
-                            if(iNbtItem.onClick(r, player)){
-                                event.setCancelled();
-                            }
-                        }
-                    }
+                if (item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")) {
+                    event.setCancelled();
+                    choseteamItem(player, room);
+                    return;
 
                 }
+                if (item.hasCompoundTag() && item.getNamedTag().contains(NbtDefaultItem.TAG)) {
+                    String name = item.getNamedTag().getString(NbtDefaultItem.TAG);
+
+                    if (event.getBlock() instanceof BlockChest) {
+                        if (!room.getClickChest().contains((BlockChest) event.getBlock())) {
+                            room.getClickChest().add((BlockChest) event.getBlock());
+                        }
+                        return;
+                    }
+                    Item r = item.clone();
+                    r.setCount(1);
+                    if (room.getRoomConfig().nbtItemInfo.items.containsKey(name)) {
+                        INbtItem iNbtItem = room.getRoomConfig().nbtItemInfo.items.get(name).name;
+                        if (iNbtItem.onClick(r, player)) {
+                            event.setCancelled();
+                        }
+                    }
+                }
+
             }
+
         }
 
     }
@@ -1296,6 +1332,8 @@ public class RoomManager implements Listener {
             }
         }
     }
+
+
 
     @EventHandler
     public void onFrom(PlayerFormRespondedEvent event){
@@ -1444,6 +1482,14 @@ public class RoomManager implements Listener {
                         }
                     }
 
+                }
+
+                if(inventory instanceof PlayerEnderChestInventory){
+                    EntityHuman player =((PlayerEnderChestInventory) inventory).getHolder();
+                    PlayerInfo playerInfo = getPlayerInfo(player);
+                    if(playerInfo.isLive()){
+                        playerInfo.getTeamInfo().pEnderChest.putAll(playerInfo.getPlayer().getEnderChestInventory().slots);
+                    }
                 }
 
                 if(inventory instanceof PlayerInventory){

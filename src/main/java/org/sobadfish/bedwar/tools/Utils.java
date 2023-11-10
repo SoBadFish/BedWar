@@ -2,6 +2,8 @@ package org.sobadfish.bedwar.tools;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.block.Block;
+import cn.nukkit.block.BlockAir;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityFirework;
 import cn.nukkit.item.ItemFirework;
@@ -15,19 +17,20 @@ import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.utils.DyeColor;
+import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.EntityBlueWitherSkull;
 import org.sobadfish.bedwar.entity.baselib.BaseEntity;
+import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
+import org.sobadfish.bedwar.room.GameRoom;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
-import java.util.SplittableRandom;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 感谢MobPlugin插件开发组提供的AI算法
@@ -313,6 +316,7 @@ public class Utils {
         destFile.close();
     }
 
+
     /**复制文件夹   */
     private static void copyDirectiory(String sourceDir, String targetDir)
             throws IOException {
@@ -348,6 +352,50 @@ public class Utils {
 
     }
 
+
+    /**
+     * 画一条进度条
+     * ■■■■□□□□□□
+     * @param progress 进度（百分比）
+     * @param size 总长度
+     * @param hasDataChar 自定义有数据图案 ■
+     * @param noDataChar 自定义无数据图案 □
+     * @return 画出来的线
+     * */
+    public static String drawLine(float progress,int size,String hasDataChar,String noDataChar){
+        int l = (int) (size * progress);
+        int other = size - l;
+        StringBuilder ls = new StringBuilder();
+        if(l > 0){
+            for(int i = 0;i < l;i++){
+                ls.append(hasDataChar);
+            }
+        }
+        StringBuilder others = new StringBuilder();
+        if(other > 0){
+            for(int i = 0;i < other;i++){
+                others.append(noDataChar);
+            }
+        }
+        return TextFormat.colorize('&',ls +others.toString());
+    }
+
+    /**
+     * 获取百分比
+     * 保留两位有效数字
+     * @param n 当前值
+     * @param max 最大值
+     * @return 计算出的百分比
+     * */
+    public static double getPercent(int n,int max){
+        double r = 0;
+        if(n > 0){
+            r = (double) n / (double) max;
+        }
+        return Double.parseDouble(String.format("%.2f",r));
+    }
+
+
     public static void launchWitherSkull(PlayerInfo playerInfo){
         Entity player = playerInfo.getPlayer();
         double f = 1.2D;
@@ -359,5 +407,42 @@ public class Utils {
         fireBall.setMaster(playerInfo);
         fireBall.setMotion(new Vector3(-Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * f * f, -Math.sin(Math.toRadians(pitch)) * f * f, Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * f * f));
         fireBall.spawnToAll();
+    }
+
+
+    /**
+     * 在游戏地图生成方块
+     * @param player 玩家
+     * @param spawn 生成的方块与位置
+     * @param canRemove 是否被移除
+     * */
+    public static void spawnBlock(Player player, LinkedHashMap<Position, Block> spawn,boolean canRemove) {
+        PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
+        if(info == null){
+            return;
+        }
+        for(Map.Entry<Position,Block> block: spawn.entrySet()){
+            if(block.getKey().getLevelBlock().getId() == 0) {
+                if(info.getGameRoom().worldInfo.onChangeBlock(block.getKey().getLevelBlock(),true)){
+                    block.getKey().getLevel().setBlock(block.getKey(), block.getValue(), true, true);
+                }
+            }
+
+        }
+        if(canRemove){
+            ThreadManager.SCHEDULED.schedule(() -> {
+                for(Position block: new ArrayList<>(spawn.keySet())){
+                    if(info.getGameRoom() == null || info.getGameRoom().getType() != GameRoom.GameType.START){
+                        return;
+                    }
+                    if(info.getGameRoom().worldInfo.onChangeBlock(block.getLevelBlock(),false)){
+                        block.getLevel().setBlock(block,new BlockAir());
+                    }
+                }
+            },5, TimeUnit.SECONDS);
+        }
+
+
+//        player.getInventory().removeItem(item);
     }
 }

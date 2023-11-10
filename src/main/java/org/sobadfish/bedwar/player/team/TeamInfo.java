@@ -3,6 +3,7 @@ package org.sobadfish.bedwar.player.team;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockAir;
+import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.potion.Effect;
@@ -18,6 +19,8 @@ import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.GameRoom;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author SoBadFish
@@ -29,6 +32,12 @@ public class TeamInfo {
     private TeamInfoConfig teamConfig;
 
     private boolean badExists = true;
+
+    //团队共享箱子
+    public LinkedHashMap<Integer, Item> pEnderChest = new LinkedHashMap<>();
+
+
+    public List<Position> placeEnderChest = new ArrayList<>();
 
     //淘汰
 

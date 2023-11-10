@@ -2,19 +2,14 @@ package org.sobadfish.bedwar.item.nbt;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
-import cn.nukkit.block.BlockAir;
 import cn.nukkit.block.BlockSlime;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import org.sobadfish.bedwar.BedWarMain;
-import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
-import org.sobadfish.bedwar.room.GameRoom;
+import org.sobadfish.bedwar.tools.Utils;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -36,37 +31,13 @@ public class Platform implements INbtItem {
 
         Position pos = info.getPlayer().add(0,-10);
         LinkedHashMap<Position,Block> spawn = BedWarMain.spawnBlockByPosAndSize(pos,3,new BlockSlime());
-        spawnBlock(item, player, spawn);
+        Utils.spawnBlock( player, spawn,true);
         info.sendMessage("&a已生成平台");
+        player.getInventory().removeItem(item);
         return true;
     }
 
-    static void spawnBlock(Item item, Player player, LinkedHashMap<Position, Block> spawn) {
-        PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
-        if(info == null){
-            return;
-        }
-        for(Map.Entry<Position,Block> block: spawn.entrySet()){
-            if(block.getKey().getLevelBlock().getId() == 0) {
-                if(info.getGameRoom().worldInfo.onChangeBlock(block.getKey().getLevelBlock(),true)){
-                    block.getKey().getLevel().setBlock(block.getKey(), block.getValue(), true, true);
-                }
-            }
 
-        }
-        ThreadManager.SCHEDULED.schedule(() -> {
-            for(Position block: new ArrayList<>(spawn.keySet())){
-                if(info.getGameRoom() == null || info.getGameRoom().getType() != GameRoom.GameType.START){
-                    return;
-                }
-                if(info.getGameRoom().worldInfo.onChangeBlock(block.getLevelBlock(),false)){
-                    block.getLevel().setBlock(block,new BlockAir());
-                }
-            }
-        },5, TimeUnit.SECONDS);
-
-        player.getInventory().removeItem(item);
-    }
 
 
 }

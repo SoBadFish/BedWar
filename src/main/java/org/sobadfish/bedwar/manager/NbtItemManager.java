@@ -31,6 +31,8 @@ public class NbtItemManager {
         NBT_MANAGER.put("搭桥蛋",new BridgingEgg());
         NBT_MANAGER.put("凋零弓",new DieBow());
 
+        NBT_MANAGER.put("守卫墙",new Wall());
+
     }
 
     public static Item build(String name, Map<?,?> map){

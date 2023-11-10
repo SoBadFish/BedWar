@@ -55,5 +55,9 @@ nbtItem:
     item: "261:0"
   "搭桥蛋":
     customName: "&e搭桥蛋"
-    lore: [ ]
+    lore: []
     item: "344:0"
+  "守卫墙":
+    customName: "&e守卫墙"
+    lore: []
+    item: "336:0"

@@ -6,6 +6,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.player.PlayerInfo;
+import org.sobadfish.bedwar.tools.Utils;
 
 import java.util.LinkedHashMap;
 
@@ -27,7 +28,7 @@ public class Line implements INbtItem{
 
         Position pos = info.getPlayer().getSide(info.getPlayer().getHorizontalFacing(),2);
         LinkedHashMap<Position,Block> spawn = BedWarMain.spawnBlockByPosAndSize(pos,3,Block.get(30));
-        Platform.spawnBlock(item, player, spawn);
+        Utils.spawnBlock(player, spawn,true);
         info.sendMessage("&a已生成蜘蛛网");
         player.getInventory().removeItem(item);
         return true;

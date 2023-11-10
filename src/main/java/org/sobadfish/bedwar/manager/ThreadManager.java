@@ -7,20 +7,16 @@ import org.sobadfish.bedwar.thread.RandomJoinRunnable;
 import org.sobadfish.bedwar.thread.RoomLoadRunnable;
 import org.sobadfish.bedwar.thread.TopRunnable;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * @author SoBadFish
  * 2022/1/2
  */
 public class ThreadManager {
+
+    public static ScheduledExecutorService TIMER =  Executors.newSingleThreadScheduledExecutor();
 
 
     public static final List<AbstractBedWarRunnable> RUNNABLES = new CopyOnWriteArrayList<>();
