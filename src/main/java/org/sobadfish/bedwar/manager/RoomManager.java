@@ -1488,6 +1488,14 @@ public class RoomManager implements Listener {
                     EntityHuman player =((PlayerEnderChestInventory) inventory).getHolder();
                     PlayerInfo playerInfo = getPlayerInfo(player);
                     if(playerInfo.isLive()){
+                        //更新所有人的
+                        for(Player player1: inventory.getViewers()){
+                            if(player1.getName().equalsIgnoreCase(player.getName())){
+                                continue;
+                            }
+                            player1.getEnderChestInventory().setContents(player.getEnderChestInventory().getContents());
+                        }
+
                         playerInfo.getTeamInfo().pEnderChest.putAll(playerInfo.getPlayer().getEnderChestInventory().slots);
                     }
                 }
