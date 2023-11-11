@@ -24,7 +24,9 @@ public class Wall implements INbtItem {
     @Override
     public boolean onClick(Item item, Player player) {
 
+
         PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
+        info.sendMessage("&7放置守卫墙!");
 
         BlockFace bf = info.getPlayer().getHorizontalFacing();
         Position pos = info.getPlayer().getSide(bf,2);
