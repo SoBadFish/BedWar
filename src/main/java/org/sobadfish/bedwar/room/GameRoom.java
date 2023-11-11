@@ -266,6 +266,7 @@ public class GameRoom {
             worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);
             //生成浮空方块
             for(Map.Entry<String, String> blockName: getRoomConfig().floatBlockConfig.entrySet()){
+                BedWarMain.sendMessageToConsole(blockName.getKey()+" 浮空方块生成");
                 ItemInfoConfig itemInfo = null;
                 for(ItemInfoConfig info: getRoomConfig().worldInfo.getItemInfos()){
                     if(info.getMoneyItemInfoConfig().getName().equals(blockName.getKey())){

@@ -5,6 +5,7 @@ import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
+import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.manager.SkinManager;
 
 /**
@@ -29,6 +30,7 @@ public class FloatBlock extends EntityHuman {
         CompoundTag tag = EntityHuman.getDefaultNBT(pos);
         Skin skin = SkinManager.getSkinByName(skinName);
         if(skin == null){
+            BedWarMain.sendMessageToConsole("&c"+skinName+" 皮肤为空!");
             return;
         }
         tag.putCompound("Skin",new CompoundTag()

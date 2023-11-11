@@ -618,7 +618,7 @@ public class GameRoomConfig implements Cloneable{
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
                 //初始化浮空字方块
                 if(room.exists("display-floatBlock")){
-                    Object omap = room.get("isplay-floatBlock");
+                    Object omap = room.get("display-floatBlock");
                     if(omap instanceof Map){
                         Map<?,?> map = (Map<?,?>)omap;
                         for(Map.Entry<?,?> entry : map.entrySet()){

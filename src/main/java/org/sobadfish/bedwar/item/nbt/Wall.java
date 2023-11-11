@@ -34,8 +34,10 @@ public class Wall implements INbtItem {
         BlockFace leftBf = bf.rotateY();
         BlockFace rightBf = bf.rotateYCCW();
 
+
         Position leftBlockEnd = pos.getSide(leftBf,2);
         Position rightBlockEnd = pos.getSide(rightBf,2);
+        System.out.println("left: "+leftBlockEnd+" right: "+rightBlockEnd);
         for(int x = leftBlockEnd.getFloorX(); x < rightBlockEnd.getFloorX();x++){
             for(int z = leftBlockEnd.getFloorZ(); z < rightBlockEnd.getFloorZ();z++){
                 for(int y = 0;y < 3;y++){

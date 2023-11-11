@@ -3,8 +3,8 @@ package org.sobadfish.bedwar.item.nbt;
 import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Location;
+import cn.nukkit.level.ParticleEffect;
 import cn.nukkit.level.Position;
-import cn.nukkit.level.particle.EnchantParticle;
 import cn.nukkit.math.Vector3;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.manager.ThreadManager;
@@ -67,7 +67,7 @@ public class BackHub implements INbtItem{
                     double z = playerLocation.getZ() + radius * Math.sin(angle);
 
                     // 创建粒子并显示
-                    player.getLevel().addParticle(new EnchantParticle(new Vector3(x, y, z)));
+                    player.getLevel().addParticleEffect(new Vector3(x, y, z), ParticleEffect.ENCHANTING_TABLE_PARTICLE);
 
                     angle += speed;
                     if (angle >= 2 * Math.PI) {
