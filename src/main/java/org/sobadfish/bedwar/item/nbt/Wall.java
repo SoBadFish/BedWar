@@ -29,16 +29,15 @@ public class Wall implements INbtItem {
         BlockFace bf = info.getPlayer().getHorizontalFacing();
         Position pos = info.getPlayer().getSide(bf,2);
         LinkedHashMap<Position,Block> blocks = new LinkedHashMap<>();
-        Block bk = Block.get(24,0,pos);
         BlockFace leftBf = bf.rotateY();
         BlockFace rightBf = bf.rotateYCCW();
 
-        Position leftBlockEnd = bk.getSide(leftBf,2);
-        Position rightBlockEnd = bk.getSide(rightBf,2);
+        Position leftBlockEnd = pos.getSide(leftBf,2);
+        Position rightBlockEnd = pos.getSide(rightBf,2);
         for(int x = leftBlockEnd.getFloorX(); x < rightBlockEnd.getFloorZ();x++){
             for(int z = leftBlockEnd.getFloorZ(); z < rightBlockEnd.getFloorZ();z++){
                 for(int y = 0;y < 3;y++){
-                    blocks.put(new Position(x,bk.getFloorY()+ y,z,player.level),Block.get(24));
+                    blocks.put(new Position(x,pos.getFloorY()+ y,z,player.level),Block.get(24));
                 }
             }
         }
