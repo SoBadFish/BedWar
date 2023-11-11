@@ -557,8 +557,15 @@ public class RoomManager implements Listener {
                         BlockFace face = getPlaceBlockFace(event.getBlockAgainst(),event.getBlockReplace());
                         if(face != null){
                             //多线程延时放置
+                            if(face == BlockFace.UP){
+                                return;
+                            }
                             Block cache =  info.getPlayer().getInventory().getItemInHand().getBlock();
-                            facePlaceBlock(face,event.getBlockAgainst(),cache,room);
+                            int count = Math.min(info.getPlayer().getInventory().getItemInHand().getCount(), 5);
+                            Item ir = info.getPlayer().getInventory().getItemInHand().clone();
+                            ir.setCount(count);
+                            info.getPlayer().getInventory().removeItem(ir);
+                            facePlaceBlock(face,event.getBlockAgainst(),cache,room,count);
                         }
 
                     }
@@ -574,11 +581,11 @@ public class RoomManager implements Listener {
      * @param face 方块朝向
      * @param block 方块
      * */
-    public void facePlaceBlock(BlockFace face,Block last,Block block,GameRoom room){
+    public void facePlaceBlock(BlockFace face,Block last,Block block,GameRoom room,int size){
         ThreadManager.SCHEDULED.execute(new Runnable() {
             @Override
             public void run() {
-                for(int i = 1;i <= 5;i++){
+                for(int i = 1;i <= size;i++){
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
