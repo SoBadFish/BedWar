@@ -620,8 +620,10 @@ public class GameRoomConfig implements Cloneable{
                 if(room.exists("display-floatBlock")){
                     Object omap = room.get("display-floatBlock");
                     if(omap instanceof Map){
+                        BedWarMain.sendMessageToConsole("&e正在读取 浮空方块信息");
                         Map<?,?> map = (Map<?,?>)omap;
                         for(Map.Entry<?,?> entry : map.entrySet()){
+                            BedWarMain.sendMessageToConsole("&e正在加载 "+entry.getKey().toString()+" 浮空方块");
                             if(itemInfo.containsKey(entry.getKey().toString()) && SkinManager.SKINS.containsKey(entry.getValue().toString())){
                                 floatBlocks.put(entry.getKey().toString(), entry.getValue().toString());
                             }

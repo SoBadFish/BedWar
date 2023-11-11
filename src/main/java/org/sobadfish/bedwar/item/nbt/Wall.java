@@ -29,7 +29,7 @@ public class Wall implements INbtItem {
         info.sendMessage("&7放置守卫墙!");
 
         BlockFace bf = info.getPlayer().getHorizontalFacing();
-        Position pos = info.getPlayer().getSide(bf,2);
+        Position pos = info.getPlayer().getLocation().add(0,1).getSide(bf,2);
         LinkedHashMap<Position,Block> blocks = new LinkedHashMap<>();
         BlockFace leftBf = bf.rotateY();
         BlockFace rightBf = bf.rotateYCCW();
@@ -37,17 +37,25 @@ public class Wall implements INbtItem {
 
         Position leftBlockEnd = pos.getSide(leftBf,2);
         Position rightBlockEnd = pos.getSide(rightBf,2);
-        System.out.println("left: "+leftBlockEnd+" right: "+rightBlockEnd);
-        for(int x = leftBlockEnd.getFloorX(); x < rightBlockEnd.getFloorX();x++){
-            for(int z = leftBlockEnd.getFloorZ(); z < rightBlockEnd.getFloorZ();z++){
+
+        int minX = (int) Math.min(Math.round(leftBlockEnd.getX()), Math.round(rightBlockEnd.getX()));
+        int maxX = (int) Math.max(Math.round(leftBlockEnd.getX()),Math.round(rightBlockEnd.getX()));
+
+        int minZ = (int) Math.min(Math.round(leftBlockEnd.getZ()), Math.round(rightBlockEnd.getZ()));
+        int maxZ = (int) Math.max(Math.round(leftBlockEnd.getZ()),Math.round(rightBlockEnd.getZ()));
+
+        for(int x = minX; x <= maxX;x++){
+            for(int z = minZ; z <= maxZ;z++){
                 for(int y = 0;y < 3;y++){
                     blocks.put(new Position(x,pos.getFloorY()+ y,z,player.level),Block.get(24));
                 }
             }
         }
+
         Utils.spawnBlock(player,blocks,false);
         player.getInventory().removeItem(item);
 
         return true;
     }
+
 }

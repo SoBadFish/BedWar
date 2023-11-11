@@ -99,6 +99,7 @@ public class BedWarMain extends PluginBase {
         Entity.registerEntity("BridgingEgg", BridgingEggEntity.class);
         Entity.registerEntity(EntityBlueWitherSkull.class.getSimpleName(), EntityBlueWitherSkull.class);
         Entity.registerEntity(IronGolem.class.getSimpleName(), IronGolem.class);
+        initSkin();
         loadBedWarConfig();
 
         //TODO 注册指令
@@ -122,6 +123,14 @@ public class BedWarMain extends PluginBase {
 
         ThreadManager.init();
 
+
+
+
+        this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
+
+    }
+
+    public void initSkin(){
         this.getLogger().info(TextFormat.colorize('&',"&d正在初始化方块模型"));
         //初始化 皮肤
         //方块列表
@@ -145,10 +154,6 @@ public class BedWarMain extends PluginBase {
 
         SkinManager.init();
         this.getLogger().info(TextFormat.colorize('&',"&a方块模型初始化完成!"));
-
-
-        this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
-
     }
 
     /**
