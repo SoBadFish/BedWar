@@ -67,8 +67,8 @@ public class BedWarMain extends PluginBase {
         this.getLogger().info(TextFormat.colorize('&',"&b  | |_) |  __/ (_| |  \\  /\\  / (_| | |"));
         this.getLogger().info(TextFormat.colorize('&',"&b  |____/ \\___|\\__,_|   \\/  \\/ \\__,_|_|"));
         this.getLogger().info(TextFormat.colorize('&',"&b"));
-        this.getLogger().info(TextFormat.colorize('&',"&e正在加载BedWar 起床战争插件 本版本为&av"+this.getDescription().getVersion()));
-        this.getLogger().info(TextFormat.colorize('&',"&c插件作者:&b sobadfish(某吃瓜咸鱼) &aQQ：&e1586235767"));
+        this.getLogger().info(TextFormat.colorize('&',"&e正在加载BedWar 起床战争插件 版本: &av"+this.getDescription().getVersion()));
+        this.getLogger().info(TextFormat.colorize('&',"&eAuthor:&b sobadfish &aQQ：&e1586235767"));
         this.getLogger().info(TextFormat.colorize('&',"&c本插件为原创插件 部分源代码出处已标明原作者"));
         sendMessageToConsole("&a正在检查相应的依赖");
 
