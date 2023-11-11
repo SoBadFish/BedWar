@@ -557,7 +557,8 @@ public class RoomManager implements Listener {
                         BlockFace face = getPlaceBlockFace(event.getBlockAgainst(),event.getBlockReplace());
                         if(face != null){
                             //多线程延时放置
-                            if(face == BlockFace.UP){
+                            Block c = event.getBlockAgainst();
+                            if(face == BlockFace.UP && floorBlock(info.getPlayer(),c)){
                                 return;
                             }
                             Block cache =  info.getPlayer().getInventory().getItemInHand().getBlock();
@@ -565,7 +566,7 @@ public class RoomManager implements Listener {
                             Item ir = info.getPlayer().getInventory().getItemInHand().clone();
                             ir.setCount(count);
                             info.getPlayer().getInventory().removeItem(ir);
-                            facePlaceBlock(face,event.getBlockAgainst(),cache,room,count);
+                            facePlaceBlock(face,c,cache,room,count);
                         }
 
                     }
@@ -574,6 +575,10 @@ public class RoomManager implements Listener {
             }
         }
 
+    }
+
+    private boolean floorBlock(Position playerPos,Block floorBlock){
+        return Math.abs(playerPos.getX() - floorBlock.getFloorX()) < 0.5 && Math.abs(playerPos.getZ() - floorBlock.getFloorZ()) < 0.5;
     }
 
     /**

@@ -18,6 +18,9 @@ entity:
 # 快速搭路
 fast-place: false
 
+# 快速搭路放置方块数量
+fast-place-count: 5
+
 # 装备无限耐久
 inventory-unbreakable: true
 max-player-waitTime: 20
