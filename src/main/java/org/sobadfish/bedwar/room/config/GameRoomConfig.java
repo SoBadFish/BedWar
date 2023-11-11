@@ -630,6 +630,7 @@ public class GameRoomConfig implements Cloneable{
                         }
                     }
 
+
                 }
                 roomConfig.floatBlockConfig = floatBlocks;
 
