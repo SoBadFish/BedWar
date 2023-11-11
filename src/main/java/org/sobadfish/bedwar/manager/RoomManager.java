@@ -562,7 +562,7 @@ public class RoomManager implements Listener {
                                 return;
                             }
                             Block cache =  info.getPlayer().getInventory().getItemInHand().getBlock();
-                            int count = Math.min(info.getPlayer().getInventory().getItemInHand().getCount(), 5);
+                            int count = Math.min(info.getPlayer().getInventory().getItemInHand().getCount(), room.getRoomConfig().fastPlaceCount);
                             Item ir = info.getPlayer().getInventory().getItemInHand().clone();
                             ir.setCount(count);
                             info.getPlayer().getInventory().removeItem(ir);

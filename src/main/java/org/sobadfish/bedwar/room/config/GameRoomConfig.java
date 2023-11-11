@@ -114,6 +114,11 @@ public class GameRoomConfig implements Cloneable{
      * */
     public boolean fastPlace = false;
 
+    /**
+     * 快速搭路放置数量
+     * */
+    public int fastPlaceCount = 5;
+
 
     /**
      * 等待大厅拉回坐标
@@ -614,6 +619,7 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.deathIcon = room.getInt("deathIcon",20);
                 roomConfig.enableFood = room.getBoolean("enable-food",false);
                 roomConfig.fastPlace = room.getBoolean("fast-place",false);
+                roomConfig.fastPlaceCount = room.getInt("fast-place-count",5);
                 LinkedHashMap<String,String> floatBlocks = new LinkedHashMap<>();
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
                 //初始化浮空字方块
@@ -708,6 +714,7 @@ public class GameRoomConfig implements Cloneable{
             itemSpawn.put(itemInfoConfig.getMoneyItemInfoConfig().getName(),itemInfoConfig.save());
         }
         config.set("fast-place",fastPlace);
+        config.set("fast-place-count",fastPlaceCount);
         config.set("itemSpawn",itemSpawn);
         config.set("waitPosition",WorldInfoConfig.positionToString(worldInfo.getWaitPosition()));
         config.set("ban-command",banCommand);
