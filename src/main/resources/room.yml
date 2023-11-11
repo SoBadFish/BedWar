@@ -39,7 +39,7 @@ floatSpawnPos: []
 display-floatBlock:
   金锭: "gold"
   钻石: "diamond"
-  绿宝石: "Emerald"
+  绿宝石: "emerald"
 
 roomStartMessage:
   - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"

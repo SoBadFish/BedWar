@@ -275,7 +275,7 @@ public class GameRoom {
                 }
                 if(itemInfo != null){
                     for(Position position: itemInfo.getPositions()){
-                        FloatBlock.spawnToLocation(position.add(0,1.2),blockName.getValue());
+                        FloatBlock.spawnToLocation(position.add(0.5,3.2,0.5),blockName.getValue().toLowerCase());
                     }
                 }
             }

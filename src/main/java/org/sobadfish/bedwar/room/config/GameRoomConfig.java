@@ -624,8 +624,8 @@ public class GameRoomConfig implements Cloneable{
                         Map<?,?> map = (Map<?,?>)omap;
                         for(Map.Entry<?,?> entry : map.entrySet()){
                             BedWarMain.sendMessageToConsole("&e正在加载 "+entry.getKey().toString()+" 浮空方块");
-                            if(itemInfo.containsKey(entry.getKey().toString()) && SkinManager.SKINS.containsKey(entry.getValue().toString())){
-                                floatBlocks.put(entry.getKey().toString(), entry.getValue().toString());
+                            if(itemInfo.containsKey(entry.getKey().toString()) && SkinManager.SKINS.containsKey(entry.getValue().toString().toLowerCase())){
+                                floatBlocks.put(entry.getKey().toString(), entry.getValue().toString().toLowerCase());
                             }
                         }
                     }

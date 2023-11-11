@@ -105,7 +105,7 @@ public class SkinManager {
                         }
                     }
                     BedWarMain.sendMessageToConsole(skinName+"模型读取完成");
-                    SKINS.put(skinName,skin);
+                    SKINS.put(skinName.toLowerCase(),skin);
                 }else{
                     BedWarMain.sendMessageToConsole("错误的模型名称格式 请将模型图片文件命名为 skin.png");
                 }
