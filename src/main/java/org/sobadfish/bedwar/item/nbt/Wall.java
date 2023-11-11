@@ -34,7 +34,7 @@ public class Wall implements INbtItem {
 
         Position leftBlockEnd = pos.getSide(leftBf,2);
         Position rightBlockEnd = pos.getSide(rightBf,2);
-        for(int x = leftBlockEnd.getFloorX(); x < rightBlockEnd.getFloorZ();x++){
+        for(int x = leftBlockEnd.getFloorX(); x < rightBlockEnd.getFloorX();x++){
             for(int z = leftBlockEnd.getFloorZ(); z < rightBlockEnd.getFloorZ();z++){
                 for(int y = 0;y < 3;y++){
                     blocks.put(new Position(x,pos.getFloorY()+ y,z,player.level),Block.get(24));
