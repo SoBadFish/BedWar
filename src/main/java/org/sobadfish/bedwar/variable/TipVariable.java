@@ -26,6 +26,7 @@ public class TipVariable extends BaseVariable {
         addStrReplaceString("%bd-line%",data.getExpLine(10)+"");
         addStrReplaceString("%bd-per%",String.format("%.2f",data.getExpPercent() * 100)+"");
         addStrReplaceString("%bd-kill%",data.getFinalData(PlayerData.DataType.KILL)+"");
+        addStrReplaceString("%bd-game-count%",data.getFinalData(PlayerData.DataType.GAME)+"");
         addStrReplaceString("%bd-victory%",data.getFinalData(PlayerData.DataType.VICTORY)+"");
         addStrReplaceString("%bd-bed%",data.getFinalData(PlayerData.DataType.BED_BREAK)+"");
 
