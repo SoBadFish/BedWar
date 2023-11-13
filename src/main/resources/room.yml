@@ -16,7 +16,7 @@ entity:
   item: 15
 
 # 快速搭路
-fast-place: false
+fast-place: true
 
 # 快速搭路放置方块数量
 fast-place-count: 5
