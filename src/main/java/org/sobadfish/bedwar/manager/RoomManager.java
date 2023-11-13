@@ -590,7 +590,7 @@ public class RoomManager implements Listener {
         ThreadManager.SCHEDULED.execute(new Runnable() {
             @Override
             public void run() {
-                for(int i = 1;i <= size;i++){
+                for(int i = 1; i <= size; i++){
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
