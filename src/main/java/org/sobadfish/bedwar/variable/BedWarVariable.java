@@ -38,14 +38,14 @@ public class BedWarVariable extends BaseVariableV2 {
                     p+= room.getPlayerInfos().size();
                 }
             }
-            addVariable("{bd-"+worldRoom.getName()+"-player}",p+"");
+            addVariable("%bd-"+worldRoom.getName()+"-player%",p+"");
 
         }
         int game = 0;
         for(GameRoom gameRoom: BedWarMain.getRoomManager().getRooms().values()){
             game += gameRoom.getPlayerInfos().size();
         }
-        addVariable("{bd-all-player}",game+"");
+        addVariable("%bd-all-player%",game+"");
 
     }
 
@@ -67,8 +67,8 @@ public class BedWarVariable extends BaseVariableV2 {
                 default:break;
             }
         }
-        addVariable("{bd-"+roomConfig.getName()+"-player}",p+"");
-        addVariable("{bd-"+roomConfig.getName()+"-maxplayer}",mp+"");
-        addVariable("{bd-"+roomConfig.getName()+"-status}",status);
+        addVariable("%bd-"+roomConfig.getName()+"-player%",p+"");
+        addVariable("%bd-"+roomConfig.getName()+"-maxplayer%",mp+"");
+        addVariable("%bd-"+roomConfig.getName()+"-status%",status);
     }
 }
