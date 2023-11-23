@@ -250,11 +250,11 @@ public class GameRoom {
                 try {
                     i.spawn();
                 }catch (Exception e){
-                    i.sendForceMessage("&c出现未知原因影响导致无法正常传送 正在重新将你移动中");
+                    i.sendForceMessage("&c出现未知原因影响导致无法正常传送 正在重新将你移动中 错误原因: "+e.getMessage());
                     try {
                         i.spawn();
                     }catch (Exception e1){
-                        i.sendForceMessage("&c移动失败 请尝试重新进入游戏");
+                        i.sendForceMessage("&c移动失败 请尝试重新进入游戏 错误原因: "+e.getMessage());
                         quitPlayerInfo(i,true);
                     }
                 }
