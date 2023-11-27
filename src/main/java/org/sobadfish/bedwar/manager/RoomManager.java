@@ -1065,7 +1065,10 @@ public class RoomManager implements Listener {
                 if(room.getType() == GameRoom.GameType.START ){
                     PlayerInfo info = room.getPlayerInfo(player);
                     if(info != null){
-                        info.setLeave(true);
+                        if(!info.isWatch()){
+                            info.setLeave(true);
+                        }
+
                     }
                 }
             }
