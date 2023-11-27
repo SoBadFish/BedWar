@@ -35,6 +35,7 @@ public class PlayerItem extends BasePlayPanelItemInstance{
     @Override
     public void onClick(ChestInventoryPanel inventory, Player player) {
         player.teleport(info.getPlayer());
+        inventory.close(player);
     }
 
     @Override

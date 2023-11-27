@@ -52,6 +52,7 @@ import org.sobadfish.bedwar.item.nbt.DieBow;
 import org.sobadfish.bedwar.item.nbt.INbtItem;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
+import org.sobadfish.bedwar.panel.DisPlayerPanel;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
 import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
@@ -1061,20 +1062,9 @@ public class RoomManager implements Listener {
             String roomName = playerJoin.get(player.getName());
             GameRoom room = getRoom(roomName);
             if(room != null){
-                if(room.getType() != GameRoom.GameType.START ){
+                if(room.getType() == GameRoom.GameType.START ){
                     PlayerInfo info = room.getPlayerInfo(player);
                     if(info != null){
-                        room.quitPlayerInfo(info,true);
-                    }
-
-                }else{
-                    PlayerInfo info = room.getPlayerInfo(player);
-                    if(info != null){
-                        if(info.isWatch()){
-                            room.quitPlayerInfo(info,true);
-                            return;
-                        }
-                        player.getInventory().clearAll();
                         info.setLeave(true);
                     }
                 }
@@ -1278,10 +1268,10 @@ public class RoomManager implements Listener {
 
     private void disPlayUI(PlayerInfo info,GameRoom room){
         //WIN10 玩家 故障，，，，
-//        DisPlayerPanel playerPanel = new DisPlayerPanel();
-//        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
+        DisPlayerPanel playerPanel = new DisPlayerPanel();
+        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
 
-        disPlayProtect(info, room);
+//        disPlayProtect(info, room);
     }
 
     private boolean quitRoomItem(Player player, String roomName, GameRoom room) {
@@ -1456,16 +1446,7 @@ public class RoomManager implements Listener {
                 GameRoom gameRoom = playerInfo.getGameRoom();
                 if (gameRoom != null) {
                     if (gameRoom.getType() == GameType.START) {
-//                        playerInfo.armorInventory = player.getInventory().getArmorContents();
-
                         playerInfo.invisibilityArmor();
-//                        player.getInventory().setArmorContents(new Item[0]);
-//                        //由于出现了玩家消失的情况 所以显示给全部玩家
-//                        for(Player pl: player.level.getPlayers().values()) {
-//                            if(!pl.equals(player)){
-//                                pl.showPlayer(player);
-//                            }
-//                        }
                     }
                 }
             }

@@ -117,37 +117,16 @@ public class BedWarFloatText extends Entity {
             }else {
                 if (player1.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())) {
                     if (!this.hasSpawned.containsValue(player1)) {
-//                        this.despawnFrom(player1);
                         spawnTo(player1);
                     }
-//                    spawnTo(player1);
                 } else {
                     this.despawnFrom(player1);
                     this.player.remove(player);
-//                    close();
 
                 }
             }
         }
     }
-//    public void disPlayers(){
-//        for(String player: player){
-//            Player player1 = Server.getInstance().getPlayer(player);
-//            if(player1 == null){
-//                this.player.remove(player);
-//            }else {
-//                if (player1.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())) {
-//                    if (this.hasSpawned.containsValue(player1)) {
-//                        this.despawnFrom(player1);
-//                    }
-//                    spawnTo(player1);
-//                } else {
-//                    this.player.remove(player);
-//                    close();
-//                }
-//            }
-//        }
-//    }
 
     private void toDisplay(){
         for(Player player: Server.getInstance().getOnlinePlayers().values()){
@@ -160,8 +139,6 @@ public class BedWarFloatText extends Entity {
 
         }
     }
-
-
 
     public void stringUpdate(){
         if(room == null){
