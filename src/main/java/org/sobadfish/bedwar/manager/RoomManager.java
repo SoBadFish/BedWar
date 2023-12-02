@@ -128,12 +128,14 @@ public class RoomManager implements Listener {
                         String roomName = nameFile.getName();
                         GameRoomConfig roomConfig = GameRoomConfig.getGameRoomConfigByFile(roomName,nameFile);
                         if(roomConfig != null){
-                            BedWarMain.sendMessageToConsole("&a加载房间 "+roomName+" 完成");
+                            BedWarMain.sendMessageToConsole(language.getLanguage("room-loading-success","&a加载房间 [1] 完成",roomName));
                             map.put(roomName,roomConfig);
+                            //TODO 更新配置注释信息
+                            File roomFile = new File(nameFile+"/room.yml");
+                            Utils.addDescription(roomFile,BedWarMain.getLanguage().roomDescription,true);
 
                         }else{
-                            BedWarMain.sendMessageToConsole("&c加载房间 "+roomName+" 失败");
-
+                            BedWarMain.sendMessageToConsole(language.getLanguage("room-loading-error","&c加载房间 [1] 失败",roomName));
                         }
                     }
                 }

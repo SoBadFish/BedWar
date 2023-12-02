@@ -16,6 +16,7 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
+import cn.nukkit.utils.Config;
 import cn.nukkit.utils.DyeColor;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
@@ -25,12 +26,14 @@ import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 感谢MobPlugin插件开发组提供的AI算法
@@ -158,6 +161,117 @@ public class Utils {
         entity.spawnToAll();
     }
 
+    private static final String KEY_HEADER = "header";
+
+    private static final String KEY_FOOTER = "footer";
+
+    /**
+     * 配置文件动态增加注释
+     * @author https://github.com/MemoriesOfTime/MemoriesOfTime-GameCore
+     * @param file 配置文件
+     * @param description 注释文件
+     * @param clearOriginalComment 清除原始选项
+     * */
+
+    public static void addDescription(File file, Config description, boolean clearOriginalComment) {
+        if (!file.exists()) {
+            return;
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        //添加头部
+        if (description.exists(KEY_HEADER) && !description.getString(KEY_HEADER).trim().isEmpty()) {
+            for (String header : description.getString(KEY_HEADER).trim().split("\n")) {
+                result.append("# ").append(header).append(System.lineSeparator());
+            }
+            result.append(System.lineSeparator());
+        }
+
+        //添加内容
+        StringBuilder keyBuilder = new StringBuilder();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(Files.newInputStream(file.toPath()), StandardCharsets.UTF_8))) {
+            String line;
+            LinkedList<String[]> path = new LinkedList<>();
+            Pattern pattern = Pattern.compile("^( *)([a-zA-Z0-9\u4e00-\u9fa5_-]+):"); //u4e00-u9fa5 中文
+            int lastIdent = 0;
+            String[] last = null;
+            int blankLine = 0;
+            //逐行读取并添加介绍
+            while ((line = in.readLine()) != null) {
+                if (clearOriginalComment && line.trim().startsWith("#")) {
+                    continue;
+                }
+
+                if (line.trim().isEmpty()) {
+                    if (blankLine > 1) {
+                        continue;
+                    }
+                    blankLine++;
+                }
+
+                Matcher matcher = pattern.matcher(line);
+                if (!matcher.find()) {
+                    result.append(line).append(System.lineSeparator());
+                    continue;
+                }
+
+                String current = matcher.group(2);
+                String ident = matcher.group(1);
+                int newIdent = ident.length();
+
+                //返回上一级
+                if (newIdent < lastIdent) {
+                    int reduced = lastIdent - newIdent; //需要移除的空格数量
+                    int i = 0;
+                    while (i < reduced && !path.isEmpty()) {
+                        if (path.pollLast()[1].length() == newIdent) { //返回到同级后 就不需要再移除上一级了
+                            break;
+                        }
+                        i++;
+                    }
+                    lastIdent = lastIdent - reduced;
+                }
+                //进入下一级
+                if (newIdent > lastIdent) {
+                    path.add(last);
+                    lastIdent = newIdent;
+                }
+                last = new String[]{current, ident};
+
+                keyBuilder.setLength(0);
+                for (String[] part : path) {
+                    keyBuilder.append('.').append(part[0]);
+                }
+                keyBuilder.append('.').append(current);
+                String key = keyBuilder.substring(1); //忽略最开始的 . 号
+                if (description.exists(key) && !description.getString(key).trim().isEmpty()) {
+                    String[] comments = description.getString(key).trim().split("\n");
+                    for (String comment : comments) {
+                        result.append(ident).append("# ").append(comment).append(System.lineSeparator());
+                    }
+                }
+
+                result.append(line).append(System.lineSeparator());
+                blankLine = 0;
+            }
+
+            //添加尾部
+            if (description.exists(KEY_FOOTER) && !description.getString(KEY_FOOTER).trim().isEmpty()) {
+                while (blankLine < 2) {
+                    result.append(System.lineSeparator());
+                    blankLine++;
+                }
+                for (String footer : description.getString(KEY_FOOTER).trim().split("\n")) {
+                    result.append("# ").append(footer).append(System.lineSeparator());
+                }
+            }
+
+            cn.nukkit.utils.Utils.writeFile(file, result.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public static String writeLine(int size,String line){
