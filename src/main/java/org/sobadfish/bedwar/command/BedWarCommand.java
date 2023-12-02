@@ -8,10 +8,11 @@ import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
+import org.sobadfish.bedwar.manager.LanguageManager;
 import org.sobadfish.bedwar.manager.RandomJoinManager;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
-import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
+import org.sobadfish.bedwar.panel.from.button.BaseIButton;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.WorldRoom;
@@ -25,8 +26,10 @@ import java.util.LinkedHashMap;
  */
 public class BedWarCommand extends Command {
 
+    public LanguageManager language = BedWarMain.getLanguage();
+
     public BedWarCommand(String name) {
-        super(name,"起床战争游戏房间");
+        super(name,BedWarMain.getLanguage().getLanguage("command-room","游戏房间"));
     }
 
     public static LinkedHashMap<String, BedWarFrom> FROM = new LinkedHashMap<>();
@@ -40,9 +43,9 @@ public class BedWarCommand extends Command {
                 if(i != null){
                     info = i;
                 }
-                BedWarFrom simple = new BedWarFrom(BedWarMain.getTitle(), "请选择地图", DisPlayWindowsFrom.getId(51530, 99810));
+                BedWarFrom simple = new BedWarFrom(BedWarMain.getTitle(), language.getLanguage("command-from-chose-world","请选择地图"), DisPlayWindowsFrom.getId(51530, 99810));
                 PlayerInfo finalInfo = info;
-                simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
+                simple.add(new BaseIButton(new ElementButton(language.getLanguage("command-from-random","随机匹配"),new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
                     @Override
                     public void onClick(Player player) {
                         RandomJoinManager.joinManager.join(finalInfo,null);
@@ -57,7 +60,8 @@ public class BedWarCommand extends Command {
                             size += room.getPlayerInfos().size();
                         }
                     }
-                    simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&', wname + " &2" + size + " &r位玩家正在游玩\n&r房间数量: &a" + worldRoom.getRoomConfigs().size()), worldRoom.getImageData())) {
+
+                    simple.add(new BaseIButton(new ElementButton(TextFormat.colorize('&', language.getLanguage("command-button-msg","[1] &2[2] &r位玩家正在游玩\n&r房间数量: &a[3]",wname,size+"",worldRoom.getRoomConfigs().size()+"")), worldRoom.getImageData())) {
                         @Override
                         public void onClick(Player player) {
                             disPlayRoomsFrom(player, wname);
@@ -78,7 +82,7 @@ public class BedWarCommand extends Command {
                         if (player != null) {
                             GameRoom room = player.getGameRoom();
                             if (room.quitPlayerInfo(player,true)) {
-                                playerInfo.sendForceMessage("&a你成功离开房间: &r" + room.getRoomConfig().getName());
+                                playerInfo.sendForceMessage(language.getLanguage("command-player-quit-room","&a你成功离开房间: &r[1]",room.getRoomConfig().getName()));
 
                                 room.getRoomConfig().quitRoomCommand.forEach(cmd-> Server.getInstance().dispatchCommand(commandSender,cmd));
                             }
@@ -88,10 +92,10 @@ public class BedWarCommand extends Command {
                         if (strings.length > 1) {
                             String name = strings[1];
                             if (BedWarMain.getRoomManager().joinRoom(playerInfo, name)) {
-                                playerInfo.sendForceMessage("&a成功加入房间: &r"+name);
+                                playerInfo.sendForceMessage(language.getLanguage("command-player-join-room","&a成功加入房间: &r[1]",name));
                             }
                         } else {
-                            playerInfo.sendForceMessage("&c请输入房间名");
+                            playerInfo.sendForceMessage(language.getLanguage("command-player-join-room-unknown","&c请输入房间名"));
                         }
                         break;
                     case "rjoin":
@@ -115,7 +119,7 @@ public class BedWarCommand extends Command {
                             RandomJoinManager.joinManager.join(info,finalName);
 
                         }else{
-                            commandSender.sendMessage("请不要在控制台执行");
+                            commandSender.sendMessage(language.getLanguage("do-not-console","请不要在控制台执行"));
                         }
 
                         break;
@@ -123,17 +127,17 @@ public class BedWarCommand extends Command {
                 }
             }
         }else{
-            commandSender.sendMessage("请不要在控制台执行");
+            commandSender.sendMessage(language.getLanguage("do-not-console","请不要在控制台执行"));
             return false;
         }
         return true;
     }
     private void disPlayRoomsFrom(Player player,String name){
         FROM.remove(player.getName());
-        BedWarFrom simple = new BedWarFrom(BedWarMain.getTitle(), "请选择房间",DisPlayWindowsFrom.getId(51530,99810));
+        BedWarFrom simple = new BedWarFrom(BedWarMain.getTitle(), language.getLanguage("command-from-chose-room","请选择房间"),DisPlayWindowsFrom.getId(51530,99810));
         WorldRoom worldRoom = BedWarMain.getMenuRoomManager().getRoom(name);
         PlayerInfo info = new PlayerInfo(player);
-        simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
+        simple.add(new BaseIButton(new ElementButton(language.getLanguage("command-from-random","随机匹配"),new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
             @Override
             public void onClick(Player player) {
                 RandomJoinManager.joinManager.join(info,null);
@@ -142,29 +146,31 @@ public class BedWarCommand extends Command {
         });
         for (GameRoomConfig roomConfig: worldRoom.getRoomConfigs()) {
             int size = 0;
-            String type = "&a空闲";
+            String type = language.getLanguage("room-status-unstarted","&a空闲");
             GameRoom room = BedWarMain.getRoomManager().getRoom(roomConfig.name);
             if(room != null){
                 size = room.getPlayerInfos().size();
                 switch (room.getType()){
                     case START:
-                        type = "&c已开始";
+                        type = language.getLanguage("room-status-started","&c已开始");
                         break;
                     case END:
-                        type = "&c等待房间结束";
+                        type = language.getLanguage("room-status-waitend","&c等待房间结束");
                         break;
-                        default:break;
+                    default:break;
                 }
             }
 
-            simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&',roomConfig.name+" &r状态:"+type + "&r\n人数: "+size+" / " + roomConfig.getMaxPlayerSize()), worldRoom.getImageData())) {
+            simple.add(new BaseIButton(new ElementButton(TextFormat.colorize('&',
+                    language.getLanguage("command-from-button-title","[1] &r状态:[2] &r[n]人数: [3] / [4]",
+                            roomConfig.name,type,size+"",roomConfig.getMaxPlayerSize()+"")), worldRoom.getImageData())) {
                 @Override
                 public void onClick(Player player) {
                     PlayerInfo playerInfo = new PlayerInfo(player);
                     if (!BedWarMain.getRoomManager().joinRoom(info,roomConfig.name)) {
-                        playerInfo.sendForceMessage("&c无法加入房间");
+                        playerInfo.sendForceMessage(language.getLanguage("command-from-join-room-error","&c无法加入房间"));
                     }else{
-                        playerInfo.sendForceMessage("&a你已加入 "+roomConfig.getName()+" 房间");
+                        playerInfo.sendForceMessage(language.getLanguage("command-from-join-room-success","&a你已加入 [1] 房间",roomConfig.getName()));
                     }
 //                    if (BedWarMain.getRoomManager().hasRoom(roomConfig.name)) {
                     FROM.remove(player.getName());

@@ -3,7 +3,7 @@ package org.sobadfish.bedwar.panel.from;
 import cn.nukkit.Player;
 import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.utils.TextFormat;
-import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
+import org.sobadfish.bedwar.panel.from.button.BaseIButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class BedWarFrom {
     private final int id;
 
 
-    private List<BaseIButtom> baseIButtoms = new ArrayList<>();
+    private List<BaseIButton> baseIButtoms = new ArrayList<>();
 
     private final String title;
 
@@ -28,11 +28,11 @@ public class BedWarFrom {
         this.id = id;
     }
 
-    public List<BaseIButtom> getBaseIButtoms() {
+    public List<BaseIButton> getBaseIButtoms() {
         return baseIButtoms;
     }
 
-    public void setBaseIButtoms(List<BaseIButtom> baseIButtoms) {
+    public void setBaseIButtoms(List<BaseIButton> baseIButtoms) {
         this.baseIButtoms = baseIButtoms;
     }
 
@@ -41,13 +41,13 @@ public class BedWarFrom {
     }
 
 
-    public void add(BaseIButtom baseIButtom){
+    public void add(BaseIButton baseIButtom){
         baseIButtoms.add(baseIButtom);
     }
 
     public void disPlay(Player player){
         FormWindowSimple simple = new FormWindowSimple(TextFormat.colorize('&',title),TextFormat.colorize('&', context));
-        for(BaseIButtom baseIButtom: baseIButtoms){
+        for(BaseIButton baseIButtom: baseIButtoms){
             simple.addButton(baseIButtom.getButton());
         }
         player.showFormWindow(simple, getId());

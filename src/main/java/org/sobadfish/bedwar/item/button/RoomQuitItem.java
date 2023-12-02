@@ -5,6 +5,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.bedwar.BedWarMain;
 
 import java.util.ArrayList;
 
@@ -30,7 +31,10 @@ public class RoomQuitItem {
         CompoundTag tag = item.getNamedTag();
         tag.putBoolean("quitItem",true);
         item.setNamedTag(tag);
-        item.setCustomName(TextFormat.colorize('&',"&r&l&e点我退出游戏"));
+
+
+        item.setCustomName(TextFormat.colorize('&',BedWarMain.getLanguage().getLanguage("player-click-quit-room"
+                ,"&r&l&e点我退出游戏")));
         return item;
 
     }

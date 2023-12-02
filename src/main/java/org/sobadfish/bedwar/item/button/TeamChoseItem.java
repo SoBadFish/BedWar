@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.bedwar.BedWarMain;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,8 @@ public class TeamChoseItem {
 
     public static Item get(){
         Item item = Item.get(69);
-        item.setCustomName(TextFormat.colorize('&',"&r&l&e点我选择队伍"));
+        item.setCustomName(TextFormat.colorize('&', BedWarMain.getLanguage().getLanguage("player-click-joined-team"
+                ,"&r&l&e点我选择队伍")));
         CompoundTag tag = item.getNamedTag();
         tag.putBoolean("choseTeam",true);
         item.setNamedTag(tag);

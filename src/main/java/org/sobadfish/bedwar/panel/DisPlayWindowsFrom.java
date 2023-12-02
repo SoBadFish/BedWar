@@ -2,7 +2,7 @@ package org.sobadfish.bedwar.panel;
 
 import cn.nukkit.Player;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
-import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
+import org.sobadfish.bedwar.panel.from.button.BaseIButton;
 import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
 import org.sobadfish.bedwar.panel.from.button.ShopButton;
@@ -31,7 +31,7 @@ public class DisPlayWindowsFrom {
 
     public static LinkedHashMap<String, BedWarFrom> CUSTOM = new LinkedHashMap<>();
 
-    public static void disPlayerCustomMenu(Player player, String tag, List<BaseIButtom> from){
+    public static void disPlayerCustomMenu(Player player, String tag, List<BaseIButton> from){
         BedWarFrom bedWarFrom = new BedWarFrom(tag,"",getId());
         bedWarFrom.setBaseIButtoms(from);
         CUSTOM.put(player.getName(), bedWarFrom);

@@ -50,7 +50,24 @@ public class BedWarMain extends PluginBase {
 
     private static PlayerTopManager topManager;
 
+    public static LanguageManager language;
+
     public static UiType uiType;
+
+    /**
+     * 游戏指令
+     * */
+    public static String COMMAND_NAME = "bw";
+
+    /**
+     * 游戏管理员指令
+     * */
+    public static String COMMAND_ADMIN_NAME = "bd";
+
+    /**
+     * 游戏内喊话指令
+     * */
+    public static String COMMAND_MESSAGE_NAME = "bws";
 
     public static int upExp;
 
@@ -58,6 +75,7 @@ public class BedWarMain extends PluginBase {
     public void onEnable() {
         bedWarMain = this;
         //  TODO 初始化文件
+        initLanguage(this);
 
         checkServer();
         this.getLogger().info(TextFormat.colorize('&',"&b   ____           ___          __"));
@@ -67,9 +85,11 @@ public class BedWarMain extends PluginBase {
         this.getLogger().info(TextFormat.colorize('&',"&b  | |_) |  __/ (_| |  \\  /\\  / (_| | |"));
         this.getLogger().info(TextFormat.colorize('&',"&b  |____/ \\___|\\__,_|   \\/  \\/ \\__,_|_|"));
         this.getLogger().info(TextFormat.colorize('&',"&b"));
-        this.getLogger().info(TextFormat.colorize('&',"&e正在加载BedWar 起床战争插件 版本: &av"+this.getDescription().getVersion()));
+        this.getLogger().info(TextFormat.colorize('&',getLanguage().getLanguage("version","&e正在加载[1] 插件 本版本为&av[2]"
+                ,"BedWar",this.getDescription().getVersion())));
         this.getLogger().info(TextFormat.colorize('&',"&eAuthor:&b sobadfish &aQQ：&e1586235767"));
         this.getLogger().info(TextFormat.colorize('&',"&c本插件为原创插件 部分源代码出处已标明原作者"));
+//        "&e正在加载BedWar 起床战争插件 版本: &av"+this.getDescription().getVersion())
         sendMessageToConsole("&a正在检查相应的依赖");
 
         for(String s : this.getDescription().getSoftDepend()){
@@ -103,9 +123,9 @@ public class BedWarMain extends PluginBase {
         loadBedWarConfig();
 
         //TODO 注册指令
-        this.getServer().getCommandMap().register("badwar",new BedWarAdminCommand("bd"));
-        this.getServer().getCommandMap().register("badwar",new BedWarCommand("bw"));
-        this.getServer().getCommandMap().register("badwar",new BedWarSpeakCommand("bws"));
+        this.getServer().getCommandMap().register("badwar",new BedWarAdminCommand(COMMAND_ADMIN_NAME));
+        this.getServer().getCommandMap().register("badwar",new BedWarCommand(COMMAND_NAME));
+        this.getServer().getCommandMap().register("badwar",new BedWarSpeakCommand(COMMAND_MESSAGE_NAME));
 
 
         RoomEventManager.register("time", TimeEvent.class);
@@ -128,6 +148,10 @@ public class BedWarMain extends PluginBase {
 
         this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
 
+    }
+
+    public static LanguageManager getLanguage() {
+        return language;
     }
 
     public void initSkin(){
@@ -239,6 +263,9 @@ public class BedWarMain extends PluginBase {
 
     }
 
+    public static void initLanguage(PluginBase plugin) {
+        language = new LanguageManager(plugin);
+    }
 
     public static void sendMessageToObject(String msg,Object o){
         String message = TextFormat.colorize('&',getTitle()+" &b>>&r "+msg);

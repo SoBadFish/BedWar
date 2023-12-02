@@ -7,11 +7,11 @@ import cn.nukkit.form.element.ElementButton;
  * @author SoBadFish
  * 2022/1/12
  */
-public abstract class BaseIButtom {
+public abstract class BaseIButton {
 
     private final ElementButton button;
 
-    public BaseIButtom(ElementButton button) {
+    public BaseIButton(ElementButton button) {
         this.button = button;
     }
 

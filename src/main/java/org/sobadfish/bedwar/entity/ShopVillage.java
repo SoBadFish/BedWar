@@ -1,19 +1,15 @@
 package org.sobadfish.bedwar.entity;
 
 import cn.nukkit.Player;
-import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCreature;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
-
-
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
 import org.sobadfish.bedwar.panel.DisPlayerPanel;
 import org.sobadfish.bedwar.player.PlayerInfo;
-import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.shop.config.ShopInfoConfig;
 import org.sobadfish.bedwar.shop.item.ShopItemInfo;
@@ -23,6 +19,7 @@ import org.sobadfish.bedwar.shop.item.ShopItemInfo;
  * 2022/1/2
  */
 public class ShopVillage extends EntityCreature {
+
 
     private ShopItemInfo infoConfig;
 
@@ -51,10 +48,10 @@ public class ShopVillage extends EntityCreature {
         this.room = room;
         this.setNameTagAlwaysVisible();
         this.setNameTagVisible();
-        String str = "&b团队商店\n&e点击购买";
+        String str = BedWarMain.getLanguage().getLanguage("team-title","&b团队商店\n&e点击购买");
         entityId = room.teamShopEntityId;
         if("defaultShop".equalsIgnoreCase(infoConfig.getShopName())){
-            str = "&b道具商店\n&e点击购买";
+            str = BedWarMain.getLanguage().getLanguage("shop-title","&b道具商店\n&e点击购买");
             entityId = room.itemShopEntityId;
         }
         this.setNameTag(TextFormat.colorize('&',str));
@@ -86,12 +83,12 @@ public class ShopVillage extends EntityCreature {
                     break;
                 case UI:
                     DisPlayerPanel disPlayerPanel = new DisPlayerPanel();
-                    disPlayerPanel.displayPlayer(player, DisPlayerPanel.disPlayShop(room, infoConfig, ShopInfoConfig.ShopItemClassify.values()[0]), "商店");
+                    disPlayerPanel.displayPlayer(player, DisPlayerPanel.disPlayShop(room, infoConfig, ShopInfoConfig.ShopItemClassify.values()[0]), BedWarMain.getLanguage().getLanguage("shop-name","商店"));
                     break;
                 default:
                     if (((Player) player.getPlayer()).getLoginChainData().getDeviceOS() == 7) {
                         DisPlayerPanel dis = new DisPlayerPanel();
-                        dis.displayPlayer(player, DisPlayerPanel.disPlayShop(room, infoConfig, ShopInfoConfig.ShopItemClassify.values()[0]), "商店");
+                        dis.displayPlayer(player, DisPlayerPanel.disPlayShop(room, infoConfig, ShopInfoConfig.ShopItemClassify.values()[0]),  BedWarMain.getLanguage().getLanguage("shop-name","商店"));
                     }else{
                         DisPlayWindowsFrom.disPlayMenu((Player) player.getPlayer(),room,infoConfig);
                     }

@@ -46,7 +46,7 @@ public class BaseDataWriterGetterManager<T>{
 
 
         } catch (IOException  e) {
-            BedWarMain.sendMessageToConsole("&c无法读取 "+file.getName()+" 配置文件");
+            BedWarMain.sendMessageToConsole(BedWarMain.getLanguage().getLanguage("config-load-error","&c无法读取 [1] 配置文件"));
             e.printStackTrace();
         } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             e.printStackTrace();
@@ -67,10 +67,10 @@ public class BaseDataWriterGetterManager<T>{
         if(!file.exists()){
             try {
                 if(!file.createNewFile()){
-                    BedWarMain.sendMessageToConsole("&c创建文件失败");
+                    BedWarMain.sendMessageToConsole(BedWarMain.getLanguage().getLanguage("file-create-error","&c创建文件失败"));
                 }
             } catch (IOException e) {
-                BedWarMain.sendMessageToConsole("未知错误 无法保存玩家数据");
+                BedWarMain.sendMessageToConsole(BedWarMain.getLanguage().getLanguage("save-player-unknown-error","未知错误 无法保存玩家数据"));
             }
         }
         try {

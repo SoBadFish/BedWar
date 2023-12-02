@@ -55,7 +55,7 @@ import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
 import org.sobadfish.bedwar.panel.DisPlayerPanel;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
-import org.sobadfish.bedwar.panel.from.button.BaseIButtom;
+import org.sobadfish.bedwar.panel.from.button.BaseIButton;
 import org.sobadfish.bedwar.panel.items.BasePlayPanelItemInstance;
 import org.sobadfish.bedwar.panel.items.NbtDefaultItem;
 import org.sobadfish.bedwar.panel.items.PlayerItem;
@@ -78,6 +78,8 @@ import java.util.Map;
  * 2022/1/2
  */
 public class RoomManager implements Listener {
+
+    public static LanguageManager language = BedWarMain.getLanguage();
 
     public static List<GameRoomConfig> LOCK_GAME = new ArrayList<>();
 
@@ -1254,10 +1256,10 @@ public class RoomManager implements Listener {
     }
 
     private void disPlayProtect(PlayerInfo info,GameRoom room){
-        List<BaseIButtom> list = new ArrayList<>();
+        List<BaseIButton> list = new ArrayList<>();
         //手机玩家
         for(PlayerInfo i: room.getLivePlayers()){
-            list.add(new BaseIButtom(new PlayerItem(i).getGUIButton(info)) {
+            list.add(new BaseIButton(new PlayerItem(i).getGUIButton(info)) {
                 @Override
                 public void onClick(Player player) {
                     player.teleport(i.getPlayer().getLocation());
@@ -1425,7 +1427,7 @@ public class RoomManager implements Listener {
     private boolean onBedWarFrom(PlayerFormRespondedEvent event, Player player, BedWarFrom simple) {
         if(simple.getId() == event.getFormID()) {
             if (event.getResponse() instanceof FormResponseSimple) {
-                BaseIButtom button = simple.getBaseIButtoms().get(((FormResponseSimple) event.getResponse())
+                BaseIButton button = simple.getBaseIButtoms().get(((FormResponseSimple) event.getResponse())
                         .getClickedButtonId());
                 button.onClick(player);
             }

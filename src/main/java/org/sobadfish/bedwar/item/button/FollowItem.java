@@ -1,12 +1,10 @@
 package org.sobadfish.bedwar.item.button;
 
-import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
-
-import java.util.ArrayList;
+import org.sobadfish.bedwar.BedWarMain;
 
 /**
  * 跟随玩家
@@ -28,7 +26,10 @@ public class FollowItem {
         CompoundTag tag = item.getNamedTag();
         tag.putBoolean("follow",true);
         item.setNamedTag(tag);
-        item.setCustomName(TextFormat.colorize('&',"&r&l&e点我传送到玩家"));
+
+
+        item.setCustomName(TextFormat.colorize('&', BedWarMain.getLanguage().getLanguage("player-click-chose-teleport-player"
+                ,"&r&l&e点我传送到玩家")));
         return item;
 
     }
