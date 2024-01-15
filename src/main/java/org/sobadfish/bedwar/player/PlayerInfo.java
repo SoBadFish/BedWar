@@ -240,7 +240,7 @@ public class PlayerInfo {
         if(damageByInfo != null) {
 
             this.damageByInfo = damageByInfo;
-            damageTime = formatSecond(5);
+            damageTime = 5;
             assistsPlayers.put(damageByInfo,System.currentTimeMillis());
             //现身
             if(isInvisibility){
