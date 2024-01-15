@@ -18,7 +18,7 @@ public class FloatTextInfo {
     public FloatTextInfo init(GameRoom room){
         try{
             Position position = WorldInfoConfig.getPositionByString(floatTextInfoConfig.position);
-            bedWarFloatText = BedWarFloatText.showFloatText(floatTextInfoConfig.name,position,"");
+            bedWarFloatText = BedWarFloatText.showFloatText(floatTextInfoConfig.name,position,floatTextInfoConfig.text);
             if(bedWarFloatText != null){
                 bedWarFloatText.room = room;
             }

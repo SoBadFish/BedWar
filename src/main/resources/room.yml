@@ -39,6 +39,10 @@ deathIcon: 20
 
 floatSpawnPos: []
 
+auto-display-floattext:
+  enable: true
+  text: "{item} &r生成点\n剩余&a {time} &r秒"
+
 display-floatBlock:
   金锭: "gold"
   钻石: "diamond"

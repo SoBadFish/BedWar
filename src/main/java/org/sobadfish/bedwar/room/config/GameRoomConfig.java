@@ -217,6 +217,11 @@ public class GameRoomConfig implements Cloneable{
     public boolean enableCustomTag = true;
 
 
+    public boolean enableAutoDisplayFloat = true;
+
+    public String autoDisplayFloat;
+
+
     public String customNamedTag;
 
 
@@ -629,6 +634,8 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.enableCustomTag = room.getBoolean("custom.namedtag.enable",true);
                 roomConfig.customNamedTag = room.getString("custom.namedtag.text","&7[{team}&7] {color}{name} \n&c❤&7 {health}");
                 LinkedHashMap<String,String> floatBlocks = new LinkedHashMap<>();
+                roomConfig.enableAutoDisplayFloat = room.getBoolean("auto-display-floattext.enable",true);
+                roomConfig.autoDisplayFloat = room.getString("auto-display-floattext.text","{item} &r生成点\n剩余&a {time} &r秒");
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
                 //初始化浮空字方块
                 if(room.exists("display-floatBlock")){
@@ -743,6 +750,9 @@ public class GameRoomConfig implements Cloneable{
         }
         config.set("display-floatBlock",floatBlockConfig);
         config.set("floatSpawnPos",pos);
+        config.set("auto-display-floattext.enable",enableAutoDisplayFloat);
+        config.set("auto-display-floattext.text",autoDisplayFloat);
+
         config.save();
         //写入注释...
         File roomFile = new File(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+getName()+"/room.yml");

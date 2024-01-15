@@ -34,6 +34,7 @@ import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.bedwar.shop.ShopInfo;
 import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.world.WorldInfo;
+import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -281,10 +282,31 @@ public class GameRoom {
                 }
                 if(itemInfo != null){
                     for(Position position: itemInfo.getPositions()){
-                        FloatBlock.spawnToLocation(position.add(0.5,3.2,0.5),blockName.getValue().toLowerCase());
+                        FloatBlock.spawnToLocation(position.add(0.5,2.2,0.5),blockName.getValue().toLowerCase());
+
+
                     }
                 }
             }
+            //  同步生成对应的浮空字文字
+            if(roomConfig.enableAutoDisplayFloat){
+                for(ItemInfoConfig itemInfoConfig: getRoomConfig().worldInfo.getItemInfos()){
+                    for(Position position: itemInfoConfig.getPositions()) {
+                        FloatTextInfo info = new FloatTextInfo(new FloatTextInfoConfig(
+                                WorldInfoConfig.positionToString(position),
+                                WorldInfoConfig.positionFloatToString(position.add(0,3.2,0)),
+                                roomConfig.autoDisplayFloat
+                                        .replace("{item}",
+                                                itemInfoConfig.getMoneyItemInfoConfig().getCustomName())
+                                        .replace("{time}","%"+itemInfoConfig.getMoneyItemInfoConfig().getName()+"-time%")
+                        )).init(this);
+                        if (info != null) {
+                            floatTextInfos.add(info);
+                        }
+                    }
+                }
+            }
+
 
 
 

@@ -621,7 +621,7 @@ public class PlayerInfo {
         }else{
             IGameRoomEvent event = getGameRoom().getEventControl().getNextEvent();
             if(event != null){
-                lore.add(event.display()+" &a"+ Utils.formatTime1((event.getEventTime() - getGameRoom().getEventControl().loadTime) / 20));
+                lore.add(event.display()+" &a"+ Utils.formatTime1((event.getEventTime() - getGameRoom().getEventControl().loadTime)));
                 lore.add("    ");
             }else{
 
@@ -839,7 +839,10 @@ public class PlayerInfo {
         if(event != null) {
             OnScreenTextureAnimationPacket packet = new OnScreenTextureAnimationPacket();
             packet.effectId = getGameRoom().getRoomConfig().deathIcon;
-            ((Player)getPlayer()).dataPacket(packet);
+            if(getPlayer() instanceof Player) {
+                ((Player)getPlayer()).dataPacket(packet);
+            }
+
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
                 if(damageByInfo != null){
                     gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 推入虚空。"+(end?" &b&l最终击杀!":""));
@@ -849,7 +852,7 @@ public class PlayerInfo {
 
             } else if (event instanceof EntityDamageByEntityEvent) {
                 Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
-                if (entity instanceof Player) {
+                if (entity instanceof EntityHuman) {
                     PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo((Player) entity);
                     String killInfo = "击杀";
                     if(event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){

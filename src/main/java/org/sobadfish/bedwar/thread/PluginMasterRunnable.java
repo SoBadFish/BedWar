@@ -38,7 +38,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
         StringBuilder s = new StringBuilder(color + "插件主进程  浮空字 &7(" +
                 FloatTextManager.floatTextList.size() + ") &a" + loadTime + " ms\n");
         for(BedWarFloatText floatText:FloatTextManager.floatTextList){
-            s.append("&r   - ").append(floatText.name).append(" &7pos=(")
+            s.append("&r   - ").append(floatText.name).append(" = ").append(floatText.text).append(" &7pos=(")
                     .append(floatText.getFloorX()).append(":")
                     .append(floatText.getFloorY()).append(":")
                     .append(floatText.getFloorZ()).append(":")

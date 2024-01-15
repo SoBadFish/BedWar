@@ -184,6 +184,10 @@ public class WorldInfoConfig {
         return position.getFloorX() + ":"+position.getFloorY()+":"+position.getFloorZ()+":"+position.getLevel().getFolderName();
     }
 
+    public static String positionFloatToString(Position position){
+        return position.x + ":"+position.y+":"+position.z+":"+position.getLevel().getFolderName();
+    }
+
     public static String locationToString(Location position){
         return position.getFloorX() + ":"+position.getFloorY()+":"+position.getFloorZ()+":"+position.getLevel().getFolderName()+":"+position.yaw;
     }
@@ -201,9 +205,9 @@ public class WorldInfoConfig {
 //            }
 //        }
         return new Position(
-                Integer.parseInt(pos[0]),
-                Integer.parseInt(pos[1]),
-                Integer.parseInt(pos[2]),
+                Double.parseDouble(pos[0]),
+                Double.parseDouble(pos[1]),
+                Double.parseDouble(pos[2]),
                 level
 
         );
