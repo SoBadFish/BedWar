@@ -15,6 +15,7 @@ import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.GameRoomCreater;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
+import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.top.TopItem;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
@@ -83,6 +84,7 @@ public class BedWarAdminCommand extends Command {
             commandSender.sendMessage(language.getLanguage("command-admin-see","/[1] see 查看所有加载的房间",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-save-item","/[1] si [名称] 将手持的物品保存到配置文件中",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-close","/[1] close [名称] 关闭房间",valueData));
+            commandSender.sendMessage(language.getLanguage("command-admin-start","/[1] start [名称] 强行启动游戏",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-exp","/[1] exp [玩家] [数量] <由来> 增加玩家经验",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-status","/[1] status 查看线程状态",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-end","/[1] end 停止模板预设",valueData));
@@ -297,6 +299,25 @@ public class BedWarAdminCommand extends Command {
                 BedWarMain.sendMessageToObject(language.getLanguage("reload-config-loading","正在读取配置文件"),commandSender);
                 BedWarMain.getBedWarMain().loadBedWarConfig();
                 BedWarMain.sendMessageToObject(language.getLanguage("reload-config-success","配置文件读取完成"),commandSender);
+                break;
+            case "start":
+                if(strings.length > 1) {
+                    String name = strings[1];
+
+                    if(BedWarMain.getRoomManager().hasGameRoom(name)){
+                        GameRoom room = BedWarMain.getRoomManager().getRoom(name);
+                        if(room != null && room.getType() == GameRoom.GameType.WAIT){
+                            room.loadTime =  Utils.formatSecond(2);
+                            commandSender.sendMessage(language.getLanguage("start-room-success","成功强行启动游戏: [1]",name));
+                        }else{
+                            commandSender.sendMessage(language.getLanguage("start-room-error-unenable","房间不是等待状态或没有玩家在游戏房间中"));
+                        }
+                    }else{
+                        commandSender.sendMessage(language.getLanguage("close-room-error-unenable","游戏房间未开启"));
+                    }
+                }else{
+                    commandSender.sendMessage(language.getLanguage("close-room-error-unknown-name","请输入房间名"));
+                }
                 break;
             case "close":
                 if(strings.length > 1) {

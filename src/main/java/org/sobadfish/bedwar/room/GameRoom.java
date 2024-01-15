@@ -262,7 +262,7 @@ public class GameRoom {
             sendTitle("&c游戏开始");
             sendSubTitle("保护你的床");
             shopInfo.init(getRoomConfig());
-            loadTime = getRoomConfig().time;
+            loadTime =  Utils.formatSecond(getRoomConfig().time);
             worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);
             //生成浮空方块
             for(Map.Entry<String, String> blockName: getRoomConfig().floatBlockConfig.entrySet()){
@@ -296,7 +296,7 @@ public class GameRoom {
                 teamInfo.echoVictory();
                 type = GameType.END;
                 worldInfo.setClose(true);
-                loadTime = 5;
+                loadTime = Utils.formatSecond(5);
             }
         }else{
             TeamInfo successInfo = null;
@@ -329,8 +329,8 @@ public class GameRoom {
     private void onWait(){
         if(getPlayerInfos().size() >= getRoomConfig().minPlayerSize){
             if(loadTime == -1){
-                loadTime = getRoomConfig().waitTime;
-                sendMessage("&2到达最低人数限制&e "+loadTime+" &2秒后开始游戏");
+                loadTime =  Utils.formatSecond(getRoomConfig().waitTime);
+                sendMessage("&2到达最低人数限制&e "+(loadTime / 20)+" &2秒后开始游戏");
 
             }
         }else {
@@ -339,13 +339,13 @@ public class GameRoom {
         if(getPlayerInfos().size() == getRoomConfig().getMaxPlayerSize()){
             if(!isMax){
                 isMax = true;
-                loadTime = getRoomConfig().getMaxWaitTime();
+                loadTime =  Utils.formatSecond(getRoomConfig().getMaxWaitTime());
             }
         }
-        if(loadTime >= 1) {
+        if(loadTime >= Utils.formatSecond(5)) {
             sendTip("&e距离开始还剩 &a " + loadTime + " &e秒");
-            if(loadTime <= 5){
-                switch (loadTime){
+            if(loadTime <=  Utils.formatSecond(5)){
+                switch (loadTime / 20){
                     case 5: sendTitle("&a5");break;
                     case 4: sendTitle("&e4");break;
                     case 3: sendTitle("&63");break;

@@ -30,7 +30,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="Maven: com.smallaswater.npc:RsNPC:1.0-SNAPSHOT">
+      <library name="Maven: com.smallaswater.npc:RsNPC:2.2.3">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/RsNPC-2.1.0-SNAPSHOT.jar!/" />
         </CLASSES>
