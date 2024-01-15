@@ -38,6 +38,11 @@ public class ThreadManager {
         SCHEDULED.scheduleAtFixedRate(r,delay,1,TimeUnit.SECONDS);
     }
 
+    private static void schedule(AbstractBedWarRunnable r,int delay,TimeUnit timeUnit) {
+        RUNNABLES.add(r);
+        SCHEDULED.scheduleAtFixedRate(r,delay,delay,timeUnit);
+    }
+
     private static void schedule(AbstractBedWarRunnable r) {
         schedule(r,0);
     }
@@ -109,7 +114,7 @@ public class ThreadManager {
     public static void init() {
         ThreadManager.schedule(new RunnableCheck());
         ThreadManager.schedule(new PluginMasterRunnable(),1);
-        ThreadManager.schedule(new RoomLoadRunnable());
+        ThreadManager.schedule(new RoomLoadRunnable(),50,TimeUnit.MILLISECONDS);
         ThreadManager.schedule(new TopRunnable());
         ThreadManager.schedule(new RandomJoinRunnable());
 

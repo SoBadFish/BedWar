@@ -559,4 +559,43 @@ public class Utils {
 
 //        player.getInventory().removeItem(item);
     }
+
+    public static int formatSecond(int i) {
+        return i * 20;
+    }
+
+    public static String formatTime(int s){
+        int min = s / 60;
+        int ss = s % 60;
+
+        if(min > 0){
+            return min+" 分 "+ss+" 秒";
+        }else{
+            return ss+" 秒";
+        }
+
+    }
+
+
+
+    public static String formatTime1(int s){
+
+        int min = s / 60;
+        int ss = s % 60;
+        String mi = min+"";
+        String sss = ss+"";
+        if(min < 10){
+            mi = "0"+mi;
+        }
+        if(ss < 10){
+            sss = "0"+ss;
+        }
+        if(min > 0){
+
+            return mi+":"+sss;
+        }else{
+            return "00:"+sss+"";
+        }
+
+    }
 }

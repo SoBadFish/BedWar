@@ -1,21 +1,21 @@
 package org.sobadfish.bedwar.thread;
 
 import cn.nukkit.Server;
-import cn.nukkit.entity.Entity;
 import org.sobadfish.bedwar.BedWarMain;
-import org.sobadfish.bedwar.entity.ShopVillage;
 import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
-import org.sobadfish.bedwar.room.floattext.FloatTextInfo;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * 房间主线程 目前刷新频率为 50ms
+ * 相当于 20 tick = 1 s
+ * */
 public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
 
     public LinkedHashMap<String,Long> time = new LinkedHashMap<>();
@@ -38,6 +38,7 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
         }
         return s.toString();
     }
+
 
     @Override
     public void run() {
@@ -62,6 +63,8 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
                 if (room.close || room.getWorldInfo().getConfig().getGameWorld() == null) {
                     continue;
                 }
+                //在这里防止房间游戏进度过快
+
                 room.onUpdate();
                 for (PlayerInfo playerInfo : room.getPlayerInfos()) {
                     if (playerInfo.cancel || playerInfo.isLeave) {

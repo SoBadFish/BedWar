@@ -37,6 +37,7 @@ import org.sobadfish.bedwar.player.message.ScoreBoardMessage;
 import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.event.IGameRoomEvent;
+import org.sobadfish.bedwar.tools.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -230,12 +231,16 @@ public class PlayerInfo {
     }
 
 
+    public int formatSecond(int seconds){
+        return seconds * 20;
+    }
+
 
     public void setDamageByInfo(PlayerInfo damageByInfo) {
         if(damageByInfo != null) {
 
             this.damageByInfo = damageByInfo;
-            damageTime = 5;
+            damageTime = formatSecond(5);
             assistsPlayers.put(damageByInfo,System.currentTimeMillis());
             //现身
             if(isInvisibility){
@@ -588,39 +593,7 @@ public class PlayerInfo {
 
     private int spawnTime = 0;
 
-    public static String formatTime(int s){
-        int min = s / 60;
-        int ss = s % 60;
 
-        if(min > 0){
-            return min+" 分 "+ss+" 秒";
-        }else{
-            return ss+" 秒";
-        }
-
-    }
-
-
-
-    public static String formatTime1(int s){
-        int min = s / 60;
-        int ss = s % 60;
-        String mi = min+"";
-        String sss = ss+"";
-        if(min < 10){
-            mi = "0"+mi;
-        }
-        if(ss < 10){
-            sss = "0"+ss;
-        }
-        if(min > 0){
-
-            return mi+":"+sss;
-        }else{
-            return "00:"+sss+"";
-        }
-
-    }
 
     private ArrayList<String> getLore(boolean isWait){
         ArrayList<String> lore = new ArrayList<>();
@@ -642,11 +615,11 @@ public class PlayerInfo {
         }else{
             IGameRoomEvent event = getGameRoom().getEventControl().getNextEvent();
             if(event != null){
-                lore.add(event.display()+" &a"+formatTime1(event.getEventTime() - getGameRoom().getEventControl().loadTime));
+                lore.add(event.display()+" &a"+ Utils.formatTime1((event.getEventTime() - getGameRoom().getEventControl().loadTime) / 20));
                 lore.add("    ");
             }else{
 
-                lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime));
+                lore.add("游戏结束: &a"+Utils.formatTime(getGameRoom().loadTime / 20));
             }
 
             for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
@@ -713,10 +686,11 @@ public class PlayerInfo {
         }else{
             if(gameRoom.getType() == GameRoom.GameType.START) {
                 if (gameRoom.getRoomConfig().minutesExp > 0) {
-                    if (updateTime % 60 == 0) {
+                    if (updateTime >= formatSecond(60)) {
                         //每 60s 增加25经验
                         PlayerData data = BedWarMain.getDataManager().getData(getName());
                         data.addExp(gameRoom.getRoomConfig().minutesExp, "时长奖励");
+                        updateTime = 0;
                     }
                 }
             }
@@ -745,7 +719,7 @@ public class PlayerInfo {
             invisibilityArmor();
         }
         if(playerType == PlayerType.DEATH){
-            if(spawnTime >= 5){
+            if(spawnTime >= formatSecond(5)){
 
                 sendTitle("&a你复活了",1);
                 sendSubTitle("");
@@ -767,7 +741,7 @@ public class PlayerInfo {
         }else if(playerType == PlayerType.START){
             //TODO 游戏开始后 可以弄一些buff
             if(player instanceof Player){
-                if(loadTime < 5){
+                if(loadTime < formatSecond(5)){
                     loadTime++;
                 }else{
                     if(gameRoom.getRoomConfig().enableFood) {
@@ -777,7 +751,16 @@ public class PlayerInfo {
                 }
 
             }
-            player.setNameTag(TextFormat.colorize('&',"&7["+teamInfo.toString()+"&7] "+teamInfo.getTeamConfig().getNameColor()+player.getName()+" \n&c❤&7"+String.format("%.1f",player.getHealth())));
+//            "&7["+teamInfo.toString()+"&7] "+teamInfo.getTeamConfig().getNameColor()+player.getName()+" \n&c❤&7"+String.format("%.1f",player.getHealth())
+            //TODO 自定义头部
+            player.setNameTag(
+                    TextFormat.colorize('&',gameRoom.getRoomConfig().customNamedTag
+                            .replace("{team}",teamInfo.toString())
+                            .replace("{color}",teamInfo.getTeamConfig().getNameColor())
+                            .replace("{name}",player.getName())
+                            .replace("{health}",String.format("%.1f",player.getHealth()))
+                            .replace("{maxhealth}",player.getMaxHealth()+""))
+            );
 
 
         }else if(playerType == PlayerType.WAIT){
@@ -824,6 +807,13 @@ public class PlayerInfo {
             ((Player) player).removeAllWindows();
             ((Player) player).getUIInventory().clearAll();
         }
+        //死亡检测一下是否为最后存活
+        if(gameRoom.getLivePlayers().size() == 1){
+            //免疫死亡
+            spawn();
+            return;
+        }
+
         PlayerGameDeathEvent event1 = new PlayerGameDeathEvent(this,getGameRoom(),BedWarMain.getBedWarMain());
         Server.getInstance().getPluginManager().callEvent(event1);
         if(getPlayer() instanceof Player) {

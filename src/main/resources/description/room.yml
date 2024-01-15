@@ -104,7 +104,15 @@ can-break: "当可破坏的方法数大于0时，地图禁止破坏"
 floatSpawnPos: "房间内浮空字的坐标"
 
 
+custom: "自定义游戏内部玩家的显示"
 
+custom.namedtag: |-
+  自定义头部显示。
+  {team}: 队伍名称(包含颜色)
+  {color}: 队伍的颜色符号
+  {name}: 玩家名称
+  {health}: 玩家当前血量
+  {maxhealth}: 玩家最大血量
 
 
 roomStartMessage: "房间开始游戏时，给玩家发送的消息"

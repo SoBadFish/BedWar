@@ -11,8 +11,8 @@ import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.item.ItemInfo;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
 import org.sobadfish.bedwar.manager.FloatTextManager;
-import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
+import org.sobadfish.bedwar.tools.Utils;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -152,7 +152,7 @@ public class BedWarFloatText extends Entity {
             MoneyItemInfoConfig config = moneyItemInfoConfig.getItemInfoConfig().getMoneyItemInfoConfig();
             uText = uText
                     .replace("%"+config.getName()+"%",config.getCustomName())
-                    .replace("%"+config.getName()+"-time%", PlayerInfo.formatTime1((moneyItemInfoConfig.getResetTick() - moneyItemInfoConfig.getTick()))+"");
+                    .replace("%"+config.getName()+"-time%", Utils.formatTime1(((moneyItemInfoConfig.getResetTick() - moneyItemInfoConfig.getTick())) / 20)+"");
         }
         if(this.isClosed()){
             FloatTextManager.removeFloatText(this);

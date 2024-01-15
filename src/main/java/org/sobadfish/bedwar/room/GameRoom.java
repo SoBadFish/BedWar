@@ -214,7 +214,7 @@ public class GameRoom {
     }
     private void onEnd(){
         if(loadTime == -1){
-            loadTime = 10;
+            loadTime = Utils.formatSecond(10);
         }
 
         for(PlayerInfo playerInfo:getLivePlayers()){

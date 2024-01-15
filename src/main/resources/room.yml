@@ -53,3 +53,18 @@ roomStartMessage:
   - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
 
 
+custom:
+  #  自定义头部显示。
+  #  {team}: 队伍名称(包含颜色)
+  #  {color}: 队伍的颜色符号
+  #  {name}: 玩家名称
+  #  {health}: 玩家当前血量
+  #  {maxhealth}: 玩家最大血量
+  namedtag:
+    enable: true
+    text: "&7[{team}&7] {color}{name} \n&c❤&7 {health}"
+
+#score-board-wait:
+#  -
+
+

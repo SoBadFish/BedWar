@@ -211,7 +211,13 @@ public class GameRoomConfig implements Cloneable{
      * */
     public LinkedHashMap<String, String> floatBlockConfig = new LinkedHashMap<>();
 
+    /**
+     * 自定义的一些文本
+     * */
+    public boolean enableCustomTag = true;
 
+
+    public String customNamedTag;
 
 
     private GameRoomConfig(String name,
@@ -620,6 +626,8 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.enableFood = room.getBoolean("enable-food",false);
                 roomConfig.fastPlace = room.getBoolean("fast-place",false);
                 roomConfig.fastPlaceCount = room.getInt("fast-place-count",5);
+                roomConfig.enableCustomTag = room.getBoolean("custom.namedtag.enable",true);
+                roomConfig.customNamedTag = room.getString("custom.namedtag.text","&7[{team}&7] {color}{name} \n&c❤&7 {health}");
                 LinkedHashMap<String,String> floatBlocks = new LinkedHashMap<>();
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
                 //初始化浮空字方块
@@ -727,6 +735,8 @@ public class GameRoomConfig implements Cloneable{
         config.set("minutesExp",minutesExp);
         config.set("deathIcon",deathIcon);
         config.set("roomStartMessage",gameStartMessage);
+        config.set("custom.namedtag.enable",enableCustomTag);
+        config.set("custom.namedtag.text",customNamedTag);
         List<Map<String,Object>> pos = new ArrayList<>();
         for(FloatTextInfoConfig floatTextInfoConfig: floatTextInfoConfigs){
             pos.add(floatTextInfoConfig.toConfig());
