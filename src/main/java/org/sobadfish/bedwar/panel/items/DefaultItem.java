@@ -60,39 +60,106 @@ public class DefaultItem extends BasePlayPanelItemInstance {
     }
 
 
-    public static DefaultItem build(Map map){
-        //TODO 根据配置去构建普通物品
-        String id = map.get("id").toString();
+//    public static DefaultItem build(Map map){
+//        //TODO 根据配置去构建普通物品
+//        String id = map.get("id").toString();
+//        String name = TextFormat.colorize('&',map.get("name").toString());
+//        ArrayList<Enchantment> enchantments = new ArrayList<>();
+//        if(!"".equalsIgnoreCase(map.get("ench").toString())) {
+//            for (String es : map.get("ench").toString().split("-")) {
+//                enchantments.add(Enchantment.get(
+//                        Integer.parseInt(es.split(":")[0]))
+//                        .setLevel(Integer.parseInt(es.split(":")[1])));
+//            }
+//        }
+//        int count = Integer.parseInt(map.get("money").toString().split("x")[1]);
+//        String moneyName = map.get("money").toString().split("x")[0];
+//        if(NbtItemManager.NBT_MANAGER.containsKey(id)){
+//            //TODO 构建NBT物品
+//            INbtItem config = NbtItemManager.NBT_MANAGER.get(id);
+//            return new NbtDefaultItem(config,moneyName,count);
+//        }
+//        String[] ids = id.split(":");
+//        int i = 0;
+//        int d = 0;
+//        int c = 1;
+//        if(ids.length > 1){
+//            i = Integer.parseInt(ids[0]);
+//            d = Integer.parseInt(ids[1]);
+//            if(ids.length > 2){
+//                c = Integer.parseInt(ids[2]);
+//            }
+//        }else if(ids.length > 0){
+//            i = Integer.parseInt(ids[0]);
+//        }
+//        Item item = Item.get(i,d,c);
+//        if(!"".equalsIgnoreCase(name)){
+//            item.setCustomName(name);
+//        }
+//        for(Enchantment enchantment: enchantments){
+//            item.addEnchantment(enchantment);
+//        }
+//        return new DefaultItem(item,moneyName,count);
+//    }
+
+    public static DefaultItem build(Map<?,?> map){
+        String ids = map.get("id").toString();
+        String[] items = ids.split(":");
         String name = TextFormat.colorize('&',map.get("name").toString());
         ArrayList<Enchantment> enchantments = new ArrayList<>();
         if(!"".equalsIgnoreCase(map.get("ench").toString())) {
             for (String es : map.get("ench").toString().split("-")) {
                 enchantments.add(Enchantment.get(
-                        Integer.parseInt(es.split(":")[0]))
+                                Integer.parseInt(es.split(":")[0]))
                         .setLevel(Integer.parseInt(es.split(":")[1])));
             }
         }
         int count = Integer.parseInt(map.get("money").toString().split("x")[1]);
         String moneyName = map.get("money").toString().split("x")[0];
-        if(NbtItemManager.NBT_MANAGER.containsKey(id)){
-            //TODO 构建NBT物品
-            INbtItem config = NbtItemManager.NBT_MANAGER.get(id);
-            return new NbtDefaultItem(config,moneyName,count);
-        }
-        String[] ids = id.split(":");
-        int i = 0;
-        int d = 0;
-        int c = 1;
-        if(ids.length > 1){
-            i = Integer.parseInt(ids[0]);
-            d = Integer.parseInt(ids[1]);
-            if(ids.length > 2){
-                c = Integer.parseInt(ids[2]);
+        Item item;
+        try{
+            int id = Integer.parseInt(items[0]);
+            int damage = 0;
+            if(items.length > 1){
+                try {
+                    damage = Integer.parseInt(items[1]);
+                }catch (Exception ignore){}
+                if(items.length > 2){
+                    try {
+                        count = Integer.parseInt(items[2]);
+                    }catch (Exception ignore){}
+                    if(count < 0){
+                        count = 1;
+                    }
+                }
             }
-        }else if(ids.length > 0){
-            i = Integer.parseInt(ids[0]);
+            item = Item.get(id,damage,count);
+        }catch (Exception e){
+            Item i = Item.fromString(items[0]);
+            if(i.getId() == 0){
+                if(NbtItemManager.NBT_MANAGER.containsKey(ids)){
+                    //TODO 构建NBT物品
+                    INbtItem config = NbtItemManager.NBT_MANAGER.get(ids);
+                    return new NbtDefaultItem(config,moneyName,count);
+                }
+            }
+            if(i.getId() == 0){
+                return null;
+            }
+            if(items.length > 1){
+                try {
+                    count = Integer.parseInt(items[1]);
+                }catch (Exception ignore){}
+                if(count <= 0){
+                    count = 1;
+                }
+            }
+            i.setCount(count);
+            item = i;
         }
-        Item item = Item.get(i,d,c);
+        if(item.getId() == 0){
+            return null;
+        }
         if(!"".equalsIgnoreCase(name)){
             item.setCustomName(name);
         }
