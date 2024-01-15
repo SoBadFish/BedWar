@@ -4,8 +4,13 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.entity.EntityHuman;
+import cn.nukkit.entity.data.Skin;
+import cn.nukkit.level.Position;
+import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
+import org.sobadfish.bedwar.entity.RobotEntity;
 import org.sobadfish.bedwar.manager.LanguageManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerData;
@@ -88,6 +93,7 @@ public class BedWarAdminCommand extends Command {
             commandSender.sendMessage(language.getLanguage("command-admin-exp","/[1] exp [玩家] [数量] <由来> 增加玩家经验",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-status","/[1] status 查看线程状态",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-end","/[1] end 停止模板预设",valueData));
+            commandSender.sendMessage(language.getLanguage("command-admin-robot","/[1] robot [房间名称] [数量] 向游戏房间内增加测试机器人",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-float","/[1] float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-cancel","/[1] cancel 终止房间创建",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-top","/[1] top add/remove [名称] [类型] [房间(可不填)] 创建/删除排行榜",valueData));
@@ -129,6 +135,7 @@ public class BedWarAdminCommand extends Command {
                     return false;
                 }
                 break;
+
             case "float":
                 if(strings.length < 4){
                     commandSender.sendMessage(language.getLanguage("command-admin-usage","/[1] help 查看指令帮助",BedWarMain.COMMAND_ADMIN_NAME));
@@ -337,6 +344,43 @@ public class BedWarAdminCommand extends Command {
                 BedWarMain.sendMessageToObject(language.getLanguage("cancel-room-create","成功终止房间的创建，残留文件将在重启服务器后自动删除"), commandSender);
                 // commandSender.sendMessage(TextFormat.colorize('&', "&d"));
 
+                break;
+            case "robot":
+
+                if(strings.length < 3){
+                    commandSender.sendMessage(language.getLanguage("command-admin-usage","/[1] help 查看指令帮助",BedWarMain.COMMAND_ADMIN_NAME));
+                    return false;
+                }
+                String roomName = strings[1];
+                GameRoomConfig roomConfig = BedWarMain.getRoomManager().getRoomConfig(roomName);
+                if(roomConfig == null){
+                    commandSender.sendMessage(language.getLanguage("room-no-exists","房间 [1] 不存在",strings[2]));
+                    return false;
+                }
+                int count = Integer.parseInt(strings[2]);
+                for(int i = 0; i < count; i++){
+                    Position pos = roomConfig.getWorldInfo().getWaitPosition();
+                    CompoundTag tag = EntityHuman.getDefaultNBT(pos);
+                    Skin skin = Utils.getDefaultSkin();
+                    tag.putCompound("Skin",new CompoundTag()
+                            .putByteArray("Data", skin.getSkinData().data)
+                            .putString("ModelId",skin.getSkinId())
+                    );
+                    int finalI = i;
+                    RobotEntity entityHuman = new RobotEntity(pos.getChunk(), tag){
+                        @Override
+                        public String getName() {
+                            return "robot No."+ finalI;
+                        }
+                    };
+                    entityHuman.setNameTag("robot No."+ i);
+
+                    entityHuman.setNameTagAlwaysVisible(true);
+                    entityHuman.setNameTagVisible(true);
+                    entityHuman.setSkin(skin);
+                    entityHuman.spawnToAll();
+                    BedWarMain.getRoomManager().joinRoom(new PlayerInfo(entityHuman), roomName);
+                }
                 break;
 
             default:break;
