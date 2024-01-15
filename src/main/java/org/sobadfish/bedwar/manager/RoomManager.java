@@ -110,6 +110,15 @@ public class RoomManager implements Listener {
                     return rooms.get(roomName).getPlayerInfo(player);
                 }
             }
+        }else{
+            if(player.namedTag.contains("room")){
+                String roomName = player.namedTag.getString("room");
+                if (!"".equalsIgnoreCase(roomName)) {
+                    if (rooms.containsKey(roomName)) {
+                        return rooms.get(roomName).getPlayerInfo(player);
+                    }
+                }
+            }
         }
         return null;
     }
@@ -939,7 +948,7 @@ public class RoomManager implements Listener {
         }
 
 
-        if(event.getEntity() instanceof Player){
+        if(event.getEntity() instanceof EntityHuman){
             PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
             if(playerInfo != null) {
                 if (playerInfo.isWatch()) {
@@ -1005,7 +1014,7 @@ public class RoomManager implements Listener {
                         event.setDamage(2);
                     }
                     //TODO 阻止队伍PVP
-                    if (entity instanceof Player) {
+                    if (entity instanceof EntityHuman) {
                         PlayerInfo damageInfo = room.getPlayerInfo((Player) entity);
                         if (damageInfo != null) {
                             if (damageInfo.isWatch()) {

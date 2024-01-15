@@ -51,7 +51,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
                     RandomJoinManager.newInstance().playerInfos.remove(info);
                     continue;
                 }
-                info.getPlayerInfo().sendSubTitle(Utils.formatTime1((int)((System.currentTimeMillis() - info.time * 20))));
+                info.getPlayerInfo().sendSubTitle(Utils.formatTime1((int)((System.currentTimeMillis() - info.time ))));
                 if(!joinRandomRoom(info)){
                     if(info.isNext){
                         if(info.getPlayerInfo().getPlayer() instanceof Player) {
@@ -87,7 +87,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
             return true;
         }
         info.sendForceTitle("&6匹配中",100);
-        info.sendSubTitle(Utils.formatTime1((int)(System.currentTimeMillis() - i.time * 20) / 1000));
+        info.sendSubTitle(Utils.formatTime1((int)(System.currentTimeMillis() - i.time) / 1000));
 
         String input = i.name;
         ArrayList<String> names = BedWarMain.getMenuRoomManager().getNames();
@@ -102,7 +102,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
             info.sendForceTitle("匹配终止!");
             return true;
         }
-        if(System.currentTimeMillis() -  i.time > (Utils.formatSecond(60))){
+        if(System.currentTimeMillis() -  i.time > (60 * 1000)){
             //一分钟未找到
             info.sendForceMessage("&c暂时没有合适的房间");
             roomManager.cancel = true;

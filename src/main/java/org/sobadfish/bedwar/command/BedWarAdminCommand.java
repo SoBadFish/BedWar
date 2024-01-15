@@ -314,7 +314,7 @@ public class BedWarAdminCommand extends Command {
                     if(BedWarMain.getRoomManager().hasGameRoom(name)){
                         GameRoom room = BedWarMain.getRoomManager().getRoom(name);
                         if(room != null && room.getType() == GameRoom.GameType.WAIT){
-                            room.loadTime =  Utils.formatSecond(2);
+                            room.loadTime =  2;
                             commandSender.sendMessage(language.getLanguage("start-room-success","成功强行启动游戏: [1]",name));
                         }else{
                             commandSender.sendMessage(language.getLanguage("start-room-error-unenable","房间不是等待状态或没有玩家在游戏房间中"));

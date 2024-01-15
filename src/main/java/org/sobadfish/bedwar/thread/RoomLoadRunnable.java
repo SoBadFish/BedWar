@@ -64,23 +64,25 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
                     continue;
                 }
                 //在这里防止房间游戏进度过快
+                if(room.lastLoadTimeMillis == 0 || System.currentTimeMillis() - room.lastLoadTimeMillis >= 1000){
+                    room.lastLoadTimeMillis =  System.currentTimeMillis();
+                    room.onUpdate();
+                    for (PlayerInfo playerInfo : room.getPlayerInfos()) {
+                        if (playerInfo.cancel || playerInfo.isLeave) {
+                            playerInfo.removeScoreBoard();
 
-                room.onUpdate();
-                for (PlayerInfo playerInfo : room.getPlayerInfos()) {
-                    if (playerInfo.cancel || playerInfo.isLeave) {
-                        playerInfo.removeScoreBoard();
+                        } else {
+                            playerInfo.onUpdate();
+                        }
 
-                    } else {
-                        playerInfo.onUpdate();
                     }
 
-                }
+                    if (room.loadTime > 0) {
+                        if (!room.getEventControl().hasEvent()) {
+                            room.loadTime--;
+                        }
 
-                if (room.loadTime > 0) {
-                    if (!room.getEventControl().hasEvent()) {
-                        room.loadTime--;
                     }
-
                 }
                 try {
                     if (room.worldInfo != null) {

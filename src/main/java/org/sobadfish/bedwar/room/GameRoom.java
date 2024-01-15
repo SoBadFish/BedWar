@@ -12,6 +12,7 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
+import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
 import org.sobadfish.bedwar.BedWarMain;
@@ -51,6 +52,8 @@ public class GameRoom {
     private final EventControl eventControl;
 
     private boolean hasStart;
+
+    public Long lastLoadTimeMillis = 0L;
 
 
     /**
@@ -207,14 +210,17 @@ public class GameRoom {
         //移除编外人员
         for(PlayerInfo info: getInRoomPlayers()){
             if(!BedWarMain.getRoomManager().playerJoin.containsKey(info.getPlayer().getName())){
-                playerInfos.remove(info);
+                //别把机器人移出去.
+                if(info.getPlayer() instanceof Player){
+                    playerInfos.remove(info);
+                }
             }
         }
 
     }
     private void onEnd(){
         if(loadTime == -1){
-            loadTime = Utils.formatSecond(10);
+            loadTime = 10;
         }
 
         for(PlayerInfo playerInfo:getLivePlayers()){
@@ -262,7 +268,7 @@ public class GameRoom {
             sendTitle("&c游戏开始");
             sendSubTitle("保护你的床");
             shopInfo.init(getRoomConfig());
-            loadTime =  Utils.formatSecond(getRoomConfig().time);
+            loadTime =  getRoomConfig().time;
             worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);
             //生成浮空方块
             for(Map.Entry<String, String> blockName: getRoomConfig().floatBlockConfig.entrySet()){
@@ -296,7 +302,7 @@ public class GameRoom {
                 teamInfo.echoVictory();
                 type = GameType.END;
                 worldInfo.setClose(true);
-                loadTime = Utils.formatSecond(5);
+                loadTime = 5;
             }
         }else{
             TeamInfo successInfo = null;
@@ -329,8 +335,8 @@ public class GameRoom {
     private void onWait(){
         if(getPlayerInfos().size() >= getRoomConfig().minPlayerSize){
             if(loadTime == -1){
-                loadTime =  Utils.formatSecond(getRoomConfig().waitTime);
-                sendMessage("&2到达最低人数限制&e "+(loadTime / 20)+" &2秒后开始游戏");
+                loadTime = getRoomConfig().waitTime;
+                sendMessage("&2到达最低人数限制&e "+(loadTime)+" &2秒后开始游戏");
 
             }
         }else {
@@ -339,13 +345,13 @@ public class GameRoom {
         if(getPlayerInfos().size() == getRoomConfig().getMaxPlayerSize()){
             if(!isMax){
                 isMax = true;
-                loadTime =  Utils.formatSecond(getRoomConfig().getMaxWaitTime());
+                loadTime = getRoomConfig().getMaxWaitTime();
             }
         }
-        if(loadTime >= Utils.formatSecond(5)) {
+        if(loadTime >= 5) {
             sendTip("&e距离开始还剩 &a " + loadTime + " &e秒");
-            if(loadTime <=  Utils.formatSecond(5)){
-                switch (loadTime / 20){
+            if(loadTime <=  5){
+                switch (loadTime){
                     case 5: sendTitle("&a5");break;
                     case 4: sendTitle("&e4");break;
                     case 3: sendTitle("&63");break;
@@ -526,7 +532,7 @@ public class GameRoom {
             }
             info.sendForceTitle("",1);
             info.sendForceSubTitle("");
-            sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+" / "+getRoomConfig().getMaxPlayerSize()+")");
+
             info.init();
             info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(),TeamChoseItem.get());
             info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
@@ -534,12 +540,17 @@ public class GameRoom {
             info.setGameRoom(this);
             if(info.getPlayer() instanceof Player) {
                 BedWarMain.getRoomManager().playerJoin.put(info.getPlayer().getName(),getRoomConfig().name);
+            }else{
+                //机器人核心
+                CompoundTag tag = info.getPlayer().namedTag;
+                tag.putString("room",getRoomConfig().getName());
             }
             playerInfos.add(info);
             info.getPlayer().teleport(pos);
             if(info.getPlayer() instanceof Player) {
                 ((Player)info.getPlayer()).setGamemode(2);
             }
+            sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size())+" / "+getRoomConfig().getMaxPlayerSize()+")");
             if(isInit){
                 isInit = false;
             }

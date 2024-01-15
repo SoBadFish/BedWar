@@ -619,7 +619,7 @@ public class PlayerInfo {
                 lore.add("    ");
             }else{
 
-                lore.add("游戏结束: &a"+Utils.formatTime(getGameRoom().loadTime / 20));
+                lore.add("游戏结束: &a"+Utils.formatTime(getGameRoom().loadTime));
             }
 
             for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
