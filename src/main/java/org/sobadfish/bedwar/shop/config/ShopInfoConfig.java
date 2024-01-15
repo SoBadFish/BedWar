@@ -3,6 +3,7 @@ package org.sobadfish.bedwar.shop.config;
 
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.panel.items.BasePlayPanelItemInstance;
 import org.sobadfish.bedwar.panel.items.DefaultItem;
 
@@ -35,9 +36,10 @@ public class ShopInfoConfig {
     public static ShopInfoConfig build(ShopItemClassify classify, List<Map> map){
         ArrayList<BasePlayPanelItemInstance> arrayList = new ArrayList<>();
         //TODO 构建商店信息
-        for(Map map1: map){
+        for(Map<?,?> map1: map){
             arrayList.add(DefaultItem.build(map1));
         }
+        BedWarMain.sendMessageToConsole("&a加载 &r"+classify.disPlayerName+" &r物品: &a"+arrayList.size()+" &r个");
         return new ShopInfoConfig(classify,arrayList);
     }
 
