@@ -824,6 +824,8 @@ public class PlayerInfo {
         Server.getInstance().getPluginManager().callEvent(event1);
         if(getPlayer() instanceof Player) {
             ((Player) getPlayer()).setGamemode(3);
+        }else{
+            getPlayer().close();
         }
 
         player.removeAllEffects();
@@ -1023,6 +1025,10 @@ public class PlayerInfo {
             if (!((Player) player).isOnline()) {
                 playerType = PlayerType.LEAVE;
                 return;
+            }
+        }else{
+            if(!player.isAlive()){
+                player.spawnToAll();
             }
         }
 
