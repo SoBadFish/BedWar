@@ -6,6 +6,7 @@ import org.sobadfish.bedwar.shop.config.ShopInfoConfig;
 import org.sobadfish.bedwar.shop.config.TeamShopInfoConfig;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -33,7 +34,7 @@ public class ShopItemInfo {
         return arrayList;
     }
 
-    public static ShopItemInfo build(String shopName, Config config){
+    public static ShopItemInfo build(List<ShopInfoConfig.ShopItemClassify> shopItemClassifies,String shopName, Config config){
         ArrayList<ShopInfoConfig> shopInfoConfigs = new ArrayList<>();
         if("teamShop".equalsIgnoreCase(shopName)){
             shopInfoConfigs.add(TeamShopInfoConfig.build("effects",config.getMapList("effects")));
@@ -44,7 +45,7 @@ public class ShopItemInfo {
             for(String s: config.getKeys()){
                 ShopInfoConfig.ShopItemClassify classify;
                 try {
-                    classify = ShopInfoConfig.ShopItemClassify.valueOf(s.toUpperCase());
+                    classify = shopItemClassifies.get(shopItemClassifies.indexOf(new ShopInfoConfig.ShopItemClassify(s)));
                 }catch (IllegalArgumentException e){
                     continue;
                 }

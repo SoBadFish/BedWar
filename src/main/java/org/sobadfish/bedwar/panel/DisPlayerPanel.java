@@ -1,22 +1,18 @@
 package org.sobadfish.bedwar.panel;
 
-import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.inventory.Inventory;
 import cn.nukkit.inventory.InventoryHolder;
 import org.sobadfish.bedwar.panel.items.*;
 import org.sobadfish.bedwar.panel.lib.AbstractFakeInventory;
 import org.sobadfish.bedwar.player.PlayerInfo;
-import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.shop.config.ShopInfoConfig;
-import org.sobadfish.bedwar.shop.config.TeamShopInfoConfig;
 import org.sobadfish.bedwar.shop.item.ShopItemInfo;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,7 +76,7 @@ public class DisPlayerPanel implements InventoryHolder {
             return panel;
         }
         int choseIndex = -1;
-        for(ShopInfoConfig.ShopItemClassify shopItemClassify : ShopInfoConfig.ShopItemClassify.values()){
+        for(ShopInfoConfig.ShopItemClassify shopItemClassify : gameRoom.shopItemClassifies){
             panel.put(index,new PanelItem(gameRoom,shopItemInfo,shopItemClassify));
             if(shopItemClassify == chose){
                 choseIndex = index;

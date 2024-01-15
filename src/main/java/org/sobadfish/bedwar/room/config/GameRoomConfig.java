@@ -10,6 +10,7 @@ import org.sobadfish.bedwar.manager.SkinManager;
 import org.sobadfish.bedwar.player.team.config.TeamConfig;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
+import org.sobadfish.bedwar.shop.config.ShopInfoConfig;
 import org.sobadfish.bedwar.shop.item.ShopItemInfo;
 import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
@@ -223,6 +224,11 @@ public class GameRoomConfig implements Cloneable{
 
 
     public String customNamedTag;
+
+    /**
+     * 商店类型
+     * */
+    public List<ShopInfoConfig.ShopItemClassify> shopItemClassifies;
 
 
     private GameRoomConfig(String name,
@@ -505,6 +511,7 @@ public class GameRoomConfig implements Cloneable{
             BedWarMain.sendMessageToConsole("创建文件夹 shop 失败");
         }
 
+        BedWarMain.getBedWarMain().saveResource("shop/shop_classify.yml","/rooms/"+name+"/shop/shop_classify.yml",false);
         BedWarMain.getBedWarMain().saveResource("shop/defaultShop.yml","/rooms/"+name+"/shop/defaultShop.yml",false);
         BedWarMain.getBedWarMain().saveResource("shop/teamShop.yml","/rooms/"+name+"/shop/teamShop.yml",false);
         BedWarMain.getBedWarMain().saveResource("item.yml","/rooms/"+name+"/item.yml",false);
@@ -588,6 +595,11 @@ public class GameRoomConfig implements Cloneable{
                             teamConfigs.get(map.get("name").toString()),map));
                 }
                 File shopDir = new File(file+"/shop");
+                if(!shopDir.exists()){
+                    if(!shopDir.mkdirs()){
+                        throw new RuntimeException("无法创建商店文件夹");
+                    }
+                }
                 if(shopDir.isDirectory()){
                     if(!new File(file+"/shop/defaultShop.yml").exists()){
                         BedWarMain.getBedWarMain().saveResource("shop/defaultShop.yml","/rooms/"+name+"/shop/defaultShop.yml",false);
@@ -595,6 +607,9 @@ public class GameRoomConfig implements Cloneable{
                     }
                     if(!new File(file+"/shop/teamShop.yml").exists()) {
                         BedWarMain.getBedWarMain().saveResource("shop/teamShop.yml", "/rooms/" + name + "/shop/teamShop.yml", false);
+                    }
+                    if(!new File(file+"/shop/shop_classify.yml").exists()) {
+                        BedWarMain.getBedWarMain().saveResource("shop/shop_classify.yml", "/rooms/" + name + "/shop/shop_classify.yml", false);
                     }
                 }
                 if(!new File(file+"/event.yml").exists()){
@@ -604,13 +619,31 @@ public class GameRoomConfig implements Cloneable{
                     BedWarMain.getBedWarMain().saveResource("roomEventList.yml","/rooms/"+name+"/roomEventList.yml",false);
                 }
                 //TODO 实现商店
+                //先加载配置项
+                Config classShop = new Config(shopDir+"/shop_classify.yml",Config.YAML);
+                List<ShopInfoConfig.ShopItemClassify> shopItemClassifies = new ArrayList<>();
+                for(Map.Entry<String,Object> entry: classShop.getAll().entrySet()){
+                    Object obj = entry.getValue();
+                    if(obj instanceof Map){
+                        Map<?,?> omap = (Map<?,?>) obj;
+                        shopItemClassifies.add(new ShopInfoConfig.ShopItemClassify(entry.getKey(),
+                                Utils.formatItemByString(omap.get("item").toString()),
+                                omap.get("name").toString()
+
+                        ));
+                    }
+
+                }
+
+
                 LinkedHashMap<String, ShopItemInfo> shopMap = new LinkedHashMap<>();
-                shopMap.put("defaultShop",ShopItemInfo.build("defaultShop",new Config(shopDir+"/defaultShop.yml",Config.YAML)));
-                shopMap.put("teamShop",ShopItemInfo.build("teamShop",new Config(shopDir+"/teamShop.yml",Config.YAML)));
+                shopMap.put("defaultShop",ShopItemInfo.build(shopItemClassifies,"defaultShop",new Config(shopDir+"/defaultShop.yml",Config.YAML)));
+                shopMap.put("teamShop",ShopItemInfo.build(null,"teamShop",new Config(shopDir+"/teamShop.yml",Config.YAML)));
                 BedWarMain.sendMessageToConsole("defaultShop 加载完成");
                 GameRoomConfig roomConfig = new GameRoomConfig(name,worldInfoConfig,time,waitTime,maxWaitTime,minPlayerSize,maxPlayerSize,shopMap,teamInfoConfigs);
                 roomConfig.setTeamCfg(teamConfigs);
                 roomConfig.setMoneyItem(itemInfo);
+                roomConfig.shopItemClassifies = shopItemClassifies;
                 roomConfig.gameRoomMoney = room.getString("roomMoney","default");
                 roomConfig.setNbtItemInfo(nbtItemInfo);
                 roomConfig.hasWatch = room.getBoolean("hasWatch",true);
