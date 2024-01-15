@@ -741,8 +741,14 @@ public class GameRoomConfig implements Cloneable{
         for(FloatTextInfoConfig floatTextInfoConfig: floatTextInfoConfigs){
             pos.add(floatTextInfoConfig.toConfig());
         }
+        config.set("display-floatBlock",floatBlockConfig);
         config.set("floatSpawnPos",pos);
         config.save();
+        //写入注释...
+        File roomFile = new File(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+getName()+"/room.yml");
+        Utils.addDescription(roomFile,BedWarMain.getLanguage().roomDescription,true);
+
+
     }
 
     @Override
