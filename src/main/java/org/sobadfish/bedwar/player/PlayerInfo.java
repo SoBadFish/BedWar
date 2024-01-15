@@ -692,7 +692,7 @@ public class PlayerInfo {
         }else{
             if(gameRoom.getType() == GameRoom.GameType.START) {
                 if (gameRoom.getRoomConfig().minutesExp > 0) {
-                    if (updateTime >= formatSecond(60)) {
+                    if (updateTime >= 60) {
                         //每 60s 增加25经验
                         PlayerData data = BedWarMain.getDataManager().getData(getName());
                         data.addExp(gameRoom.getRoomConfig().minutesExp, "时长奖励");
@@ -725,7 +725,7 @@ public class PlayerInfo {
             invisibilityArmor();
         }
         if(playerType == PlayerType.DEATH){
-            if(spawnTime >= formatSecond(5)){
+            if(spawnTime >= 5){
 
                 sendTitle("&a你复活了",1);
                 sendSubTitle("");
@@ -747,7 +747,7 @@ public class PlayerInfo {
         }else if(playerType == PlayerType.START){
             //TODO 游戏开始后 可以弄一些buff
             if(player instanceof Player){
-                if(loadTime < formatSecond(5)){
+                if(loadTime < 5){
                     loadTime++;
                 }else{
                     if(gameRoom.getRoomConfig().enableFood) {
