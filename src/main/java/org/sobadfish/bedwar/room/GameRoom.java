@@ -282,31 +282,24 @@ public class GameRoom {
                 }
                 if(itemInfo != null){
                     for(Position position: itemInfo.getPositions()){
-                        FloatBlock.spawnToLocation(position.add(0.5,2.2,0.5),blockName.getValue().toLowerCase());
-
-
-                    }
-                }
-            }
-            //  同步生成对应的浮空字文字
-            if(roomConfig.enableAutoDisplayFloat){
-                for(ItemInfoConfig itemInfoConfig: getRoomConfig().worldInfo.getItemInfos()){
-                    for(Position position: itemInfoConfig.getPositions()) {
-                        FloatTextInfo info = new FloatTextInfo(new FloatTextInfoConfig(
-                                WorldInfoConfig.positionToString(position),
-                                WorldInfoConfig.positionFloatToString(position.add(0,3.2,0)),
-                                roomConfig.autoDisplayFloat
-                                        .replace("{item}",
-                                                itemInfoConfig.getMoneyItemInfoConfig().getCustomName())
-                                        .replace("{time}","%"+itemInfoConfig.getMoneyItemInfoConfig().getName()+"-time%")
-                        )).init(this);
-                        if (info != null) {
-                            floatTextInfos.add(info);
+                        //  同步生成对应的浮空字文字
+                        FloatBlock.spawnToLocation(position.add(0.5,2.6,0.5),blockName.getValue().toLowerCase());
+                        if(roomConfig.enableAutoDisplayFloat){
+                            FloatTextInfo info = new FloatTextInfo(new FloatTextInfoConfig(
+                                    WorldInfoConfig.positionToString(position),
+                                    WorldInfoConfig.positionFloatToString(position.add(0.5,3.2,0.5)),
+                                    roomConfig.autoDisplayFloat
+                                            .replace("{item}",
+                                                    itemInfo.getMoneyItemInfoConfig().getCustomName())
+                                            .replace("{time}","%"+itemInfo.getMoneyItemInfoConfig().getName()+"-time%")
+                            )).init(this);
+                            if (info != null) {
+                                floatTextInfos.add(info);
+                            }
                         }
                     }
                 }
             }
-
 
 
 

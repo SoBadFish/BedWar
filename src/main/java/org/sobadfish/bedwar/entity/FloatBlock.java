@@ -39,7 +39,7 @@ public class FloatBlock extends EntityHuman {
         );
         FloatBlock floatBlock = new FloatBlock(pos.getChunk(), tag);
         floatBlock.setSkin(skin);
-        floatBlock.setScale(0.8f);
+        floatBlock.setScale(0.5f);
         floatBlock.spawnToAll();
 
 

@@ -638,18 +638,24 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.autoDisplayFloat = room.getString("auto-display-floattext.text","{item} &r生成点\n剩余&a {time} &r秒");
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
                 //初始化浮空字方块
-                if(room.exists("display-floatBlock")){
-                    Object omap = room.get("display-floatBlock");
-                    if(omap instanceof Map){
-                        BedWarMain.sendMessageToConsole("&e正在读取 浮空方块信息");
-                        Map<?,?> map = (Map<?,?>)omap;
-                        for(Map.Entry<?,?> entry : map.entrySet()){
-                            BedWarMain.sendMessageToConsole("&e正在加载 "+entry.getKey().toString()+" 浮空方块");
-                            if(itemInfo.containsKey(entry.getKey().toString()) && SkinManager.SKINS.containsKey(entry.getValue().toString().toLowerCase())){
-                                floatBlocks.put(entry.getKey().toString(), entry.getValue().toString().toLowerCase());
-                            }
+                Object omap = room.get("display-floatBlock");
+                if(omap instanceof Map){
+                    BedWarMain.sendMessageToConsole("&e正在读取 浮空方块信息");
+                    Map<?,?> map = (Map<?,?>)omap;
+                    for(Map.Entry<?,?> entry : map.entrySet()){
+                        BedWarMain.sendMessageToConsole("&e正在加载 "+entry.getKey().toString()+" 浮空方块");
+                        if(itemInfo.containsKey(entry.getKey().toString()) && SkinManager.SKINS.containsKey(entry.getValue().toString().toLowerCase())){
+                            floatBlocks.put(entry.getKey().toString(), entry.getValue().toString().toLowerCase());
+                            BedWarMain.sendMessageToConsole("&e写入 "+entry.getKey().toString()+" 浮空方块");
+                        }else{
+                            BedWarMain.sendMessageToConsole("&c载入 "+entry.getKey().toString()+" 浮空方块失败！");
                         }
                     }
+                    if(floatBlocks.size() == 0){
+                        BedWarMain.sendMessageToConsole("&c未读取到浮空方块信息");
+                    }
+
+
 
 
                 }
