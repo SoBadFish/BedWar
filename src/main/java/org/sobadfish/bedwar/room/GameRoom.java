@@ -348,7 +348,7 @@ public class GameRoom {
                 loadTime = getRoomConfig().getMaxWaitTime();
             }
         }
-        if(loadTime >= 5) {
+        if(loadTime >= 1) {
             sendTip("&e距离开始还剩 &a " + loadTime + " &e秒");
             if(loadTime <=  5){
                 switch (loadTime){
@@ -367,11 +367,12 @@ public class GameRoom {
             }
             if(loadTime == 1){
                 type = GameType.START;
-                loadTime = -1;
+
                 if(allotOfAverage()){
                     teamAll = true;
                 }
 
+                loadTime = -1;
 
             }
         }else{
