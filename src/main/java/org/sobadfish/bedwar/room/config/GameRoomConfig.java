@@ -511,7 +511,7 @@ public class GameRoomConfig implements Cloneable{
             BedWarMain.sendMessageToConsole("创建文件夹 shop 失败");
         }
 
-        BedWarMain.getBedWarMain().saveResource("shop/shop_classify.yml","/rooms/"+name+"/shop/shop_classify.yml",false);
+        BedWarMain.getBedWarMain().saveResource("shop/shopClassify.yml","/rooms/"+name+"/shop/shopClassify.yml",false);
         BedWarMain.getBedWarMain().saveResource("shop/defaultShop.yml","/rooms/"+name+"/shop/defaultShop.yml",false);
         BedWarMain.getBedWarMain().saveResource("shop/teamShop.yml","/rooms/"+name+"/shop/teamShop.yml",false);
         BedWarMain.getBedWarMain().saveResource("item.yml","/rooms/"+name+"/item.yml",false);
@@ -608,8 +608,8 @@ public class GameRoomConfig implements Cloneable{
                     if(!new File(file+"/shop/teamShop.yml").exists()) {
                         BedWarMain.getBedWarMain().saveResource("shop/teamShop.yml", "/rooms/" + name + "/shop/teamShop.yml", false);
                     }
-                    if(!new File(file+"/shop/shop_classify.yml").exists()) {
-                        BedWarMain.getBedWarMain().saveResource("shop/shop_classify.yml", "/rooms/" + name + "/shop/shop_classify.yml", false);
+                    if(!new File(file+"/shop/shopClassify.yml").exists()) {
+                        BedWarMain.getBedWarMain().saveResource("shop/shopClassify.yml", "/rooms/" + name + "/shop/shopClassify.yml", false);
                     }
                 }
                 if(!new File(file+"/event.yml").exists()){
@@ -620,7 +620,7 @@ public class GameRoomConfig implements Cloneable{
                 }
                 //TODO 实现商店
                 //先加载配置项
-                Config classShop = new Config(shopDir+"/shop_classify.yml",Config.YAML);
+                Config classShop = new Config(shopDir+"/shopClassify.yml",Config.YAML);
                 List<ShopInfoConfig.ShopItemClassify> shopItemClassifies = new ArrayList<>();
                 for(Map.Entry<String,Object> entry: classShop.getAll().entrySet()){
                     Object obj = entry.getValue();
