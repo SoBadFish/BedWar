@@ -356,7 +356,10 @@ public class PlayerInfo {
         if(cancel || isLeave){
             return;
         }
-        getPlayer().getLevel().addSound(getPlayer(),sound,v1,v2,(Player)getPlayer());
+        if(getPlayer() instanceof Player){
+            getPlayer().getLevel().addSound(getPlayer(),sound,v1,v2,(Player)getPlayer());
+        }
+
     }
     /**
      * 发送音效
@@ -365,7 +368,10 @@ public class PlayerInfo {
         if(cancel || isLeave){
             return;
         }
-        getPlayer().getLevel().addSound(sound,(Player) getPlayer());
+        if(getPlayer() instanceof Player){
+            getPlayer().getLevel().addSound(sound,(Player) getPlayer());
+        }
+
     }
 
 
