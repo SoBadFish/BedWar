@@ -104,12 +104,13 @@ public class DisPlayerPanel implements InventoryHolder {
                             gameRoom.getNbtItemInfo()
                             .items.get(((NbtDefaultItem) panelItemInstance).item.getName()));
                 }
-                newLineIndexCount++;
-                if(newLineIndexCount == 8){
-                    newLineIndexCount = 0;
-                    index+=2;
-                }
+
                 panel.put(index, panelItemInstance);
+                newLineIndexCount++;
+                if(newLineIndexCount == 7){
+                    newLineIndexCount = 0;
+                    index ++;
+                }
                 index++;
             }
         }
