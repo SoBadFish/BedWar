@@ -109,7 +109,7 @@ public class DisPlayerPanel implements InventoryHolder {
                 newLineIndexCount++;
                 if(newLineIndexCount == 7){
                     newLineIndexCount = 0;
-                    index ++;
+                    index += 2;
                 }
                 index++;
             }
