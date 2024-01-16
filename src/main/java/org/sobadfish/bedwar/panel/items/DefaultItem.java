@@ -114,8 +114,9 @@ public class DefaultItem extends BasePlayPanelItemInstance {
                         .setLevel(Integer.parseInt(es.split(":")[1])));
             }
         }
-        int count = Integer.parseInt(map.get("money").toString().split("x")[1]);
+        int moneyCount = Integer.parseInt(map.get("money").toString().split("x")[1]);
         String moneyName = map.get("money").toString().split("x")[0];
+        int count = 1;
         Item item;
         try{
             int id = Integer.parseInt(items[0]);
@@ -140,7 +141,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
                 if(NbtItemManager.NBT_MANAGER.containsKey(ids)){
                     //TODO 构建NBT物品
                     INbtItem config = NbtItemManager.NBT_MANAGER.get(ids);
-                    return new NbtDefaultItem(config,moneyName,count);
+                    return new NbtDefaultItem(config,moneyName,moneyCount);
                 }
             }
             if(i.getId() == 0){
@@ -166,7 +167,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
         for(Enchantment enchantment: enchantments){
             item.addEnchantment(enchantment);
         }
-        return new DefaultItem(item,moneyName,count);
+        return new DefaultItem(item,moneyName,moneyCount);
     }
 
 

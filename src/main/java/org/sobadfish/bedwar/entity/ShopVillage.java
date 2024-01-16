@@ -71,11 +71,12 @@ public class ShopVillage extends EntityCreature {
         //TODO 展示给玩家窗口
         if(player.getPlayer() instanceof Player) {
             BedWarMain.UiType finalUiType;
-            if(BedWarMain.uiType != BedWarMain.UiType.AUTO){
-                finalUiType = BedWarMain.uiType;
-            }else{
+            if(room.uiType != null){
                 finalUiType = room.uiType;
+            }else{
+                finalUiType = BedWarMain.uiType;
             }
+
             switch (finalUiType){
                 case PACKET:
                     DisPlayWindowsFrom.disPlayMenu((Player) player.getPlayer(),room,infoConfig);

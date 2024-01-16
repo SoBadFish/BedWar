@@ -13,7 +13,7 @@ callbackY: "等待大厅，玩家低于出生点x格后拉回出生点"
 
 killItem: "击杀玩家后背包物品掉落概率"
 
-ui: "商店菜单的UI auto为自动 ui为GUI菜单 packet为箱子菜单"
+ui: "商店菜单的UI auto为自动 ui为箱子菜单 packet为GUI菜单"
 
 entity: "游戏内商店NPC生物ID"
 entity.team: "团队商店的NPC生物"
