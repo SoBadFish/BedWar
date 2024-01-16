@@ -54,8 +54,8 @@ public class DisPlayerPanel implements InventoryHolder {
         if(chose == null){
            index = 4;
            panel.put(index,new TeamPanelItem(gameRoom,shopItemInfo));
-           index = 9;
-           for(int i = 0;i < 9 ;i++){
+           index = 8;
+           for(int i = 1;i < 8 ;i++){
                 panel.put(index,new NomalItem(i == 4));
                 index++;
            }
@@ -68,7 +68,7 @@ public class DisPlayerPanel implements InventoryHolder {
            for (BasePlayPanelItemInstance panelItemInstance : teamShopItems) {
                panel.put(index, panelItemInstance);
                index+=2;
-               if(index % 9 == 0){
+               if(index % 8 == 0){
                    index++;
                }
            }
@@ -85,7 +85,8 @@ public class DisPlayerPanel implements InventoryHolder {
         }
         index++;
 //        panel.put(index++,new TeamPanelItem(gameRoom,shopItemInfo));
-        for(int i = 0;i < 9 ;i++){
+        //前后留空
+        for(int i = 1;i < 8 ;i++){
             panel.put(index,new NomalItem(i == choseIndex));
             index++;
         }
