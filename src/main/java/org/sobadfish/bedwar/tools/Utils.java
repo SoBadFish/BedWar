@@ -100,11 +100,12 @@ public class Utils {
     }
 
     public static BedWarMain.UiType loadUiTypeByName(String name) {
-        BedWarMain.UiType type = BedWarMain.UiType.valueOf(name.toUpperCase());
-        if (type == null) {
-            type = BedWarMain.UiType.AUTO;
+        try{
+            return BedWarMain.UiType.valueOf(name.toUpperCase());
+        }catch (Exception e){
+            return BedWarMain.UiType.AUTO;
         }
-        return type;
+
     }
 
     public static void toDelete(File file) {

@@ -38,6 +38,13 @@ public class MoneyItemInfo {
         return items.get(key);
     }
 
+    @Override
+    public String toString() {
+        return "MoneyItemInfo{" +
+                "items=" + items +
+                '}';
+    }
+
     public boolean containsKey(String key){
         return items.containsKey(key);
     }

@@ -74,8 +74,7 @@ public class MoneyItemInfoConfig {
         }
         Item item1 = Item.fromString(item);
         MoneyItemInfoConfig iconfig = new MoneyItemInfoConfig(name,customName,item1);
-        double exp = map.containsKey("exp")?Double.parseDouble(map.get("exp").toString()):1.0;
-        iconfig.exp = exp;
+        iconfig.exp = map.containsKey("exp")?Double.parseDouble(map.get("exp").toString()):1.0;
         return iconfig;
     }
 
