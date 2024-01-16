@@ -56,6 +56,11 @@ public class ItemInfoConfig {
             BedWarMain.sendMessageToConsole("&c由于一个未知问题导致 spawnTick 无法转为 int 。传入的参数 "+map.get("spawnTIck").toString());
 
         }
+        if(spawnTick <= 5){
+            //太快的话会影响服务器效率
+            spawnTick = 10;
+
+        }
 
         Object oList = map.get("position");
         if(oList instanceof List){
