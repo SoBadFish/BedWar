@@ -90,6 +90,10 @@ public class DisPlayerPanel implements InventoryHolder {
             panel.put(index,new NomalItem(i == choseIndex));
             index++;
         }
+        //前面留空
+        index++;
+
+        int newLineIndexCount = 0;
 
 
         ShopInfoConfig shopInfoConfigs = shopItemInfo.getShopInfoConfigByClassify(chose);
@@ -100,12 +104,13 @@ public class DisPlayerPanel implements InventoryHolder {
                             gameRoom.getNbtItemInfo()
                             .items.get(((NbtDefaultItem) panelItemInstance).item.getName()));
                 }
+                newLineIndexCount++;
+                if(newLineIndexCount == 8){
+                    newLineIndexCount = 0;
+                    index+=2;
+                }
                 panel.put(index, panelItemInstance);
                 index++;
-                //实现前后空两个位置
-                if(index % 7 == 0){
-                    index += 2;
-                }
             }
         }
         return panel;
