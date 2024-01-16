@@ -90,10 +90,7 @@ public class DisPlayerPanel implements InventoryHolder {
             panel.put(index,new NomalItem(i == choseIndex));
             index++;
         }
-        //实现前后空两个位置
-        if(index % 7 == 0){
-            index += 2;
-        }
+
 
         ShopInfoConfig shopInfoConfigs = shopItemInfo.getShopInfoConfigByClassify(chose);
         if(shopInfoConfigs != null) {
@@ -105,6 +102,10 @@ public class DisPlayerPanel implements InventoryHolder {
                 }
                 panel.put(index, panelItemInstance);
                 index++;
+                //实现前后空两个位置
+                if(index % 7 == 0){
+                    index += 2;
+                }
             }
         }
         return panel;
