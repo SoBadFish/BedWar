@@ -19,6 +19,16 @@ fast:
     ench: ""
     money: "铜锭x8"
 
+  - id: "320:0:8"
+    name: ""
+    ench: ""
+    money: "铜锭x16"
+
+  - id: "275:0"
+    name: ""
+    ench: ""
+    money: "铜锭x16"
+
 weapon:
   - id: "272:0"
     name: ""

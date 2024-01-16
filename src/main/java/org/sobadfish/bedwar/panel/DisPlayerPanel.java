@@ -83,7 +83,10 @@ public class DisPlayerPanel implements InventoryHolder {
             }
             index++;
         }
-        index++;
+        if(index < 9){
+            index++;
+        }
+//
 //        panel.put(index++,new TeamPanelItem(gameRoom,shopItemInfo));
         //前后留空
         for(int i = 0;i < 9 ;i++){
