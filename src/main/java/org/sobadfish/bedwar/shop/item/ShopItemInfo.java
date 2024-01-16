@@ -49,6 +49,7 @@ public class ShopItemInfo {
                 }catch (IllegalArgumentException e){
                     continue;
                 }
+
                 shopInfoConfigs.add(ShopInfoConfig.build(classify,config.getMapList(s)));
             }
         }

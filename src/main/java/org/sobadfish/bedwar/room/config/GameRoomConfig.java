@@ -714,6 +714,7 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.eventListConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/roomEventList.yml"));
                 return roomConfig;
             }catch (Exception e){
+                e.printStackTrace();
                 BedWarMain.sendMessageToConsole("加载房间出错: "+e.getMessage());
 
                 return null;

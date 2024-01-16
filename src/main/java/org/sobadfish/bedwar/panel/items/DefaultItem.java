@@ -114,7 +114,11 @@ public class DefaultItem extends BasePlayPanelItemInstance {
                         .setLevel(Integer.parseInt(es.split(":")[1])));
             }
         }
+        if(!map.containsKey("money") || "".equalsIgnoreCase(map.get("money").toString())){
+           return null;
+        }
         int moneyCount = Integer.parseInt(map.get("money").toString().split("x")[1]);
+
         String moneyName = map.get("money").toString().split("x")[0];
         int count = 1;
         Item item;
