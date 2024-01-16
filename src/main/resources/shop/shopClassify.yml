@@ -1,3 +1,6 @@
+fast:
+  name: "快捷购买"
+  item: "264:0"
 weapon:
   name: "武器"
   item: "276:0"

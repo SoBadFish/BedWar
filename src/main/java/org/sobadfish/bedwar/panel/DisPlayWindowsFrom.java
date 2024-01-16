@@ -74,6 +74,9 @@ public class DisPlayWindowsFrom {
         ArrayList<ShopButton> shopButtons = new ArrayList<>();
         ShopInfoConfig shopInfoConfig = shopItemInfo.getShopInfoConfigByClassify(classify);
         for(BasePlayPanelItemInstance panelItemInstance: shopInfoConfig.getShopItems()){
+            if(panelItemInstance == null){
+                continue;
+            }
             if(panelItemInstance instanceof NbtDefaultItem){
                 ((NbtDefaultItem) panelItemInstance).setPlayerItem(
                         roomConfig.getNbtItemInfo()

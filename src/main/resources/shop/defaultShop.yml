@@ -1,5 +1,24 @@
 # 武器
 # 将money换为 exp 即可
+fast:
+  - id: "272:0"
+    name: ""
+    ench: ""
+    money: "铜锭x4"
+  - id: "304:0"
+    name: ""
+    ench: ""
+    money: "铜锭x20"
+  - id: "261:0"
+    name: ""
+    ench: ""
+    money: "金锭x7"
+
+  - id: "35:0:16"
+    name: ""
+    ench: ""
+    money: "铜锭x8"
+
 weapon:
   - id: "272:0"
     name: ""

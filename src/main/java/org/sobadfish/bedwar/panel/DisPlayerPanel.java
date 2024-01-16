@@ -99,19 +99,25 @@ public class DisPlayerPanel implements InventoryHolder {
         ShopInfoConfig shopInfoConfigs = shopItemInfo.getShopInfoConfigByClassify(chose);
         if(shopInfoConfigs != null) {
             for (BasePlayPanelItemInstance panelItemInstance : shopInfoConfigs.getShopItems()) {
-                if(panelItemInstance instanceof NbtDefaultItem){
-                    ((NbtDefaultItem) panelItemInstance).setPlayerItem(
-                            gameRoom.getNbtItemInfo()
-                            .items.get(((NbtDefaultItem) panelItemInstance).item.getName()));
+                if(panelItemInstance != null){
+                    if(panelItemInstance instanceof NbtDefaultItem){
+                        ((NbtDefaultItem) panelItemInstance).setPlayerItem(
+                                gameRoom.getNbtItemInfo()
+                                        .items.get(((NbtDefaultItem) panelItemInstance).item.getName()));
+                    }
+
+                    panel.put(index, panelItemInstance);
+                    newLineIndexCount++;
+                    if(newLineIndexCount == 7){
+                        newLineIndexCount = 0;
+                        index += 2;
+                    }
+                    index++;
+                }else{
+                    //占位
+                    index++;
                 }
 
-                panel.put(index, panelItemInstance);
-                newLineIndexCount++;
-                if(newLineIndexCount == 7){
-                    newLineIndexCount = 0;
-                    index += 2;
-                }
-                index++;
             }
         }
         return panel;
