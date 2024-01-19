@@ -774,7 +774,9 @@ public class GameRoomConfig implements Cloneable{
         config.set("waitPosition",WorldInfoConfig.positionToString(worldInfo.getWaitPosition()));
         config.set("ban-command",banCommand);
         config.set("QuitRoom",quitRoomCommand);
-        config.set("ui",uiType.name().toLowerCase());
+        if(uiType != null){
+            config.set("ui",uiType.name().toLowerCase());
+        }
         config.set("fireballKnockBack", fireballKnockBack);
         config.set("hasWatch", hasWatch);
         config.set("AutomaticNextRound",isAutomaticNextRound);
