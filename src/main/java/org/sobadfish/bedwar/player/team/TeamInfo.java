@@ -3,6 +3,8 @@ package org.sobadfish.bedwar.player.team;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockAir;
+import cn.nukkit.block.BlockBed;
+import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
@@ -15,6 +17,7 @@ import org.sobadfish.bedwar.event.TeamVictoryEvent;
 import org.sobadfish.bedwar.item.team.TeamEffectInfo;
 import org.sobadfish.bedwar.item.team.TeamTrap;
 import org.sobadfish.bedwar.player.PlayerInfo;
+import org.sobadfish.bedwar.player.team.config.TeamConfig;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.GameRoom;
 
@@ -241,24 +244,40 @@ public class TeamInfo {
     }
     public void placeBed(){
         //尝试修复床透明的问题
-        if(!getTeamConfig().getBedPosition().getChunk().isLoaded()){
+        TeamInfoConfig config = getTeamConfig();
+        Position bedPosition = config.getBedPosition();
+        if(!bedPosition.getChunk().isLoaded()){
 //            try {
 //                getTeamConfig().getBedPosition().getChunk().load();
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
-            getTeamConfig().getBedPosition().getLevel().loadChunk(getTeamConfig().getBedPosition().getChunkX(),getTeamConfig().getBedPosition().getChunkZ());
+            bedPosition.getLevel().loadChunk(bedPosition.getChunkX(), bedPosition.getChunkZ());
         }
-        if(!getTeamConfig().getSpawnPosition().getChunk().isLoaded()){
-            getTeamConfig().getSpawnPosition().getLevel().loadChunk(getTeamConfig().getSpawnPosition().getChunkX(),getTeamConfig().getSpawnPosition().getChunkZ());
+        if(!config.getSpawnPosition().getChunk().isLoaded()){
+            config.getSpawnPosition().getLevel().loadChunk(config.getSpawnPosition().getChunkX(), config.getSpawnPosition().getChunkZ());
         }
 
-        getTeamConfig().getBedPosition().getLevel().setBlock(getTeamConfig().getBedPosition(),Block.get(26,0),true,true);
-        Position pos2 = getTeamConfig().getBedPosition().getSide(getTeamConfig().getBedFace());
-        getTeamConfig().getBedPosition().getLevel().setBlock(pos2,Block.get(26,getTeamConfig().getBedFace().getHorizontalIndex()|8),true,true);
+        bedPosition.getLevel().setBlock(bedPosition,Block.get(26,0),true,true);
+        Position pos2 = bedPosition.getSide(config.getBedFace());
+        bedPosition.getLevel().setBlock(pos2,Block.get(26, config.getBedFace().getHorizontalIndex()|8),true,true);
 
+        Server.getInstance().getScheduler().scheduleDelayedTask(BedWarMain.getBedWarMain(), () -> {
+            createBedBlockEntity(bedPosition, teamConfig.getTeamConfig());
+            createBedBlockEntity(pos2, teamConfig.getTeamConfig());
+        }, 2);
+    }
 
-
+    private void createBedBlockEntity(Position position, TeamConfig config) {
+        Block block = position.getLevelBlock();
+        if (block instanceof BlockBed) {
+            BlockEntity.createBlockEntity(
+                    BlockEntity.BED,
+                    position.getChunk(),
+                    BlockEntity.getDefaultCompound(block, BlockEntity.BED)
+                            .putByte("color", config.getBlockWoolColor().getDamage())
+            );
+        }
     }
 
     public void onBedBreak(PlayerInfo info){
