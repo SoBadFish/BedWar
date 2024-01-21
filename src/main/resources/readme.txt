@@ -83,16 +83,16 @@ value: 时间(秒)
 
 
 本插件对接 RsNPC 插件
-%房间名称-player% 在房间内的玩家数量
-%房间名称-maxplayer% 在房间内的最大玩家数量
-%房间名称-status% 在房间当前状态
+{bd-房间名称-player} 在房间内的玩家数量
+{bd-房间名称-maxplayer} 在房间内的最大玩家数量
+{bd-房间名称-status} 在房间当前状态
 
 本插件对接 Tips 插件
-%bd-level% 玩家的等级
-%bd-exp% 玩家的经验
-%bd-nextExp% 玩家下一级经验
-%bd-line% 玩家经验条
-%bd-per% 玩家经验百分比
-%bd-kill% 玩家击杀总数量
-%bd-victory% 玩家胜利场数
-%bd-bed% 玩家破坏床
+{bd-level} 玩家的等级
+{bd-exp} 玩家的经验
+{bd-nextExp} 玩家下一级经验
+{bd-line} 玩家经验条
+{bd-per} 玩家经验百分比
+{bd-kill} 玩家击杀总数量
+{bd-victory} 玩家胜利场数
+{bd-bed} 玩家破坏床
