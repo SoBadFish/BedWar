@@ -22,13 +22,14 @@ public class BackHub implements INbtItem{
 
     @Override
     public String getName() {
-        return "快速回城";
+        return
+                BedWarMain.getLanguage().getLanguage("back-hub-item","快速回城");
     }
 
     @Override
     public boolean onClick(Item item, Player player) {
         PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
-        info.sendMessage("5秒后传送至出生点 请不要移动");
+        info.sendMessage(BedWarMain.getLanguage().getLanguage("back-hub-tp-msg","5秒后传送至出生点 请不要移动"));
 
         ThreadManager.TIMER.execute(new Runnable() {
 
@@ -53,11 +54,14 @@ public class BackHub implements INbtItem{
                     }
                     Position newLocation = info.getLocation();
                     if(Math.abs(newLocation.getX() - lastPosition.getX()) > 2 || Math.abs(newLocation.getZ() - lastPosition.getZ()) > 2){
-                        info.sendMessage("&c 传送取消!");
+                        info.sendMessage(BedWarMain.getLanguage().getLanguage("back-hub-wait-tp-msg","&c 传送取消!"));
                         return;
                     }
                     //读条期间有粒子很合理吧
-                    info.sendTip("&e传送中.. "+ Utils.drawLine((float) Utils.getPercent((int) (System.currentTimeMillis() - useTime),5000)
+                    info.sendTip(BedWarMain.getLanguage().getLanguage
+                            ("back-hub-tp-msg","传送中...")+
+                            Utils.drawLine((float) Utils.getPercent((int)
+                                            (System.currentTimeMillis() - useTime),5000)
                             ,5,"&a■","&7■"));
 
                     Location playerLocation = player.getLocation();
@@ -86,7 +90,7 @@ public class BackHub implements INbtItem{
                     }
                 }
 
-                info.sendMessage("&a已传送到出生点");
+                info.sendMessage(BedWarMain.getLanguage().getLanguage("back-hub-tp-success","&a已传送到出生点"));
                 info.getPlayer().teleport(info.getTeamInfo().getTeamConfig().getSpawnPosition());
             }
         });

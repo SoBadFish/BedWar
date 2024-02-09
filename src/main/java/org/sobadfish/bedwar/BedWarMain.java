@@ -27,6 +27,8 @@ import org.sobadfish.bedwar.variable.TipVariable;
 
 import java.io.File;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -39,6 +41,12 @@ import java.util.LinkedHashMap;
  * @author SoBadFish
  */
 public class BedWarMain extends PluginBase {
+
+    private static List<String> LANGUAGE_LIST = new LinkedList<>();
+    static {
+        LANGUAGE_LIST.add("eng");
+        LANGUAGE_LIST.add("chs");
+    }
 
     private static BedWarMain bedWarMain;
 
@@ -75,7 +83,10 @@ public class BedWarMain extends PluginBase {
     public void onEnable() {
         bedWarMain = this;
         //  TODO 初始化文件
-        initLanguage(this);
+        //
+        saveDefaultConfig();
+        reloadConfig();
+        initLanguage(this,getConfig().getString("language","chs"));
 
         checkServer();
         this.getLogger().info(TextFormat.colorize('&',"&b   ____           ___          __"));
@@ -184,8 +195,8 @@ public class BedWarMain extends PluginBase {
      * 加载配置文件
     */
     public void loadBedWarConfig(){
-        saveDefaultConfig();
-        reloadConfig();
+//        saveDefaultConfig();
+//        reloadConfig();
         uiType = Utils.loadUiTypeByName(getConfig().getString("shop-ui","auto"));
         upExp = getConfig().getInt("up-exp",500);
         NbtItemManager.init();
@@ -263,8 +274,13 @@ public class BedWarMain extends PluginBase {
 
     }
 
-    public static void initLanguage(PluginBase plugin) {
-        language = new LanguageManager(plugin);
+    public static void initLanguage(PluginBase plugin,String lang) {
+        //TODO 检查字符串是否合法
+
+        if(!LANGUAGE_LIST.contains(lang.toLowerCase())){
+            lang = LANGUAGE_LIST.get(0);
+        }
+        language = new LanguageManager(plugin,lang);
     }
 
     public static void sendMessageToObject(String msg,Object o){

@@ -16,7 +16,7 @@ public class DieBow implements INbtItem{
 
     @Override
     public String getName() {
-        return "凋零弓";
+        return BedWarMain.getLanguage().getLanguage("die-item","凋零弓");
     }
 
 

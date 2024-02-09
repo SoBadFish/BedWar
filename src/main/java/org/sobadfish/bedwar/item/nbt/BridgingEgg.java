@@ -19,7 +19,7 @@ import org.sobadfish.bedwar.player.PlayerInfo;
 public class BridgingEgg implements INbtItem{
     @Override
     public String getName() {
-        return "搭桥蛋";
+        return BedWarMain.getLanguage().getLanguage("egg-item","搭桥蛋");
     }
 
     @Override

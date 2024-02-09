@@ -26,7 +26,7 @@ public class FireBall implements INbtItem{
 
     @Override
     public String getName() {
-        return "火球";
+        return BedWarMain.getLanguage().getLanguage("fire-boll-item","火球");
     }
 
     @Override
@@ -44,7 +44,8 @@ public class FireBall implements INbtItem{
                 clickTime.put(playerInfo,System.currentTimeMillis());
             }
             if(System.currentTimeMillis() - clickTime.get(playerInfo) < 500){
-                playerInfo.sendMessage("&c使用太频繁了 请过一会再试吧");
+                playerInfo.sendMessage(BedWarMain.getLanguage().getLanguage("fire-boll-use-message"
+                        ,"&c使用太频繁了 请过一会再试吧"));
                 return true;
             }else{
                 clickTime.put(playerInfo,System.currentTimeMillis());

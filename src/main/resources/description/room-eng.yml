@@ -1,0 +1,122 @@
+header: |-
+  本文件主要是对room房间的配置进行编辑修改
+  如果你没有yaml基础，则不建议对这个文件进行更改
+  通过修改这个配置文件可以实现不同的小游戏功能
+
+world: "游戏地图"
+
+gameTime: "游戏时长"
+
+infinite-time: "无限时间： 游戏永远不会结束（除非一个玩家没有） 填 true 或 false"
+callbackY: "等待大厅，玩家低于出生点x格后拉回出生点"
+
+
+killItem: "击杀玩家后背包物品掉落概率"
+
+ui: "商店菜单的UI auto为自动 ui为箱子菜单 packet为GUI菜单"
+
+entity: "游戏内商店NPC生物ID"
+entity.team: "团队商店的NPC生物"
+
+
+entity.item: "物品商店的NPC生物"
+
+fast-place: "是否启用快速搭路"
+
+fast-place-count: "快速搭路放置方块数量"
+
+inventory-unbreakable: "装备无限耐久"
+
+hasWatch: "这个房间是否允许玩家旁观"
+
+waitTime: "人数不满的等待时间"
+
+gameInWait: "游戏内等待 当游戏开始后会有一段时间的等待"
+
+ban-craft: "是否允许玩家使用游戏内合成"
+
+enable-food: "是否启用饥饿值掉落"
+
+
+enable-shop: "是否启用游戏内置商店功能"
+
+max-player-waitTime: "满人时等待时长"
+
+minPlayerSize: "房间最低玩家数量"
+
+maxPlayerSize: "房间最高玩家数量"
+
+
+teamSpawn: "队伍出生点 这个要注意与team.yml中的队伍对应"
+
+itemSpawn: "物品生成点"
+
+
+waitPosition: "等待大厅坐标 可以设置其他地图"
+
+
+ban-command: |-
+  禁止玩家执行的指令 格式是yaml的list形式
+  例如: ["say"] 禁用玩家使用 say指令
+
+
+QuitRoom: |-
+  玩家离开游戏房间执行的指令 @p 代表玩家
+  注意这个是玩家退出一次房间就执行一次,别真的给玩家钻石什么的，
+  如果你不怕玩家刷物品，，随意
+  例如: ["give @p 264 1"] 给予玩家一颗钻石
+
+AutomaticNextRound: |-
+  游戏房间结束后 是否自动匹配下一个游戏房间
+  有BUG还未解决 请不要开启这个功能
+
+
+
+
+player-game-mode: |-
+  玩家进入游戏的游戏模式
+
+victoryCmd: |-
+  队伍/玩家取得胜利时执行的指令 @p 为玩家
+  例如: ["give @p 264 1"] 给予玩家一颗钻石
+
+
+defeatCmd: |-
+  队伍/玩家取得胜利时执行的指令 @p 为玩家
+  例如: ["give @p 264 1"] 给予玩家一颗钻石
+
+
+minutesExp: "游戏内每分钟增加的经验值"
+
+deathIcon: "死亡的图标"
+
+display-floatBlock: |-
+  资源点展示的浮空字
+  格式: 货币名称:皮肤名称
+
+resetWorld: "游戏结束后是否重置地图"
+
+ban-break: |-
+  禁止破坏的方块
+  当禁止破坏的方块大于0时，全地图可破坏
+
+
+can-break: "当可破坏的方法数大于0时，地图禁止破坏"
+
+floatSpawnPos: "房间内浮空字的坐标"
+
+
+custom: "自定义游戏内部玩家的显示"
+
+custom.namedtag: |-
+  自定义头部显示。
+  {team}: 队伍名称(包含颜色)
+  {color}: 队伍的颜色符号
+  {name}: 玩家名称
+  {health}: 玩家当前血量
+  {maxhealth}: 玩家最大血量
+
+
+roomStartMessage: "房间开始游戏时，给玩家发送的消息"
+
+

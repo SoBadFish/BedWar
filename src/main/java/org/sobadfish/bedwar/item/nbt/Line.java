@@ -19,7 +19,7 @@ import java.util.LinkedHashMap;
 public class Line implements INbtItem{
     @Override
     public String getName() {
-        return "线";
+        return BedWarMain.getLanguage().getLanguage("line-item","线");
     }
 
     @Override
@@ -29,7 +29,7 @@ public class Line implements INbtItem{
         Position pos = info.getPlayer().getSide(info.getPlayer().getHorizontalFacing(),2);
         LinkedHashMap<Position,Block> spawn = BedWarMain.spawnBlockByPosAndSize(pos,3,Block.get(30));
         Utils.spawnBlock(player, spawn,true);
-        info.sendMessage("&a已生成蜘蛛网");
+        info.sendMessage(BedWarMain.getLanguage().getLanguage("line-use-message","&a已生成蜘蛛网"));
         player.getInventory().removeItem(item);
         return true;
     }

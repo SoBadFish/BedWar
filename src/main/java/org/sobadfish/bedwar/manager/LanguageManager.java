@@ -2,6 +2,7 @@ package org.sobadfish.bedwar.manager;
 
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
+import cn.nukkit.utils.TextFormat;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -20,16 +21,16 @@ public class LanguageManager {
     public Config roomDescription;
 
 
-    public LanguageManager(PluginBase plugin){
+    public LanguageManager(PluginBase plugin,String lang){
         ini = new HashMap<>();
         if(!new File(plugin.getDataFolder()+"/lang").exists()){
             if(!new File(plugin.getDataFolder()+"/lang").mkdirs()){
                 plugin.getLogger().error("Could not create lang");
             }
         }
-        File iniFile = new File(plugin.getDataFolder()+"/lang/language.ini");
+        File iniFile = new File(plugin.getDataFolder()+ "/lang/"+lang+"/language.ini");
         if(!iniFile.exists()){
-            plugin.saveResource("language.ini","lang/language.ini",false);
+            plugin.saveResource("lang/"+lang+"/language.ini", "lang/"+lang+"/language.ini",false);
         }
         BufferedReader br;
         try {
@@ -45,9 +46,9 @@ public class LanguageManager {
             e.printStackTrace();
         }
         //读取 room.yml注释
-        InputStream resource = plugin.getResource("description/room.yml");
+        InputStream resource = plugin.getResource("description/room-"+lang+".yml");
         if (resource == null) {
-            resource = plugin.getResource("description/room.yml");
+            resource = plugin.getResource("description/room-"+lang+".yml");
         }
         roomDescription = new Config();
         roomDescription.load(resource);
@@ -90,7 +91,7 @@ public class LanguageManager {
             }
         }
         value = value.replace("[n]","\n");
-        return value;
+        return TextFormat.colorize('&',value);
     }
 
     public static class IniValueData{

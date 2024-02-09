@@ -90,7 +90,9 @@ minutesExp: "游戏内每分钟增加的经验值"
 
 deathIcon: "死亡的图标"
 
-display-floatBlock: "资源点展示的浮空字"
+display-floatBlock: |-
+  资源点展示的浮空字
+  格式: 货币名称:皮肤名称
 
 resetWorld: "游戏结束后是否重置地图"
 
