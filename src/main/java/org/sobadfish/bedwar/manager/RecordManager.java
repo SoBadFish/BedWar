@@ -115,7 +115,7 @@ public class RecordManager {
             LevelRecordPack recordPack = LevelRecordPack.unpackFile(file);
             String roomName = recordPack.getMetadata().getAsJsonPrimitive("roomName").getAsString();
             String roomWorld = recordPack.getMetadata().getAsJsonPrimitive("roomWorld").getAsString();
-            String recordWorld = roomWorld + "Record";
+            String recordWorld = roomWorld + "Record#" + player.getName();
             GameRoomConfig roomConfig = BedWarMain.getRoomManager().getRoomConfig(roomName);
             if (roomConfig == null) {
                 return new OK(false, "录像房间配置不存在");

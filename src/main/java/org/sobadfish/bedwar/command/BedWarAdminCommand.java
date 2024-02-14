@@ -388,10 +388,10 @@ public class BedWarAdminCommand extends Command {
                     if (commandSender instanceof Player) {
                         RecordPanel.disPlayerMenu((Player) commandSender);
                     } else {
-                        commandSender.sendMessage("请不要在控制台执行");
+                        commandSender.sendMessage(language.getLanguage("do-not-console","请不要在控制台执行"));
                     }
                 } else {
-                    commandSender.sendMessage("未启用录像功能");
+                    commandSender.sendMessage(language.getLanguage("record-not-enabled", "未启用录像功能"));
                 }
                 break;
             default:break;
