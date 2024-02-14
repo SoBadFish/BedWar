@@ -306,6 +306,7 @@ public class GameRoom {
             GameRoomStartEvent event = new GameRoomStartEvent(this,BedWarMain.getBedWarMain());
             Server.getInstance().getPluginManager().callEvent(event);
 
+            BedWarMain.getRecordManager().startRecord(this);
         }
         if(loadTime > 0) {
 
@@ -898,6 +899,7 @@ public class GameRoom {
         if(close){
             return;
         }
+        BedWarMain.getRecordManager().stopRecord(this);
         close = true;
         type = GameType.CLOSE;
         if(hasStart) {

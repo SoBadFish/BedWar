@@ -13,6 +13,7 @@ import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.RobotEntity;
 import org.sobadfish.bedwar.manager.LanguageManager;
 import org.sobadfish.bedwar.manager.ThreadManager;
+import org.sobadfish.bedwar.panel.RecordPanel;
 import org.sobadfish.bedwar.player.PlayerData;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.TeamInfo;
@@ -382,7 +383,17 @@ public class BedWarAdminCommand extends Command {
                     BedWarMain.getRoomManager().joinRoom(new PlayerInfo(entityHuman), roomName);
                 }
                 break;
-
+            case "record":
+                if (BedWarMain.enableRecord) {
+                    if (commandSender instanceof Player) {
+                        RecordPanel.disPlayerMenu((Player) commandSender);
+                    } else {
+                        commandSender.sendMessage("请不要在控制台执行");
+                    }
+                } else {
+                    commandSender.sendMessage("未启用录像功能");
+                }
+                break;
             default:break;
 
         }
