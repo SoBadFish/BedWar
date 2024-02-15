@@ -101,6 +101,12 @@ ban-break: |-
   当禁止破坏的方块大于0时，全地图可破坏
 
 
+kb-setting: "游戏kb设置 使用独立的算法"
+kb-setting.enable: "是否启用~"
+kb-setting.force: "击退力量"
+kb-setting.speed: "击退速度"
+kb-setting.motionY: "击退高度"
+
 can-break: "当可破坏的方法数大于0时，地图禁止破坏"
 
 floatSpawnPos: "房间内浮空字的坐标"

@@ -128,6 +128,12 @@ public class BedWarMain extends PluginBase {
                 Class.forName("tip.utils.variables.BaseVariable");
                 TipVariable.init();
             }catch (Exception ignore){}
+            try{
+                Class.forName("net.easecation.ghosty.GhostyPlugin");
+                recordManager = new RecordManager();
+
+            }catch (Exception ignore){}
+
 
 
         }
@@ -230,7 +236,8 @@ public class BedWarMain extends PluginBase {
             topManager.init();
         }
 
-        recordManager = new RecordManager();
+
+
     }
 
     public static int getUpExp(){

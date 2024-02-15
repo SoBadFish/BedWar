@@ -127,6 +127,11 @@ public class GameRoomConfig implements Cloneable{
     public int callbackY = 17;
 
     /**
+     * 击退设置
+     * */
+    public KnockConfig knockConfig = new KnockConfig();
+
+    /**
      * 玩家身上的装备无限耐久
      * */
     public boolean inventoryUnBreakable = false;
@@ -620,6 +625,7 @@ public class GameRoomConfig implements Cloneable{
                 }
                 //TODO 实现商店
                 //先加载配置项
+
                 Config classShop = new Config(shopDir+"/shopClassify.yml",Config.YAML);
                 List<ShopInfoConfig.ShopItemClassify> shopItemClassifies = new ArrayList<>();
                 for(Map.Entry<String,Object> entry: classShop.getAll().entrySet()){
@@ -643,6 +649,10 @@ public class GameRoomConfig implements Cloneable{
                 GameRoomConfig roomConfig = new GameRoomConfig(name,worldInfoConfig,time,waitTime,maxWaitTime,minPlayerSize,maxPlayerSize,shopMap,teamInfoConfigs);
                 roomConfig.setTeamCfg(teamConfigs);
                 roomConfig.setMoneyItem(itemInfo);
+                roomConfig.knockConfig.enable = room.getBoolean("kb-setting.enable",true);
+                roomConfig.knockConfig.force = (float) room.getDouble("kb-setting.force",0.4f);
+                roomConfig.knockConfig.speed = (float) room.getDouble("kb-setting.speed",0.5f);
+                roomConfig.knockConfig.motionY = (float) room.getDouble("kb-setting.motionY",0.1f);
                 roomConfig.shopItemClassifies = shopItemClassifies;
                 roomConfig.gameRoomMoney = room.getString("roomMoney","default");
                 roomConfig.setNbtItemInfo(nbtItemInfo);

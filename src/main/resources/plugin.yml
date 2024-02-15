@@ -1,6 +1,6 @@
 name: BedWar
 main: org.sobadfish.bedwar.BedWarMain
-version: 2.1.2
+version: 2.1.3
 api:
   - 1.0.11
   - 3.0.0
@@ -13,6 +13,7 @@ softdepend:
   - ScoreboardPlugin
   - AutoUpData
   - Tips
+  - Ghosty
 
 loadbefore:
   - ScoreboardPlugin

@@ -48,6 +48,13 @@ display-floatBlock:
   钻石: "diamond"
   绿宝石: "emerald"
 
+# 游戏kb设置 使用独立的算法
+kb-setting:
+  enable: true
+  force: 0.4
+  speed: 0.5
+  motionY: 0.1
+
 roomStartMessage:
   - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
   - "&f起床战争"

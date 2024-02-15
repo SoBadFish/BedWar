@@ -579,6 +579,28 @@ public class Utils {
 
     }
 
+    /**
+     * 击退逻辑实现
+     * @param entity 被击退的实体
+     * @param target 击退的实体
+     * @param speed 击退的速度
+     * @param force 击退的力道
+     * @param motionY 击退的高度
+     *
+     * @return 击退的向量
+     *
+     * */
+    public static Vector3 knockBack(Vector3 entity, Vector3 target,float speed, float force,float motionY){
+        double x = entity.x - target.x;
+        double z = entity.z - target.z;
+        double distance = Math.sqrt(x * x + z * z);
+        x /= distance * force;
+        z /= distance * force;
+        Vector3 v3 = new Vector3(x, motionY, z);
+        return v3.multiply(speed).add(x,motionY,z);
+
+
+    }
 
 
     public static String formatTime1(int s){

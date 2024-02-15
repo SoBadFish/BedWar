@@ -1034,12 +1034,24 @@ public class RoomManager implements Listener {
                             event.setCancelled();
                         }
                     }
+                    //击退..
+                    if(!event.isCancelled()){
+                        if(room.getRoomConfig().knockConfig.enable && !event.isCancelled()){
+                            event.getEntity().setMotion(Utils.knockBack(event.getEntity(),entity,
+                                    room.getRoomConfig().knockConfig.speed,
+                                    room.getRoomConfig().knockConfig.force,
+                                    room.getRoomConfig().knockConfig.motionY));
+                            ((EntityDamageByEntityEvent) event).setKnockBack(0f);
+                        }
+                    }
+
 
                 }
                 if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
                     event.setCancelled();
                     playerInfo.death(event);
                 }
+
                 if (event.getFinalDamage() + 1 > playerInfo.getPlayer().getHealth()) {
                     event.setCancelled();
                     playerInfo.death(event);
@@ -1047,7 +1059,9 @@ public class RoomManager implements Listener {
                         event.setDamage(0, modifier);
                     }
                 }
+
             }
+
         }
     }
 
