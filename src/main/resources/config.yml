@@ -20,6 +20,9 @@ shop-ui: auto
 # 每下一级的经验为 up-exp * 等级
 up-exp: 500
 
+# 是否启用房间录制和回放
+enable-Record: false
+
 game-logo: "&l&cB&6e&ed&aW&ba&9r"
 
 join-menu:

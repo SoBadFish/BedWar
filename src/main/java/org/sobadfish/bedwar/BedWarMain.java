@@ -8,6 +8,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
+import lombok.Getter;
 import org.sobadfish.bedwar.command.BedWarAdminCommand;
 import org.sobadfish.bedwar.command.BedWarCommand;
 import org.sobadfish.bedwar.command.BedWarSpeakCommand;
@@ -58,6 +59,9 @@ public class BedWarMain extends PluginBase {
 
     private static PlayerTopManager topManager;
 
+    @Getter
+    private static RecordManager recordManager;
+
     public static LanguageManager language;
 
     public static UiType uiType;
@@ -78,6 +82,7 @@ public class BedWarMain extends PluginBase {
     public static String COMMAND_MESSAGE_NAME = "bws";
 
     public static int upExp;
+    public static boolean enableRecord;
 
     @Override
     public void onEnable() {
@@ -156,7 +161,7 @@ public class BedWarMain extends PluginBase {
 
 
 
-
+        enableRecord = this.getConfig().getBoolean("enable-Record");
         this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
 
     }
@@ -225,7 +230,7 @@ public class BedWarMain extends PluginBase {
             topManager.init();
         }
 
-
+        recordManager = new RecordManager();
     }
 
     public static int getUpExp(){
