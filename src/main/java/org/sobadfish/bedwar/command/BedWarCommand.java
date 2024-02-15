@@ -43,7 +43,7 @@ public class BedWarCommand extends Command {
                 if(i != null){
                     info = i;
                 }
-                BedWarFrom simple = new BedWarFrom(BedWarMain.getTitle(), language.getLanguage("command-from-chose-world","请选择地图"), DisPlayWindowsFrom.getId(51530, 99810));
+                BedWarFrom simple = new BedWarFrom(BedWarMain.getTitle(), language.getLanguage("command-from-chose-world","请选择地图"), BedWarFrom.getRId(51530, 99810));
                 PlayerInfo finalInfo = info;
                 simple.add(new BaseIButton(new ElementButton(language.getLanguage("command-from-random","随机匹配"),new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
                     @Override
@@ -134,7 +134,7 @@ public class BedWarCommand extends Command {
     }
     private void disPlayRoomsFrom(Player player,String name){
         FROM.remove(player.getName());
-        BedWarFrom simple = new BedWarFrom(BedWarMain.getTitle(), language.getLanguage("command-from-chose-room","请选择房间"),DisPlayWindowsFrom.getId(51530,99810));
+        BedWarFrom simple = new BedWarFrom(BedWarMain.getTitle(), language.getLanguage("command-from-chose-room","请选择房间"),BedWarFrom.getRId(51530,99810));
         WorldRoom worldRoom = BedWarMain.getMenuRoomManager().getRoom(name);
         PlayerInfo info = new PlayerInfo(player);
         simple.add(new BaseIButton(new ElementButton(language.getLanguage("command-from-random","随机匹配"),new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
