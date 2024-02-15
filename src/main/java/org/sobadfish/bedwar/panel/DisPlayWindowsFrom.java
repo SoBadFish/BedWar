@@ -23,16 +23,14 @@ import java.util.List;
  */
 public class DisPlayWindowsFrom {
 
-    public static int FROM_ID = 155;
 
-    public static int FROM_MAX_ID = 105478;
 
     public static LinkedHashMap<String, ShopFrom> SHOP = new LinkedHashMap<>();
 
     public static LinkedHashMap<String, BedWarFrom> CUSTOM = new LinkedHashMap<>();
 
     public static void disPlayerCustomMenu(Player player, String tag, List<BaseIButton> from){
-        BedWarFrom bedWarFrom = new BedWarFrom(tag,"",getId());
+        BedWarFrom bedWarFrom = new BedWarFrom(tag,"",BedWarFrom.getRId());
         bedWarFrom.setBaseIButtoms(from);
         CUSTOM.put(player.getName(), bedWarFrom);
         bedWarFrom.disPlay(player);
@@ -41,7 +39,7 @@ public class DisPlayWindowsFrom {
 
     public static void disPlayMenu(Player player, GameRoomConfig room, ShopItemInfo shopItemInfo){
 
-        ShopFrom shopFrom = new ShopFrom(getId(),player,room,shopItemInfo);
+        ShopFrom shopFrom = new ShopFrom(BedWarFrom.getRId(),player,room,shopItemInfo);
         ArrayList<ShopButton> shopButtons = new ArrayList<>();
         if("teamShop".equalsIgnoreCase(shopItemInfo.getShopName())){
             displayTeam(player, room,false);
@@ -57,17 +55,11 @@ public class DisPlayWindowsFrom {
 
     }
 
-    public static int getId(){
-        return Utils.rand(FROM_ID,FROM_MAX_ID);
-    }
-    public static int getId(int min,int max){
-        return Utils.rand(min,max);
-    }
 
 
 
     public static void disPlayChoseList(Player player, GameRoomConfig roomConfig, ShopItemInfo shopItemInfo, ShopInfoConfig.ShopItemClassify classify){
-        ShopFrom shopFrom = new ShopFrom(getId(),player,roomConfig,shopItemInfo);
+        ShopFrom shopFrom = new ShopFrom(BedWarFrom.getRId(),player,roomConfig,shopItemInfo);
         if(SHOP.containsKey(player.getName())){
             shopFrom.setLastFrom(SHOP.get(player.getName()));
         }
@@ -90,7 +82,7 @@ public class DisPlayWindowsFrom {
     }
 
     public static void displayTeam(Player player, GameRoomConfig roomConfig,boolean isBack){
-        int fromId3 = getId();
+        int fromId3 = BedWarFrom.getRId();
         ArrayList<ShopButton> shopButtons = new ArrayList<>();
         ShopItemInfo shopInfoConfigs = roomConfig.getShops().get("teamShop");
         ShopFrom shopFrom = new ShopFrom(fromId3,player,roomConfig,shopInfoConfigs);

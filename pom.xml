@@ -95,8 +95,8 @@
             <groupId>net.easecation</groupId>
             <artifactId>Ghosty</artifactId>
             <version>B20240115-MOT-C1-JAVA8</version>
-            <scope>system</scope>
-            <systemPath> ${project.basedir}/lib/Ghosty-B20240115-MOT-C1.jar</systemPath>
+            <scope>provided</scope>
+<!--            <systemPath> ${project.basedir}/lib/Ghosty-B20240115-MOT-C1.jar</systemPath>-->
         </dependency>
 
 
