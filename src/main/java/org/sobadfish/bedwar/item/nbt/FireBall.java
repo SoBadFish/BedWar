@@ -51,6 +51,8 @@ public class FireBall implements INbtItem{
                 clickTime.put(playerInfo,System.currentTimeMillis());
             }
 
+            Item ic = item.clone();
+            ic.setCount(1);
             double f = 1.8D;
             double yaw = player.yaw;
             double pitch = player.pitch;
@@ -61,7 +63,7 @@ public class FireBall implements INbtItem{
             fireBall.setMaster(playerInfo);
             fireBall.setMotion(new Vector3(-Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * f * f, -Math.sin(Math.toRadians(pitch)) * f * f, Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * f * f));
             fireBall.spawnToAll();
-            player.getInventory().removeItem(item);
+            player.getInventory().removeItem(ic);
             playerInfo.isSpawnFire = false;
         }
         return true;

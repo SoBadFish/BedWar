@@ -56,7 +56,7 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
     }
 
     public EntityFireBall(FullChunk chunk, CompoundTag nbt) {
-        this(chunk, nbt, (Entity)null);
+        this(chunk, nbt, null);
     }
 
     public void setMaster(PlayerInfo master) {
@@ -92,19 +92,25 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
         if (this.closed) {
             return false;
         } else {
-            if (!this.hadCollision && this.critical) {
+            //碰撞就爆炸
+            if(this.hadCollision || this.age > 1200 || this.isCollided){
                 this.level.addParticle(new CriticalParticle(this.add((double)(this.getWidth() / 2.0F) + Utils.rand(-100.0D, 100.0D) / 500.0D, (double)(this.getHeight() / 2.0F) + Utils.rand(-100.0D, 100.0D) / 500.0D, (double)(this.getWidth() / 2.0F) + Utils.rand(-100.0D, 100.0D) / 500.0D)));
-            } else if (this.onGround) {
-                this.critical = false;
-            }
-
-            if (this.age > 1200 || this.isCollided) {
-                if (this.isCollided && this.canExplode) {
-                    this.explode();
-                }
-
+                this.explode();
                 this.close();
             }
+//            if (!this.hadCollision && this.critical) {
+//                this.level.addParticle(new CriticalParticle(this.add((double)(this.getWidth() / 2.0F) + Utils.rand(-100.0D, 100.0D) / 500.0D, (double)(this.getHeight() / 2.0F) + Utils.rand(-100.0D, 100.0D) / 500.0D, (double)(this.getWidth() / 2.0F) + Utils.rand(-100.0D, 100.0D) / 500.0D)));
+//            } else if (this.onGround) {
+//                this.critical = false;
+//            }
+//
+//            if (this.age > 1200 || this.isCollided) {
+////                if (this.isCollided && this.canExplode) {
+//                    this.explode();
+////                }
+//
+//                this.close();
+//            }
 
             return super.onUpdate(currentTick);
         }
