@@ -125,3 +125,7 @@ custom.namedtag: |-
 roomStartMessage: "房间开始游戏时，给玩家发送的消息"
 
 
+tntDamage: "TNT的伤害"
+
+
+tntExplodeTime: "TNT爆炸时间（秒）"

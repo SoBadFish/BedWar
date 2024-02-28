@@ -39,10 +39,7 @@ import cn.nukkit.math.BlockFace;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.command.BedWarCommand;
-import org.sobadfish.bedwar.entity.BedWarFloatText;
-import org.sobadfish.bedwar.entity.EntityFireBall;
-import org.sobadfish.bedwar.entity.FloatBlock;
-import org.sobadfish.bedwar.entity.ShopVillage;
+import org.sobadfish.bedwar.entity.*;
 import org.sobadfish.bedwar.event.*;
 import org.sobadfish.bedwar.item.ItemIDSunName;
 import org.sobadfish.bedwar.item.button.RoomQuitItem;
@@ -542,7 +539,10 @@ public class RoomManager implements Listener {
                     if (block instanceof BlockTNT) {
                         try{
                             event.setCancelled();
-                            ((BlockTNT) block).prime(40);
+//                            ((BlockTNT) block).prime(40);
+                            //TODO 自定义TNT
+                            EntityTnt entityTnt = new EntityTnt(info.getPlayer().chunk,Entity.getDefaultNBT(block),info,room.getRoomConfig().tntExplodeTime * 20);
+                            entityTnt.spawnToAll();
                             Item i2 = item.clone();
                             i2.setCount(1);
                             event.getPlayer().getInventory().removeItem(i2);
@@ -601,22 +601,19 @@ public class RoomManager implements Listener {
      * @param block 方块
      * */
     public void facePlaceBlock(BlockFace face,Block last,Block block,GameRoom room,int size){
-        ThreadManager.SCHEDULED.execute(new Runnable() {
-            @Override
-            public void run() {
-                for(int i = 1; i <= size; i++){
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Position pos = last.getSide(face,i);
-                    if(pos.level.getBlock(pos).getId() == 0){
-                        Block place = Block.get(block.getId(),block.getDamage(),last.getSide(face,i));
-                        last.level.setBlock(place,place);
-                        if(room != null){
-                            room.worldInfo.onChangeBlock(place, true);
-                        }
+        ThreadManager.SCHEDULED.execute(() -> {
+            for(int i = 1; i <= size; i++){
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Position pos = last.getSide(face,i);
+                if(pos.level.getBlock(pos).getId() == 0){
+                    Block place = Block.get(block.getId(),block.getDamage(),last.getSide(face,i));
+                    last.level.setBlock(place,place);
+                    if(room != null){
+                        room.worldInfo.onChangeBlock(place, true);
                     }
                 }
             }
@@ -1009,9 +1006,24 @@ public class RoomManager implements Listener {
                 }
                 if (event instanceof EntityDamageByEntityEvent) {
                     //TODO 免受TNT爆炸伤害
+//                    Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
+//                    if (entity instanceof EntityPrimedTNT) {
+//                        event.setDamage(2);
+//                    }
                     Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
                     if (entity instanceof EntityPrimedTNT) {
-                        event.setDamage(2);
+                        event.setDamage(room.getRoomConfig().tntDamage);
+                    }
+                    if(entity instanceof EntityTnt){
+                        PlayerInfo target = ((EntityTnt) entity).getTarget();
+                        if(target != null){
+                            if(!target.equals(playerInfo) && (target.getTeamInfo() != null && !target.getTeamInfo().equals(playerInfo.getTeamInfo()))){
+                                playerInfo.setDamageByInfo(target);
+                            }else{
+                                event.setCancelled();
+                                return;
+                            }
+                        }
                     }
                     //TODO 阻止队伍PVP
                     if (entity instanceof EntityHuman) {
@@ -1230,6 +1242,7 @@ public class RoomManager implements Listener {
                         }
                     }
                 }
+
 
             }
 

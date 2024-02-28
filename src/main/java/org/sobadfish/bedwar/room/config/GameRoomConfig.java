@@ -230,6 +230,17 @@ public class GameRoomConfig implements Cloneable{
 
     public String customNamedTag;
 
+
+    /**
+     * TNT伤害
+     * */
+    public int tntDamage = 8;
+
+    /**
+     * TNT爆炸时间
+     * */
+    public int tntExplodeTime = 5;
+
     /**
      * 商店类型
      * */
@@ -674,6 +685,8 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.enableFood = room.getBoolean("enable-food",false);
                 roomConfig.fastPlace = room.getBoolean("fast-place",false);
                 roomConfig.fastPlaceCount = room.getInt("fast-place-count",5);
+                roomConfig.tntDamage = room.getInt("tntDamage",8);
+                roomConfig.tntExplodeTime = room.getInt("tntExplodeTime",5);
                 roomConfig.enableCustomTag = room.getBoolean("custom.namedtag.enable",true);
                 roomConfig.customNamedTag = room.getString("custom.namedtag.text","&7[{team}&7] {color}{name} \n&c❤&7 {health}");
                 LinkedHashMap<String,String> floatBlocks = new LinkedHashMap<>();

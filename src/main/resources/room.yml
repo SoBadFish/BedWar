@@ -39,6 +39,12 @@ deathIcon: 20
 
 floatSpawnPos: []
 
+# TNT的伤害
+tntDamage: 8
+
+# TNT爆炸时间（秒）
+tntExplodeTime: 5
+
 auto-display-floattext:
   enable: true
   text: "{item} &r生成点\n剩余&a {time} &r秒"
