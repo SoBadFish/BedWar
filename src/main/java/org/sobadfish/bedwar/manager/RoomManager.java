@@ -406,7 +406,8 @@ public class RoomManager implements Listener {
     public void onChunkUnload(ChunkUnloadEvent event){
         for(Entity entity: event.getChunk().getEntities().values()){
             if(entity instanceof BedWarFloatText){
-                event.setCancelled();
+//                event.setCancelled();
+                entity.despawnFromAll();
             }
         }
     }

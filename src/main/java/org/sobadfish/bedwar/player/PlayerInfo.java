@@ -825,7 +825,7 @@ public class PlayerInfo {
         if(getPlayer() instanceof Player) {
             ((Player) getPlayer()).setGamemode(3);
         }else{
-            getPlayer().close();
+            getPlayer().despawnFromAll();
         }
 
         player.removeAllEffects();
@@ -1028,7 +1028,8 @@ public class PlayerInfo {
             }
         }else{
             if(!player.isAlive()){
-                player.spawnToAll();
+                player.respawnToAll();
+
             }
         }
 
@@ -1036,14 +1037,17 @@ public class PlayerInfo {
         this.exp = 0;
         isInvisibility = false;
 
+
         boolean teleport;
         try {
             teleport = player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
         }catch (Exception e){
+            e.printStackTrace();
             teleport = false;
         }
-        if(!teleport){
+        if(!teleport && player instanceof Player) {
             throw new NullPointerException("无法将玩家传送到队伍出生点");
+
         }
         if (getPlayer() instanceof Player) {
             ((Player) getPlayer()).setGamemode(0);

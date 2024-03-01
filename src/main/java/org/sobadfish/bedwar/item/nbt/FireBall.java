@@ -40,16 +40,15 @@ public class FireBall implements INbtItem{
                 sakuraAPI.addBypassTime((Player) playerInfo.getPlayer(), "KillAura", 2);
             } catch (Throwable ignore) {
             }
-            if(!clickTime.containsKey(playerInfo)){
-                clickTime.put(playerInfo,System.currentTimeMillis());
-            }
-            if(System.currentTimeMillis() - clickTime.get(playerInfo) < 500){
+            if(clickTime.containsKey(playerInfo) && System.currentTimeMillis() - clickTime.get(playerInfo) < 500){
                 playerInfo.sendMessage(BedWarMain.getLanguage().getLanguage("fire-boll-use-message"
                         ,"&c使用太频繁了 请过一会再试吧"));
                 return true;
             }else{
                 clickTime.put(playerInfo,System.currentTimeMillis());
             }
+
+
 
             Item ic = item.clone();
             ic.setCount(1);
