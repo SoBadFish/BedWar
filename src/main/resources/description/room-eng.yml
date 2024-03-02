@@ -1,128 +1,126 @@
 header: |-
-  本文件主要是对room房间的配置进行编辑修改
-  如果你没有yaml基础，则不建议对这个文件进行更改
-  通过修改这个配置文件可以实现不同的小游戏功能
+  This file mainly edits and modifies the configuration of the room.
+  If you do not have a basic understanding of yaml, it is not recommended to change this file.
+  Different mini-game functions can be achieved by modifying this configuration file.
 
-world: "游戏地图"
+world: "Game map"
 
-gameTime: "游戏时长"
+gameTime: "Game duration"
 
-infinite-time: "无限时间： 游戏永远不会结束（除非一个玩家没有） 填 true 或 false"
-callbackY: "等待大厅，玩家低于出生点x格后拉回出生点"
-
-
-killItem: "击杀玩家后背包物品掉落概率"
-
-ui: "商店菜单的UI auto为自动 ui为箱子菜单 packet为GUI菜单"
-
-entity: "游戏内商店NPC生物ID"
-entity.team: "团队商店的NPC生物"
+infinite-time: "Infinite time: The game will never end (unless a player is not present) Type true or false"
+callbackY: "Waiting lobby, players below the spawn point by X blocks are teleported to the spawn point"
 
 
-entity.item: "物品商店的NPC生物"
+killItem: "Probability of dropping items from the inventory after killing a player"
 
-fast-place: "是否启用快速搭路"
+ui: "UI of the shop menu. \"auto\" for automatic, \"ui\" for chest menu, \"packet\" for GUI menu"
 
-fast-place-count: "快速搭路放置方块数量"
-
-inventory-unbreakable: "装备无限耐久"
-
-hasWatch: "这个房间是否允许玩家旁观"
-
-waitTime: "人数不满的等待时间"
-
-gameInWait: "游戏内等待 当游戏开始后会有一段时间的等待"
-
-ban-craft: "是否允许玩家使用游戏内合成"
-
-enable-food: "是否启用饥饿值掉落"
+entity: "Game shop NPC entity ID"
+entity.team: "NPC entity for team shop"
 
 
-enable-shop: "是否启用游戏内置商店功能"
+entity.item: "NPC entity for item shop"
 
-max-player-waitTime: "满人时等待时长"
+fast-place: "Whether to enable fast placing"
 
-minPlayerSize: "房间最低玩家数量"
+fast-place-count: "Number of blocks placed during fast placing"
 
-maxPlayerSize: "房间最高玩家数量"
+inventory-unbreakable: "Equipment with infinite durability"
+
+hasWatch: "Whether this room allows players to spectate"
+
+waitTime: "Waiting time when the number of players is not full"
+
+gameInWait: "In-game waiting There is a waiting period after the game starts"
+
+ban-craft: "Whether to allow players to use in-game crafting"
+
+enable-food: "Whether to enable hunger depletion"
 
 
-teamSpawn: "队伍出生点 这个要注意与team.yml中的队伍对应"
+enable-shop: "Whether to enable the in-game shop feature"
 
-itemSpawn: "物品生成点"
+max-player-waitTime: "Waiting time when full"
+
+minPlayerSize: "Minimum number of players in the room"
+
+maxPlayerSize: "Maximum number of players in the room"
 
 
-waitPosition: "等待大厅坐标 可以设置其他地图"
+teamSpawn: "Team spawn points Be careful to correspond with the teams in team.yml"
+
+itemSpawn: "Item spawn points"
+
+
+waitPosition: "Coordinates of the waiting lobby Can be set to other maps"
 
 
 ban-command: |-
-  禁止玩家执行的指令 格式是yaml的list形式
-  例如: ["say"] 禁用玩家使用 say指令
+  Commands that players are prohibited from executing in yaml list format
+  For example: ["say"] to disable the use of the say command by players
 
 
 QuitRoom: |-
-  玩家离开游戏房间执行的指令 @p 代表玩家
-  注意这个是玩家退出一次房间就执行一次,别真的给玩家钻石什么的，
-  如果你不怕玩家刷物品，，随意
-  例如: ["give @p 264 1"] 给予玩家一颗钻石
+  Commands executed by players when leaving the game room @p represents the player
+  Note that this is executed once every time a player exits a room, don't actually give players diamonds or anything,
+  If you don't care players farming items, DO WHATEVER YOU LIKE
+  For example: ["give @p 264 1"] to give a player a diamond
 
 AutomaticNextRound: |-
-  游戏房间结束后 是否自动匹配下一个游戏房间
-  有BUG还未解决 请不要开启这个功能
+  Whether to automatically match the next game room after the game room ends
+  There is a BUG that has not been resolved PLEASE DO NOT ENABLE THIS FEATURE
 
 
 
 
 player-game-mode: |-
-  玩家进入游戏的游戏模式
+  The game mode players enter the game in
 
 victoryCmd: |-
-  队伍/玩家取得胜利时执行的指令 @p 为玩家
-  例如: ["give @p 264 1"] 给予玩家一颗钻石
+  Commands executed when a team/player wins @p is the player
+  For example: ["give @p 264 1"] to give a player a diamond
 
 
 defeatCmd: |-
-  队伍/玩家取得胜利时执行的指令 @p 为玩家
-  例如: ["give @p 264 1"] 给予玩家一颗钻石
+  Commands executed when a team/player is defeated @p is the player
+  For example: ["give @p 264 1"] to give a player a diamond
 
 
-minutesExp: "游戏内每分钟增加的经验值"
+minutesExp: "Experience gained per minute in the game"
 
-deathIcon: "死亡的图标"
+deathIcon: "Icon for death"
 
 display-floatBlock: |-
-  资源点展示的浮空字
-  格式: 货币名称:皮肤名称
+  Floating text display of resource points
+  Format: Currency name:Skin name
 
-resetWorld: "游戏结束后是否重置地图"
+resetWorld: "Whether to reset the map after the game ends"
 
 ban-break: |-
-  禁止破坏的方块
-  当禁止破坏的方块大于0时，全地图可破坏
+  Blocks that are prohibited from being destroyed
+  When the number of blocks that are prohibited from being destroyed is more than 0, the whole map can be destroyed
 
 
-kb-setting: "游戏kb设置 使用独立的算法"
-kb-setting.enable: "是否启用~"
-kb-setting.force: "击退力量"
-kb-setting.speed: "击退速度"
-kb-setting.motionY: "击退高度"
+kb-setting: "Game kb settings Using a separate algorithm"
+kb-setting.enable: "Whether to enable~"
+kb-setting.force: "Knockback force"
+kb-setting.speed: "Knockback speed"
+kb-setting.motionY: "Knockback height"
 
-can-break: "当可破坏的方法数大于0时，地图禁止破坏"
+can-break: "When the number of methods that can break is more than 0, the map is prohibited from being destroyed"
 
-floatSpawnPos: "房间内浮空字的坐标"
+floatSpawnPos: "Coordinates of floating text in the room"
 
 
-custom: "自定义游戏内部玩家的显示"
+custom: "Custom display of players within the game"
 
 custom.namedtag: |-
-  自定义头部显示。
-  {team}: 队伍名称(包含颜色)
-  {color}: 队伍的颜色符号
-  {name}: 玩家名称
-  {health}: 玩家当前血量
-  {maxhealth}: 玩家最大血量
+  Custom display above the head.
+  {team}: Team name (including color)
+  {color}: Team color symbol
+  {name}: Player name
+  {health}: Current health of the player
+  {maxhealth}: Maximum health of the player
 
 
-roomStartMessage: "房间开始游戏时，给玩家发送的消息"
-
-
+roomStartMessage: "Message sent to players when the room starts the game"
