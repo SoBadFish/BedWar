@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class SpawnMob implements INbtItem{
     @Override
     public String getName() {
-        return "Guard";
+        return BedWarMain.getLanguage().getLanguage("guard-item","护卫");
     }
 
     @Override

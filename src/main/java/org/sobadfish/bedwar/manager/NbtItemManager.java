@@ -21,17 +21,17 @@ public class NbtItemManager {
     public static LinkedHashMap<String, INbtItem> NBT_MANAGER = new LinkedHashMap<>();
 
     public static void init(){
-        NBT_MANAGER.put("简易平台",new Platform());
-        NBT_MANAGER.put("快速回城",new BackHub());
-        NBT_MANAGER.put("线",new StringItem());
-        NBT_MANAGER.put("指南针",new PointPlayer());
-        NBT_MANAGER.put("护卫",new SpawnMob());
+        NBT_MANAGER.put("platform-item",new Platform());
+        NBT_MANAGER.put("back-hub-item",new BackHub());
+        NBT_MANAGER.put("string-item",new StringItem());
+        NBT_MANAGER.put("compass-item",new PointPlayer());
+        NBT_MANAGER.put("guard-item",new SpawnMob());
 
-        NBT_MANAGER.put("火球",new FireBall());
-        NBT_MANAGER.put("搭桥蛋",new BridgingEgg());
-        NBT_MANAGER.put("凋零弓",new DieBow());
+        NBT_MANAGER.put("fire-ball-item",new FireBall());
+        NBT_MANAGER.put("egg-item",new BridgingEgg());
+        NBT_MANAGER.put("die-item",new DieBow());
 
-        NBT_MANAGER.put("守卫墙",new Wall());
+        NBT_MANAGER.put("wall-item",new Wall());
 
     }
 
