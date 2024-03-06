@@ -1,11 +1,11 @@
-title: "&f[&a起床战争&f]"
+title: "&f[&aBedWar&f]"
 
 # 语言
 # chs 简体中文
 # eng English
-language: "chs"
+language: "eng"
 
-scoreboard-title: "&f[&a起床战争&f]"
+scoreboard-title: "&f[&aBedWar&f]"
 
 # 是否保存玩家背包
 save-playerInventory:  true
@@ -26,9 +26,9 @@ enable-Record: false
 game-logo: "&l&cB&6e&ed&aW&ba&9r"
 
 join-menu:
-  cw:
+  BedWarRoom:
     buttonImg:
       type: "path"
       path: "textures/ui/icon_recipe_item"
     rooms:
-      - 测试房间
+      - "Test Room"
