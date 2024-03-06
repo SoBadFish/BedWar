@@ -1096,6 +1096,8 @@ public class PlayerInfo {
 
     }
 
+
+
     public void putPlayerArmor(){
         //TODO 初始装备
         for (Map.Entry<Integer, Item> entry : armor.entrySet()) {
