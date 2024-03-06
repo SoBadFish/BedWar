@@ -73,19 +73,22 @@ public class GameRoomCreater {
 
     public void onCreatePreset(String value){
         if(flag !=  1){
-            creator.sendForceMessage("&c你正在进行默认创建，无法使用预设");
+            creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("go-on-default-create-not-use","&c你正在进行默认创建，无法使用预设"));
             return;
         }
         switch (setFlag){
             case 1:
-                creator.sendForceMessage("&2正在创建 名称为 &r"+value+" &2的房间模板");
-                creator.sendForceMessage("&e继续执行 &r/bd set &a[最低玩家数]&e 执行下一步操作");
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-template","&2正在创建 名称为 &r[1] &2的房间模板",value));
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-min-player",
+                        "&e继续执行 &r/[1] set &a[最低玩家数]&e 执行下一步操作","bd"));
                 roomName = value;
                 setFlag++;
                 break;
             case 2:
-                creator.sendForceMessage("&2设置最低人数 "+value);
-                creator.sendForceMessage("&e继续执行 &r/bd set &2[最大玩家数]&e 执行下一步操作");
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-min-player",
+                        "&2设置最低人数 [1]",value));
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-max-player",
+                        "&e继续执行 &r/[1] set &2[最大玩家数]&e 执行下一步操作","bd"));
                 min = Integer.parseInt(value);
                 setFlag++;
                 break;
@@ -93,24 +96,30 @@ public class GameRoomCreater {
                 int max = Integer.parseInt(value);
                 roomConfig = GameRoomConfig.createGameRoom(roomName,min, max);
                 ArrayList<String> itemName = roomConfig.moneyItem.getNames();
-                creator.sendForceMessage("&2设置最大人数:&b "+value);
-                creator.sendForceMessage("&a可终止预设");
-                creator.sendForceMessage("&e继续执行 &r/bd set &2[数量] &e执行设置: &r"+itemName.get(inflag)+" &e生成点数量操作");
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-max-player",
+                        "&2设置最大人数:&b [1]",value));
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-can-cancel","&a可终止预设"));
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-last-spawn-item",
+                                "&e继续执行 &r/[1] set &2[数量] &e执行设置: &r[2] &e生成点数量操作","bd",itemName.get(inflag)
+                ));
                 isRoomCreate = true;
                 setFlag++;
                 break;
             case 4:
                 itemName = roomConfig.moneyItem.getNames();
-                creator.sendForceMessage("&2设置 &r"+itemName.get(inflag)+"&2生成点数量:&b "+value);
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-last-spawn-item-setting",
+                        "&2设置 &r[1]&2生成点数量:&b [2]",
+                        itemName.get(inflag),value));
                 moneyItemSize.put(itemName.get(inflag),Integer.parseInt(value));
                 inflag++;
                 if(inflag == itemName.size()){
-                    creator.sendForceMessage("&a预设完成");
+                    creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-default-setting-success","&a预设完成"));
                     setFlag = 1;
                     return;
                 }
-                creator.sendForceMessage("&e继续执行 &r/bd set &2[数量] &e执行设置: &r"+itemName.get(inflag)+" &e生成点数量操作");
-
+//                creator.sendForceMessage("&e继续执行 &r/bd set &2[数量] &e执行设置: &r"+itemName.get(inflag)+" &e生成点数量操作");
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-last-spawn-item",
+                        "&e继续执行 &r/[1] set &2[数量] &e执行设置: &r[2] &e生成点数量操作","bd",itemName.get(inflag)));
 
                 break;
             default: break;
@@ -121,41 +130,47 @@ public class GameRoomCreater {
     public void stopInit(){
         if(setFlag >= 4) {
             setFlag = 1;
-            creator.sendForceMessage("&c终止预设");
+            creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-default-setting-cancel","&c终止预设"));
         }else{
-            creator.sendForceMessage("&c无法终止预设");
+            creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-default-setting-cancel-error","&c无法终止预设"));
         }
     }
 
     public boolean onCreateNext(){
         if(setFlag != 1){
-            creator.sendForceMessage("&c请先完成预设");
+            creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-must-success-setting","&c请先完成预设"));
             return true;
         }
         //测试创建
         switch (flag) {
             case 1:
                 if(roomConfig == null) {
-                    roomConfig = GameRoomConfig.createGameRoom("测试房间", 4, 16);
+                    roomConfig = GameRoomConfig.createGameRoom("Test Room", 4, 16);
                     isRoomCreate = true;
-                    creator.sendForceMessage("&2成功创建一个 名字已经固定为 &r“测试房间”&2的游戏房间模板 已设定最低玩家为 &b4&2 最大玩家为 &b16&r");
-                    creator.sendForceMessage("继续执行/bd 进行下一步 [进入游戏地图设置]");
+                    creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-default-success","&2成功创建一个 名字已经固定为 &r“[1]”&2的游戏房间模板 已设定最低玩家为 &b4&2 最大玩家为 &b16&r",
+                            "Test Room"));
+                    creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-game-world","继续执行/[1] 进行下一步 [进入游戏地图设置]","bd"));
                 }else{
-                    creator.sendForceMessage("&2成功预设房间设置");
-                    creator.sendForceMessage("&e继续执行 &r/bd &r进行下一步 &b[进入游戏地图设置]");
+                    creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-default-setting-room-success","&2成功预设房间设置"));
+                    creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-game-world","继续执行/[1] 进行下一步 [进入游戏地图设置]","bd"));
                 }
                 flag++;
                 break;
             case 2:
                 worldInfoConfig = WorldInfoConfig.createWorldConfig(creator.getLevel().getFolderName());
-                creator.sendForceMessage("&2成功设定游戏地图");
-                creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &b[设置等待大厅]");
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-game-world-success","&2成功设定游戏地图"));
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-game-wait","&e继续执行 &r/[1] &e进行下一步 &b[设置等待大厅]","bd"));
                 flag++;
                 break;
             case 3:
                 worldInfoConfig.setWaitPosition(creator.getPosition());
-                creator.sendForceMessage("&2成功等待大厅");
-                creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"商店 &21&b /&d "+roomConfig.teamCfg.size()+"&r]");
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-game-wait-success","&2成功设置等待大厅"));
+//                creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"商店 &21&b /&d "+roomConfig.teamCfg.size()+"&r]");
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-shop",
+                        "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]商店 &21&b /&d [3]&r]","bd",
+                        (new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size())),
+                        roomConfig.teamCfg.size()+""
+                        ));
                 flag++;
                 break;
             case 4:
@@ -166,19 +181,37 @@ public class GameRoomCreater {
                 break;
             case 6:
                 team.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()),WorldInfoConfig.positionToString(creator.getPosition()));
-                int index = 0;
-                if(team.size() > 0){
-                    index = team.size() - 1;
-                }
-                creator.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(index))+"出生点 &r[&2"+team.size()+"&b/&d"+roomConfig.getTeamCfg().size()+"&r]");
+                int index;
+                team.size();
+                index = team.size() - 1;
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-team-spawn",
+                        "&2设置&r [1] &2出生点坐标&r [&2[2] &b/&d [3]&r]",
+                        (new ArrayList<>(roomConfig.teamCfg.keySet()).get(index)),
+                        team.size()+"",
+                        roomConfig.getTeamCfg().size()+""
+
+                        ));
+//                creator.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(index))+"出生点 &r[&2"+team.size()+"&b/&d"+roomConfig.getTeamCfg().size()+"&r]");
                 if(team.size() == roomConfig.getTeamCfg().size()){
 
-                    creator.sendForceMessage("&2队伍出生点设置完成");
-                    creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(0))+"床的位置&2 1&b /&d "+roomConfig.teamCfg.size()+"&r]");
+                    creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-team-spawn-success",
+                            "&2队伍出生点设置完成"));
+                    creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-bed-location",
+                            "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]床的位置&2 1&b /&d [3]&r]",
+                            "bd",
+                            (new ArrayList<>(roomConfig.teamCfg.keySet()).get(0)),
+                            roomConfig.teamCfg.size()+""));
+//                    creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(0))+"床的位置&2 1&b /&d "+roomConfig.teamCfg.size()+"&r]");
                     flag++;
                     break;
                 }
-                creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"出生点 &r[&2"+(team.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-spawn",
+                        "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]出生点 &21&b /&d [3]&r]",
+                        "bd",
+                        (new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size())),
+                        (team.size() + 1)+"" ,
+                        roomConfig.getTeamCfg().size()+  ""
+                        ));
                 break;
             case 7:
                createBedPos();
