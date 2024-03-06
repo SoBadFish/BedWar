@@ -297,7 +297,11 @@ public class DefaultItem extends BasePlayPanelItemInstance {
 
     @Override
     public ElementButton getGUIButton(PlayerInfo info) {
-        String itemString = ItemIDSunName.getIDByName(getItem());
+        //TODO 如果语言非中文则获取其他名称
+        String itemString = getItem().getName();
+        if("chs".equalsIgnoreCase(BedWarMain.getLanguage().lang)){
+            itemString = ItemIDSunName.getIDByName(getItem());
+        }
         String path = ItemIDSunName.getIDByPath(getItem().getId(),getItem().getDamage());
         if(path == null){
             path =ItemIDSunName.getIDByPath(getItem().getId());

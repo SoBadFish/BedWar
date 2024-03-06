@@ -74,12 +74,12 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                         FloatTextManager.removeFloatText(floatText);
                         continue;
                     }
-                    if (player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName())) {
-                        if (!floatText.player.contains(player.getName())) {
-                            floatText.player.add(player.getName());
-                        }
-
-                    }
+//                    if (player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName())) {
+//                        if (!floatText.player.contains(player.getName())) {
+//                            floatText.player.add(player.getName());
+//                        }
+//
+//                    }
                     if (update > 5) {
                         floatText.disPlayers();
                         update = 0;

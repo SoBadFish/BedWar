@@ -110,6 +110,8 @@ public class BedWarFloatText extends Entity {
      * 写好调用了，不需要再重复调用
      * */
     public void disPlayers(){
+        //检验是否有新玩家没显示
+        toDisplay();
         for(String player: player){
             Player player1 = Server.getInstance().getPlayer(player);
             if(player1 == null){
@@ -117,6 +119,10 @@ public class BedWarFloatText extends Entity {
             }else {
                 if (player1.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())) {
                     if (!this.hasSpawned.containsValue(player1)) {
+                        spawnTo(player1);
+                    }else{
+                        //刷新显示.
+                        this.despawnFrom(player1);
                         spawnTo(player1);
                     }
                 } else {
@@ -126,10 +132,11 @@ public class BedWarFloatText extends Entity {
                 }
             }
         }
+
     }
 
     private void toDisplay(){
-        for(Player player: Server.getInstance().getOnlinePlayers().values()){
+        for(Player player: this.level.getPlayers().values()){
             if(!this.player.contains(player.getName())) {
                 if(player.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())){
                     this.player.add(player.getName());

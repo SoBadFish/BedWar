@@ -20,6 +20,8 @@ public class LanguageManager {
 
     public Config roomDescription;
 
+    public String lang;
+
 
     public LanguageManager(PluginBase plugin,String lang){
         ini = new HashMap<>();
@@ -32,6 +34,7 @@ public class LanguageManager {
         if(!iniFile.exists()){
             plugin.saveResource("lang/"+lang+"/language.ini", "lang/"+lang+"/language.ini",false);
         }
+        this.lang = lang;
         BufferedReader br;
         try {
             InputStream in = new FileInputStream(iniFile);
