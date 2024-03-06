@@ -7,14 +7,10 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.scheduler.Task;
 import com.google.gson.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import net.easecation.ghosty.LevelRecordPack;
 import net.easecation.ghosty.entity.PlaybackNPC;
 import net.easecation.ghosty.playback.LevelPlaybackEngine;
 import net.easecation.ghosty.recording.LevelRecordEngine;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
@@ -71,7 +67,7 @@ public class RecordManager {
         return BedWarMain.getBedWarMain().getDataFolder() + "/record/";
     }
 
-    public void startRecord(@NotNull GameRoom room) {
+    public void startRecord(GameRoom room) {
         if (!BedWarMain.enableRecord) {
             return;
         }
@@ -82,7 +78,7 @@ public class RecordManager {
         this.recordEngineHashMap.put(room, levelRecordEngine);
     }
 
-    public void stopRecord(@NotNull GameRoom room) {
+    public void stopRecord(GameRoom room) {
         if (!BedWarMain.enableRecord) {
             return;
         }
@@ -153,7 +149,7 @@ public class RecordManager {
         }
     }
 
-    @Nullable
+
     public List<File> getRecordFileList() {
         File[] files = new File(this.getRecordPath()).listFiles();
         if (files != null) {
@@ -176,11 +172,31 @@ public class RecordManager {
         }
     }
 
-    @Data
-    @AllArgsConstructor
+
     public static class OK {
         private boolean isOK;
         private String message;
+
+        public OK(boolean isOK, String message) {
+            this.isOK = isOK;
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public void setOK(boolean OK) {
+            isOK = OK;
+        }
+
+        public boolean isOK() {
+            return isOK;
+        }
     }
 
 }

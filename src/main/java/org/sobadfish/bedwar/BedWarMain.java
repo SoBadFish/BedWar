@@ -8,7 +8,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
-import lombok.Getter;
+
 import org.sobadfish.bedwar.command.BedWarAdminCommand;
 import org.sobadfish.bedwar.command.BedWarCommand;
 import org.sobadfish.bedwar.command.BedWarSpeakCommand;
@@ -59,7 +59,7 @@ public class BedWarMain extends PluginBase {
 
     private static PlayerTopManager topManager;
 
-    @Getter
+
     private static RecordManager recordManager;
 
     public static LanguageManager language;
@@ -172,6 +172,10 @@ public class BedWarMain extends PluginBase {
         enableRecord = this.getConfig().getBoolean("enable-Record");
         this.getLogger().info(TextFormat.colorize('&',BedWarMain.getLanguage().getLanguage("success","&a起床战争插件加载完成，祝您使用愉快")));
 
+    }
+
+    public static RecordManager getRecordManager() {
+        return recordManager;
     }
 
     public static LanguageManager getLanguage() {
