@@ -23,7 +23,7 @@ public class NbtItemManager {
     public static void init(){
         NBT_MANAGER.put("简易平台",new Platform());
         NBT_MANAGER.put("快速回城",new BackHub());
-        NBT_MANAGER.put("线",new Line());
+        NBT_MANAGER.put("线",new StringItem());
         NBT_MANAGER.put("指南针",new PointPlayer());
         NBT_MANAGER.put("护卫",new SpawnMob());
 

@@ -4,7 +4,6 @@ import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.player.PlayerInfo;
-import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 
 import java.util.*;
@@ -17,7 +16,7 @@ import java.util.*;
 public class PointPlayer implements INbtItem{
     @Override
     public String getName() {
-        return "指南针";
+        return BedWarMain.getLanguage().getLanguage("compass-item","指南针");
     }
 
     @Override
@@ -41,7 +40,9 @@ public class PointPlayer implements INbtItem{
             target = list.get(0).getKey();
 
             if (target != null) {
-                info.sendTip("&a找到" + target + "\n" + "&c距离: &r" + String.format("%.2f", list.get(0).getValue()) + " 米");
+                info.sendTip(BedWarMain.getLanguage().getLanguage("compass-use-message","&a找到[1]\n&c距离: &r[2] 米",
+                        target.toString(),
+                        String.format("%.2f", list.get(0).getValue())));
 
             }
         }

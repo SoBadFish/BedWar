@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class SpawnMob implements INbtItem{
     @Override
     public String getName() {
-        return "护卫";
+        return "Guard";
     }
 
     @Override
@@ -36,15 +36,16 @@ public class SpawnMob implements INbtItem{
                 }
             }
             if(iron > 10){
-                playerInfo.sendMessage("&c你已经在这片区域生成了 10 只铁傀儡 无法继续生成。");
+                playerInfo.sendMessage(BedWarMain.getLanguage().getLanguage("guard-use-error","&c你已经在这片区域生成了 10 只铁傀儡 无法继续生成。"));
                 return true;
             }
             IronGolem golem = new IronGolem(playerInfo,player.chunk, Entity.getDefaultNBT(player));
             golem.setNameTagAlwaysVisible();
             golem.setNameTagVisible();
-            golem.setNameTag(TextFormat.colorize('&',playerInfo.getTeamInfo().getTeamConfig().getNameColor()+playerInfo.getTeamInfo().getTeamConfig().getName()+" 的护卫"));
+            golem.setNameTag(TextFormat.colorize('&',BedWarMain.getLanguage().getLanguage("guard-named-tag","[1]  &r的护卫",
+                    playerInfo.getTeamInfo().getTeamConfig().getNameColor()+playerInfo.getTeamInfo().getTeamConfig().getName())));
             golem.spawnToAll();
-            playerInfo.sendMessage("&b你生成了一个护卫");
+            playerInfo.sendMessage(BedWarMain.getLanguage().getLanguage("guard-use-success","&b你生成了一个护卫"));
         }
         player.getInventory().removeItem(item);
         return true;

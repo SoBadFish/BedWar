@@ -16,10 +16,10 @@ import java.util.LinkedHashMap;
  * @author SoBadFish
  * 2022/1/6
  */
-public class Line implements INbtItem{
+public class StringItem implements INbtItem{
     @Override
     public String getName() {
-        return BedWarMain.getLanguage().getLanguage("line-item","线");
+        return BedWarMain.getLanguage().getLanguage("string-item","线");
     }
 
     @Override
@@ -29,7 +29,7 @@ public class Line implements INbtItem{
         Position pos = info.getPlayer().getSide(info.getPlayer().getHorizontalFacing(),2);
         LinkedHashMap<Position,Block> spawn = BedWarMain.spawnBlockByPosAndSize(pos,3,Block.get(30));
         Utils.spawnBlock(player, spawn,true);
-        info.sendMessage(BedWarMain.getLanguage().getLanguage("line-use-message","&a已生成蜘蛛网"));
+        info.sendMessage(BedWarMain.getLanguage().getLanguage("string-use-message","&a已生成蜘蛛网"));
         player.getInventory().removeItem(item);
         return true;
     }

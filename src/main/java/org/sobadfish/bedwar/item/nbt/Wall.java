@@ -18,7 +18,7 @@ import java.util.LinkedHashMap;
 public class Wall implements INbtItem {
     @Override
     public String getName() {
-        return "守卫墙";
+        return BedWarMain.getLanguage().getLanguage("wall-item","守卫墙");
     }
 
     @Override
@@ -26,7 +26,7 @@ public class Wall implements INbtItem {
 
 
         PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
-        info.sendMessage("&7放置守卫墙!");
+        info.sendMessage(BedWarMain.getLanguage().getLanguage("wall-use-success","&7放置守卫墙!"));
 
         BlockFace bf = info.getPlayer().getHorizontalFacing();
         Position pos = info.getPlayer().getLocation().add(0,1).getSide(bf,2);
