@@ -272,36 +272,36 @@ public class PlayerData {
         /**
          * 击杀
          * */
-        KILL("击杀"),
+        KILL(BedWarMain.getLanguage().getLanguage("type-kill","击杀")),
         /**
          * 死亡
          * */
-        DEATH("死亡"),
+        DEATH(BedWarMain.getLanguage().getLanguage("type-death","死亡")),
         /**
          * 胜利
          * */
-        VICTORY("胜利"),
+        VICTORY(BedWarMain.getLanguage().getLanguage("type-victory","胜利")),
         /**
          * 失败
          * */
-        DEFEAT("失败"),
+        DEFEAT(BedWarMain.getLanguage().getLanguage("type-defeat","失败")),
         /**
          * 破坏床
          * */
-        BED_BREAK("破坏床"),
+        BED_BREAK(BedWarMain.getLanguage().getLanguage("type-bed-break","破坏床")),
         /**
          * 最终击杀
          * */
-        END_KILL("最终击杀"),
+        END_KILL(BedWarMain.getLanguage().getLanguage("type-final-kill","最终击杀")),
         /**
          * 助攻
          * */
-        ASSISTS("助攻"),
+        ASSISTS(BedWarMain.getLanguage().getLanguage("type-assists","助攻")),
 
         /**
          * 游戏次数
          * */
-        GAME("游戏次数");
+        GAME(BedWarMain.getLanguage().getLanguage("type-game","游戏次数"));
 
         protected String name;
 

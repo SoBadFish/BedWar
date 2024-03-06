@@ -688,7 +688,7 @@ public class PlayerInfo {
 
         updateTime++;
         if(isWatch()){
-            sendActionBar("&c你当前是一名观察者 &b/bw quit 离开房间");
+            sendActionBar(BedWarMain.getLanguage().getLanguage("player-is-watch","&c你当前是一名观察者 &b/bw quit 离开房间"));
             if(player instanceof Player){
                 if(((Player) player).getGamemode() != 3){
                     ((Player) player).setGamemode(3);
@@ -849,7 +849,7 @@ public class PlayerInfo {
         }
         player.teleport(getGameRoom().worldInfo.getConfig().getGameWorld().getSafeSpawn());
         player.teleport(new Position(player.x,teamInfo.getTeamConfig().getBedPosition().y + 64,player.z,getLevel()));
-        sendTitle("&c你死了");
+        sendTitle(BedWarMain.getLanguage().getLanguage("player-death-info-title","&c你死了"));
         deathCount++;
         boolean end = !teamInfo.isBadExists();
 
@@ -862,44 +862,63 @@ public class PlayerInfo {
 
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
                 if(damageByInfo != null){
-                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 推入虚空。"+(end?" &b&l最终击杀!":""));
+                    gameRoom.sendMessage(BedWarMain.getLanguage().getLanguage("player-death-by-player-void",
+                            "[1] &e被 &r[2] 推入虚空。",
+                            this.toString(),
+                            damageByInfo.toString()
+                            )+" "+(end?BedWarMain.getLanguage().getLanguage("player-death-by-player-kill-final",
+                            "&b&l最终击杀!"):""));
+//                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 推入虚空。"+(end?" &b&l最终击杀!":""));
                     addKill(damageByInfo,end);
                 }
-                gameRoom.sendMessage(this + "&e掉入虚空");
+                gameRoom.sendMessage(BedWarMain.getLanguage().getLanguage("player-death-by-void", "&e掉入虚空",this.toString()));
 
             } else if (event instanceof EntityDamageByEntityEvent) {
                 Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
                 if (entity instanceof EntityHuman) {
                     PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo((Player) entity);
-                    String killInfo = "击杀";
+                    String killInfo = BedWarMain.getLanguage().getLanguage("death-by-damage","击杀");
                     if(event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){
-                        killInfo = "射杀";
+                        killInfo = BedWarMain.getLanguage().getLanguage("death-by-arrow","射杀");
                     }
                     if (info != null) {
                         addKill(info,end);
-                        gameRoom.sendMessage(this + " &e被 &r" + info + " "+killInfo+"了。"+(end?" &b&l最终击杀!":""));
+                        gameRoom.sendMessage(BedWarMain.getLanguage().getLanguage("player-kill-player-info",
+                                "[1] &e被 &r[2] [3]了。",
+                                this.toString(),
+                                info.toString(),
+                                killInfo
+                                )+" "+(end?BedWarMain.getLanguage().getLanguage("player-death-by-player-kill-final",
+                                "&b&l最终击杀!"):""));
                     }
                 } else {
-                    gameRoom.sendMessage(this + " &e被 &r" + entity.getName() + " 击败了"+(end?" &b&l最终击杀!":""));
+                    gameRoom.sendMessage(this + " &e被 &r" + entity.getName() + " 击败了"+" "+(end?BedWarMain.getLanguage().getLanguage("player-death-by-player-kill-final",
+                            "&b&l最终击杀!"):""));
                 }
             } else {
                 if(damageByInfo != null){
                     addKill(damageByInfo,end);
-                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 击败了"+(end?" &b&l最终击杀!":""));
+                    gameRoom.sendMessage(
+                            BedWarMain.getLanguage().getLanguage("player-death-by-player-kill",
+                                    "[1] &e被 &r[2] 击败了",
+                                    this.toString(),
+                                    damageByInfo.toString()
+                                    )+" "+(end?BedWarMain.getLanguage().getLanguage("player-death-by-player-kill-final",
+                            "&b&l最终击杀!"):""));
                 }else {
-                    String deathInfo = "&e死了";
+                    String deathInfo = BedWarMain.getLanguage().getLanguage("player-death-info-unknown","&e死了");
                     switch (event.getCause()){
                         case LAVA:
-                            deathInfo = "&e被岩浆烧死了";
+                            deathInfo =  BedWarMain.getLanguage().getLanguage("player-death-info-lava","&e被岩浆烧死了");
                             break;
                         case FALL:
-                            deathInfo = "&e摔死了";
+                            deathInfo = BedWarMain.getLanguage().getLanguage("player-death-info-fall","&e摔死了");
                             break;
                         case FIRE:
-                            deathInfo = "&e被烧了";
+                            deathInfo =BedWarMain.getLanguage().getLanguage("player-death-info-fire","&e被烧了");
                             break;
                         case HUNGER:
-                            deathInfo = "&e饿死了";
+                            deathInfo = BedWarMain.getLanguage().getLanguage("player-death-info-hunger","&e饿死了");
                             break;
                             default:break;
                     }
@@ -920,7 +939,7 @@ public class PlayerInfo {
 
         }
         if(end && getGameRoom().getType() != GameRoom.GameType.END){
-            gameRoom.sendMessage(this + " &e淘汰了");
+            gameRoom.sendMessage(BedWarMain.getLanguage().getLanguage("player-end", "[1] &e淘汰了",this.toString()));
         }
         if(teamInfo.isBadExists()){
             playerType = PlayerType.DEATH;

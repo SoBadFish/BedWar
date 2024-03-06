@@ -226,7 +226,7 @@ public class TeamInfo {
                 if(playerInfo.getPlayer().distance(getTeamConfig().getBedPosition()) <= 5){
                     teamEffects.remove(new TeamEffectInfo(new TeamTrap(1)));
                     //TODO 陷阱触发
-                    sendTitle(playerInfo+" &c触发了陷阱");
+                    sendTitle(BedWarMain.getLanguage().getLanguage("team-trap","[1] &c触发了陷阱",playerInfo.toString()));
                     playerInfo.getPlayer().addEffect(Effect.getEffect(15).setAmplifier(1).setDuration(60));
                     playerInfo.getPlayer().addEffect(Effect.getEffect(4).setAmplifier(1).setDuration(60));
                 }
@@ -236,7 +236,8 @@ public class TeamInfo {
 
         if(d == getTeamPlayers().size()){
             //被淘汰了
-            room.sendMessage("&r团灭 > "+toString()+"&c已被淘汰!");
+            room.sendMessage(BedWarMain.getLanguage().getLanguage("team-no-live",
+                    "&r团灭 > [1]&c已被淘汰!",this.toString()));
             echoDefeat();
             stop = true;
         }
@@ -281,8 +282,9 @@ public class TeamInfo {
     }
 
     public void onBedBreak(PlayerInfo info){
-        room.sendTitle(this+" &c床被破坏！");
-        room.sendSubTitle("&7摧毁者: &r"+info);
+        room.sendTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-title"
+                ,"[1] &c床被破坏！",this.toString()));
+        room.sendSubTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-sub-title","&7摧毁者: &r[1]",info.toString()));
         room.addSound(Sound.MOB_ENDERDRAGON_GROWL);
 
         setBadExists(false);
