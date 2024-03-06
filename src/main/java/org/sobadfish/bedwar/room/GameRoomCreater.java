@@ -305,11 +305,22 @@ public class GameRoomCreater {
     private void createBedPos(){
         teamBed.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size()),WorldInfoConfig.positionToString(creator.getPosition()));
         teamBedFace.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBedFace.size()), creator.getHorizontalFacing());
-        creator.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size() - 1))+"床坐标 &r[&2"+teamBed.size()+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+//        creator.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size() - 1))+"床坐标 &r[&2"+teamBed.size()+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+        creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-bed-location",
+                "&2设置[1]床坐标 &r[&2[2] &b/&d [3]&r]",
+                (new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size() - 1)),
+                teamBed.size()+"",
+                roomConfig.getTeamCfg().size()+""));
         if(teamBed.size() == roomConfig.getTeamCfg().size()){
 
-            creator.sendForceMessage("&2队伍床设置完成");
-            creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置 &r"+roomConfig.moneyItem.getNames().get(0)+" &2刷新点 &r"+" [&21 &b/&d "+moneyItemSize.getOrDefault(roomConfig.moneyItem.getNames().get(0),4)+"&r]");
+            creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-bed-success","&2队伍床设置完成"));
+//            creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置 &r"+roomConfig.moneyItem.getNames().get(0)+" &2刷新点 &r"+" [&21 &b/&d "+moneyItemSize.getOrDefault(roomConfig.moneyItem.getNames().get(0),4)+"&r]");
+            creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-item-spawn-point",
+                    "&e继续执行 &r/[1] &e进行下一步 &r[&b设置 &r[2] &2刷新点 &r [&2[3] &b/&d [4]&r]","bd",
+                    roomConfig.moneyItem.getNames().get(0),
+                    "1",
+                    moneyItemSize.getOrDefault(roomConfig.moneyItem.getNames().get(0),4)+""
+                    ));
             ArrayList<TeamInfoConfig> teamInfoConfigs = new ArrayList<>();
             for(String teamName : team.keySet()){
                 TeamInfoConfig teamInfoConfig = new TeamInfoConfig(roomConfig.teamCfg.get(teamName),teamBed.get(teamName),teamBedFace.get(teamName),team.get(teamName));
@@ -326,7 +337,13 @@ public class GameRoomCreater {
             return;
 
         }
-        creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size()))+"床&r [&2"+(teamBed.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+        creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-bed-location",
+                "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]床的位置&2 [3]&b /&d [4]&r]",
+                "bd",
+                (new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size())),
+                (teamBed.size() + 1)+"",
+                roomConfig.getTeamCfg().size()+""));
+//        creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size()))+"床&r [&2"+(teamBed.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
     }
     /**
      * 创建生成点坐标
@@ -341,18 +358,36 @@ public class GameRoomCreater {
         ArrayList<String> positions = itemPosition.get(name);
         if(positions.size() < moneyItemSize.getOrDefault(name,4)){
             positions.add(WorldInfoConfig.positionToString(creator.getPosition()));
-            creator.sendForceMessage("&2设置&r "+name+" &2生成点坐标&r [&2"+positions.size()+" &b/&d "+moneyItemSize.getOrDefault(name,4)+"&r]");
+            creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-setting-item-spawn-point",
+                    "&2设置&r [1] &2生成点坐标&r [&2[2] &b/&d [3]&r]",
+                    name,
+                    positions.size()+"",
+                    moneyItemSize.getOrDefault(name,4)+""
+                    ));
+//            creator.sendForceMessage("&2设置&r "+name+" &2生成点坐标&r [&2"+positions.size()+" &b/&d "+moneyItemSize.getOrDefault(name,4)+"&r]");
             if(positions.size() != moneyItemSize.getOrDefault(name,4)) {
-                creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置物品刷新点&r " + name + " [&2" + (positions.size() + 1) + " &b/&d "+moneyItemSize.getOrDefault(name,4)+"&r]");
+//                creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置物品刷新点&r " + name + " [&2" + (positions.size() + 1) + " &b/&d "+moneyItemSize.getOrDefault(name,4)+"&r]");
+                creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-item-spawn-point",
+                        "&e继续执行 &r/[1] &e进行下一步 &r[&b设置 &r[2] &2刷新点 &r [&2[3] &b/&d [4]&r]","bd",
+                        name,
+                        (positions.size() + 1)+"",
+                        moneyItemSize.getOrDefault(name,4)+""
+                ));
             }else{
 
                 if(itemName.size() > itemFlag+1){
-                    creator.sendForceMessage("&2设置 &r" + name + " &2生成点坐标完成");
-                    creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置 &r"+ itemName.get(itemFlag + 1) + " &2刷新点 &r [&21 &b/&d "+moneyItemSize.getOrDefault(itemName.get(itemFlag + 1),4)+"&r]");
+                    creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-item-spawn-poin-success","&2设置 &r[1] &2生成点坐标完成",name));
+//                    creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置 &r"+ itemName.get(itemFlag + 1) + " &2刷新点 &r [&21 &b/&d "+moneyItemSize.getOrDefault(itemName.get(itemFlag + 1),4)+"&r]");
+                    creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-item-spawn-point",
+                            "&e继续执行 &r/[1] &e进行下一步 &r[&b设置 &r[2] &2刷新点 &r [&2[3] &b/&d [4]&r]","bd",
+                            itemName.get(itemFlag + 1),
+                            "1",
+                            moneyItemSize.getOrDefault(itemName.get(itemFlag + 1),4)+""
+                    ));
                 }
                 itemFlag++;
                 if (itemFlag >= roomConfig.moneyItem.getNames().size()) {
-                    creator.sendForceMessage("&2设置所有生成点坐标完成");
+                    creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-all-points-success","&2设置所有生成点坐标完成"));
                     ArrayList<ItemInfoConfig> itemInfoConfigs = new ArrayList<>();
                     for (String s1 : itemPosition.keySet()) {
                         itemInfoConfigs.add(new ItemInfoConfig(roomConfig.moneyItem.get(s1), itemPosition.get(s1), 20));
@@ -361,7 +396,7 @@ public class GameRoomCreater {
                     roomConfig.setWorldInfo(worldInfoConfig);
                     flag = 1;
                     isCreate = true;
-                    creator.sendForceMessage("&a游戏房间创建完成 &c(重启生效配置)");
+                    creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-success","&a游戏房间创建完成 &c(重启生效配置)"));
 
                     return false;
                 }
