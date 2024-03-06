@@ -43,7 +43,7 @@ import java.util.List;
  */
 public class BedWarMain extends PluginBase {
 
-    private static List<String> LANGUAGE_LIST = new LinkedList<>();
+    private static final List<String> LANGUAGE_LIST = new LinkedList<>();
     static {
         LANGUAGE_LIST.add("eng");
         LANGUAGE_LIST.add("chs");
@@ -93,6 +93,8 @@ public class BedWarMain extends PluginBase {
         reloadConfig();
         initLanguage(this,getConfig().getString("language","chs"));
 
+
+
         checkServer();
         this.getLogger().info(TextFormat.colorize('&',"&b   ____           ___          __"));
         this.getLogger().info(TextFormat.colorize('&',"&b  |  _ \\         | \\ \\        / /"));
@@ -104,14 +106,14 @@ public class BedWarMain extends PluginBase {
         this.getLogger().info(TextFormat.colorize('&',getLanguage().getLanguage("version","&e正在加载[1] 插件 本版本为&av[2]"
                 ,"BedWar",this.getDescription().getVersion())));
         this.getLogger().info(TextFormat.colorize('&',"&eAuthor:&b sobadfish &aQQ：&e1586235767"));
-        this.getLogger().info(TextFormat.colorize('&',"&c本插件为原创插件 部分源代码出处已标明原作者"));
+//        this.getLogger().info(TextFormat.colorize('&',"&c本插件为原创插件 部分源代码出处已标明原作者"));
 //        "&e正在加载BedWar 起床战争插件 版本: &av"+this.getDescription().getVersion())
-        sendMessageToConsole("&a正在检查相应的依赖");
+        sendMessageToConsole("&aChunk plugin depends");
 
         for(String s : this.getDescription().getSoftDepend()){
             Plugin plugin = getServer().getPluginManager().getPlugin(s);
             if(plugin == null){
-                sendMessageToConsole("&c"+s+" 插件未加载，部分功能可能无法实现");
+                sendMessageToConsole("&c"+s+" Unload");
                 continue;
             }
             try{
@@ -159,7 +161,7 @@ public class BedWarMain extends PluginBase {
         RoomEventManager.register("light",LightEvent.class);
         RoomEventManager.register("die", DiwBowEvent.class);
 
-        sendMessageToConsole("&e当前内置 &a"+RoomEventManager.EVENT.size()+" &e个事件");
+        sendMessageToConsole("&eLoad &a"+RoomEventManager.EVENT.size()+" &eEvents");
 
 
 
@@ -168,7 +170,7 @@ public class BedWarMain extends PluginBase {
 
 
         enableRecord = this.getConfig().getBoolean("enable-Record");
-        this.getLogger().info(TextFormat.colorize('&',"&a起床战争插件加载完成，祝您使用愉快"));
+        this.getLogger().info(TextFormat.colorize('&',BedWarMain.getLanguage().getLanguage("success","&a起床战争插件加载完成，祝您使用愉快")));
 
     }
 
@@ -177,7 +179,7 @@ public class BedWarMain extends PluginBase {
     }
 
     public void initSkin(){
-        this.getLogger().info(TextFormat.colorize('&',"&d正在初始化方块模型"));
+        this.getLogger().info(TextFormat.colorize('&',"&dLoading Block Skin"));
         //初始化 皮肤
         //方块列表
         String[] blockList = {"diamond","emerald","gold","iron"};
@@ -190,7 +192,7 @@ public class BedWarMain extends PluginBase {
             }
             //写入皮肤文件
             for(String skinName: blockList){
-                this.getLogger().info(TextFormat.colorize('&',"写入模型: "+skinName));
+                this.getLogger().info(TextFormat.colorize('&',"Load Skin: "+skinName));
 
                 saveResource("blockskin/"+skinName+"/skin.json","/skin/"+skinName+"/skin.json",false);
                 saveResource("blockskin/"+skinName+"/skin.png","/skin/"+skinName+"/skin.png",false);
@@ -199,7 +201,7 @@ public class BedWarMain extends PluginBase {
 
 
         SkinManager.init();
-        this.getLogger().info(TextFormat.colorize('&',"&a方块模型初始化完成!"));
+        this.getLogger().info(TextFormat.colorize('&',"&aBlock Skin Init OK!"));
     }
 
     /**
@@ -215,12 +217,12 @@ public class BedWarMain extends PluginBase {
         File mainFileDir = new File(this.getDataFolder()+File.separator+"rooms");
         if(!mainFileDir.exists()){
             if(!mainFileDir.mkdirs()){
-                sendMessageToConsole("&c创建文件夹 rooms失败");
+                sendMessageToConsole("&cCreate Folder rooms Failed!");
             }
         }
 
         roomManager = RoomManager.initGameRoomConfig(mainFileDir);
-        sendMessageToConsole("&a房间数据全部加载完成");
+        sendMessageToConsole("&aRoom Loading OK!");
         this.getServer().getPluginManager().registerEvents(roomManager,this);
         if(getConfig().getAll().size() == 0) {
             this.saveResource("config.yml", true);
@@ -374,9 +376,9 @@ public class BedWarMain extends PluginBase {
 
         AbstractFakeInventory.IS_PM1E = ver;
         if(ver){
-            sendMessageToConsole("&e当前核心为 Nukkit PM1E");
+            sendMessageToConsole("&eCore Nukkit PM1E");
         }else{
-            sendMessageToConsole("&e当前核心为 Nukkit");
+            sendMessageToConsole("&eCore Nukkit");
         }
     }
 

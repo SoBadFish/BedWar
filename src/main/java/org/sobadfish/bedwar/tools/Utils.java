@@ -364,7 +364,7 @@ public class Utils {
         File[] files = old.listFiles();
         if(files != null){
             for (File value : files) {
-                BedWarMain.sendMessageToConsole("复制地图中 ... "+((load / (float)files.length) * 100) +"%");
+                BedWarMain.sendMessageToConsole("Copy World ... "+((load / (float)files.length) * 100) +"%");
                 load++;
                 if (value.isFile()) {
                     // 复制文件

@@ -96,17 +96,17 @@ public class WorldInfoConfig {
         if(world.exists() && world.isDirectory()){
             if(toPathWorld(roomName, levelName,true)){
                 Server.getInstance().loadLevel(levelName);
-                BedWarMain.sendMessageToConsole("&a地图 &e"+levelName+" &a初始化完成");
+                BedWarMain.sendMessageToConsole("&aWorld &e"+levelName+" &ainit ok!");
             }else{
-                BedWarMain.sendMessageToConsole("&c地图 &e"+levelName+" &c初始化失败,无法完成房间的加载");
+                BedWarMain.sendMessageToConsole("&cWorld &e"+levelName+" &cinit faild,Unable to complete loading of room");
                 return false;
             }
         }
         if(!world.exists()){
             if(toBackUpWorld(roomName, levelName)){
-                BedWarMain.sendMessageToConsole("&a地图 &e"+levelName+" &a备份完成");
+                BedWarMain.sendMessageToConsole("&aWorld &e"+levelName+" &aBackup OK");
             }else{
-                BedWarMain.sendMessageToConsole("&c地图 &e"+levelName+" &c备份失败,无法完成房间的加载");
+                BedWarMain.sendMessageToConsole("&cWorld &e"+levelName+" &cBackup faild,Unable to complete loading of room");
                 return false;
             }
         }

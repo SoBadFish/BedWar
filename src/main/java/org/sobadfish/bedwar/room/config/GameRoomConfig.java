@@ -588,15 +588,15 @@ public class GameRoomConfig implements Cloneable{
                 MoneyItemInfo itemInfo = MoneyItemInfo.getMoneyItemInfoByFile(item);
                 NbtItemInfo nbtItemInfo = NbtItemInfo.getNbtItemInfoByFile(item);
                 if(!new File(file+"/room.yml").exists()){
-                    BedWarMain.sendMessageToConsole("&e检测到未完成房间模板");
+                    BedWarMain.sendMessageToConsole("&eUnfinished room template detected");
                     Utils.toDelete(file);
-                    BedWarMain.sendMessageToConsole("&a成功清除未完成的房间模板");
+                    BedWarMain.sendMessageToConsole("&aSuccessfully cleared unfinished room templates");
                     return null;
                 }
                 Config room = new Config(file+"/room.yml",Config.YAML);
                 WorldInfoConfig worldInfoConfig = WorldInfoConfig.getInstance(name,itemInfo,room);
                 if(worldInfoConfig == null){
-                    BedWarMain.sendMessageToConsole("&c未成功加载 &a"+name+"&c 的游戏地图");
+                    BedWarMain.sendMessageToConsole("&cUnsuccessfully loaded game map for "+name);
                     return null;
                 }
 
@@ -613,7 +613,7 @@ public class GameRoomConfig implements Cloneable{
                 File shopDir = new File(file+"/shop");
                 if(!shopDir.exists()){
                     if(!shopDir.mkdirs()){
-                        throw new RuntimeException("无法创建商店文件夹");
+                        throw new RuntimeException("Unable to create shop folder");
                     }
                 }
                 if(shopDir.isDirectory()){
@@ -656,7 +656,7 @@ public class GameRoomConfig implements Cloneable{
                 LinkedHashMap<String, ShopItemInfo> shopMap = new LinkedHashMap<>();
                 shopMap.put("defaultShop",ShopItemInfo.build(shopItemClassifies,"defaultShop",new Config(shopDir+"/defaultShop.yml",Config.YAML)));
                 shopMap.put("teamShop",ShopItemInfo.build(null,"teamShop",new Config(shopDir+"/teamShop.yml",Config.YAML)));
-                BedWarMain.sendMessageToConsole("defaultShop 加载完成");
+                BedWarMain.sendMessageToConsole("defaultShop load OK");
                 GameRoomConfig roomConfig = new GameRoomConfig(name,worldInfoConfig,time,waitTime,maxWaitTime,minPlayerSize,maxPlayerSize,shopMap,teamInfoConfigs);
                 roomConfig.setTeamCfg(teamConfigs);
                 roomConfig.setMoneyItem(itemInfo);
@@ -696,19 +696,19 @@ public class GameRoomConfig implements Cloneable{
                 //初始化浮空字方块
                 Object omap = room.get("display-floatBlock");
                 if(omap instanceof Map){
-                    BedWarMain.sendMessageToConsole("&e正在读取 浮空方块信息");
+                    BedWarMain.sendMessageToConsole("&eLoading float blocks info");
                     Map<?,?> map = (Map<?,?>)omap;
                     for(Map.Entry<?,?> entry : map.entrySet()){
-                        BedWarMain.sendMessageToConsole("&e正在加载 "+entry.getKey().toString()+" 浮空方块");
+                        BedWarMain.sendMessageToConsole("&eLoading "+entry.getKey().toString()+" float block");
                         if(itemInfo.containsKey(entry.getKey().toString()) && SkinManager.SKINS.containsKey(entry.getValue().toString().toLowerCase())){
                             floatBlocks.put(entry.getKey().toString(), entry.getValue().toString().toLowerCase());
-                            BedWarMain.sendMessageToConsole("&e写入 "+entry.getKey().toString()+" 浮空方块");
+                            BedWarMain.sendMessageToConsole("&eWrite "+entry.getKey().toString()+" float block..");
                         }else{
-                            BedWarMain.sendMessageToConsole("&c载入 "+entry.getKey().toString()+" 浮空方块失败！");
+                            BedWarMain.sendMessageToConsole("&cRead "+entry.getKey().toString()+" float block！");
                         }
                     }
                     if(floatBlocks.size() == 0){
-                        BedWarMain.sendMessageToConsole("&c未读取到浮空方块信息");
+                        BedWarMain.sendMessageToConsole("&cNo float block information was read");
                     }
 
 
@@ -731,14 +731,14 @@ public class GameRoomConfig implements Cloneable{
                 }else{
                     roomConfig.gameStartMessage = defaultGameStartMessage();
                 }
-                BedWarMain.sendMessageToConsole("&e开始加载 房间主事件");
+                BedWarMain.sendMessageToConsole("&eLoading Room Events");
                 roomConfig.eventConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/event.yml"));
-                BedWarMain.sendMessageToConsole("&e开始加载 房间备选事件");
+                BedWarMain.sendMessageToConsole("&eLoading Room spare Events");
                 roomConfig.eventListConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/roomEventList.yml"));
                 return roomConfig;
             }catch (Exception e){
                 e.printStackTrace();
-                BedWarMain.sendMessageToConsole("加载房间出错: "+e.getMessage());
+                BedWarMain.sendMessageToConsole("Load Error: "+e.getMessage());
 
                 return null;
 

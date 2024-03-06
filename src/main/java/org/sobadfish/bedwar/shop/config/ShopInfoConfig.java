@@ -39,7 +39,7 @@ public class ShopInfoConfig {
         for(Map<?,?> map1: map){
             arrayList.add(DefaultItem.build(map1));
         }
-        BedWarMain.sendMessageToConsole("&a加载 &r"+classify.disPlayerName+" &r物品: &a"+arrayList.size()+" &r个");
+        BedWarMain.sendMessageToConsole("&aLoad &2"+classify.disPlayerName+" &rItem: &a"+arrayList.size()+" &r");
         return new ShopInfoConfig(classify,arrayList);
     }
 

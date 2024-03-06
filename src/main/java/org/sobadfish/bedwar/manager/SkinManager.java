@@ -46,7 +46,7 @@ public class SkinManager {
                     try {
                         skindata = ImageIO.read(new File(BedWarMain.getBedWarMain().getDataFolder()+"/skin/"+skinName+"/skin.png"));
                     } catch (IOException var19) {
-                        System.out.println("不存在模型");
+                        System.out.println("Skin does not exist");
                     }
 
                     if (skindata != null) {
@@ -66,7 +66,7 @@ public class SkinManager {
                             case "1.12.0":
                                 geometryName = getGeometryName(skinJsonFile);
                                 if("nullvalue".equals(geometryName)){
-                                    BedWarMain.sendMessageToConsole("暂不支持" + skinName + "模型所用格式！请等待更新！");
+                                    BedWarMain.sendMessageToConsole("The format used by "+skinName+" model is not supported yet! Please wait for the update!");
                                 }else{
                                     skin.generateSkinId(skinName);
                                     skin.setSkinResourcePatch("{\"geometry\":{\"default\":\"" + geometryName + "\"}}");
@@ -77,11 +77,11 @@ public class SkinManager {
                                         return;
                                     }
 
-                                    BedWarMain.sendMessageToConsole("模型 " + skinName + " 读取中");
+                                    BedWarMain.sendMessageToConsole("Reading skin: " + skinName + " ");
                                 }
                                 break;
                             default:
-                                BedWarMain.sendMessageToConsole("["+skinJsonFile.getName()+"] 的版本格式为："+formatVersion + "，正在尝试加载！");
+                                BedWarMain.sendMessageToConsole("["+skinJsonFile.getName()+"] version："+formatVersion + "，try to load！");
                             case "1.10.0":
                             case "1.8.0":
                                 for (Map.Entry<String, Object> entry : skinJson.entrySet()) {
@@ -104,10 +104,10 @@ public class SkinManager {
                                 break;
                         }
                     }
-                    BedWarMain.sendMessageToConsole(skinName+"模型读取完成");
+                    BedWarMain.sendMessageToConsole(skinName+" load ok!");
                     SKINS.put(skinName.toLowerCase(),skin);
                 }else{
-                    BedWarMain.sendMessageToConsole("错误的模型名称格式 请将模型图片文件命名为 skin.png");
+                    BedWarMain.sendMessageToConsole("Wrong model name format. Please name the model image file as skin.png");
                 }
             }
         }
