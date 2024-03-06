@@ -1,6 +1,7 @@
 package org.sobadfish.bedwar.manager;
 
 import cn.nukkit.Player;
+import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 
@@ -69,7 +70,7 @@ public class RandomJoinManager {
         iPlayerInfo.playerInfo = info;
         iPlayerInfo.isNext = isNext;
         if(playerInfos.contains(iPlayerInfo)){
-            info.sendForceMessage("&c取消匹配");
+            info.sendForceMessage(BedWarMain.getLanguage().getLanguage("matching-cancel","&c取消匹配"));
             playerInfos.remove(iPlayerInfo);
             return;
         }

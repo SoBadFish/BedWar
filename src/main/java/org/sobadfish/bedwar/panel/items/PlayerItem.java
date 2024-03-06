@@ -50,15 +50,15 @@ public class PlayerItem extends BasePlayPanelItemInstance{
         //todo 这里似乎可以画个lore
         List<String> lore = new ArrayList<>();
         lore.add(TextFormat.colorize('&',"&r "));
-        lore.add(TextFormat.colorize('&',"&r&7血量 &a"+this.info.getPlayer().getHealth()+" / "+this.info.getPlayer().getMaxHealth()));
+        lore.add(TextFormat.colorize('&',"&r&7Health &a"+this.info.getPlayer().getHealth()+" / "+this.info.getPlayer().getMaxHealth()));
         lore.add(TextFormat.colorize('&',"&r  "));
-        lore.add(TextFormat.colorize('&',"&r&7击杀 &a"+this.info.getKillCount()));
+        lore.add(TextFormat.colorize('&',"&r&7Kill &a"+this.info.getKillCount()));
         lore.add(TextFormat.colorize('&',"&r   "));
-        String status = "&a存活";
+        String status = "&aLive";
         if(this.info.getPlayerType() == PlayerInfo.PlayerType.DEATH){
-            status = "&c复活中";
+            status = "&cRespawn";
         }
-        lore.add(TextFormat.colorize('&',"&r&7状态 &a"+status));
+        lore.add(TextFormat.colorize('&',"&r&7Status &a"+status));
         item.setLore(lore.toArray(new String[0]));
         item.setNamedTag(item.getNamedTag().putInt("index", index));
         item.setNamedTag(item.getNamedTag().putString("player", i.getName()));
@@ -75,6 +75,6 @@ public class PlayerItem extends BasePlayPanelItemInstance{
             img = ItemIDSunName.getIDByPath(i.getId(),i.getDamage());
         }
 
-        return new ElementButton(TextFormat.colorize('&', this.info.toString()+"\n&r生命 &c"+ this.info.getPlayer().getHealth()+" / "+ this.info.getPlayer().getMaxHealth()),new ElementButtonImageData("path",img));
+        return new ElementButton(TextFormat.colorize('&', this.info.toString()+"\n&r❤ &c"+ this.info.getPlayer().getHealth()+" / "+ this.info.getPlayer().getMaxHealth()),new ElementButtonImageData("path",img));
     }
 }

@@ -2,9 +2,8 @@ package org.sobadfish.bedwar.panel;
 
 import cn.nukkit.Player;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
-import org.sobadfish.bedwar.panel.from.button.BaseIButton;
-import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
+import org.sobadfish.bedwar.panel.from.button.BaseIButton;
 import org.sobadfish.bedwar.panel.from.button.ShopButton;
 import org.sobadfish.bedwar.panel.items.BasePlayPanelItemInstance;
 import org.sobadfish.bedwar.panel.items.NbtDefaultItem;
@@ -49,7 +48,7 @@ public class DisPlayWindowsFrom {
             }
 //            shopButtons.add(new ShopButton(new TeamPanelItem(room,shopItemInfo)));
             shopFrom.setShopButtons(shopButtons);
-            shopFrom.disPlay("主页",false);
+            shopFrom.disPlay("Menu",false);
 
         }
 
@@ -100,6 +99,6 @@ public class DisPlayWindowsFrom {
         }
 
         shopFrom.setShopButtons(shopButtons);
-        shopFrom.disPlay("团队商店",isBack);
+        shopFrom.disPlay("Team Shop",isBack);
     }
 }

@@ -161,21 +161,22 @@ public class RoomManager implements Listener {
         if (BedWarMain.getRoomManager().hasRoom(roomName)) {
             if (!BedWarMain.getRoomManager().hasGameRoom(roomName)) {
                 if(!BedWarMain.getRoomManager().enableRoom(BedWarMain.getRoomManager().getRoomConfig(roomName))){
-                    player.sendForceMessage("&c" + roomName + " 还没准备好");
+                    player.sendForceMessage(BedWarMain.getLanguage().getLanguage("room-enable-error","&c[1] 还没准备好",roomName));
                     return false;
                 }
             }else{
                 GameRoom room = BedWarMain.getRoomManager().getRoom(roomName);
                 if(room != null){
                     if(RoomManager.LOCK_GAME.contains(room.getRoomConfig()) && room.getType() == GameType.END || room.getType() == GameType.CLOSE){
-                        player.sendForceMessage("&c" + roomName + " 还没准备好");
+                        player.sendForceMessage(BedWarMain.getLanguage().getLanguage("room-enable-error","&c[1] 还没准备好",roomName));
                         return false;
                     }
                     if(room.getWorldInfo().getConfig().getGameWorld() == null){
                         return false;
                     }
                     if(room.getType() == GameType.END ||room.getType() == GameType.CLOSE){
-                        player.sendForceMessage("&c" + roomName + " 结算中");
+                        player.sendForceMessage(BedWarMain.getLanguage().getLanguage("room-status-ending","&c[1] 结算中",roomName));
+
                         return false;
                     }
                 }
@@ -188,11 +189,11 @@ public class RoomManager implements Listener {
             switch (room.joinPlayerInfo(player,true)){
                 case CAN_WATCH:
                     if(!room.getRoomConfig().hasWatch){
-                        player.sendForceMessage("&c该房间开始后不允许旁观");
+                        player.sendForceMessage(BedWarMain.getLanguage().getLanguage("room-ban-watch","&c该房间开始后不允许旁观"));
                     }else{
 
                         if(player.getGameRoom() != null && !player.isWatch()){
-                            player.sendForceMessage("&c你无法进入此房间");
+                            player.sendForceMessage(BedWarMain.getLanguage().getLanguage("room-ban-watch-join","&c你无法进入此房间"));
                             return false;
                         }else{
                             room.joinWatch(player);
@@ -201,19 +202,19 @@ public class RoomManager implements Listener {
                     }
                     break;
                 case NO_LEVEL:
-                    player.sendForceMessage("&c这个房间正在准备中，稍等一会吧");
+                    player.sendForceMessage(BedWarMain.getLanguage().getLanguage("room-level-resting","&c这个房间正在准备中，稍等一会吧"));
                     break;
                 case NO_ONLINE:
                     break;
                 case NO_JOIN:
-                    player.sendForceMessage("&c该房间不允许加入");
+                    player.sendForceMessage(BedWarMain.getLanguage().getLanguage("room-ban-join","&c该房间不允许加入"));
                     break;
                 default:
                     //可以加入
                     return true;
             }
         } else {
-            player.sendForceMessage("&c不存在 &r" + roomName + " &c房间");
+            player.sendForceMessage(BedWarMain.getLanguage().getLanguage("room-absence","&c不存在 &r[1] &c房间",roomName));
 
         }
         return false;
@@ -294,7 +295,7 @@ public class RoomManager implements Listener {
             data.getRoomData(event.getRoom().getRoomConfig().name).gameCount++;
             room.getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
             if(event.getRoom().getRoomConfig().isAutomaticNextRound){
-                info.sendMessage("&7即将自动进行下一局");
+                info.sendMessage(BedWarMain.getLanguage().getLanguage("player-auto-join-next-room","&7即将自动进行下一局"));
                 RandomJoinManager.joinManager.nextJoin(info);
 //                ThreadManager.addThread(new AutoJoinGameRoomRunnable(5,info,event.getRoom(),null));
 
@@ -318,9 +319,9 @@ public class RoomManager implements Listener {
                 BedWarMain.sendTipMessageToObject("&l"+Utils.writeLine(9,"&a﹉﹉"),player);
                 String line = String.format("%20s","");
                 player.sendMessage(line);
-                String inputTitle = "&b&l起床战争经验\n";
+                String inputTitle = BedWarMain.getLanguage().getLanguage("player-getting-level-exp-title","&b&l起床战争经验\n");
                 BedWarMain.sendTipMessageToObject(Utils.getCentontString(inputTitle,30),player);
-                BedWarMain.sendTipMessageToObject(Utils.getCentontString("&b等级 "+data.getLevel()+String.format("%"+inputTitle.length()+"s","")+" 等级 "+(data.getLevel() + 1)+"\n",30),player);
+                BedWarMain.sendTipMessageToObject(Utils.getCentontString(BedWarMain.getLanguage().getLanguage("game-level-msg","&b等级")+" "+data.getLevel()+String.format("%"+inputTitle.length()+"s","")+" "+BedWarMain.getLanguage().getLanguage("game-level-msg","&b等级")+"&r "+(data.getLevel() + 1)+"\n",30),player);
 
                 BedWarMain.sendTipMessageToObject("&7["+data.getExpLine(20)+"&7]\n",player);
 
@@ -353,13 +354,18 @@ public class RoomManager implements Listener {
 
     @EventHandler
     public void onTeamVictory(TeamVictoryEvent event){
-        event.getTeamInfo().sendTitle("&e&l胜利!",5);
+        event.getTeamInfo().sendTitle(BedWarMain.getLanguage().getLanguage("game-victory","&e&l胜利!"),5);
         String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■";
         event.getRoom().sendTipMessage("&a"+line);
-        event.getRoom().sendTipMessage(Utils.getCentontString("&b游戏结束",line.length()));
+        event.getRoom().sendTipMessage(Utils.getCentontString(BedWarMain.getLanguage().getLanguage("game-end","&b游戏结束"),line.length()));
         event.getRoom().sendTipMessage("");
         for(PlayerInfo playerInfo: event.getTeamInfo().getInRoomPlayer()){
-            event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getKillCount())+" 破坏床数: "+playerInfo.getBedBreakCount()+" 助攻: "+playerInfo.getAssists(),line.length()));
+            event.getRoom().sendTipMessage(Utils.getCentontString(BedWarMain.getLanguage().getLanguage("game-end-info","&7   [1] 击杀：[2] 破坏床数: [3] 助攻: [4]",
+                    playerInfo.getPlayer().getName(),
+                    (playerInfo.getKillCount())+"",
+                    playerInfo.getBedBreakCount()+"",
+                    playerInfo.getAssists()+""
+                    ),line.length()));
         }
         event.getRoom().sendTipMessage("&a"+line);
         for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
@@ -369,7 +375,8 @@ public class RoomManager implements Listener {
             event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
         }
 
-        event.getRoom().sendMessage("&a恭喜 "+event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()+" &a 获得了胜利!");
+        event.getRoom().sendMessage(BedWarMain.getLanguage().getLanguage("game-end-team-info","&a恭喜 [1] &a 获得了胜利!",
+                event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()));
 
     }
 
@@ -392,7 +399,8 @@ public class RoomManager implements Listener {
             if(info.isWatch()){
                 return;
             }
-            room.sendMessage("&c玩家 "+event.getPlayerInfo().playerName+" 离开了游戏");
+            room.sendMessage(BedWarMain.getLanguage().getLanguage("player-quit-room-echo-message","&c玩家 [1] 离开了游戏",
+                    event.getPlayerInfo().playerName ));
         }
     }
 
@@ -429,7 +437,7 @@ public class RoomManager implements Listener {
             String roomName = BedWarMain.getRoomManager().playerJoin.get(info.getPlayer().getName());
             if (roomName.equalsIgnoreCase(event.getRoom().getRoomConfig().name) && gameRoom.getPlayerInfos().contains(info)) {
                 if(event.isSend()) {
-                    info.sendForceMessage("&c你已经在这个房间内了");
+                    info.sendForceMessage(BedWarMain.getLanguage().getLanguage("player-join-in-room","&c你已经在这个房间内了"));
                 }
                 event.setCancelled();
                 return;
@@ -440,7 +448,7 @@ public class RoomManager implements Listener {
                     if (room.getPlayerInfo(info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.WATCH ||
                             room.getPlayerInfo(info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.LEAVE) {
                         if(event.isSend()) {
-                            info.sendForceMessage("&c你已经在游戏房间内了");
+                            info.sendForceMessage(BedWarMain.getLanguage().getLanguage("player-join-in-room","&c你已经在这个房间内了"));
                         }
                         event.setCancelled();
 
@@ -458,14 +466,14 @@ public class RoomManager implements Listener {
 
             }
             if(event.isSend()) {
-                info.sendForceMessage("&c游戏已经开始了");
+                info.sendForceMessage(BedWarMain.getLanguage().getLanguage("player-join-in-room-started","&c游戏已经开始了"));
             }
             event.setCancelled();
             return;
         }
         if(gameRoom.getPlayerInfos().size() == gameRoom.getRoomConfig().getMaxPlayerSize()){
             if(event.isSend()) {
-                info.sendForceMessage("&c房间满了");
+                info.sendForceMessage(BedWarMain.getLanguage().getLanguage("player-join-in-room-max","&c房间满了"));
             }
             event.setCancelled();
         }
@@ -528,12 +536,12 @@ public class RoomManager implements Listener {
             PlayerInfo info = room.getPlayerInfo(event.getPlayer());
             if(info != null) {
                 if (info.isWatch()) {
-                    info.sendMessage("&c观察状态下不能放置方块");
+                    info.sendMessage(BedWarMain.getLanguage().getLanguage("event-place-block-cancel-watch","&c观察状态下不能放置方块"));
                     event.setCancelled();
                     return;
                 }
                 if (item.getId() == 65 && !room.getWorldInfo().getPlaceBlock().contains(event.getBlockAgainst())) {
-                    info.sendMessage("&c你只能将梯子放置在玩家放置的方块上");
+                    info.sendMessage(BedWarMain.getLanguage().getLanguage("event-place-ladder-in-block","&c你只能将梯子放置在玩家放置的方块上"));
                     event.setCancelled();
                     return;
                 } else {
@@ -557,7 +565,7 @@ public class RoomManager implements Listener {
 
                 }
                 if (!room.worldInfo.onChangeBlock(block, true)) {
-                    info.sendMessage("&c你不能在这里放置方块");
+                    info.sendMessage(BedWarMain.getLanguage().getLanguage("event-place-block-cancel","&c你不能在这里放置方块"));
 
                     event.setCancelled();
                 }else{
@@ -641,17 +649,28 @@ public class RoomManager implements Listener {
                 }else{
                     String msg = event.getMessage();
                     if(msg.startsWith("@") || msg.startsWith("!")){
-                        info.getGameRoom().sendFaceMessage("&l&7(全体消息)&r "+info+"&r >> "+msg.substring(1));
+                        info.getGameRoom().sendFaceMessage(BedWarMain.getLanguage().getLanguage("player-speak-in-room-message-all",
+                                "&l&7(全体消息)&r [1]&r >> [2]",info.toString(),msg.substring(1)));
                     }else{
                         TeamInfo teamInfo = info.getTeamInfo();
                         if(teamInfo != null){
                             if(info.isDeath()){
-                                room.sendMessageOnDeath(info+"&7(死亡) &r>> "+msg);
+                                room.sendMessageOnDeath(BedWarMain.getLanguage().getLanguage("player-speak-in-room-message-death",
+                                        "[1]&7(死亡) &r>> [2]",
+                                        info.toString(),msg
+                                ));
                             }else {
-                                teamInfo.sendMessage(teamInfo.getTeamConfig().getNameColor() + "[队伍]&7 " + info.getPlayer().getName() + " &f>>&r " + msg);
+                                teamInfo.sendMessage(BedWarMain.getLanguage().getLanguage("player-speak-in-room-message-team",
+                                        "[1][队伍]&7 [2] &f>>&r [3]",
+                                        teamInfo.getTeamConfig().getNameColor(),
+                                        info.getPlayer().getName(),
+                                        msg));
+//                                teamInfo.sendMessage(teamInfo.getTeamConfig().getNameColor() + "[队伍]&7 " + info.getPlayer().getName() + " &f>>&r " + msg);
                             }
                         }else{
-                            room.sendMessage(info+" &f>>&r "+msg);
+                            room.sendMessage(BedWarMain.getLanguage().getLanguage("player-speak-in-room-message",
+                                    "[1] &f>>&r [2]",
+                                    info.toString(),msg));
                         }
                     }
                 }
@@ -672,7 +691,7 @@ public class RoomManager implements Listener {
             PlayerInfo info = room.getPlayerInfo(player);
             if(info == null){
                 if(!player.isOp()) {
-                    player.sendMessage("你不能破坏此方块");
+                    player.sendMessage(BedWarMain.getLanguage().getLanguage("event-break-block-cancel","你不能破坏此方块"));
                     event.setCancelled();
                 }
             }else{
@@ -691,7 +710,7 @@ public class RoomManager implements Listener {
                     event.setDrops(new Item[0]);
                 }
                 if(info.isWatch()){
-                    player.sendMessage("&c观察状态下不能破坏方块");
+                    player.sendMessage(BedWarMain.getLanguage().getLanguage("event-break-block-cancel-watch","&c观察状态下不能破坏方块"));
                     event.setCancelled();
                 }
             }
@@ -877,7 +896,7 @@ public class RoomManager implements Listener {
                     case NO_LEVEL:
                     case NO_JOIN:
                         event.setCancelled();
-                        BedWarMain.sendMessageToObject("&c你无法进入该地图",entity);
+                        BedWarMain.sendMessageToObject(BedWarMain.getLanguage().getLanguage("world-ban-join","&c你无法进入该地图"),entity);
                         if(Server.getInstance().getDefaultLevel() != null) {
                             info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
                         }else{
@@ -950,7 +969,7 @@ public class RoomManager implements Listener {
             PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
             if(playerInfo != null) {
                 if (playerInfo.isWatch()) {
-                    playerInfo.sendForceMessage("&c你处于观察者模式");
+                    playerInfo.sendForceMessage(BedWarMain.getLanguage().getLanguage("player-gamemode-3","&c你处于观察者模式"));
                     event.setCancelled();
                     return;
                 }
@@ -995,7 +1014,8 @@ public class RoomManager implements Listener {
                                 if (h < 0) {
                                     h = 0;
                                 }
-                                playerInfo1.sendTip("&e目标: &c❤" + String.format("%.1f", h));
+                                playerInfo1.sendTip(BedWarMain.getLanguage().getLanguage("player-attack-by-arrow",
+                                        "&e目标: &c❤ [1]",String.format("%.1f", h)) );
                             }
 
                         }
@@ -1254,10 +1274,10 @@ public class RoomManager implements Listener {
     private boolean choseteamItem(Player player, GameRoom room) {
         if(!TeamChoseItem.clickAgain.contains(player)){
             TeamChoseItem.clickAgain.add(player);
-            player.sendTip("请再点击一次");
+            player.sendTip(BedWarMain.getLanguage().getLanguage("chose-click-again","请再点击一次"));
             return true;
         }
-        FormWindowSimple simple = new FormWindowSimple("请选择队伍","");
+        FormWindowSimple simple = new FormWindowSimple(BedWarMain.getLanguage().getLanguage("player-chose-team","请选择队伍"),"");
         for(TeamInfo teamInfoConfig: room.getTeamInfos()){
             Item wool = teamInfoConfig.getTeamConfig().getTeamConfig().getBlockWoolColor();
 
@@ -1271,7 +1291,7 @@ public class RoomManager implements Listener {
     }
 
     private void followPlayer(PlayerInfo info,GameRoom room){
-        info.sendMessage("选择要传送的玩家");
+        info.sendMessage(BedWarMain.getLanguage().getLanguage("player-click-chose-teleport-player","选择要传送的玩家"));
         if (room == null){
             return;
         }
@@ -1305,7 +1325,7 @@ public class RoomManager implements Listener {
                 }
             });
         }
-        DisPlayWindowsFrom.disPlayerCustomMenu((Player) info.getPlayer(),"传送玩家",list);
+        DisPlayWindowsFrom.disPlayerCustomMenu((Player) info.getPlayer(),BedWarMain.getLanguage().getLanguage("player-from-teleport-player-title","传送玩家"),list);
 
     }
 
@@ -1313,7 +1333,7 @@ public class RoomManager implements Listener {
     private void disPlayUI(PlayerInfo info,GameRoom room){
         //WIN10 玩家 故障，，，，
         DisPlayerPanel playerPanel = new DisPlayerPanel();
-        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
+        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),BedWarMain.getLanguage().getLanguage("player-from-teleport-player-title","传送玩家"));
 
 //        disPlayProtect(info, room);
     }
@@ -1321,12 +1341,12 @@ public class RoomManager implements Listener {
     private boolean quitRoomItem(Player player, String roomName, GameRoom room) {
         if(!RoomQuitItem.clickAgain.contains(player)){
             RoomQuitItem.clickAgain.add(player);
-            player.sendTip("请再点击一次");
+            player.sendTip(BedWarMain.getLanguage().getLanguage("chose-click-again","请再点击一次"));
             return true;
         }
         RoomQuitItem.clickAgain.remove(player);
         if(room.quitPlayerInfo(room.getPlayerInfo(player),true)){
-            player.sendMessage("你成功离开房间 "+roomName);
+            player.sendMessage(BedWarMain.getLanguage().getLanguage("player-quit-room-success","你成功离开房间 ",roomName));
         }
         return false;
     }
@@ -1414,9 +1434,11 @@ public class RoomManager implements Listener {
                 TeamInfo teamInfo = info.getGameRoom().getTeamInfos().get(((FormResponseSimple) event.getResponse())
                         .getClickedButtonId());
                 if(!teamInfo.join(info)){
-                    info.sendMessage("&c你已经加入了 "+ teamInfo);
+                    info.sendMessage(BedWarMain.getLanguage().getLanguage("player-joined-team","&c你已经加入了 [1]",teamInfo.toString()));
                 }else{
-                    info.sendMessage("&a加入了&r"+ teamInfo +" &a成功");
+//                    info.sendMessage("&a加入了&r"+ teamInfo +" &a成功");
+                    info.sendMessage((BedWarMain.getLanguage().getLanguage("player-join-team-success","&a加入&r[1] &a成功",
+                            teamInfo.toString())));
                     player.getInventory().setItem(0,teamInfo.getTeamConfig().getTeamConfig().getBlockWoolColor());
                     for (Map.Entry<Integer, Item> entry : info.armor.entrySet()) {
                         Item item;
@@ -1576,8 +1598,8 @@ public class RoomManager implements Listener {
                 BedWarMain.getRoomManager().getRooms().remove(config.getName());
                 RoomManager.LOCK_GAME.remove(config);
                 WorldResetManager.RESET_QUEUE.remove(config.name);
-                BedWarMain.sendMessageToConsole("&r释放房间 " + config.name);
-                BedWarMain.sendMessageToConsole("&r房间 " + config.name + " 已回收");
+                BedWarMain.sendMessageToConsole("&rRecycle Room " + config.name);
+                BedWarMain.sendMessageToConsole("&rRoom " + config.name + " Recycled");
 
 //            }
 //        });

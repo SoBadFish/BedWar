@@ -123,13 +123,13 @@ public class ShopFrom {
     public void disPlay(String title, boolean isBack){
         setTitle(title);
         setBreak(isBack);
-        FormWindowSimple simple = new FormWindowSimple("商店"+"-- "+title,"");
+        FormWindowSimple simple = new FormWindowSimple(title,"");
         PlayerInfo playerInfo = BedWarMain.getRoomManager().getPlayerInfo(player);
         for(ShopButton shopButton:this.shopButtons){
             simple.addButton(shopButton.getItemInstance().getGUIButton(playerInfo));
         }
         if(isBack) {
-            ElementButton button2 = new ElementButton("返回", new ElementButtonImageData("path", "textures/ui/refresh_light"));
+            ElementButton button2 = new ElementButton("Back", new ElementButtonImageData("path", "textures/ui/refresh_light"));
             simple.addButton(button2);
         }
         player.showFormWindow(simple,++id);

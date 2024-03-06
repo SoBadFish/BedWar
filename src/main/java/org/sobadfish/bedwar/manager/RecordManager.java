@@ -28,6 +28,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 游戏录制/回放管理器
+ * 懒得在这里加多语言了
  *
  * @author LT_Name
  */

@@ -307,13 +307,13 @@ public class DefaultItem extends BasePlayPanelItemInstance {
             path =ItemIDSunName.getIDByPath(getItem().getId());
         }
         MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
-        String btName = TextFormat.colorize('&',  itemString+" * "+getItem().getCount()+"\n&r价格: "+oInfo.getCustomName()+"&r *&a "+count);
+        String btName = TextFormat.colorize('&',  itemString+" * "+getItem().getCount()+"\n&rPrice: "+oInfo.getCustomName()+"&r *&a "+count);
         if(info.getGameRoom().getRoomConfig().isExp()){
             int rc = 1;
             if(info.getGameRoom().getRoomConfig().moneyItem.containsKey(moneyItem)){
                 rc = (int) oInfo.getExp();
             }
-            btName =TextFormat.colorize('&',  itemString+" * "+getItem().getCount()+"\n&r价格: Exp * "+count * rc);
+            btName =TextFormat.colorize('&',  itemString+" * "+getItem().getCount()+"\n&rPrice: Exp * "+count * rc);
         }
 
         if (path == null){

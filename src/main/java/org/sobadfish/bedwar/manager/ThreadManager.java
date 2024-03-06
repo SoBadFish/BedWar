@@ -146,7 +146,7 @@ public class ThreadManager {
             if(isClose){
                 color = "&7";
             }
-            return color+"线程检测";
+            return color+BedWarMain.getLanguage().getLanguage("thread-chunk","线程检测");
         }
 
         @Override

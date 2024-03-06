@@ -609,13 +609,18 @@ public class PlayerInfo {
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         lore.add("&7"+format.format(new Date()));
-        lore.add("游戏模式: &a"+levelName);
+        lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-game-world",
+                "游戏模式: &a[1]",levelName));
 
         lore.add(" ");
         if(isWait){
             //玩家等待时的计分板显示内容
-            lore.add("玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize());
-            lore.add("等待中....");
+            lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-wait-player",
+                    "玩家数: &a[1] &r/&a [2]",
+                    gameRoom.getPlayerInfos().size()+"",
+                    gameRoom.getRoomConfig().getMaxPlayerSize()+""));
+//            lore.add("玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize());
+            lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-waiting","等待中...."));
             lore.add("   ");
 
         }else{
@@ -625,27 +630,36 @@ public class PlayerInfo {
                 lore.add("    ");
             }else{
 
-                lore.add("游戏结束: &a"+Utils.formatTime(getGameRoom().loadTime));
+                lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-game-end","游戏结束: &a[1]",
+                        Utils.formatTime(getGameRoom().loadTime)
+                ));
             }
 
             for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
                 String me = "";
                 if(getTeamInfo() != null && getTeamInfo().equals(teamInfo)){
-                    me = "&7(我)";
+                    me = BedWarMain.getLanguage().getLanguage("scoreboard-line-myself","&7(我)");
                 }
                 if(teamInfo.isBadExists() && teamInfo.isLoading()){
 
-                    lore.add("◎ "+ teamInfo +":&r    &a✔ "+me);
+//                    lore.add("◎ "+ teamInfo +":&r    &a✔ "+me);
+                    lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-exits-bed",
+                            "◎ [1]: &r    &a✔",teamInfo.toString())+" "+me);
                 }else if(!teamInfo.isBadExists() && teamInfo.isLoading()){
-                    lore.add("◎ "+ teamInfo +": &r   &c"+teamInfo.getLivePlayer().size()+" "+me);
+//                    lore.add("◎ "+ teamInfo +": &r   &c"+teamInfo.getLivePlayer().size()+" "+me);
+                    lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-no-bed",
+                            "◎ [1]: &r    &a[2]",teamInfo.toString(),teamInfo.getLivePlayer().size()+"")+" "+me);
                 }else{
-                    lore.add("◎ "+ teamInfo +": &r   &c✘ "+me);
+//                    lore.add("◎ "+ teamInfo +": &r   &c✘ "+me);
+                    lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-disuse",
+                            "◎ [1]: &r    &c✘",teamInfo.toString())+" "+me);
                 }
             }
             lore.add("      ");
-            lore.add("击杀数: &a"+killCount);
-            lore.add("助攻数: &a"+assists);
+            lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-kill","击杀数: &a[1]",killCount+""));
+            lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-assists","助攻数: &a[1]",assists+""));
             lore.add("破坏床数: &a"+bedBreakCount);
+            lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-break-bed","破坏床: &a[1]",bedBreakCount+""));
 
             lore.add("        ");
         }
@@ -727,7 +741,7 @@ public class PlayerInfo {
         if(playerType == PlayerType.DEATH){
             if(spawnTime >= 5){
 
-                sendTitle("&a你复活了",1);
+                sendTitle(BedWarMain.getLanguage().getLanguage("player-respawn-info","&a你复活了"),1);
                 sendSubTitle("");
                 spawn();
                 spawnTime = 0;
@@ -735,11 +749,12 @@ public class PlayerInfo {
                 if(spawnTime == 0 && !isSendkey){
                     isSendkey = true;
                     if(gameRoom != null) {
-                        sendTitle("&c你死了", gameRoom.reSpawnTime);
+                        sendTitle(BedWarMain.getLanguage().getLanguage("player-death-info-title","&c你死了"), gameRoom.reSpawnTime);
                     }
                 }
                 if(gameRoom != null) {
-                    sendSubTitle((gameRoom.reSpawnTime - spawnTime) + " 秒后复活");
+                    sendSubTitle(BedWarMain.getLanguage().getLanguage("player-death-respawn-info-title",
+                            "[1] 秒后复活",(gameRoom.reSpawnTime - spawnTime)+""));
                 }
                 spawnTime++;
             }
