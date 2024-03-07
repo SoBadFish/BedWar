@@ -90,7 +90,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
             try {
                 for(Map.Entry<String,String> map: WorldResetManager.RESET_QUEUE.entrySet()){
                     if (WorldInfoConfig.toPathWorld(map.getKey(), map.getValue(),false)) {
-                        BedWarMain.sendMessageToConsole("&a" + map.getKey() + " 地图已还原");
+                        BedWarMain.sendMessageToConsole("&a" + map.getKey() + " Reset!");
                     }
                     Server.getInstance().getPluginManager().callEvent(new ReloadWorldEvent(BedWarMain.getBedWarMain(), BedWarMain.getRoomManager().getRoomConfig(map.getKey())));
 
