@@ -1,26 +1,26 @@
 team:
-  - name: "绿队"
+  - name: "Green"
     nameColor: "&a"
     blockWoolColor: "35:13"
     rgb:
       r: 0
       g: 255
       b: 0
-  - name: "红队"
+  - name: "Red"
     nameColor: "&c"
     blockWoolColor: "35:14"
     rgb:
       r: 255
       g: 0
       b: 0
-  - name: "蓝队"
+  - name: "Blue"
     nameColor: "&9"
     blockWoolColor: "35:11"
     rgb:
       r: 0
       g: 0
       b: 255
-  - name: "黄队"
+  - name: "Yellow"
     nameColor: "&e"
     blockWoolColor: "35:4"
     rgb:

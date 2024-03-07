@@ -3,32 +3,32 @@ effects:
     name: "治疗"
     disPlay: "138:0"
     maxLevel: 1
-    money: "钻石x1"
+    money: "diamondx1"
   - id: 3
     name: "急迫"
     disPlay: "285:0"
     maxLevel: 1
-    money: "钻石x1"
+    money: "diamondx1"
 enchants:
   - id: 0
     name: "保护"
     disPlay: "311:0"
     maxLevel: 3
-    money: "钻石x5"
+    money: "diamondx5"
   - id: 9
     name: "锋利"
     disPlay: "276:0"
     maxLevel: 3
-    money: "钻石x5"
+    money: "diamondx5"
   - id: 15
     name: "效率"
     disPlay: "278:0"
     maxLevel: 3
-    money: "钻石x5"
+    money: "diamondx5"
 
 trap:
   - id: 0
     name: "陷阱"
     maxLevel: 1
     disPlay: "69:0"
-    money: "钻石x2"
+    money: "diamondx2"

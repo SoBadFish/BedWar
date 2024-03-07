@@ -6,30 +6,30 @@
 # eventTime 为事件倒计时 单位为秒
 eventLists:
   - type: "time"
-    display: "钻石生成点 II 级"
+    display: "Diamond Level II"
     eventTime: 220
-    value: "钻石:800"
+    value: "diamond:800"
   - type: "time"
-    display: "钻石生成点 III 级"
+    display: "Diamond Level III"
     eventTime: 260
-    value: "钻石:60"
+    value: "diamond:60"
   - type: "time"
-    display: "绿宝石生成点 II 级"
+    display: "Emerald Level II"
     eventTime: 280
-    value: "绿宝石:1000"
+    value: "emerald:1000"
   - type: "time"
-    display: "绿宝石生成点 III 级"
+    display: "Emerald Level III"
     eventTime: 300
-    value: "绿宝石:800"
+    value: "emerald:800"
   - type: "break"
-    display: "床破坏"
+    display: "Bed Break"
     eventTime: 330
   - type: "chicken"
-    display: "鸡你太美~~"
+    display: "Chicken play~"
     eventTime: 20
     value: 0.25
   - type: "light"
-    display: "天选时刻"
+    display: "lightning carnival"
     eventTime: 20
     value: 1
 
