@@ -55,13 +55,13 @@ public class TeamPanelItem extends BasePlayPanelItemInstance{
     @Override
     public Item getPanelItem(PlayerInfo info, int index)  {
         Item item = this.item;
-        item.setCustomName(TextFormat.colorize('&',"&r团队商店"));
+        item.setCustomName(TextFormat.colorize('&',"&rTeam Shop"));
         item.setNamedTag(item.getNamedTag().putInt("index",index));
         return item;
     }
 
     @Override
     public ElementButton getGUIButton(PlayerInfo info) {
-        return new ElementButton("团队商店",new ElementButtonImageData("path", ItemIDSunName.getIDByPath(item.getId(),item.getDamage())));
+        return new ElementButton("Team Shop",new ElementButtonImageData("path", ItemIDSunName.getIDByPath(item.getId(),item.getDamage())));
     }
 }

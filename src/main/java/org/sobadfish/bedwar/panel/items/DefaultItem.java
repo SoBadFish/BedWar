@@ -194,7 +194,8 @@ public class DefaultItem extends BasePlayPanelItemInstance {
             GameRoom room = info.getGameRoom();
             boolean u = true;
             int rc = 1;
-            String errorMessage = moneyItem+"不足";
+            String errorMessage = BedWarMain.getLanguage().getLanguage("item-not-enough","[1] 不足",
+                    moneyItem);
             if(room.getRoomConfig().moneyItem.containsKey(moneyItem)){
                 MoneyItemInfoConfig oInfo = room.getRoomConfig().moneyItem.get(moneyItem);
                 rc = (int) oInfo.getExp();
@@ -202,12 +203,12 @@ public class DefaultItem extends BasePlayPanelItemInstance {
             Item i = getItem();
             if(info.buyArmorId.contains(i.getId())){
                 u = false;
-                errorMessage = "已经购买过此盔甲了";
+                errorMessage = BedWarMain.getLanguage().getLanguage("armor-allow-buy","已经购买过此盔甲了");
             }
             if(u) {
                 if (room.getRoomConfig().isExp()) {
                     u = info.reduceExp(count * rc);
-                    errorMessage = "经验不足";
+                    errorMessage = BedWarMain.getLanguage().getLanguage("exp-not-enough","经验不足");
                 } else {
                     u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
                 }
