@@ -571,9 +571,9 @@ public class GameRoom {
             try{
                 info.getPlayer().teleport(pos);
             }catch (Exception e){
-                //TODO 当传送出现异常
-                quitPlayerInfo(info,true);
-                return JoinType.NO_JOIN;
+                //TODO 当传送出现异常 无视...
+//                quitPlayerInfo(info,true);
+//                return JoinType.NO_JOIN;
             }
             
             if(info.getPlayer() instanceof Player) {
