@@ -67,11 +67,12 @@ public class TeamItem extends BasePlayPanelItemInstance {
 
         GameRoom room = info.getGameRoom();
         if (level == effect.getMaxLevel() && effect.equals(new TeamTrap(1))) {
-            info.sendMessage("&c当前团队存在 &r" + getItem().getCustomName());
+            info.sendMessage(BedWarMain.getLanguage().getLanguage("team-exists-effect",
+                    "&c当前团队存在 &r[1]",getItem().getCustomName()));
             return;
         }
         if (level == effect.getMaxLevel()) {
-            info.sendMessage("&r&e已到达最大等级");
+            info.sendMessage(BedWarMain.getLanguage().getLanguage("team-effect-max-level","&r&e已到达最大等级"));
             return;
         }
         // if(ItemInfo.getCountByInventory(room.getRoomConfig().moneyItem.get(moneyItem),
@@ -84,7 +85,8 @@ public class TeamItem extends BasePlayPanelItemInstance {
         }
         boolean u;
         int rc = 1;
-        String errorMessage = moneyItem + "不足";
+        String errorMessage = BedWarMain.getLanguage().getLanguage("item-not-enough","[1] 不足",
+                moneyItem);
         if (room.getRoomConfig().moneyItem.containsKey(moneyItem)) {
             MoneyItemInfoConfig oInfo = room.getRoomConfig().moneyItem.get(moneyItem);
             rc = (int) oInfo.getExp();
@@ -92,7 +94,7 @@ public class TeamItem extends BasePlayPanelItemInstance {
         if (room.getRoomConfig().isExp()) {
             //由于扣除经验落后一个等级
             u = info.reduceExp(count * (level)  * rc);
-            errorMessage = "经验不足";
+            errorMessage =  BedWarMain.getLanguage().getLanguage("exp-not-enough","经验不足");
         } else {
             u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count * (level));
         }
@@ -100,10 +102,14 @@ public class TeamItem extends BasePlayPanelItemInstance {
         if (u) {
             info.getTeamInfo().addEffect(new TeamEffectInfo(effect));
             if (effect.equals(new TeamTrap(1))) {
-                info.getTeamInfo().sendMessage(info + " &e购买了 " + getItem().getCustomName());
+                info.getTeamInfo().sendMessage(BedWarMain.getLanguage().getLanguage("team-effect-buy",
+                        "[1] &e购买了 [2]",info.toString(),getItem().getCustomName()));
             } else {
                 info.getTeamInfo()
-                        .sendMessage(info + " &e升级了&r " + getItem().getCustomName() + " " + (getTeamInfoLevel(info)));
+                        .sendMessage(BedWarMain.getLanguage().getLanguage("team-effect-level-up",
+                                "[1] &e升级了&r [2] [3]",
+                                info.toString(),getItem().getCustomName(),
+                                getTeamInfoLevel(info)+""));
             }
             info.addSound(Sound.RANDOM_ORB);
         } else {
@@ -178,9 +184,13 @@ public class TeamItem extends BasePlayPanelItemInstance {
             level--;
         }
         if (effect.equals(new TeamTrap(1))) {
-            i.setCustomName(TextFormat.colorize('&', "&r购买 " + getItem().getCustomName()));
+            i.setCustomName(TextFormat.colorize('&', BedWarMain.getLanguage().getLanguage("team-shop-buy-button",
+                    "&r购买 [1]",getItem().getCustomName())));
         } else {
-            i.setCustomName(TextFormat.colorize('&', "&r升级 " + getItem().getCustomName() + "" + (level)));
+            i.setCustomName(TextFormat.colorize('&',
+                    BedWarMain.getLanguage().getLanguage("team-shop-level-up-button",
+                            "&r升级 [1] [2]",getItem().getCustomName(),level+"")));
+
         }
 
         ArrayList<String> lore = new ArrayList<>();
@@ -198,7 +208,7 @@ public class TeamItem extends BasePlayPanelItemInstance {
         }
 
         if (getTeamInfoLevel(info) == effect.getMaxLevel()) {
-            title = "&r&c已到达最大等级";
+            title = BedWarMain.getLanguage().getLanguage("team-effect-max-level","&r&e已到达最大等级");
         }
         lore.add(TextFormat.colorize('&', title));
         i.setLore(lore.toArray(new String[0]));
@@ -216,9 +226,11 @@ public class TeamItem extends BasePlayPanelItemInstance {
         if (level > effect.getMaxLevel()) {
             level--;
         }
-        String txt = "升级 " + getItem().getCustomName() + "" + (level);
+        String txt =  BedWarMain.getLanguage().getLanguage("team-shop-level-up-button",
+                "&r升级 [1] [2]",getItem().getCustomName(),level+"");
         if (effect.equals(new TeamTrap(1))) {
-            txt = "购买 " + getItem().getCustomName();
+            txt = BedWarMain.getLanguage().getLanguage("team-shop-buy-button",
+                    "&r购买 [1]",getItem().getCustomName());
         }
         MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
         String title = "&r" + oInfo.getCustomName() + "&r x&a " + count * level;
@@ -232,7 +244,7 @@ public class TeamItem extends BasePlayPanelItemInstance {
         }
 
         if (getTeamInfoLevel(info) == effect.getMaxLevel()) {
-            title = "&c已到达最大等级";
+            title =  BedWarMain.getLanguage().getLanguage("team-effect-max-level","&r&e已到达最大等级");;
         }
         return new ElementButton(TextFormat.colorize('&', txt + "\n&r" + title),
                 new ElementButtonImageData("path",

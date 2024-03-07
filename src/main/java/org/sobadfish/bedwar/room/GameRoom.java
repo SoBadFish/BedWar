@@ -568,7 +568,14 @@ public class GameRoom {
                 tag.putString("room",getRoomConfig().getName());
             }
             playerInfos.add(info);
-            info.getPlayer().teleport(pos);
+            try{
+                info.getPlayer().teleport(pos);
+            }catch (Exception e){
+                //TODO 当传送出现异常
+                quitPlayerInfo(info,true);
+                return JoinType.NO_JOIN;
+            }
+            
             if(info.getPlayer() instanceof Player) {
                 ((Player)info.getPlayer()).setGamemode(2);
             }
