@@ -626,7 +626,8 @@ public class PlayerInfo {
         }else{
             IGameRoomEvent event = getGameRoom().getEventControl().getNextEvent();
             if(event != null){
-                lore.add(event.display()+" &a"+ Utils.formatTime1((event.getEventTime() - getGameRoom().getEventControl().loadTime)));
+                lore.add(event.display());
+                lore.add("&a"+ Utils.formatTime1((event.getEventTime() - getGameRoom().getEventControl().loadTime)));
                 lore.add("    ");
             }else{
 
@@ -658,7 +659,7 @@ public class PlayerInfo {
             lore.add("      ");
             lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-kill","击杀数: &a[1]",killCount+""));
             lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-assists","助攻数: &a[1]",assists+""));
-            lore.add("破坏床数: &a"+bedBreakCount);
+//            lore.add("破坏床数: &a"+bedBreakCount);
             lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-break-bed","破坏床: &a[1]",bedBreakCount+""));
 
             lore.add("        ");
