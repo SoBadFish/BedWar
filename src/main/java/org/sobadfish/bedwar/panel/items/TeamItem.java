@@ -65,7 +65,13 @@ public class TeamItem extends BasePlayPanelItemInstance {
         Player player = (Player) info.getPlayer();
         int level = getTeamInfoLevel(info);
 
+
         GameRoom room = info.getGameRoom();
+        MoneyItemInfoConfig oInfo = room.getRoomConfig().moneyItem.getItemInfoConfigs().get(0);
+        if (room.getRoomConfig().moneyItem.containsKey(moneyItem)) {
+            oInfo = room.getRoomConfig().moneyItem.get(moneyItem);
+        }
+
         if (level == effect.getMaxLevel() && effect.equals(new TeamTrap(1))) {
             info.sendMessage(BedWarMain.getLanguage().getLanguage("team-exists-effect",
                     "&c当前团队存在 &r[1]",getItem().getCustomName()));
@@ -84,13 +90,11 @@ public class TeamItem extends BasePlayPanelItemInstance {
             level = 1;
         }
         boolean u;
-        int rc = 1;
+        int rc = (int) oInfo.getExp();
+
         String errorMessage = BedWarMain.getLanguage().getLanguage("item-not-enough","[1] 不足",
-                moneyItem);
-        if (room.getRoomConfig().moneyItem.containsKey(moneyItem)) {
-            MoneyItemInfoConfig oInfo = room.getRoomConfig().moneyItem.get(moneyItem);
-            rc = (int) oInfo.getExp();
-        }
+                oInfo.getCustomName());
+
         if (room.getRoomConfig().isExp()) {
             //由于扣除经验落后一个等级
             u = info.reduceExp(count * (level)  * rc);

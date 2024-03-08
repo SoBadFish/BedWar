@@ -26,6 +26,7 @@ public class MoneyItemInfo {
         return new MoneyItemInfo(configLinkedHashMap);
     }
 
+
     public ArrayList<MoneyItemInfoConfig> getItemInfoConfigs(){
         return new ArrayList<>(items.values());
     }

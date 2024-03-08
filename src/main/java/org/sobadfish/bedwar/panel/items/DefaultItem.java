@@ -192,14 +192,15 @@ public class DefaultItem extends BasePlayPanelItemInstance {
             Player player = (Player) info.getPlayer();
 
             GameRoom room = info.getGameRoom();
-            boolean u = true;
-            int rc = 1;
-            String errorMessage = BedWarMain.getLanguage().getLanguage("item-not-enough","[1] 不足",
-                    moneyItem);
-            if(room.getRoomConfig().moneyItem.containsKey(moneyItem)){
-                MoneyItemInfoConfig oInfo = room.getRoomConfig().moneyItem.get(moneyItem);
-                rc = (int) oInfo.getExp();
+            MoneyItemInfoConfig oInfo = room.getRoomConfig().moneyItem.getItemInfoConfigs().get(0);
+            if (room.getRoomConfig().moneyItem.containsKey(moneyItem)) {
+                oInfo = room.getRoomConfig().moneyItem.get(moneyItem);
             }
+            boolean u = true;
+            int rc = (int) oInfo.getExp();
+            String errorMessage = BedWarMain.getLanguage().getLanguage("item-not-enough","[1] 不足",
+                    oInfo.getCustomName());
+
             Item i = getItem();
             if(info.buyArmorId.contains(i.getId())){
                 u = false;
