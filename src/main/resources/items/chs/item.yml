@@ -3,61 +3,61 @@ money:
     # 货币名称
   - name: "copper"
     # 仅用作显示名称
-    customName: "&4Copper"
+    customName: "&4铜锭"
     item: "336:0"
     exp: 1.0
     # 货币名称
   - name: "gold"
       # 仅用作显示名称
-    customName: "&eGold"
+    customName: "&e金锭"
     item: "266:0"
     exp: 5.0
     # 货币名称
   - name: "diamond"
     # 仅用作显示名称
-    customName: "&bDiamond"
+    customName: "&b钻石"
     item: "264:0"
     exp: 10.0
   - name: "emerald"
     # 仅用作显示名称
-    customName: "&aEmerald"
+    customName: "&a绿宝石"
     item: "388:0"
     exp: 20.0
 # 特殊物品
 nbtItem:
-  "platform-item":
-    customName: "&eshort platform"
+  platform-item:
+    customName: "&e救援平台"
     lore: []
     item: "341:0"
-  "back-hub-item":
-    customName: "&eQuickly return to the birth point"
+  back-hub-item:
+    customName: "&e快速回城"
     lore: []
     item: "288:0"
-  "string-item":
-    customName: "&e3*3Spider web"
+  string-item:
+    customName: "&e3*3蜘蛛网"
     lore: []
     item: "287:0"
-  "compass-item":
-    customName: "&ePoint to nearest player"
+  compass-item:
+    customName: "&e指向玩家"
     lore: []
     item: "345:0"
-  "guard-item":
-    customName: "&eGenerate iron golem"
+  guard-item:
+    customName: "&e生成护卫"
     lore: []
     item: "383:10"
-  "fire-ball-item":
-    customName: "&eFire bomb"
+  fire-ball-item:
+    customName: "&e火球"
     lore: []
     item: "385:0"
-  "die-item":
-    customName: "&eDie bow"
+  die-item:
+    customName: "&e凋零弓"
     lore: []
     item: "261:0"
-  "egg-item":
-    customName: "&ebridge egg"
+  egg-item:
+    customName: "&e搭桥蛋"
     lore: []
     item: "344:0"
-  "wall-item":
-    customName: "&eGuard wall"
+  wall-item:
+    customName: "&e守卫墙"
     lore: []
     item: "336:0"

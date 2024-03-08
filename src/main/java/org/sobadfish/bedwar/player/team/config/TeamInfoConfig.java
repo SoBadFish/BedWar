@@ -116,7 +116,7 @@ public class TeamInfoConfig {
 
     public LinkedHashMap<String, Object> save(){
         LinkedHashMap<String, Object> config = new LinkedHashMap<>();
-        config.put("name",teamConfig.getName());
+//        config.put("name",teamConfig.getName());
         config.put("position",spawnPosition);
         config.put("bedPosition",bedPosition);
         config.put("bedFace",bedFace.getName());

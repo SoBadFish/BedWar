@@ -16,10 +16,7 @@ import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -69,7 +66,7 @@ public class GameRoomConfig implements Cloneable{
     /**
      * 队伍数据信息
      * */
-    public LinkedHashMap<String,TeamConfig> teamCfg = new LinkedHashMap<>();
+    public List<TeamConfig> teamCfg = new LinkedList<>();
 
     /**
      * 队伍
@@ -276,7 +273,7 @@ public class GameRoomConfig implements Cloneable{
         return maxWaitTime;
     }
 
-    public LinkedHashMap<String, TeamConfig> getTeamCfg() {
+    public List<TeamConfig> getTeamCfg() {
         return teamCfg;
     }
 
@@ -396,8 +393,17 @@ public class GameRoomConfig implements Cloneable{
         this.name = name;
     }
 
-    public void setTeamCfg(LinkedHashMap<String, TeamConfig> teamCfg) {
+    public void setTeamCfg(List<TeamConfig> teamCfg) {
         this.teamCfg = teamCfg;
+    }
+
+    public List<String> getTeamNames(){
+        List<String> names = new ArrayList<String>();
+        for (TeamConfig teamConfig : teamCfg) {
+            names.add(teamConfig.getName());
+
+        }
+        return names;
     }
 
     public void setMaxPlayerSize(int maxPlayerSize) {
@@ -527,13 +533,13 @@ public class GameRoomConfig implements Cloneable{
             BedWarMain.sendMessageToConsole("创建文件夹 shop 失败");
         }
 
-        BedWarMain.getBedWarMain().saveResource("shop/shopClassify.yml","/rooms/"+name+"/shop/shopClassify.yml",false);
-        BedWarMain.getBedWarMain().saveResource("shop/defaultShop.yml","/rooms/"+name+"/shop/defaultShop.yml",false);
-        BedWarMain.getBedWarMain().saveResource("shop/teamShop.yml","/rooms/"+name+"/shop/teamShop.yml",false);
-        BedWarMain.getBedWarMain().saveResource("item.yml","/rooms/"+name+"/item.yml",false);
-        BedWarMain.getBedWarMain().saveResource("team.yml","/rooms/"+name+"/team.yml",false);
+        BedWarMain.getBedWarMain().saveResource("shop/"+BedWarMain.getLanguage().lang+"/shopClassify.yml","/rooms/"+name+ "/shop/"+BedWarMain.getLanguage().lang+"/shopClassify.yml",false);
+        BedWarMain.getBedWarMain().saveResource("shop/"+BedWarMain.getLanguage().lang+"/defaultShop.yml","/rooms/"+name+ "/shop/"+BedWarMain.getLanguage().lang+"/defaultShop.yml",false);
+        BedWarMain.getBedWarMain().saveResource("shop/"+BedWarMain.getLanguage().lang+"/teamShop.yml","/rooms/"+name+ "/shop/"+BedWarMain.getLanguage().lang+"/teamShop.yml",false);
+        BedWarMain.getBedWarMain().saveResource("items/"+BedWarMain.getLanguage().lang+"/item.yml","/rooms/"+name+"/"+BedWarMain.getLanguage().lang+"/item.yml",false);
+        BedWarMain.getBedWarMain().saveResource("team/"+BedWarMain.getLanguage().lang+"/team.yml","/rooms/"+name+"/"+BedWarMain.getLanguage().lang+"/team.yml",false);
         BedWarMain.getBedWarMain().saveResource("event.yml","/rooms/"+name+"/event.yml",false);
-        BedWarMain.getBedWarMain().saveResource("roomEventList.yml","/rooms/"+name+"/roomEventList.yml",false);
+        BedWarMain.getBedWarMain().saveResource("event/"+BedWarMain.getLanguage().lang+"/roomEventList.yml","/rooms/"+name+"/"+BedWarMain.getLanguage().lang+"/roomEventList.yml",false);
         BedWarMain.getBedWarMain().saveResource("readme.txt","/rooms/"+name+"/readme.txt",false);
         loadTeamShopConfig(roomConfig);
         return roomConfig;
@@ -541,14 +547,14 @@ public class GameRoomConfig implements Cloneable{
     }
 
     public static void loadTeamShopConfig(GameRoomConfig roomConfig){
-        Config team = new Config(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+roomConfig.name+"/team.yml",Config.YAML);
-        LinkedHashMap<String,TeamConfig> teamConfigs = new LinkedHashMap<>();
+        Config team = new Config(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+roomConfig.name+"/"+BedWarMain.getLanguage().lang+"/team.yml",Config.YAML);
+        List<TeamConfig> teamConfigs = new LinkedList<>();
         for(Map<?,?> map : team.getMapList("team")){
             TeamConfig teamConfig = TeamConfig.getInstance(map);
-            teamConfigs.put(teamConfig.getName(),teamConfig);
+            teamConfigs.add(teamConfig);
         }
         roomConfig.setTeamCfg(teamConfigs);
-        Config item = new Config(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+roomConfig.name+"/item.yml",Config.YAML);
+        Config item = new Config(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+roomConfig.name+"/"+BedWarMain.getLanguage().lang+"/item.yml",Config.YAML);
         MoneyItemInfo itemInfo = MoneyItemInfo.getMoneyItemInfoByFile(item);
         roomConfig.setNbtItemInfo(NbtItemInfo.getNbtItemInfoByFile(item));
 
@@ -574,17 +580,17 @@ public class GameRoomConfig implements Cloneable{
     public static GameRoomConfig getGameRoomConfigByFile(String name, File file){
         if(file.isDirectory()){
             try {
-                Config team = new Config(file+"/team.yml",Config.YAML);
-                LinkedHashMap<String,TeamConfig> teamConfigs = new LinkedHashMap<>();
+                Config team = new Config(file+"/"+BedWarMain.getLanguage().lang+"/team.yml",Config.YAML);
+                List<TeamConfig> teamConfigs = new LinkedList<>();
                 for(Map<?,?> map : team.getMapList("team")){
                     TeamConfig teamConfig = TeamConfig.getInstance(map);
-                    teamConfigs.put(teamConfig.getName(),teamConfig);
+                    teamConfigs.add(teamConfig);
                 }
-                if(!new File(file+"/item.yml").exists()){
-                    BedWarMain.getBedWarMain().saveResource("item.yml","/rooms/"+name+"/item.yml",false);
+                if(!new File(file+"/"+BedWarMain.getLanguage().lang+"/item.yml").exists()){
+                    BedWarMain.getBedWarMain().saveResource("items/"+BedWarMain.getLanguage().lang+"/item.yml","/rooms/"+name+"/"+BedWarMain.getLanguage().lang+"/item.yml",false);
 
                 }
-                Config item = new Config(file+"/item.yml",Config.YAML);
+                Config item = new Config(file+"/"+BedWarMain.getLanguage().lang+"/item.yml",Config.YAML);
                 MoneyItemInfo itemInfo = MoneyItemInfo.getMoneyItemInfoByFile(item);
                 NbtItemInfo nbtItemInfo = NbtItemInfo.getNbtItemInfoByFile(item);
                 if(!new File(file+"/room.yml").exists()){
@@ -606,10 +612,15 @@ public class GameRoomConfig implements Cloneable{
                 int minPlayerSize = room.getInt("minPlayerSize");
                 int maxPlayerSize =  room.getInt("maxPlayerSize");
                 ArrayList<TeamInfoConfig> teamInfoConfigs = new ArrayList<>();
-                for(Map<?,?> map: room.getMapList("teamSpawn")){
-                    teamInfoConfigs.add(TeamInfoConfig.getInfoByMap(
-                            teamConfigs.get(map.get("name").toString()),map));
+                for(int i = 0;i < teamConfigs.size();i++) {
+                    teamInfoConfigs.add(
+                            TeamInfoConfig.getInfoByMap(  teamConfigs.get(i) ,room.getMapList("teamSpawn").get(i)));
                 }
+//                int index = 0;
+//                for(Map<?,?> map: room.getMapList("teamSpawn")){
+//                    teamInfoConfigs.add(TeamInfoConfig.getInfoByMap(
+//                            teamConfigs.get(map.get("name").toString()),map));
+//                }
                 File shopDir = new File(file+"/shop");
                 if(!shopDir.exists()){
                     if(!shopDir.mkdirs()){
@@ -617,27 +628,27 @@ public class GameRoomConfig implements Cloneable{
                     }
                 }
                 if(shopDir.isDirectory()){
-                    if(!new File(file+"/shop/defaultShop.yml").exists()){
-                        BedWarMain.getBedWarMain().saveResource("shop/defaultShop.yml","/rooms/"+name+"/shop/defaultShop.yml",false);
+                    if(!new File(file+ "/shop/"+BedWarMain.getLanguage().lang+"/defaultShop.yml").exists()){
+                        BedWarMain.getBedWarMain().saveResource("shop/"+BedWarMain.getLanguage().lang+"/defaultShop.yml","/rooms/"+name+ "/shop/"+BedWarMain.getLanguage().lang+"/defaultShop.yml",false);
 
                     }
-                    if(!new File(file+"/shop/teamShop.yml").exists()) {
-                        BedWarMain.getBedWarMain().saveResource("shop/teamShop.yml", "/rooms/" + name + "/shop/teamShop.yml", false);
+                    if(!new File(file+ "/shop/"+BedWarMain.getLanguage().lang+"/teamShop.yml").exists()) {
+                        BedWarMain.getBedWarMain().saveResource("shop/"+BedWarMain.getLanguage().lang+"/teamShop.yml", "/rooms/" + name + "/shop/"+BedWarMain.getLanguage().lang+"/teamShop.yml", false);
                     }
-                    if(!new File(file+"/shop/shopClassify.yml").exists()) {
-                        BedWarMain.getBedWarMain().saveResource("shop/shopClassify.yml", "/rooms/" + name + "/shop/shopClassify.yml", false);
+                    if(!new File(file+ "/shop/"+BedWarMain.getLanguage().lang+"/shopClassify.yml").exists()) {
+                        BedWarMain.getBedWarMain().saveResource("shop/"+BedWarMain.getLanguage().lang+"/shopClassify.yml", "/rooms/" + name + "/shop/"+BedWarMain.getLanguage().lang+"/shopClassify.yml", false);
                     }
                 }
                 if(!new File(file+"/event.yml").exists()){
                     BedWarMain.getBedWarMain().saveResource("event.yml","/rooms/"+name+"/event.yml",false);
                 }
-                if(!new File(file+"/roomEventList.yml").exists()){
-                    BedWarMain.getBedWarMain().saveResource("roomEventList.yml","/rooms/"+name+"/roomEventList.yml",false);
+                if(!new File(file+"/"+BedWarMain.getLanguage().lang+"/roomEventList.yml").exists()){
+                    BedWarMain.getBedWarMain().saveResource("event/"+BedWarMain.getLanguage().lang+"/roomEventList.yml","/rooms/"+name+"/"+BedWarMain.getLanguage().lang+"/roomEventList.yml",false);
                 }
                 //TODO 实现商店
                 //先加载配置项
 
-                Config classShop = new Config(shopDir+"/shopClassify.yml",Config.YAML);
+                Config classShop = new Config(shopDir+"/"+BedWarMain.getLanguage().lang+"/shopClassify.yml",Config.YAML);
                 List<ShopInfoConfig.ShopItemClassify> shopItemClassifies = new ArrayList<>();
                 for(Map.Entry<String,Object> entry: classShop.getAll().entrySet()){
                     Object obj = entry.getValue();
@@ -654,8 +665,8 @@ public class GameRoomConfig implements Cloneable{
 
 
                 LinkedHashMap<String, ShopItemInfo> shopMap = new LinkedHashMap<>();
-                shopMap.put("defaultShop",ShopItemInfo.build(shopItemClassifies,"defaultShop",new Config(shopDir+"/defaultShop.yml",Config.YAML)));
-                shopMap.put("teamShop",ShopItemInfo.build(null,"teamShop",new Config(shopDir+"/teamShop.yml",Config.YAML)));
+                shopMap.put("defaultShop",ShopItemInfo.build(shopItemClassifies,"defaultShop",new Config(shopDir+"/"+BedWarMain.getLanguage().lang+"/defaultShop.yml",Config.YAML)));
+                shopMap.put("teamShop",ShopItemInfo.build(null,"teamShop",new Config(shopDir+"/"+BedWarMain.getLanguage().lang+"/teamShop.yml",Config.YAML)));
                 BedWarMain.sendMessageToConsole("defaultShop load OK");
                 GameRoomConfig roomConfig = new GameRoomConfig(name,worldInfoConfig,time,waitTime,maxWaitTime,minPlayerSize,maxPlayerSize,shopMap,teamInfoConfigs);
                 roomConfig.setTeamCfg(teamConfigs);
@@ -734,7 +745,7 @@ public class GameRoomConfig implements Cloneable{
                 BedWarMain.sendMessageToConsole("&eLoading Room Events");
                 roomConfig.eventConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/event.yml"));
                 BedWarMain.sendMessageToConsole("&eLoading Room spare Events");
-                roomConfig.eventListConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/roomEventList.yml"));
+                roomConfig.eventListConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/"+BedWarMain.getLanguage().lang+"/roomEventList.yml"));
                 return roomConfig;
             }catch (Exception e){
                 e.printStackTrace();

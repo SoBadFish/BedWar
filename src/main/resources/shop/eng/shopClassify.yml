@@ -1,0 +1,27 @@
+fast:
+  name: "Quick purchase"
+  item: "264:0"
+weapon:
+  name: "weapon"
+  item: "276:0"
+armor:
+  name: "armor"
+  item: "311:0"
+bow:
+  name: "bow"
+  item: "261:0"
+block:
+  name: "block"
+  item: "24:2"
+food:
+  name: "food"
+  item: "320:0"
+tools:
+  name: "tools"
+  item: "278:0"
+items:
+  name: "items"
+  item: "46:0"
+effect:
+  name: "effect"
+  item: "373:0"

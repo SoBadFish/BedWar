@@ -104,6 +104,8 @@ public class DisPlayerPanel implements InventoryHolder {
             for (BasePlayPanelItemInstance panelItemInstance : shopInfoConfigs.getShopItems()) {
                 if(panelItemInstance != null){
                     if(panelItemInstance instanceof NbtDefaultItem){
+                        System.out.println("字符: "+ gameRoom.getNbtItemInfo()
+                                .items.get(((NbtDefaultItem) panelItemInstance).item.getName()));
                         ((NbtDefaultItem) panelItemInstance).setPlayerItem(
                                 gameRoom.getNbtItemInfo()
                                         .items.get(((NbtDefaultItem) panelItemInstance).item.getName()));

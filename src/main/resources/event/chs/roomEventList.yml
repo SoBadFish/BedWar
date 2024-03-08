@@ -1,0 +1,36 @@
+# 整局游戏中的事件
+# 跟 events 列表联动
+# 这里的事件不直接参与游戏内 但是会保存在游戏内
+# 通过自定义事件调用
+# value 数值在 time 类型中为tick时间 20 tick 为 1 秒
+# eventTime 为事件倒计时 单位为秒
+eventLists:
+  - type: "time"
+    display: "钻石点升级 II 级"
+    eventTime: 220
+    value: "diamond:800"
+  - type: "time"
+    display: "钻石点升级 III 级"
+    eventTime: 260
+    value: "diamond:60"
+  - type: "time"
+    display: "绿宝石点升级 II 级"
+    eventTime: 280
+    value: "emerald:1000"
+  - type: "time"
+    display: "绿宝石点升级 III 级"
+    eventTime: 300
+    value: "emerald:800"
+  - type: "break"
+    display: "床破坏"
+    eventTime: 330
+  - type: "chicken"
+    display: "鸡你太美~"
+    eventTime: 20
+    value: 0.25
+  - type: "light"
+    display: "天选时刻"
+    eventTime: 20
+    value: 1
+
+

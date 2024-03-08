@@ -4,6 +4,7 @@ import cn.nukkit.math.BlockFace;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
 import org.sobadfish.bedwar.player.PlayerInfo;
+import org.sobadfish.bedwar.player.team.config.TeamConfig;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.tools.Utils;
@@ -165,10 +166,10 @@ public class GameRoomCreater {
             case 3:
                 worldInfoConfig.setWaitPosition(creator.getPosition());
                 creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-game-wait-success","&2成功设置等待大厅"));
-//                creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"商店 &21&b /&d "+roomConfig.teamCfg.size()+"&r]");
+//                creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.getTeamNames()).get(team.size()))+"商店 &21&b /&d "+roomConfig.teamCfg.size()+"&r]");
                 creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-shop",
                         "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]商店 &2[3]&b /&d [4]&r]","bd",
-                        (new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size())),
+                        (new ArrayList<>(roomConfig.getTeamNames()).get(team.size())),
                         "1",
                         roomConfig.teamCfg.size()+""
                 ));
@@ -181,18 +182,18 @@ public class GameRoomCreater {
                 createShop2Pos();
                 break;
             case 6:
-                team.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()),WorldInfoConfig.positionToString(creator.getPosition()));
+                team.put(new ArrayList<>(roomConfig.getTeamNames()).get(team.size()),WorldInfoConfig.positionToString(creator.getPosition()));
                 int index;
                 team.size();
                 index = team.size() - 1;
                 creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-team-spawn",
                         "&2设置&r [1] &2出生点坐标&r [&2[2] &b/&d [3]&r]",
-                        (new ArrayList<>(roomConfig.teamCfg.keySet()).get(index)),
+                        (new ArrayList<>(roomConfig.getTeamNames()).get(index)),
                         team.size()+"",
                         roomConfig.getTeamCfg().size()+""
 
                         ));
-//                creator.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(index))+"出生点 &r[&2"+team.size()+"&b/&d"+roomConfig.getTeamCfg().size()+"&r]");
+//                creator.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.getTeamNames()).get(index))+"出生点 &r[&2"+team.size()+"&b/&d"+roomConfig.getTeamCfg().size()+"&r]");
                 if(team.size() == roomConfig.getTeamCfg().size()){
 
                     creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-team-spawn-success",
@@ -200,17 +201,17 @@ public class GameRoomCreater {
                     creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-bed-location",
                             "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]床的位置&2 [3]&b /&d [4]&r]",
                             "bd",
-                            (new ArrayList<>(roomConfig.teamCfg.keySet()).get(0)),
+                            (new ArrayList<>(roomConfig.getTeamNames()).get(0)),
                             "1",
                             roomConfig.teamCfg.size()+""));
-//                    creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(0))+"床的位置&2 1&b /&d "+roomConfig.teamCfg.size()+"&r]");
+//                    creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.getTeamNames()).get(0))+"床的位置&2 1&b /&d "+roomConfig.teamCfg.size()+"&r]");
                     flag++;
                     break;
                 }
                 creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-spawn",
                         "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]出生点 &2[2]&b /&d [4]&r]",
                         "bd",
-                        (new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size())),
+                        (new ArrayList<>(roomConfig.getTeamNames()).get(team.size())),
                         (team.size() + 1)+"" ,
                         roomConfig.getTeamCfg().size()+  ""
                         ));
@@ -232,33 +233,33 @@ public class GameRoomCreater {
      * 创建商店1坐标
      * */
     private void createShopPos(){
-        teamShop.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop.size()),WorldInfoConfig.locationToString(creator.getLocation()));
+        teamShop.put(new ArrayList<>(roomConfig.getTeamNames()).get(teamShop.size()),WorldInfoConfig.locationToString(creator.getLocation()));
 
         creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-setting-shop",
                 "&2设置[1]商店 &r[&a[2]&b/&d[3]&r]",
-                (new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop.size() - 1)),
+                (new ArrayList<>(roomConfig.getTeamNames()).get(teamShop.size() - 1)),
                 teamShop.size()+"",
                 roomConfig.getTeamCfg().size()+""
                 ));
 //        creator.sendForceMessage(
-//                "&2设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop.size() - 1))+"商店 &r[&a"+teamShop.size()+"&b/&d"+roomConfig.getTeamCfg().size()+"&r]");
+//                "&2设置"+(new ArrayList<>(roomConfig.getTeamNames()).get(teamShop.size() - 1))+"商店 &r[&a"+teamShop.size()+"&b/&d"+roomConfig.getTeamCfg().size()+"&r]");
         if(teamShop.size() == roomConfig.getTeamCfg().size()){
             creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-team-shop",
                     "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]团队商店 &r[&2[3] &b/&d [4]&r]",
                     "bd",
-                    (new ArrayList<>(roomConfig.teamCfg.keySet()).get(0)),
+                    (new ArrayList<>(roomConfig.getTeamNames()).get(0)),
                     (team.size() + 1)+"",
                     roomConfig.getTeamCfg().size()+""
                     ));
-//            creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(0))+"团队商店 &r[&2"+(team.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+//            creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.getTeamNames()).get(0))+"团队商店 &r[&2"+(team.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
             flag++;
             return;
         }
-//        creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop.size()))+"商店 &r[&2"+(teamShop.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+//        creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.getTeamNames()).get(teamShop.size()))+"商店 &r[&2"+(teamShop.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
         creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-shop",
                 "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]商店 &2[3]&b /&d [4]&r]",
                 "bd",
-                (new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size())),
+                (new ArrayList<>(roomConfig.getTeamNames()).get(team.size())),
                 (teamShop.size() + 1)+"",
                 roomConfig.teamCfg.size()+""
         ));
@@ -267,21 +268,21 @@ public class GameRoomCreater {
      * 创建商店2坐标
      * */
     private void createShop2Pos(){
-        teamShop2.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop2.size()),WorldInfoConfig.locationToString(creator.getLocation()));
+        teamShop2.put(new ArrayList<>(roomConfig.getTeamNames()).get(teamShop2.size()),WorldInfoConfig.locationToString(creator.getLocation()));
         creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-setting-team-shop",
                 "&2设置[1]团队商店 &r[&2[2] &b/&d [3]&r]",
-                (new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop2.size() - 1)),
+                (new ArrayList<>(roomConfig.getTeamNames()).get(teamShop2.size() - 1)),
                 teamShop2.size()+"",
                 roomConfig.getTeamCfg().size()+""
                 ));
-//        creator.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop2.size() - 1))+"团队商店 &r[&2"+teamShop2.size()+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+//        creator.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.getTeamNames()).get(teamShop2.size() - 1))+"团队商店 &r[&2"+teamShop2.size()+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
         if(teamShop2.size() == roomConfig.getTeamCfg().size()){
-//            creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(0))+"出生点 &r[&2"+(team.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+//            creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.getTeamNames()).get(0))+"出生点 &r[&2"+(team.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
 
             creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-spawn",
                     "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]出生点 &2[2]&b /&d [4]&r]",
                     "bd",
-                    (new ArrayList<>(roomConfig.teamCfg.keySet()).get(0)),
+                    (new ArrayList<>(roomConfig.getTeamNames()).get(0)),
                     (team.size() + 1)+"" ,
                     roomConfig.getTeamCfg().size()+  ""
             ));
@@ -289,11 +290,11 @@ public class GameRoomCreater {
             return;
 
         }
-//        creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop2.size() ))+"团队商店 &r[&2"+(teamShop2.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+//        creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.getTeamNames()).get(teamShop2.size() ))+"团队商店 &r[&2"+(teamShop2.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
         creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-team-shop",
                 "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]团队商店 &r[&2[3] &b/&d [4]&r]",
                 "bd",
-                (new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamShop2.size() )),
+                (new ArrayList<>(roomConfig.getTeamNames()).get(teamShop2.size() )),
                 (teamShop2.size() + 1)+"",
                 roomConfig.getTeamCfg().size()+""
         ));
@@ -303,12 +304,12 @@ public class GameRoomCreater {
      * 创建床坐标
      * */
     private void createBedPos(){
-        teamBed.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size()),WorldInfoConfig.positionToString(creator.getPosition()));
-        teamBedFace.put(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBedFace.size()), creator.getHorizontalFacing());
-//        creator.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size() - 1))+"床坐标 &r[&2"+teamBed.size()+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+        teamBed.put(new ArrayList<>(roomConfig.getTeamNames()).get(teamBed.size()),WorldInfoConfig.positionToString(creator.getPosition()));
+        teamBedFace.put(new ArrayList<>(roomConfig.getTeamNames()).get(teamBedFace.size()), creator.getHorizontalFacing());
+//        creator.sendForceMessage("&2设置"+(new ArrayList<>(roomConfig.getTeamNames()).get(teamBed.size() - 1))+"床坐标 &r[&2"+teamBed.size()+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
         creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-bed-location",
                 "&2设置[1]床坐标 &r[&2[2] &b/&d [3]&r]",
-                (new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size() - 1)),
+                (new ArrayList<>(roomConfig.getTeamNames()).get(teamBed.size() - 1)),
                 teamBed.size()+"",
                 roomConfig.getTeamCfg().size()+""));
         if(teamBed.size() == roomConfig.getTeamCfg().size()){
@@ -322,8 +323,10 @@ public class GameRoomCreater {
                     moneyItemSize.getOrDefault(roomConfig.moneyItem.getNames().get(0),4)+""
                     ));
             ArrayList<TeamInfoConfig> teamInfoConfigs = new ArrayList<>();
-            for(String teamName : team.keySet()){
-                TeamInfoConfig teamInfoConfig = new TeamInfoConfig(roomConfig.teamCfg.get(teamName),teamBed.get(teamName),teamBedFace.get(teamName),team.get(teamName));
+            for(int i= 0;i < team.size();i++){
+                TeamConfig teamConfig = roomConfig.teamCfg.get(i);
+                String teamName = teamConfig.getName();
+                TeamInfoConfig teamInfoConfig = new TeamInfoConfig(teamConfig,teamBed.get(teamName),teamBedFace.get(teamName),team.get(teamName));
                 teamInfoConfig.setVillage(new LinkedHashMap<String, String>(){
                     {
                         put("defaultShop",teamShop.get(teamName));
@@ -340,10 +343,10 @@ public class GameRoomCreater {
         creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-run-command-bed-location",
                 "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]床的位置&2 [3]&b /&d [4]&r]",
                 "bd",
-                (new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size())),
+                (new ArrayList<>(roomConfig.getTeamNames()).get(teamBed.size())),
                 (teamBed.size() + 1)+"",
                 roomConfig.getTeamCfg().size()+""));
-//        creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamBed.size()))+"床&r [&2"+(teamBed.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+//        creator.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.getTeamNames()).get(teamBed.size()))+"床&r [&2"+(teamBed.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
     }
     /**
      * 创建生成点坐标
