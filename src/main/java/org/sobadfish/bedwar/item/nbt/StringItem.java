@@ -19,7 +19,7 @@ import java.util.LinkedHashMap;
 public class StringItem implements INbtItem{
     @Override
     public String getName() {
-        return BedWarMain.getLanguage().getLanguage("string-item","线");
+        return "string-item";
     }
 
     @Override

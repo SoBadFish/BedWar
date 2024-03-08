@@ -22,8 +22,7 @@ public class BackHub implements INbtItem{
 
     @Override
     public String getName() {
-        return
-                BedWarMain.getLanguage().getLanguage("back-hub-item","快速回城");
+        return "back-hub-item";
     }
 
     @Override

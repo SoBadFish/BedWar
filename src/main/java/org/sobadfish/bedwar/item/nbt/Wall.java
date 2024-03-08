@@ -18,7 +18,7 @@ import java.util.LinkedHashMap;
 public class Wall implements INbtItem {
     @Override
     public String getName() {
-        return BedWarMain.getLanguage().getLanguage("wall-item","守卫墙");
+        return "wall-item";
     }
 
     @Override

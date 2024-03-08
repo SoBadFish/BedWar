@@ -16,7 +16,7 @@ import java.util.*;
 public class PointPlayer implements INbtItem{
     @Override
     public String getName() {
-        return BedWarMain.getLanguage().getLanguage("compass-item","指南针");
+        return "compass-item";
     }
 
     @Override

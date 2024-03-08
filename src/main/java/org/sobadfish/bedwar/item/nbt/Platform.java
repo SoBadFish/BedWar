@@ -22,7 +22,7 @@ public class Platform implements INbtItem {
 
     @Override
     public String getName() {
-        return BedWarMain.getLanguage().getLanguage("platform-item","简易平台");
+        return "platform-item";
     }
 
     @Override

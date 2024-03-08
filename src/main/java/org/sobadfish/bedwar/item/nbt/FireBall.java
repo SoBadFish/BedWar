@@ -26,7 +26,7 @@ public class FireBall implements INbtItem{
 
     @Override
     public String getName() {
-        return BedWarMain.getLanguage().getLanguage("fire-ball-item","火球");
+        return "fire-ball-item";
     }
 
     @Override
