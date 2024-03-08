@@ -81,6 +81,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
 //
 //                    }
                     if (update > 5) {
+                        //每5秒刷新一下...
                         floatText.disPlayers();
                         update = 0;
                     }

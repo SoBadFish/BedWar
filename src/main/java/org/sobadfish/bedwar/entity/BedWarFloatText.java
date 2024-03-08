@@ -138,6 +138,9 @@ public class BedWarFloatText extends Entity {
     }
 
     private void toDisplay(){
+        //清空一下显示
+        this.despawnFromAll();
+        this.player.clear();
         for(Player player: this.level.getPlayers().values()){
             if(!this.player.contains(player.getName())) {
                 if(player.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())){
