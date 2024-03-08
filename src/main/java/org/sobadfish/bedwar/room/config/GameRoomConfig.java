@@ -547,6 +547,7 @@ public class GameRoomConfig implements Cloneable{
     }
 
     public static void loadTeamShopConfig(GameRoomConfig roomConfig){
+
         Config team = new Config(BedWarMain.getBedWarMain().getDataFolder()+"/rooms/"+roomConfig.name+"/"+BedWarMain.getLanguage().lang+"/team.yml",Config.YAML);
         List<TeamConfig> teamConfigs = new LinkedList<>();
         for(Map<?,?> map : team.getMapList("team")){
@@ -580,6 +581,10 @@ public class GameRoomConfig implements Cloneable{
     public static GameRoomConfig getGameRoomConfigByFile(String name, File file){
         if(file.isDirectory()){
             try {
+                if(!new File(file+"/"+BedWarMain.getLanguage().lang+"/team.yml").exists()){
+                    BedWarMain.getBedWarMain().saveResource("team/"+BedWarMain.getLanguage().lang+"/team.yml","/rooms/"+name+"/"+BedWarMain.getLanguage().lang+"/team.yml",false);
+
+                }
                 Config team = new Config(file+"/"+BedWarMain.getLanguage().lang+"/team.yml",Config.YAML);
                 List<TeamConfig> teamConfigs = new LinkedList<>();
                 for(Map<?,?> map : team.getMapList("team")){
