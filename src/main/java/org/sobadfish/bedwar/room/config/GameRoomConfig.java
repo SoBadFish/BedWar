@@ -617,9 +617,9 @@ public class GameRoomConfig implements Cloneable{
                 int minPlayerSize = room.getInt("minPlayerSize");
                 int maxPlayerSize =  room.getInt("maxPlayerSize");
                 ArrayList<TeamInfoConfig> teamInfoConfigs = new ArrayList<>();
-                for(int i = 0;i < teamConfigs.size();i++) {
+                for(int i = 0;i < Math.min(teamConfigs.size(),room.getMapList("teamSpawn").size());i++) {
                     teamInfoConfigs.add(
-                            TeamInfoConfig.getInfoByMap(  teamConfigs.get(i) ,room.getMapList("teamSpawn").get(i)));
+                            TeamInfoConfig.getInfoByMap(teamConfigs.get(i) ,room.getMapList("teamSpawn").get(i)));
                 }
 //                int index = 0;
 //                for(Map<?,?> map: room.getMapList("teamSpawn")){
