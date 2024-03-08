@@ -621,11 +621,7 @@ public class GameRoomConfig implements Cloneable{
                     teamInfoConfigs.add(
                             TeamInfoConfig.getInfoByMap(teamConfigs.get(i) ,room.getMapList("teamSpawn").get(i)));
                 }
-//                int index = 0;
-//                for(Map<?,?> map: room.getMapList("teamSpawn")){
-//                    teamInfoConfigs.add(TeamInfoConfig.getInfoByMap(
-//                            teamConfigs.get(map.get("name").toString()),map));
-//                }
+
                 File shopDir = new File(file+"/shop");
                 if(!shopDir.exists()){
                     if(!shopDir.mkdirs()){
