@@ -88,7 +88,9 @@ public class BedWarFloatText extends Entity {
     @Override
     public boolean onUpdate(int i) {
 
-        return super.onUpdate(i);
+
+         super.onUpdate(i);
+         return true;
     }
 
 
@@ -164,6 +166,10 @@ public class BedWarFloatText extends Entity {
 //        if(this.isClosed()){
 //            FloatTextManager.removeFloatText(this);
 //        }
+//        检查是否存活 /
+        if(!this.isAlive()){
+           this.hasSpawned.clear();
+        }
         this.setText(uText,false);
 
 
