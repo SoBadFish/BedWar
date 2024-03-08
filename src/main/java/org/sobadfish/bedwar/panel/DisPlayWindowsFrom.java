@@ -48,7 +48,7 @@ public class DisPlayWindowsFrom {
             }
 //            shopButtons.add(new ShopButton(new TeamPanelItem(room,shopItemInfo)));
             shopFrom.setShopButtons(shopButtons);
-            shopFrom.disPlay("Menu",false);
+            shopFrom.disPlay("MENU",false);
 
         }
 
@@ -99,6 +99,6 @@ public class DisPlayWindowsFrom {
         }
 
         shopFrom.setShopButtons(shopButtons);
-        shopFrom.disPlay("Team Shop",isBack);
+        shopFrom.disPlay("TEAM SHOP",isBack);
     }
 }

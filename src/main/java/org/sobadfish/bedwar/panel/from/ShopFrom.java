@@ -129,7 +129,7 @@ public class ShopFrom {
             simple.addButton(shopButton.getItemInstance().getGUIButton(playerInfo));
         }
         if(isBack) {
-            ElementButton button2 = new ElementButton("Back", new ElementButtonImageData("path", "textures/ui/refresh_light"));
+            ElementButton button2 = new ElementButton("BACK", new ElementButtonImageData("path", "textures/ui/refresh_light"));
             simple.addButton(button2);
         }
         player.showFormWindow(simple,++id);
