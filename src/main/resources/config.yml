@@ -3,7 +3,7 @@ title: "&f[&aBedWar&f]"
 # 语言
 # chs 简体中文
 # eng English
-language: "eng"
+language: "chs"
 
 scoreboard-title: "&f[&aBedWar&f]"
 
@@ -31,4 +31,4 @@ join-menu:
       type: "path"
       path: "textures/ui/icon_recipe_item"
     rooms:
-      - "Test Room"
+      - "bd"

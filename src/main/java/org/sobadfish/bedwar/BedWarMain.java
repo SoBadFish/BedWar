@@ -3,19 +3,13 @@ package org.sobadfish.bedwar;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Position;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
-
 import org.sobadfish.bedwar.command.BedWarAdminCommand;
 import org.sobadfish.bedwar.command.BedWarCommand;
 import org.sobadfish.bedwar.command.BedWarSpeakCommand;
-import org.sobadfish.bedwar.entity.BridgingEggEntity;
-import org.sobadfish.bedwar.entity.EntityBlueWitherSkull;
-import org.sobadfish.bedwar.entity.EntityFireBall;
-import org.sobadfish.bedwar.entity.IronGolem;
 import org.sobadfish.bedwar.manager.*;
 import org.sobadfish.bedwar.manager.data.PlayerDataManager;
 import org.sobadfish.bedwar.manager.data.PlayerTopManager;
@@ -139,10 +133,11 @@ public class BedWarMain extends PluginBase {
 
 
         }
-        Entity.registerEntity("FireBall", EntityFireBall.class);
-        Entity.registerEntity("BridgingEgg", BridgingEggEntity.class);
-        Entity.registerEntity(EntityBlueWitherSkull.class.getSimpleName(), EntityBlueWitherSkull.class);
-        Entity.registerEntity(IronGolem.class.getSimpleName(), IronGolem.class);
+        //应该没必要注册..
+//        Entity.registerEntity("FireBall", EntityFireBall.class);
+//        Entity.registerEntity("BridgingEgg", BridgingEggEntity.class);
+//        Entity.registerEntity(EntityBlueWitherSkull.class.getSimpleName(), EntityBlueWitherSkull.class);
+//        Entity.registerEntity(IronGolem.class.getSimpleName(), IronGolem.class);
         initSkin();
         loadBedWarConfig();
 
