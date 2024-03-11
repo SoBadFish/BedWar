@@ -1,27 +1,27 @@
 fast:
-  name: "Quick purchase"
+  name: "快速购买"
   item: "264:0"
 weapon:
-  name: "weapon"
+  name: "武器"
   item: "276:0"
 armor:
-  name: "armor"
+  name: "盔甲"
   item: "311:0"
 bow:
-  name: "bow"
+  name: "弓"
   item: "261:0"
 block:
-  name: "block"
+  name: "方块"
   item: "24:2"
 food:
-  name: "food"
+  name: "食物"
   item: "320:0"
 tools:
-  name: "tools"
+  name: "工具"
   item: "278:0"
 items:
-  name: "items"
+  name: "小道具"
   item: "46:0"
 effect:
-  name: "effect"
+  name: "药水"
   item: "373:0"
