@@ -992,13 +992,25 @@ public class RoomManager implements Listener {
                     return;
                 }
                 if (event instanceof EntityDamageByEntityEvent) {
-                    if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
-                        if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityHuman){
-                            //TODO 证明是扔火球的玩家
-                            event.setDamage(2);
-                            ((EntityDamageByEntityEvent) event).setKnockBack(room.getRoomConfig().fireballKnockBack);
+                    Entity dg = ((EntityDamageByEntityEvent)event).getDamager();
+                    if (dg instanceof EntityFireBall) {
+                        PlayerInfo target = ((EntityFireBall) dg).getMaster();
+                        if(target != null){
+                            if(!target.equals(playerInfo) && (target.getTeamInfo() != null
+                                    && !target.getTeamInfo().equals(playerInfo.getTeamInfo()))){
+                                playerInfo.setDamageByInfo(target);
+                            }
                         }
+                        event.setDamage(2.0F);
+                        ((EntityDamageByEntityEvent)event).setKnockBack(room.getRoomConfig().fireballKnockBack);
                     }
+//                    if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
+//                        if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityHuman){
+//                            //TODO 证明是扔火球的玩家
+//                            event.setDamage(2);
+//                            ((EntityDamageByEntityEvent) event).setKnockBack(room.getRoomConfig().fireballKnockBack);
+//                        }
+//                    }
                     if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityLightning){
                         event.setDamage(12);
                     }
