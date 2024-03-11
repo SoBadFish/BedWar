@@ -309,7 +309,9 @@ public class RoomManager implements Listener {
         String playerName = event.getPlayerName();
         Player player = Server.getInstance().getPlayer(playerName);
         if(player != null){
-            player.sendMessage(TextFormat.colorize('&',"&b +"+event.getExp()+" 经验("+event.getCause()+")"));
+//            "&b +"+event.getExp()+" 经验("+event.getCause()+")"
+            player.sendMessage(TextFormat.colorize('&',BedWarMain.getLanguage().getLanguage("player-add-exp-msg",
+                    "&b +[1] 经验([2])",event.getExp()+"",event.getCause())));
             PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
             PlayerData data = BedWarMain.getDataManager().getData(playerName);
 

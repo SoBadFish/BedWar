@@ -710,7 +710,7 @@ public class PlayerInfo {
                     if (updateTime >= 60) {
                         //每 60s 增加25经验
                         PlayerData data = BedWarMain.getDataManager().getData(getName());
-                        data.addExp(gameRoom.getRoomConfig().minutesExp, "时长奖励");
+                        data.addExp(gameRoom.getRoomConfig().minutesExp, BedWarMain.getLanguage().getLanguage("player-exp-time-award","时长奖励"));
                         updateTime = 0;
                     }
                 }
