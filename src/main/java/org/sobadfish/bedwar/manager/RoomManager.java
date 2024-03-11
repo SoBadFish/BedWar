@@ -969,6 +969,8 @@ public class RoomManager implements Listener {
 
         if(event.getEntity() instanceof EntityHuman){
             PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
+            //防止火球这些伤害导致重设PVP的击退
+            boolean resetKnock = true;
             if(playerInfo != null) {
                 if (playerInfo.isWatch()) {
                     playerInfo.sendForceMessage(BedWarMain.getLanguage().getLanguage("player-gamemode-3","&c你处于观察者模式"));
@@ -1005,6 +1007,7 @@ public class RoomManager implements Listener {
                         }
                         event.setDamage(2.0F);
                         ((EntityDamageByEntityEvent)event).setKnockBack(room.getRoomConfig().fireballKnockBack);
+                        resetKnock = false;
                     }
 //                    if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
 //                        if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityHuman){
@@ -1015,6 +1018,7 @@ public class RoomManager implements Listener {
 //                    }
                     if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityLightning){
                         event.setDamage(12);
+                        resetKnock = false;
                     }
                 }
                 if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
@@ -1038,6 +1042,7 @@ public class RoomManager implements Listener {
                         }
 
                     }
+                    resetKnock = false;
                 }
                 if (event instanceof EntityDamageByEntityEvent) {
                     //TODO 免受TNT爆炸伤害
@@ -1048,6 +1053,7 @@ public class RoomManager implements Listener {
                     Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
                     if (entity instanceof EntityPrimedTNT) {
                         event.setDamage(room.getRoomConfig().tntDamage);
+                        resetKnock = false;
                     }
                     if(entity instanceof EntityTnt){
                         PlayerInfo target = ((EntityTnt) entity).getTarget();
@@ -1059,6 +1065,7 @@ public class RoomManager implements Listener {
                                 return;
                             }
                         }
+                        resetKnock = false;
                     }
                     //TODO 阻止队伍PVP
                     if (entity instanceof EntityHuman) {
@@ -1083,13 +1090,16 @@ public class RoomManager implements Listener {
                     }
                     //击退..
                     if(!event.isCancelled()){
-                        if(room.getRoomConfig().knockConfig.enable && !event.isCancelled()){
-                            event.getEntity().setMotion(Utils.knockBack(event.getEntity(),entity,
-                                    room.getRoomConfig().knockConfig.speed,
-                                    room.getRoomConfig().knockConfig.force,
-                                    room.getRoomConfig().knockConfig.motionY));
-                            ((EntityDamageByEntityEvent) event).setKnockBack(0f);
+                        if(resetKnock){
+                            if(room.getRoomConfig().knockConfig.enable && !event.isCancelled()){
+                                event.getEntity().setMotion(Utils.knockBack(event.getEntity(),entity,
+                                        room.getRoomConfig().knockConfig.speed,
+                                        room.getRoomConfig().knockConfig.force,
+                                        room.getRoomConfig().knockConfig.motionY));
+                                ((EntityDamageByEntityEvent) event).setKnockBack(0f);
+                            }
                         }
+
                     }
 
 
