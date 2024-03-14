@@ -259,7 +259,7 @@ public class GameRoomCreater {
         creator.sendForceMessage(BedWarMain.getLanguage().getLanguage("create-room-setting-shop",
                 "&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]商店 &2[3]&b /&d [4]&r]",
                 "bd",
-                (new ArrayList<>(roomConfig.getTeamNames()).get(team.size())),
+                (new ArrayList<>(roomConfig.getTeamNames()).get(teamShop.size())),
                 (teamShop.size() + 1)+"",
                 roomConfig.teamCfg.size()+""
         ));
