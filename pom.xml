@@ -6,6 +6,14 @@
     <artifactId>BedWar</artifactId>
     <version>2.1.7</version>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
     <repositories>
 <!--        <repository>-->
 <!--            <id>opencollab-repo-release</id>-->
@@ -51,9 +59,9 @@
         <dependency>
             <groupId>cn.nukkit</groupId>
             <artifactId>Nukkit</artifactId>
-            <version>PM1E</version>
-            <scope>system</scope>
-            <systemPath> ${project.basedir}/lib/Nukkit-PM1E-MOT-SNAPSHOT.jar</systemPath>
+            <version>MOT-java8-SNAPSHOT</version>
+            <scope>provided</scope>
+            <!--<systemPath> ${project.basedir}/lib/Nukkit-PM1E-MOT-SNAPSHOT.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>com.smallaswater.npc</groupId>
@@ -104,7 +112,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-
+                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <addMavenDescriptor>false</addMavenDescriptor>
@@ -124,9 +132,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.6.1</version>
                 <configuration>
-
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>${maven.compiler.encoding}</encoding>
                 </configuration>
             </plugin>
         </plugins>
