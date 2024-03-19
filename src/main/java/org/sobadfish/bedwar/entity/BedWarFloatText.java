@@ -1,21 +1,18 @@
 package org.sobadfish.bedwar.entity;
 
 import cn.nukkit.Player;
-import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.ItemInfo;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
 import org.sobadfish.bedwar.manager.FloatTextManager;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.tools.Utils;
-
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BedWarFloatText extends Entity {
 
@@ -27,8 +24,6 @@ public class BedWarFloatText extends Entity {
 
     //如果不为null 就是房间内的浮空字 到时候需要移除
     public GameRoom room;
-
-    public List<String> player = new CopyOnWriteArrayList<>();
 
     public BedWarFloatText(String name,FullChunk fullChunk, CompoundTag compoundTag) {
         super(fullChunk, compoundTag);
@@ -87,8 +82,6 @@ public class BedWarFloatText extends Entity {
 
     @Override
     public boolean onUpdate(int i) {
-
-
          super.onUpdate(i);
          return true;
     }
@@ -103,7 +96,7 @@ public class BedWarFloatText extends Entity {
         }
         text1.setText(text);
         FloatTextManager.addFloatText(text1);
-        text1.toDisplay();
+        text1.disPlayers();
         return text1;
     }
 
@@ -112,43 +105,11 @@ public class BedWarFloatText extends Entity {
      * 写好调用了，不需要再重复调用
      * */
     public void disPlayers(){
-        //检验是否有新玩家没显示
-        toDisplay();
-        for(String player: player){
-            Player player1 = Server.getInstance().getPlayer(player);
-            if(player1 == null){
-                this.player.remove(player);
-            }else {
-                if (player1.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())) {
-                    if (!this.hasSpawned.containsValue(player1)) {
-                        spawnTo(player1);
-                    }else{
-                        //刷新显示.
-                        this.despawnFrom(player1);
-                        spawnTo(player1);
-                    }
-                } else {
-                    this.despawnFrom(player1);
-                    this.player.remove(player);
-
-                }
-            }
-        }
-
-    }
-
-    private void toDisplay(){
-        //清空一下显示
         this.despawnFromAll();
-        this.player.clear();
         for(Player player: this.level.getPlayers().values()){
-            if(!this.player.contains(player.getName())) {
-                if(player.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())){
-                    this.player.add(player.getName());
-                    spawnTo(player);
-                }
+            if(!this.hasSpawned.containsKey(player.getLoaderId())) {
+                spawnTo(player);
             }
-
         }
     }
 
