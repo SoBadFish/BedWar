@@ -13,6 +13,7 @@ import org.sobadfish.bedwar.tools.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -175,11 +176,20 @@ public class WorldInfoConfig {
         }
 
         ArrayList<ItemInfoConfig> itemInfoConfigs = new ArrayList<>();
-        Map mItemSpawn = (Map) config.get("itemSpawn");
-        for(Object mName:mItemSpawn.keySet()){
-            itemInfoConfigs.add(ItemInfoConfig.getItemInfoConfig(itemInfo,mName.toString(), (Map) mItemSpawn.get(mName)));
+        //兼容旧版本配置
+        Object cm = config.get("itemSpawn");
+        if(cm instanceof Map){
+            Map mItemSpawn = (Map) config.get("itemSpawn");
+            for(Object mName:mItemSpawn.keySet()){
+                itemInfoConfigs.add(ItemInfoConfig.getItemInfoConfig(itemInfo,mName.toString(), (Map) mItemSpawn.get(mName)));
+            }
+        }else{
+            List<Map> mItemSpawn = config.getMapList("itemSpawn");
+            int i = 0;
+            for(Map<?,?> map: mItemSpawn){
+                itemInfoConfigs.add(ItemInfoConfig.getItemInfoConfig(itemInfo,itemInfo.getItemInfoConfigs().get(i++).getName(),map));
+            }
         }
-
 
         return new WorldInfoConfig(config.getString("world"),config.getString("waitPosition"),itemInfoConfigs);
     }

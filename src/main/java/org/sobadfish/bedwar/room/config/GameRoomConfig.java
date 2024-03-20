@@ -713,10 +713,26 @@ public class GameRoomConfig implements Cloneable{
                     for(Map.Entry<?,?> entry : map.entrySet()){
                         BedWarMain.sendMessageToConsole("&eLoading "+entry.getKey().toString()+" float block");
                         if(itemInfo.containsKey(entry.getKey().toString()) && SkinManager.SKINS.containsKey(entry.getValue().toString().toLowerCase())){
-                            floatBlocks.put(entry.getKey().toString(), entry.getValue().toString().toLowerCase());
+//                            floatBlocks.put(entry.getKey().toString(), entry.getValue().toString().toLowerCase());
+                            int iv = itemInfo.indexOf(entry.getKey().toString());
+                            floatBlocks.put(iv+"", entry.getValue().toString().toLowerCase());
+
                             BedWarMain.sendMessageToConsole("&eWrite "+entry.getKey().toString()+" float block..");
                         }else{
-                            BedWarMain.sendMessageToConsole("&cRead "+entry.getKey().toString()+" float block！");
+                            if(SkinManager.SKINS.containsKey(entry.getValue().toString().toLowerCase())){
+                                try{
+                                    int id = Integer.parseInt(entry.getKey().toString());
+                                    floatBlocks.put(id+"", entry.getValue().toString().toLowerCase());
+                                    BedWarMain.sendMessageToConsole("&eWrite "+entry.getKey().toString()+" float block..");
+                                }catch (Exception ignore){
+                                    BedWarMain.sendMessageToConsole("&cRead "+entry.getKey().toString()+" float block！");
+                                }
+                            }else{
+                                BedWarMain.sendMessageToConsole("&cRead "+entry.getKey().toString()+" float block！");
+                            }
+
+
+
                         }
                     }
                     if(floatBlocks.size() == 0){
@@ -799,9 +815,11 @@ public class GameRoomConfig implements Cloneable{
             teamSpawn.add(infoConfig.save());
         }
         config.set("teamSpawn",teamSpawn);
-        LinkedHashMap<String, Object> itemSpawn = new LinkedHashMap<>();
+        List<Object> itemSpawn = new ArrayList<>();
+//        LinkedHashMap<String, Object> itemSpawn = new LinkedHashMap<>();
         for(ItemInfoConfig itemInfoConfig: worldInfo.getItemInfos()){
-            itemSpawn.put(itemInfoConfig.getMoneyItemInfoConfig().getName(),itemInfoConfig.save());
+            itemSpawn.add(itemInfoConfig.save());
+//            itemSpawn.put(itemInfoConfig.getMoneyItemInfoConfig().getName(),itemInfoConfig.save());
         }
         config.set("fast-place",fastPlace);
         config.set("fast-place-count",fastPlaceCount);

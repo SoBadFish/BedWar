@@ -50,8 +50,8 @@ auto-display-floattext:
   text: "{item} &r生成点\n剩余时间: &a {time} &r"
 
 display-floatBlock:
-  diamond: "diamond"
-  emerald: "emerald"
+  2: "diamond"
+  3: "emerald"
 
 # 游戏kb设置 使用独立的算法
 kb-setting:

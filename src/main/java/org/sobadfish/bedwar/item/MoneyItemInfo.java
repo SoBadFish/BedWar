@@ -46,6 +46,11 @@ public class MoneyItemInfo {
                 '}';
     }
 
+    public int indexOf(String key){
+        return new ArrayList<>(items.keySet()).indexOf(key);
+
+    }
+
     public boolean containsKey(String key){
         return items.containsKey(key);
     }

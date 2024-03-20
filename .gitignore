@@ -26,6 +26,7 @@
 hs_err_pid*
 
 .gitignore
+.idea/
 .idea/.gitignore
 .idea/BedWar.iml
 .idea/compiler.xml

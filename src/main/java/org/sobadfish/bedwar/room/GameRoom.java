@@ -274,10 +274,11 @@ public class GameRoom {
             worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);
             //生成浮空方块
             for(Map.Entry<String, String> blockName: getRoomConfig().floatBlockConfig.entrySet()){
-                BedWarMain.sendMessageToConsole(blockName.getKey()+" Float Block Spawn OK!");
+                String itemName = getRoomConfig().moneyItem.getNames().get(Integer.parseInt(blockName.getKey()));
+                BedWarMain.sendMessageToConsole(itemName+" Float Block Spawn OK!");
                 ItemInfoConfig itemInfo = null;
                 for(ItemInfoConfig info: getRoomConfig().worldInfo.getItemInfos()){
-                    if(info.getMoneyItemInfoConfig().getName().equals(blockName.getKey())){
+                    if(info.getMoneyItemInfoConfig().getName().equals(itemName)){
                         itemInfo = info;
                     }
                 }
