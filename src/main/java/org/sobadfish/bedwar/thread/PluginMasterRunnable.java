@@ -80,9 +80,12 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 if (update > 120) {
                     //每120秒刷新一下...
                     floatText.disPlayers();
-                    update = 0;
+
                 }
                 floatText.stringUpdate();
+            }
+            if(update > 120){
+                update = 0;
             }
             try {
                 for(Map.Entry<String,String> map: WorldResetManager.RESET_QUEUE.entrySet()){
