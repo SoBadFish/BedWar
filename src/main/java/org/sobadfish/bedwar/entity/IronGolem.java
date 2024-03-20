@@ -29,7 +29,7 @@ public class IronGolem extends BaseEntityMove {
     }
 
     @Override
-    protected float getGravity() {
+    public float getGravity() {
         return 2.0F;
     }
 

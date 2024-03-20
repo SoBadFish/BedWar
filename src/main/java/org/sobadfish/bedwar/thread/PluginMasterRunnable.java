@@ -61,32 +61,28 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 isClose = true;
                 return;
             }
-            for (Player player :Server.getInstance().getOnlinePlayers().values()) {
-                if(!player.isOnline()){
+
+            for (BedWarFloatText floatText : FloatTextManager.floatTextList) {
+                if (floatText == null) {
                     continue;
                 }
-                for (BedWarFloatText floatText : FloatTextManager.floatTextList) {
-                    if (floatText == null) {
-                        continue;
-                    }
 
-                    if (floatText.isFinalClose) {
-                        FloatTextManager.removeFloatText(floatText);
-                        continue;
-                    }
+                if (floatText.isFinalClose) {
+                    FloatTextManager.removeFloatText(floatText);
+                    continue;
+                }
 //                    if (player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName())) {
 //                        if (!floatText.player.contains(player.getName())) {
 //                            floatText.player.add(player.getName());
 //                        }
 //
 //                    }
-                    if (update > 5) {
-                        //每5秒刷新一下...
-                        floatText.disPlayers();
-                        update = 0;
-                    }
-                    floatText.stringUpdate();
+                if (update > 120) {
+                    //每120秒刷新一下...
+                    floatText.disPlayers();
+                    update = 0;
                 }
+                floatText.stringUpdate();
             }
             try {
                 for(Map.Entry<String,String> map: WorldResetManager.RESET_QUEUE.entrySet()){
