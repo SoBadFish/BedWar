@@ -52,7 +52,7 @@ public class FireBall implements INbtItem{
 
             Item ic = item.clone();
             ic.setCount(1);
-            double f = 1.8D;
+            double f = 2.2D;
             double yaw = player.yaw;
             double pitch = player.pitch;
             playerInfo.isSpawnFire = true;

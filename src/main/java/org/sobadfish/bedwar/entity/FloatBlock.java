@@ -17,8 +17,6 @@ public class FloatBlock extends EntityHuman {
 
     public FloatBlock(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
-
-
     }
 
     @Override
@@ -50,12 +48,8 @@ public class FloatBlock extends EntityHuman {
     @Override
     public boolean onUpdate(int currentTick) {
         if (this.isAlive()) {
-
             this.yaw += 2;
-
         }
-
-
 
         return super.onUpdate(currentTick);
     }
