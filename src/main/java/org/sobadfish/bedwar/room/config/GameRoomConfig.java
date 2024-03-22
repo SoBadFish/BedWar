@@ -94,6 +94,11 @@ public class GameRoomConfig implements Cloneable{
     public float fireballKnockBack = 0.6f;
 
     /**
+     * 自定义TNT击退距离
+     * */
+    public float tntKnockBack = 0.6f;
+
+    /**
      * 获取击杀玩家的物品 (50%)
      * */
     public float killItem = 0.5f;
@@ -687,6 +692,7 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.callbackY = room.getInt("callbackY",17);
                 roomConfig.inventoryUnBreakable = room.getBoolean("inventory-unbreakable",true);
                 roomConfig.fireballKnockBack = (float) room.getDouble("fireballKnockBack",0.6f);
+                roomConfig.tntKnockBack = (float) room.getDouble("tntKnockBack",0.6f);
                 roomConfig.banCommand = new ArrayList<>(room.getStringList("ban-command"));
                 roomConfig.isAutomaticNextRound = room.getBoolean("AutomaticNextRound",true);
                 roomConfig.quitRoomCommand = new ArrayList<>(room.getStringList("QuitRoom"));
@@ -831,6 +837,7 @@ public class GameRoomConfig implements Cloneable{
             config.set("ui",uiType.name().toLowerCase());
         }
         config.set("fireballKnockBack", fireballKnockBack);
+        config.set("tntKnockBack", tntKnockBack);
         config.set("hasWatch", hasWatch);
         config.set("AutomaticNextRound",isAutomaticNextRound);
         config.set("defeatCmd",defeatCommand);

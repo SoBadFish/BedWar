@@ -6,7 +6,6 @@ import cn.nukkit.block.*;
 import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
-import cn.nukkit.entity.item.EntityPrimedTNT;
 import cn.nukkit.entity.weather.EntityLightning;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
@@ -552,7 +551,7 @@ public class RoomManager implements Listener {
                             event.setCancelled();
 //                            ((BlockTNT) block).prime(40);
                             //TODO 自定义TNT
-                            EntityTnt entityTnt = new EntityTnt(info.getPlayer().chunk,Entity.getDefaultNBT(block),info,room.getRoomConfig().tntExplodeTime * 20);
+                            EntityTnt entityTnt = new EntityTnt(info.getPlayer().chunk,Entity.getDefaultNBT(block.add(0.5,0,0.5)),info,room.getRoomConfig().tntExplodeTime * 20);
                             entityTnt.spawnToAll();
                             Item i2 = item.clone();
                             i2.setCount(1);
@@ -971,6 +970,7 @@ public class RoomManager implements Listener {
             PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
             //防止火球这些伤害导致重设PVP的击退
             boolean resetKnock = true;
+            boolean explode = false;
             if(playerInfo != null) {
                 if (playerInfo.isWatch()) {
                     playerInfo.sendForceMessage(BedWarMain.getLanguage().getLanguage("player-gamemode-3","&c你处于观察者模式"));
@@ -1008,6 +1008,7 @@ public class RoomManager implements Listener {
                         event.setDamage(2.0F);
                         ((EntityDamageByEntityEvent)event).setKnockBack(room.getRoomConfig().fireballKnockBack);
                         resetKnock = false;
+                        explode = true;
                     }
 //                    if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
 //                        if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityHuman){
@@ -1019,6 +1020,7 @@ public class RoomManager implements Listener {
                     if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityLightning){
                         event.setDamage(12);
                         resetKnock = false;
+                        explode = true;
                     }
                 }
                 if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
@@ -1039,6 +1041,7 @@ public class RoomManager implements Listener {
                         }
                         if(damagers instanceof EntityFireBall){
                             event.setDamage(2);
+                            explode = true;
                         }
 
                     }
@@ -1051,20 +1054,30 @@ public class RoomManager implements Listener {
 //                        event.setDamage(2);
 //                    }
                     Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
-                    if (entity instanceof EntityPrimedTNT) {
-                        event.setDamage(room.getRoomConfig().tntDamage);
-                        resetKnock = false;
-                    }
+//                    if (entity instanceof EntityPrimedTNT) {
+//                        event.setDamage(room.getRoomConfig().tntDamage);
+//                        resetKnock = false;
+//                        explode = true;
+//                    }
                     if(entity instanceof EntityTnt){
                         PlayerInfo target = ((EntityTnt) entity).getTarget();
                         if(target != null){
                             if(!target.equals(playerInfo) && (target.getTeamInfo() != null && !target.getTeamInfo().equals(playerInfo.getTeamInfo()))){
                                 playerInfo.setDamageByInfo(target);
+                                event.setDamage(room.getRoomConfig().tntDamage);
                             }else{
-                                event.setCancelled();
-                                return;
+                                event.setDamage(2f);
                             }
+                            explode = true;
+//                            else{
+//                                event.setCancelled();
+//                                return;
+//                            }
                         }
+                        if(room.getRoomConfig().tntKnockBack > 0){
+                            ((EntityDamageByEntityEvent) event).setKnockBack(room.getRoomConfig().tntKnockBack);
+                        }
+
                         resetKnock = false;
                     }
                     //TODO 阻止队伍PVP
@@ -1077,15 +1090,21 @@ public class RoomManager implements Listener {
                             }
                             TeamInfo t1 = playerInfo.getTeamInfo();
                             TeamInfo t2 = damageInfo.getTeamInfo();
-                            if (t1 != null && t2 != null) {
-                                if (t1.getTeamConfig().getName().equalsIgnoreCase(t2.getTeamConfig().getName())) {
-                                    event.setCancelled();
-                                    return;
+                            if(!explode){
+                                if (t1 != null && t2 != null) {
+                                    if (t1.getTeamConfig().getName().equalsIgnoreCase(t2.getTeamConfig().getName())) {
+                                        event.setCancelled();
+                                        return;
+                                    }
                                 }
+
                             }
                             playerInfo.setDamageByInfo(damageInfo);
                         } else {
-                            event.setCancelled();
+                            if(!explode){
+                                event.setCancelled();
+                            }
+
                         }
                     }
                     //击退..
@@ -1128,9 +1147,9 @@ public class RoomManager implements Listener {
         Entity d = event.getEntity();
         if(d instanceof EntityFireBall){
             if(entity instanceof Player){
-                if(((EntityFireBall) d).getMaster() != null && ((EntityFireBall) d).getMaster().equals(new PlayerInfo((EntityHuman) entity))){
-                    event.setCancelled();
-                }
+//                if(((EntityFireBall) d).getMaster() != null && ((EntityFireBall) d).getMaster().equals(new PlayerInfo((EntityHuman) entity))){
+////                    event.setCancelled();
+//                }
                 //照样爆炸
                 ((EntityFireBall) d).explode();
             }

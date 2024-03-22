@@ -2,7 +2,6 @@ package org.sobadfish.bedwar.room.config;
 
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
-import org.sobadfish.bedwar.BedWarMain;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class GameRoomEventConfig {
             if(map.containsKey("value")){
                 value = map.get("value");
             }
-            if(type.equalsIgnoreCase("")){
+            if("".equalsIgnoreCase(type)){
                 continue;
             }
             items.add(new GameRoomEventItem(type,disPlay,eventTime,value));
