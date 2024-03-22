@@ -1433,20 +1433,18 @@ public class RoomManager implements Listener {
         Player player = event.getPlayer();
         if(DisPlayWindowsFrom.CUSTOM.containsKey(player.getName())){
             BedWarFrom simple = DisPlayWindowsFrom.CUSTOM.get(player.getName());
-            if (!onBedWarFrom(event, player, simple)) {
-                DisPlayWindowsFrom.CUSTOM.remove(player.getName());
-            }
+            onBedWarFrom(event, player, simple);
+            DisPlayWindowsFrom.CUSTOM.remove(player.getName());
             return;
 
         }
         if(BedWarCommand.FROM.containsKey(player.getName())){
             BedWarFrom simple = BedWarCommand.FROM.get(player.getName());
-            if (!onBedWarFrom(event, player, simple)) {
-                BedWarCommand.FROM.remove(player.getName());
-            }
+            onBedWarFrom(event, player, simple);
+            BedWarCommand.FROM.remove(player.getName());
             return;
-
         }
+
 
         int fromId = 102;
         if(event.getFormID() == fromId && event.getResponse() instanceof FormResponseSimple){
@@ -1509,19 +1507,14 @@ public class RoomManager implements Listener {
         }
     }
 
-    private boolean onBedWarFrom(PlayerFormRespondedEvent event, Player player, BedWarFrom simple) {
+    private void onBedWarFrom(PlayerFormRespondedEvent event, Player player, BedWarFrom simple) {
         if(simple.getId() == event.getFormID()) {
             if (event.getResponse() instanceof FormResponseSimple) {
                 BaseIButton button = simple.getBaseIButtoms().get(((FormResponseSimple) event.getResponse())
                         .getClickedButtonId());
                 button.onClick(player);
             }
-            return true;
-
-        }else{
-            BedWarCommand.FROM.remove(player.getName());
         }
-        return false;
     }
 
 
