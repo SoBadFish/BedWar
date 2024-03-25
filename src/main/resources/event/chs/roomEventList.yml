@@ -8,19 +8,19 @@ eventLists:
   - type: "time"
     display: "钻石点升级 II 级"
     eventTime: 220
-    value: "diamond:800"
+    value: "钻石:800"
   - type: "time"
     display: "钻石点升级 III 级"
     eventTime: 260
-    value: "diamond:60"
+    value: "钻石:60"
   - type: "time"
     display: "绿宝石点升级 II 级"
     eventTime: 280
-    value: "emerald:1000"
+    value: "绿宝石:1000"
   - type: "time"
     display: "绿宝石点升级 III 级"
     eventTime: 300
-    value: "emerald:800"
+    value: "绿宝石:800"
   - type: "break"
     display: "床破坏"
     eventTime: 330
