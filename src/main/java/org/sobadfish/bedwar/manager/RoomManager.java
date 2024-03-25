@@ -81,6 +81,12 @@ public class RoomManager implements Listener {
 
     public LinkedHashMap<String,String> playerJoin = new LinkedHashMap<>();
 
+    /**
+     * 当房间丢失 但是缓存了玩家登入数据的时候
+     * 这个用作最终的数据还原
+     * */
+    public static LinkedHashMap<String,PlayerInfo> CACHE_INFO = new LinkedHashMap<>();
+
     private RoomManager(Map<String, GameRoomConfig> roomConfig){
         this.roomConfig = roomConfig;
     }
@@ -391,6 +397,7 @@ public class RoomManager implements Listener {
             GameRoom room = event.getRoom();
             info.clear();
 
+
             if(info.getPlayer() instanceof Player && ((Player) info.getPlayer()).isOnline()){
                 ((Player)info.getPlayer()).setFoodEnabled(false);
                 if(info.getPlayer() != null) {
@@ -435,6 +442,12 @@ public class RoomManager implements Listener {
         PlayerInfo info = event.getPlayerInfo();
         GameRoom gameRoom = event.getRoom();
         if (BedWarMain.getRoomManager().playerJoin.containsKey(info.getPlayer().getName())) {
+            //写入数组
+            if(info.isPlayer()){
+                CACHE_INFO.put(info.playerName,info);
+            }
+
+
             String roomName = BedWarMain.getRoomManager().playerJoin.get(info.getPlayer().getName());
             if (roomName.equalsIgnoreCase(event.getRoom().getRoomConfig().name) && gameRoom.getPlayerInfos().contains(info)) {
                 if(event.isSend()) {
@@ -777,6 +790,14 @@ public class RoomManager implements Listener {
 
     private void reset(Player player){
         PlayerInfo info = getPlayerInfo(player);
+        if(info == null){
+            if(playerJoin.containsKey(player.getName())){
+                if(CACHE_INFO.containsKey(player.getName())){
+                    info = CACHE_INFO.get(player.getName());
+                    CACHE_INFO.remove(player.getName());
+                }
+            }
+        }
         player.setNameTag(player.getName());
         playerJoin.remove(player.getName());
         player.setHealth(player.getMaxHealth());
@@ -786,6 +807,7 @@ public class RoomManager implements Listener {
             player.getInventory().setContents(info.inventory);
             player.getEnderChestInventory().setContents(info.eInventory);
             player.setGamemode(info.lastGameMode);
+            player.setExperience(info.lastExp);
         }
         player.removeAllEffects();
         player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());

@@ -33,6 +33,7 @@ import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
 import org.sobadfish.bedwar.item.team.TeamEffect;
 import org.sobadfish.bedwar.item.team.TeamEffectInfo;
 import org.sobadfish.bedwar.item.team.TeamEnchant;
+import org.sobadfish.bedwar.manager.RoomManager;
 import org.sobadfish.bedwar.player.message.ScoreBoardMessage;
 import org.sobadfish.bedwar.player.team.TeamInfo;
 import org.sobadfish.bedwar.room.GameRoom;
@@ -90,6 +91,8 @@ public class PlayerInfo {
     public boolean isInvisibility = false;
 
     public int lastGameMode = 0;
+
+    public int lastExp = 0;
 
     public boolean fastPlace = true;
 
@@ -975,6 +978,8 @@ public class PlayerInfo {
             ((Player) getPlayer()).setExperience(0,0);
             //记录信息
             lastGameMode = ((Player) getPlayer()).getGamemode();
+            //记录经验值
+            lastExp = ((Player) getPlayer()).getExperience();
 
         }
         getPlayer().getInventory().clearAll();
@@ -1028,6 +1033,9 @@ public class PlayerInfo {
         }
     }
 
+    public boolean isPlayer(){
+        return player instanceof Player;
+    }
 
 
     public boolean isWatch(){
@@ -1137,7 +1145,7 @@ public class PlayerInfo {
                 player.removeAllEffects();
                 ((Player) player).getFoodData().reset();
                 player.setHealth(player.getMaxHealth());
-                ((Player) player).setExperience(0,0);
+                ((Player) player).setExperience(lastExp);
                 if(inventory != null && eInventory != null){
                     player.getInventory().setContents(inventory);
                     player.getEnderChestInventory().setContents(eInventory);
@@ -1145,6 +1153,9 @@ public class PlayerInfo {
                 if(getPlayer() instanceof Player) {
                     ((Player) getPlayer()).setGamemode(lastGameMode);
                 }
+
+                //清空缓存
+                RoomManager.CACHE_INFO.remove(playerName);
             }
         }
     }
