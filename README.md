@@ -23,6 +23,9 @@
  2. **物品兑换模式**  
 
 **使用介绍:**  
+
+**DOWNLOAD:** https://ci.lanink.cn/job/BedWar/
+
 **一、插件启动**
 
 1. 将本插件拖动到 plugins文件夹
