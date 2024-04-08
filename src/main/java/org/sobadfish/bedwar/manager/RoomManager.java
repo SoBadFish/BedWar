@@ -1474,16 +1474,20 @@ public class RoomManager implements Listener {
         Player player = event.getPlayer();
         if(DisPlayWindowsFrom.CUSTOM.containsKey(player.getName())){
             BedWarFrom simple = DisPlayWindowsFrom.CUSTOM.get(player.getName());
-            onBedWarFrom(event, player, simple);
-            DisPlayWindowsFrom.CUSTOM.remove(player.getName());
-            return;
-
+            if(onBedWarFrom(event, player, simple)){
+                return;
+            }else{
+                DisPlayWindowsFrom.CUSTOM.remove(player.getName());
+            }
         }
         if(BedWarCommand.FROM.containsKey(player.getName())){
             BedWarFrom simple = BedWarCommand.FROM.get(player.getName());
-            onBedWarFrom(event, player, simple);
-            BedWarCommand.FROM.remove(player.getName());
-            return;
+            if(onBedWarFrom(event, player, simple)){
+                return;
+            }else{
+                BedWarCommand.FROM.remove(player.getName());
+            }
+
         }
 
 
@@ -1520,42 +1524,46 @@ public class RoomManager implements Listener {
         }
 
         if(DisPlayWindowsFrom.SHOP.containsKey(player.getName())){
-            if(BedWarMain.getRoomManager().getPlayerInfo(player) != null) {
-                ShopFrom shopFrom = DisPlayWindowsFrom.SHOP.get(player.getName());
-                if(shopFrom == null){
-                    DisPlayWindowsFrom.SHOP.remove(player.getName());
-                    return;
-                }
-                if (event.getResponse() instanceof FormResponseSimple) {
-                    if (((FormResponseSimple) event.getResponse())
-                            .getClickedButtonId() == shopFrom.getShopButtons().size()) {
-                        if (shopFrom.getLastFrom() != null) {
-                            shopFrom.getLastFrom().disPlay(shopFrom.getLastFrom().getTitle(), false);
+            ShopFrom shopFrom = DisPlayWindowsFrom.SHOP.get(player.getName());
+            if(shopFrom != null){
+                if(shopFrom.getId() == event.getFormID()){
+                    if(BedWarMain.getRoomManager().getPlayerInfo(player) != null) {
+                        if (event.getResponse() instanceof FormResponseSimple) {
+                            if (((FormResponseSimple) event.getResponse())
+                                    .getClickedButtonId() == shopFrom.getShopButtons().size()) {
+                                if (shopFrom.getLastFrom() != null) {
+                                    shopFrom.getLastFrom().disPlay(shopFrom.getLastFrom().getTitle(), false);
+                                }
+
+                                return;
+                            }
+                            if(((FormResponseSimple) event.getResponse()).getClickedButtonId() >= shopFrom.getShopButtons().size()){
+                                return;
+                            }
+                            shopFrom.getShopButtons().get(((FormResponseSimple) event.getResponse())
+                                    .getClickedButtonId()).getItemInstance().onClickButton(player, shopFrom);
+                            return;
+
                         }
-
-                        return;
                     }
-                    if(((FormResponseSimple) event.getResponse()).getClickedButtonId() >= shopFrom.getShopButtons().size()){
-                        return;
-                    }
-                    shopFrom.getShopButtons().get(((FormResponseSimple) event.getResponse())
-                            .getClickedButtonId()).getItemInstance().onClickButton(player, shopFrom);
-
                 }
-            }else{
-                DisPlayWindowsFrom.SHOP.remove(player.getName());
             }
+            DisPlayWindowsFrom.SHOP.remove(player.getName());
+
+
         }
     }
 
-    private void onBedWarFrom(PlayerFormRespondedEvent event, Player player, BedWarFrom simple) {
+    private boolean onBedWarFrom(PlayerFormRespondedEvent event, Player player, BedWarFrom simple) {
         if(simple.getId() == event.getFormID()) {
             if (event.getResponse() instanceof FormResponseSimple) {
                 BaseIButton button = simple.getBaseIButtoms().get(((FormResponseSimple) event.getResponse())
                         .getClickedButtonId());
                 button.onClick(player);
+                return true;
             }
         }
+        return false;
     }
 
 
