@@ -823,24 +823,29 @@ public class GameRoom {
             Block block = info1.getTeamConfig().getBedPosition().getLevelBlock();
             if (block instanceof BlockBed) {
                 //TODO 判断一下床是否被保护的严实
-                if(isProtect((BlockBed)position)){
-                    info.sendMessage(BedWarMain.getLanguage().getLanguage("room-bed-protect-in-area","&c这个床被方块包围，你至少要挖开一角"));
-                    return false;
-                }
-                if (info.getTeamInfo().getTeamConfig().equals(info1.getTeamConfig())) {
-                    info.sendMessage(BedWarMain.getLanguage().getLanguage("room-bed-protect-in-team","&c你不能破坏自己的床"));
-                    return false;
-                } else {
-                    TeamBedBreakEvent event = new TeamBedBreakEvent(info1,info,this,BedWarMain.getBedWarMain());
-                    Server.getInstance().getPluginManager().callEvent(event);
-                    info.bedBreakCount++;
-                    sendMessage(BedWarMain.getLanguage().getLanguage("room-bed-break-success",
-                            "[1] &c破坏了 [2] &c的床!",info.toString(),
-                            info1.getTeamConfig().getNameColor() + info1.getTeamConfig().getName()
-                            ));
-                    info1.onBedBreak(info);
+                if(info1.isBadExists()){
+                    if(isProtect((BlockBed)position)){
+                        info.sendMessage(BedWarMain.getLanguage().getLanguage("room-bed-protect-in-area","&c这个床被方块包围，你至少要挖开一角"));
+                        return false;
+                    }
+                    if (info.getTeamInfo().getTeamConfig().equals(info1.getTeamConfig())) {
+                        info.sendMessage(BedWarMain.getLanguage().getLanguage("room-bed-protect-in-team","&c你不能破坏自己的床"));
+                        return false;
+                    } else {
+                        TeamBedBreakEvent event = new TeamBedBreakEvent(info1,info,this,BedWarMain.getBedWarMain());
+                        Server.getInstance().getPluginManager().callEvent(event);
+                        info.bedBreakCount++;
+                        sendMessage(BedWarMain.getLanguage().getLanguage("room-bed-break-success",
+                                "[1] &c破坏了 [2] &c的床!",info.toString(),
+                                info1.getTeamConfig().getNameColor() + info1.getTeamConfig().getName()
+                        ));
+                        info1.onBedBreak(info);
+                        return true;
+                    }
+                }else{
                     return true;
                 }
+
 
             }
         }

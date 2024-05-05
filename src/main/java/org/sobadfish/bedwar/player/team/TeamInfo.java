@@ -282,20 +282,24 @@ public class TeamInfo {
     }
 
     public void onBedBreak(PlayerInfo info){
-        room.sendTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-title"
-                ,"[1] &c床被破坏！",this.toString()));
-        room.sendSubTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-sub-title","&7摧毁者: &r[1]",info.toString()));
-        room.addSound(Sound.MOB_ENDERDRAGON_GROWL);
+        if(badExists) {
+            room.sendTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-title"
+                    , "[1] &c床被破坏！", this.toString()));
+            room.sendSubTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-sub-title", "&7摧毁者: &r[1]", info.toString()));
+            room.addSound(Sound.MOB_ENDERDRAGON_GROWL);
 
-        setBadExists(false);
+            setBadExists(false);
+        }
     }
 
     public void breakBed(){
-        badExists = false;
-        getTeamConfig().getBedPosition().getLevel().setBlock( getTeamConfig().getBedPosition(),new BlockAir());
-        Position pos2 = getTeamConfig().getBedPosition().getSide(getTeamConfig().getBedFace());
-        room.addSound(Sound.MOB_ENDERDRAGON_GROWL);
-        getTeamConfig().getBedPosition().getLevel().setBlock(pos2,new BlockAir(),true,true);
+        if(badExists){
+            badExists = false;
+            getTeamConfig().getBedPosition().getLevel().setBlock( getTeamConfig().getBedPosition(),new BlockAir());
+            Position pos2 = getTeamConfig().getBedPosition().getSide(getTeamConfig().getBedFace());
+            room.addSound(Sound.MOB_ENDERDRAGON_GROWL);
+            getTeamConfig().getBedPosition().getLevel().setBlock(pos2,new BlockAir(),true,true);
+        }
     }
 
     public boolean join(PlayerInfo info){
