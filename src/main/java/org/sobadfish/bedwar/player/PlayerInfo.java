@@ -1177,7 +1177,7 @@ public class PlayerInfo {
                             }
                         }
                         //TODO 修复附魔高一级的BUG
-                        item.getValue().addEnchantment(enchantment.setLevel(effect.getLevel() - 1));
+                        item.getValue().addEnchantment(enchantment.setLevel(effect.getLevel() ));
                         player.getInventory().setItem(item.getKey(),item.getValue());
                     }
                 }
