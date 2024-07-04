@@ -15,7 +15,7 @@ public class BedWarVariable extends BaseVariableV2 {
 
 
     public static void init() {
-        VariableManage.addVariableV2("bedwar", BedWarVariable.class);
+        VariableManage.addVariableV2("bedwar_v2.0.1", BedWarVariable.class);
     }
 
     @Override
