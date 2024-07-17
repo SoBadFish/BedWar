@@ -107,11 +107,13 @@ public class DefaultItem extends BasePlayPanelItemInstance {
         String[] items = ids.split(":");
         String name = TextFormat.colorize('&',map.get("name").toString());
         ArrayList<Enchantment> enchantments = new ArrayList<>();
-        if(!"".equalsIgnoreCase(map.get("ench").toString())) {
-            for (String es : map.get("ench").toString().split("-")) {
-                enchantments.add(Enchantment.get(
-                                Integer.parseInt(es.split(":")[0]))
-                        .setLevel(Integer.parseInt(es.split(":")[1])));
+        if(map.containsKey("ench")) {
+            if (!"".equalsIgnoreCase(map.get("ench").toString())) {
+                for (String es : map.get("ench").toString().split("-")) {
+                    enchantments.add(Enchantment.get(
+                                    Integer.parseInt(es.split(":")[0]))
+                            .setLevel(Integer.parseInt(es.split(":")[1])));
+                }
             }
         }
         if(!map.containsKey("money") || "".equalsIgnoreCase(map.get("money").toString())){

@@ -940,6 +940,8 @@ public class RoomManager implements Listener {
                     }
                 }
             }
+            //清除所有的浮空字
+
         }
 
     }

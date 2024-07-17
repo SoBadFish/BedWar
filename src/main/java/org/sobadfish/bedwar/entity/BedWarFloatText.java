@@ -7,7 +7,6 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
-import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.ItemInfo;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
 import org.sobadfish.bedwar.manager.FloatTextManager;
@@ -111,6 +110,7 @@ public class BedWarFloatText extends Entity {
                 spawnTo(player);
             }
         }
+
     }
 
     public void stringUpdate(){

@@ -1,6 +1,5 @@
 package org.sobadfish.bedwar.thread;
 
-import cn.nukkit.Player;
 import cn.nukkit.Server;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
@@ -22,6 +21,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
 
     //浮空字一秒更新一次会跳
     private int update = 0;
+
 
 
     @Override
@@ -71,12 +71,6 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                     FloatTextManager.removeFloatText(floatText);
                     continue;
                 }
-//                    if (player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName())) {
-//                        if (!floatText.player.contains(player.getName())) {
-//                            floatText.player.add(player.getName());
-//                        }
-//
-//                    }
                 if (update > 120) {
                     //每120秒刷新一下...
                     floatText.disPlayers();
