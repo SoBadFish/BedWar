@@ -654,7 +654,7 @@ public class PlayerInfo {
 
                     lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-no-bed",
                             "◎ [1]: &r    &a[2] &r[3] {me}",teamInfo.toString(),
-                            teamInfo.getTeamConfig().getTeamConfig().getBedNormal(),
+                            teamInfo.getTeamConfig().getTeamConfig().getBedDestroy(),
                             teamInfo.getLivePlayer().size()+""
                     ).replace("{me}",me));
                 }else{
