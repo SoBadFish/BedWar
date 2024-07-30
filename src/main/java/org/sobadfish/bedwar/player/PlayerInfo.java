@@ -648,21 +648,21 @@ public class PlayerInfo {
                     lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-exits-bed",
                             "◎ [1]: &r    &a[2] &r[3] {me}",teamInfo.toString(),
                             teamInfo.getTeamConfig().getTeamConfig().getBedNormal(),
-                            teamInfo.toString(),teamInfo.getLivePlayer().size()+""
+                            teamInfo.getLivePlayer().size()+""
                             ).replace("{me}",me));
                 }else if(!teamInfo.isBadExists() && teamInfo.isLoading()){
 
                     lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-no-bed",
                             "◎ [1]: &r    &a[2] &r[3] {me}",teamInfo.toString(),
                             teamInfo.getTeamConfig().getTeamConfig().getBedNormal(),
-                            teamInfo.toString(),teamInfo.getLivePlayer().size()+""
+                            teamInfo.getLivePlayer().size()+""
                     ).replace("{me}",me));
                 }else{
 
                     lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-disuse",
                             "◎ [1]: &r    &a[2] &r[3] {me}",teamInfo.toString(),
                             teamInfo.getTeamConfig().getTeamConfig().getBedDestroy(),
-                            teamInfo.toString(),teamInfo.getLivePlayer().size()+""
+                            teamInfo.getLivePlayer().size()+""
                     ).replace("{me}",me));
                 }
             }
