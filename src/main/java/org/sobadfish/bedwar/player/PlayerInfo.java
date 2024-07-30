@@ -645,17 +645,25 @@ public class PlayerInfo {
                 }
                 if(teamInfo.isBadExists() && teamInfo.isLoading()){
 
-//                    lore.add("◎ "+ teamInfo +":&r    &a✔ "+me);
                     lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-exits-bed",
-                            "◎ [1]: &r    &a✔",teamInfo.toString())+" "+me);
+                            "◎ [1]: &r    &a[2] &r[3] {me}",teamInfo.toString(),
+                            teamInfo.getTeamConfig().getTeamConfig().getBedNormal(),
+                            teamInfo.toString(),teamInfo.getLivePlayer().size()+""
+                            ).replace("{me}",me));
                 }else if(!teamInfo.isBadExists() && teamInfo.isLoading()){
-//                    lore.add("◎ "+ teamInfo +": &r   &c"+teamInfo.getLivePlayer().size()+" "+me);
+
                     lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-no-bed",
-                            "◎ [1]: &r    &a[2]",teamInfo.toString(),teamInfo.getLivePlayer().size()+"")+" "+me);
+                            "◎ [1]: &r    &a[2] &r[3] {me}",teamInfo.toString(),
+                            teamInfo.getTeamConfig().getTeamConfig().getBedNormal(),
+                            teamInfo.toString(),teamInfo.getLivePlayer().size()+""
+                    ).replace("{me}",me));
                 }else{
-//                    lore.add("◎ "+ teamInfo +": &r   &c✘ "+me);
+
                     lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-disuse",
-                            "◎ [1]: &r    &c✘",teamInfo.toString())+" "+me);
+                            "◎ [1]: &r    &a[2] &r[3] {me}",teamInfo.toString(),
+                            teamInfo.getTeamConfig().getTeamConfig().getBedDestroy(),
+                            teamInfo.toString(),teamInfo.getLivePlayer().size()+""
+                    ).replace("{me}",me));
                 }
             }
             lore.add("      ");

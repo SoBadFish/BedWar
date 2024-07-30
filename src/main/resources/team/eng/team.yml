@@ -2,6 +2,10 @@ team:
   - name: "Green"
     nameColor: "&a"
     blockWoolColor: "35:13"
+    # The bed is destroyed.
+    bed-destroy: "✘"
+    # Bed normal condition
+    bed-normal: "✔"
     rgb:
       r: 0
       g: 255
@@ -9,6 +13,10 @@ team:
   - name: "Red"
     nameColor: "&c"
     blockWoolColor: "35:14"
+    # The bed is destroyed.
+    bed-destroy: "✘"
+    # Bed normal condition
+    bed-normal: "✔"
     rgb:
       r: 255
       g: 0
@@ -16,6 +24,10 @@ team:
   - name: "Blue"
     nameColor: "&9"
     blockWoolColor: "35:11"
+    # The bed is destroyed.
+    bed-destroy: "✘"
+    # Bed normal condition
+    bed-normal: "✔"
     rgb:
       r: 0
       g: 0
@@ -23,6 +35,10 @@ team:
   - name: "Yellow"
     nameColor: "&e"
     blockWoolColor: "35:4"
+    # The bed is destroyed.
+    bed-destroy: "✘"
+    # Bed normal condition
+    bed-normal: "✔"
     rgb:
       r: 255
       g: 255

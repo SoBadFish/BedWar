@@ -283,9 +283,14 @@ public class TeamInfo {
 
     public void onBedBreak(PlayerInfo info){
         if(badExists) {
-            room.sendTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-title"
-                    , "[1] &c床被破坏！", this.toString()));
-            room.sendSubTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-sub-title", "&7摧毁者: &r[1]", info.toString()));
+            room.sendTitleNoTeam(BedWarMain.getLanguage().getLanguage("team-bed-break-title"
+                    , "[1] &c床被破坏！", this.toString()),this);
+            room.sendSubTitleNoTeam(BedWarMain.getLanguage().getLanguage("team-bed-break-sub-title", "&7摧毁者: &r[1]", info.toString()),this);
+
+            sendTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-my-title"
+                    , "&c床被破坏了！"));
+            sendSubTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-my-sub-title", "&7你将无法重生!"));
+
             room.addSound(Sound.MOB_ENDERDRAGON_GROWL);
 
             setBadExists(false);
