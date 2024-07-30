@@ -1,5 +1,6 @@
 package org.sobadfish.bedwar.thread;
 
+import cn.nukkit.Player;
 import cn.nukkit.Server;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
@@ -10,7 +11,9 @@ import org.sobadfish.bedwar.manager.WorldResetManager;
 import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Sobadfish
@@ -61,26 +64,33 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 isClose = true;
                 return;
             }
+            for (Player player : new ArrayList<>(Server.getInstance().getOnlinePlayers().values())) {
+                for (BedWarFloatText floatText : new CopyOnWriteArrayList<>(FloatTextManager.floatTextList)) {
+                    if (floatText == null) {
+                        continue;
+                    }
 
-            for (BedWarFloatText floatText : FloatTextManager.floatTextList) {
-                if (floatText == null) {
-                    continue;
+                    if (floatText.isFinalClose) {
+                        FloatTextManager.removeFloatText(floatText);
+                        continue;
+                    }
+
+                    if (player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName())) {
+                        if(!floatText.player.contains(player.getName())){
+                            floatText.player.add(player.getName());
+                        }
+
+                    }
+                    if(update > 120){
+                        floatText.disPlayers();
+                        update = 0;
+                    }
+                    floatText.stringUpdate();
+
                 }
 
-                if (floatText.isFinalClose) {
-                    FloatTextManager.removeFloatText(floatText);
-                    continue;
-                }
-                if (update > 120) {
-                    //每120秒刷新一下...
-                    floatText.disPlayers();
-
-                }
-                floatText.stringUpdate();
             }
-            if(update > 120){
-                update = 0;
-            }
+
             try {
                 for(Map.Entry<String,String> map: WorldResetManager.RESET_QUEUE.entrySet()){
                     if (WorldInfoConfig.toPathWorld(map.getKey(), map.getValue(),false)) {
