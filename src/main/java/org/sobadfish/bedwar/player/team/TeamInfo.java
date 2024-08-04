@@ -247,9 +247,8 @@ public class TeamInfo {
         //尝试修复床透明的问题
         TeamInfoConfig config = getTeamConfig();
         Position bedPosition = config.getBedPosition();
-        if(bedPosition.getChunk() == null){
-            return;
-        }
+        if(bedPosition.getChunk() != null){
+            
         if(!bedPosition.getChunk().isLoaded()){
 //            try {
 //                getTeamConfig().getBedPosition().getChunk().load();
@@ -261,7 +260,7 @@ public class TeamInfo {
         if(!config.getSpawnPosition().getChunk().isLoaded()){
             config.getSpawnPosition().getLevel().loadChunk(config.getSpawnPosition().getChunkX(), config.getSpawnPosition().getChunkZ());
         }
-
+        }
         bedPosition.getLevel().setBlock(bedPosition,Block.get(26,0),true,true);
         Position pos2 = bedPosition.getSide(config.getBedFace());
         bedPosition.getLevel().setBlock(pos2,Block.get(26, config.getBedFace().getHorizontalIndex()|8),true,true);
