@@ -247,6 +247,9 @@ public class TeamInfo {
         //尝试修复床透明的问题
         TeamInfoConfig config = getTeamConfig();
         Position bedPosition = config.getBedPosition();
+        if(bedPosition.getChunk() == null){
+            return;
+        }
         if(!bedPosition.getChunk().isLoaded()){
 //            try {
 //                getTeamConfig().getBedPosition().getChunk().load();
