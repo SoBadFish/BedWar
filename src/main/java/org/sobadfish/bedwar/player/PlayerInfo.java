@@ -1098,7 +1098,7 @@ public class PlayerInfo {
             }
         }
         if(!teleport && player instanceof Player) {
-            sendMessage("&cRoom error place try again!")
+            sendMessage("&cRoom error place try again!");
             cancel();
             return;
             //throw new NullPointerException("无法将玩家传送到队伍出生点");
