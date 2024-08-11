@@ -855,6 +855,8 @@ public class GameRoomConfig implements Cloneable{
         config.set("floatSpawnPos",pos);
         config.set("auto-display-floattext.enable",enableAutoDisplayFloat);
         config.set("auto-display-floattext.text",autoDisplayFloat);
+        config.set("kb-setting",knockConfig.saveConfig());
+        
 
         config.save();
         //写入注释...
