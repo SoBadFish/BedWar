@@ -1399,10 +1399,10 @@ public class RoomManager implements Listener {
 
     private void disPlayUI(PlayerInfo info,GameRoom room){
         //WIN10 玩家 故障，，，，
-        DisPlayerPanel playerPanel = new DisPlayerPanel();
-        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),BedWarMain.getLanguage().getLanguage("player-from-teleport-player-title","传送玩家"));
+       // DisPlayerPanel playerPanel = new DisPlayerPanel();
+       // playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),BedWarMain.getLanguage().getLanguage("player-from-teleport-player-title","传送玩家"));
 
-//        disPlayProtect(info, room);
+        disPlayProtect(info, room);
     }
 
     private boolean quitRoomItem(Player player, String roomName, GameRoom room) {
