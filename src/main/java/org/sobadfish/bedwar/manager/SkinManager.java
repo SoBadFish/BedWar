@@ -37,7 +37,7 @@ public class SkinManager {
     public static void init(){
 
         File[] files = new File(BedWarMain.getBedWarMain().getDataFolder()+"/skin").listFiles();
-        if(files != null && files.length > 0){
+        if(files != null){
             for(File file:files){
                 String skinName = file.getName();
                 if(new File(BedWarMain.getBedWarMain().getDataFolder()+"/skin/"+skinName+"/skin.png").exists()){

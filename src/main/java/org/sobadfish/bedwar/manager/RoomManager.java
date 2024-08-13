@@ -36,6 +36,8 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.utils.TextFormat;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.command.BedWarCommand;
 import org.sobadfish.bedwar.entity.*;
@@ -133,7 +135,7 @@ public class RoomManager implements Listener {
         Map<String, GameRoomConfig> map = new LinkedHashMap<>();
         if(file.isDirectory()){
             File[] dirNameList = file.listFiles();
-            if(dirNameList != null && dirNameList.length > 0) {
+            if(dirNameList != null) {
                 for (File nameFile : dirNameList) {
                     if(nameFile.isDirectory()){
                         String roomName = nameFile.getName();
@@ -228,10 +230,7 @@ public class RoomManager implements Listener {
 
     private final Map<String, GameRoomConfig> roomConfig;
 
-    public Map<String, GameRoom> getRooms() {
-        return rooms;
-    }
-
+    @Getter
     private final Map<String, GameRoom> rooms = new LinkedHashMap<>();
 
     public boolean hasRoom(String room){
@@ -629,7 +628,7 @@ public class RoomManager implements Listener {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    BedWarMain.printMessageException(e);
                 }
                 Position pos = last.getSide(face,i);
                 if(pos.level.getBlock(pos).getId() == 0){
@@ -1657,18 +1656,13 @@ public class RoomManager implements Listener {
     @EventHandler
     public void onWorldReloadEvent(ReloadWorldEvent event) {
         GameRoomConfig config = event.getRoomConfig();
-//        Server.getInstance().getScheduler().scheduleTask(BedWarMain.getBedWarMain(), new Runnable() {
-//            @Override
-//            public void run() {
-                Server.getInstance().loadLevel(config.getWorldInfo().getLevel());
-                BedWarMain.getRoomManager().getRooms().remove(config.getName());
-                RoomManager.LOCK_GAME.remove(config);
-                WorldResetManager.RESET_QUEUE.remove(config.name);
-                BedWarMain.sendMessageToConsole("&rRecycle Room " + config.name);
-                BedWarMain.sendMessageToConsole("&rRoom " + config.name + " Recycled");
+        Server.getInstance().loadLevel(config.getWorldInfo().getLevel());
+        BedWarMain.getRoomManager().getRooms().remove(config.getName());
+        RoomManager.LOCK_GAME.remove(config);
+        WorldResetManager.RESET_QUEUE.remove(config.name);
+        BedWarMain.sendMessageToConsole("&rRecycle Room " + config.name);
+        BedWarMain.sendMessageToConsole("&rRoom " + config.name + " Recycled");
 
-//            }
-//        });
 
     }
 }

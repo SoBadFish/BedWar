@@ -2048,22 +2048,6 @@ public enum ItemIDSunName {
         return String.valueOf(map.get("Path"));
     }
 
-    /**
-     * @param ID 物品ID
-     * @return 根据物品ID获取物品名称
-     */
-    public static String getIDByName(int ID) {
-        return getIDByName(ID + ":0");
-    }
-
-    /**
-     * @param ID     物品ID
-     * @param Damage 物品特殊值
-     * @return 根据物品ID获取物品名称
-     */
-    public static String getIDByName(int ID, int Damage) {
-        return getIDByName(ID + ":" + Damage);
-    }
 
 
     public static String getIDByName(Item item) {
@@ -2101,7 +2085,7 @@ public enum ItemIDSunName {
         Map<String, Object> map = NAME_MAP.getOrDefault(Name, null);
         if (map == null || map.getOrDefault("ID", null) == null)
             return 0;
-        return Integer.valueOf(String.valueOf(map.get("ID")));
+        return Integer.parseInt(String.valueOf(map.get("ID")));
     }
 
     /**
@@ -2112,7 +2096,7 @@ public enum ItemIDSunName {
         Map<String, Object> map = NAME_MAP.getOrDefault(Name, null);
         if (map == null || map.getOrDefault("Damage", null) == null)
             return 0;
-        return Integer.valueOf(String.valueOf(map.get("Damage")));
+        return Integer.parseInt(String.valueOf(map.get("Damage")));
     }
 
     /**
@@ -2173,24 +2157,4 @@ public enum ItemIDSunName {
         }
     }
 
-    /**
-     * @param string 物品ID/物品名称/物品贴图路径
-     * @return 尝试解析并获取物品贴图路径
-     */
-    public static String UnknownToPath(String string) {
-        if (UnknownToID(string) != null)
-            return getIDByPath(UnknownToID(string));
-        else
-            return string;
-    }
-
-
-    /**
-     * 获取所有项目
-     *
-     * @return
-     */
-    public static ArrayList<HashMap<String, Object>> getAll() {
-        return All;
-    }
 }

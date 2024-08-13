@@ -1,6 +1,8 @@
 package org.sobadfish.bedwar.item.config;
 
 import cn.nukkit.level.Position;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.MoneyItemInfo;
 import org.sobadfish.bedwar.tools.Utils;
@@ -19,8 +21,11 @@ import java.util.Map;
 
 public class ItemInfoConfig {
 
+    @Getter
     private final MoneyItemInfoConfig moneyItemInfoConfig;
 
+    @Getter
+    @Setter
     private int spawnTick;
 
     private final ArrayList<String> positions;
@@ -40,15 +45,9 @@ public class ItemInfoConfig {
         return list;
     }
 
-    public int getSpawnTick() {
-        return spawnTick;
-    }
 
-    public MoneyItemInfoConfig getMoneyItemInfoConfig() {
-        return moneyItemInfoConfig;
-    }
 
-    public static ItemInfoConfig getItemInfoConfig(MoneyItemInfo moneyItemInfo, String name, Map map){
+    public static ItemInfoConfig getItemInfoConfig(MoneyItemInfo moneyItemInfo, String name, Map<?,?> map){
         int spawnTick = Utils.formatSecond(3);
         try {
             spawnTick = Integer.parseInt(map.get("spawnTick").toString());
@@ -64,18 +63,15 @@ public class ItemInfoConfig {
 
         Object oList = map.get("position");
         if(oList instanceof List){
-            return new ItemInfoConfig(moneyItemInfo.get(name),getPositionByList((List) oList),spawnTick);
+            return new ItemInfoConfig(moneyItemInfo.get(name),getPositionByList((List<?>) oList),spawnTick);
         }
         return null;
     }
 
 
 
-    public void setSpawnTick(int spawnTick) {
-        this.spawnTick = spawnTick;
-    }
 
-    private static ArrayList<String> getPositionByList(List list){
+    private static ArrayList<String> getPositionByList(List<?> list){
         ArrayList<String> positions = new ArrayList<>();
         for(Object ostr : list){
             positions.add(ostr.toString());

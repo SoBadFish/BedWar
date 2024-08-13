@@ -2,7 +2,11 @@ package org.sobadfish.bedwar.player.team.config;
 
 import cn.nukkit.level.Position;
 import cn.nukkit.math.BlockFace;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.BlockColor;
+import lombok.Data;
+import org.sobadfish.bedwar.manager.WorldResetManager;
+import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.util.LinkedHashMap;
@@ -15,7 +19,7 @@ import java.util.Map;
  * @author SoBadFish
  * 2022/1/3
  */
-
+@Data
 public class TeamInfoConfig {
 
     private TeamConfig teamConfig;
@@ -46,45 +50,15 @@ public class TeamInfoConfig {
 
     }
 
-    public TeamConfig getTeamConfig() {
-        return teamConfig;
-    }
-
-    public LinkedHashMap<String, String> getVillage() {
-        return village;
-    }
-
-    public BlockFace getBedFace() {
-        return bedFace;
-    }
-
-    public void setSpawnPosition(String spawnPosition) {
-        this.spawnPosition = spawnPosition;
-    }
-
-    public void setTeamConfig(TeamConfig teamConfig) {
-        this.teamConfig = teamConfig;
-    }
-
-    public void setBedFace(BlockFace bedFace) {
-        this.bedFace = bedFace;
-    }
-
-    public void setBedPosition(String bedPosition) {
-        this.bedPosition = bedPosition;
-    }
-
-    public void setVillage(LinkedHashMap<String, String> village) {
-        this.village = village;
-    }
-
-    public Position getBedPosition() {
+    public Position getBedPosition(){
         return WorldInfoConfig.getPositionByString(bedPosition);
     }
 
-    public Position getSpawnPosition() {
+    public Position getSpawnPosition(){
         return WorldInfoConfig.getPositionByString(spawnPosition);
     }
+
+
 
     public static TeamInfoConfig getInfoByMap(TeamConfig teamConfig, Map<?,?> map){
 //        Position bedPosition = WorldInfoConfig.getPositionByString();

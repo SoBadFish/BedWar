@@ -11,6 +11,8 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
 
@@ -25,10 +27,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ItemInfo {
 
+    @Getter
+    @Setter
     private int tick;
 
+    @Getter
     private final ItemInfoConfig itemInfoConfig;
 
+    @Setter
     private int resetTick = -1;
 
 
@@ -46,9 +52,7 @@ public class ItemInfo {
         return count;
     }
 
-    public void setResetTick(int resetTick) {
-        this.resetTick = resetTick;
-    }
+
 
     public int getResetTick() {
         if(resetTick == -1){
@@ -57,13 +61,6 @@ public class ItemInfo {
         return resetTick;
     }
 
-    public int getTick() {
-        return tick;
-    }
-
-    public void setTick(int tick) {
-        this.tick = tick;
-    }
 
     public static boolean use(MoneyItemInfoConfig info, PlayerInventory inventory, int count){
         if(getCountByInventory(info,inventory) >= count){
@@ -103,9 +100,6 @@ public class ItemInfo {
 
     }
 
-    public ItemInfoConfig getItemInfoConfig() {
-        return itemInfoConfig;
-    }
 
     public void toUpdate(){
         if(resetTick > 0 && tick >= resetTick || resetTick == -1 && tick >= itemInfoConfig.getSpawnTick()){

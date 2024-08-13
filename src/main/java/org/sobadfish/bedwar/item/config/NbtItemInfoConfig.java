@@ -3,6 +3,7 @@ package org.sobadfish.bedwar.item.config;
 import cn.nukkit.item.Item;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import lombok.Getter;
 import org.sobadfish.bedwar.item.nbt.INbtItem;
 import org.sobadfish.bedwar.item.nbt.INbtItemBuild;
 import org.sobadfish.bedwar.manager.NbtItemManager;
@@ -20,6 +21,7 @@ public class NbtItemInfoConfig {
 
     public INbtItem name;
 
+    @Getter
     public Item item;
 
 
@@ -28,7 +30,7 @@ public class NbtItemInfoConfig {
         this.item = item;
     }
 
-    public static NbtItemInfoConfig build(String name, Map map){
+    public static NbtItemInfoConfig build(String name, Map<?,?> map){
         if(NbtItemManager.NBT_MANAGER.containsKey(name)){
             INbtItem iNbtItem = NbtItemManager.NBT_MANAGER.get(name);
             if(iNbtItem == null){
@@ -45,7 +47,4 @@ public class NbtItemInfoConfig {
     }
 
 
-    public Item getItem() {
-        return item;
-    }
 }

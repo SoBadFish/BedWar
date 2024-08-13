@@ -18,7 +18,7 @@ public class EffectEvent extends IGameRoomEvent{
     public void onStart(GameRoom room) {
         List<Effect> effects = new ArrayList<>();
         if(item.value instanceof List){
-            List oList = (List) item.value;
+            List<?> oList = (List<?>) item.value;
             for(Object os:oList){
                 Effect e = stringToEffect(os.toString());
                 if(e != null){

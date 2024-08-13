@@ -7,6 +7,7 @@ import cn.nukkit.inventory.InventoryType;
 import cn.nukkit.item.Item;
 import cn.nukkit.network.protocol.ContainerOpenPacket;
 import cn.nukkit.network.protocol.RemoveEntityPacket;
+import lombok.Getter;
 import org.sobadfish.bedwar.panel.items.BasePlayPanelItemInstance;
 import org.sobadfish.bedwar.panel.lib.DoubleChestFakeInventory;
 import org.sobadfish.bedwar.player.PlayerInfo;
@@ -25,6 +26,7 @@ public class ChestInventoryPanel extends DoubleChestFakeInventory implements Inv
 
     public int clickSolt;
 
+    @Getter
     private Map<Integer, BasePlayPanelItemInstance> panel = new LinkedHashMap<>();
 
     ChestInventoryPanel(PlayerInfo player, InventoryHolder holder, String name) {
@@ -57,9 +59,6 @@ public class ChestInventoryPanel extends DoubleChestFakeInventory implements Inv
         return (Player) player.getPlayer();
     }
 
-    public Map<Integer, BasePlayPanelItemInstance> getPanel() {
-        return panel;
-    }
 
     @Override
     public void setName(String name) {

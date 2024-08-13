@@ -1,5 +1,8 @@
 package org.sobadfish.bedwar.item.team;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 团队的效果
  * @author SoBadFish
@@ -7,6 +10,8 @@ package org.sobadfish.bedwar.item.team;
  */
 public abstract class BaseTeamEffect implements Cloneable{
 
+    @Getter
+    @Setter
     private int maxLevel;
 
     public int level = 1;
@@ -15,9 +20,6 @@ public abstract class BaseTeamEffect implements Cloneable{
         this.maxLevel = maxLevel;
     }
 
-    public int getMaxLevel() {
-        return maxLevel;
-    }
 
     /**
      * 必须实现判断
@@ -27,10 +29,13 @@ public abstract class BaseTeamEffect implements Cloneable{
     @Override
     abstract public boolean equals(Object obj);
 
-    public void setLevel(int level) {
-        this.level = level;
+
+    @Override
+    public BaseTeamEffect clone() {
+        try {
+            return (BaseTeamEffect) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
-
-
-
 }

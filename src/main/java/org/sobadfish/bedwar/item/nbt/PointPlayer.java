@@ -26,7 +26,7 @@ public class PointPlayer implements INbtItem{
             return true;
         }
         GameRoom room = info.getGameRoom();
-        PlayerInfo target = null;
+        PlayerInfo target;
         LinkedHashMap<PlayerInfo,Double> dis = new LinkedHashMap<>();
         for(PlayerInfo info1: room.getLivePlayers()){
             if(!info1.getTeamInfo().equals(info.getTeamInfo())){
@@ -36,7 +36,7 @@ public class PointPlayer implements INbtItem{
         }
         List<Map.Entry<PlayerInfo, Double>> list = new ArrayList<>(dis.entrySet());
         list.sort(Comparator.comparingInt(o -> o.getValue().intValue()));
-        if(list.size() > 0) {
+        if(!list.isEmpty()) {
             target = list.get(0).getKey();
 
             if (target != null) {

@@ -1,6 +1,8 @@
 package org.sobadfish.bedwar.top;
 
 import cn.nukkit.level.Position;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.player.PlayerData;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
@@ -16,6 +18,8 @@ public class TopItem {
 
     public String position;
 
+    @Getter
+    @Setter
     public String title = "";
 
     public String room;
@@ -36,13 +40,7 @@ public class TopItem {
         return WorldInfoConfig.getPositionByString(position);
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
-    public String getTitle() {
-        return title;
-    }
 
     public String getListText(){
         StringBuilder builder = new StringBuilder(getTitle()+"\n");
@@ -57,7 +55,7 @@ public class TopItem {
         });
         String topColor;
         int top = 1;
-        if(dataList.size() > 0) {
+        if(!dataList.isEmpty()) {
 
             for (PlayerData data : dataList) {
                 if (top >= 10) {

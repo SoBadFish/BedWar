@@ -272,7 +272,7 @@ public class Utils {
 
             cn.nukkit.utils.Utils.writeFile(file, result.toString());
         } catch (Exception e) {
-            e.printStackTrace();
+            BedWarMain.printMessageException(e);
         }
     }
 
@@ -374,14 +374,14 @@ public class Utils {
                             try{
                                 file1.createNewFile();
                             }catch (Exception e){
-                                e.printStackTrace();
+                                BedWarMain.printMessageException(e);
                             }
 
                         }
                         copyByChannelToChannel(value, file1);
 
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        BedWarMain.printMessageException(e);
                     }
                 }
                 if (value.isDirectory()) {
@@ -391,7 +391,7 @@ public class Utils {
                     try {
                         copyDirectiory(sourceDir, targetDir);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        BedWarMain.printMessageException(e);
                     }
                 }
             }

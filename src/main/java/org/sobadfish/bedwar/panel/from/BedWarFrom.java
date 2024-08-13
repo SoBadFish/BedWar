@@ -3,6 +3,7 @@ package org.sobadfish.bedwar.panel.from;
 import cn.nukkit.Player;
 import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.utils.TextFormat;
+import lombok.Data;
 import org.sobadfish.bedwar.panel.from.button.BaseIButton;
 import org.sobadfish.bedwar.tools.Utils;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author SoBadFish
  * 2022/1/12
  */
+@Data
 public class BedWarFrom {
 
     private final int id;
@@ -33,25 +35,7 @@ public class BedWarFrom {
         this.id = id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
-    public void setContext(String context) {
-        this.context = context;
-    }
-
-    public List<BaseIButton> getBaseIButtoms() {
-        return baseIButtoms;
-    }
-
-    public void setBaseIButtoms(List<BaseIButton> baseIButtoms) {
-        this.baseIButtoms = baseIButtoms;
-    }
-
-    public int getId() {
-        return id;
-    }
 
 
     public void add(BaseIButton baseIButtom){

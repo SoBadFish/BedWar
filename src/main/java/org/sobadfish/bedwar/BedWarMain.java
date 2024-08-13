@@ -7,6 +7,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
+import lombok.Getter;
 import org.sobadfish.bedwar.command.BedWarAdminCommand;
 import org.sobadfish.bedwar.command.BedWarCommand;
 import org.sobadfish.bedwar.command.BedWarSpeakCommand;
@@ -43,19 +44,26 @@ public class BedWarMain extends PluginBase {
         LANGUAGE_LIST.add("chs");
     }
 
+    @Getter
     private static BedWarMain bedWarMain;
 
+    @Getter
     private static RoomManager roomManager;
 
+    @Getter
     private static MenuRoomManager menuRoomManager;
 
+    @Getter
     private static PlayerDataManager dataManager;
 
+    @Getter
     private static PlayerTopManager topManager;
 
 
+    @Getter
     private static RecordManager recordManager;
 
+    @Getter
     public static LanguageManager language;
 
     public static UiType uiType;
@@ -75,6 +83,7 @@ public class BedWarMain extends PluginBase {
      * */
     public static String COMMAND_MESSAGE_NAME = "bws";
 
+    @Getter
     public static int upExp;
     public static boolean enableRecord;
 
@@ -169,14 +178,6 @@ public class BedWarMain extends PluginBase {
 
     }
 
-    public static RecordManager getRecordManager() {
-        return recordManager;
-    }
-
-    public static LanguageManager getLanguage() {
-        return language;
-    }
-
     public void initSkin(){
         this.getLogger().info(TextFormat.colorize('&',"&dLoading Block Skin"));
         //初始化 皮肤
@@ -223,7 +224,7 @@ public class BedWarMain extends PluginBase {
         roomManager = RoomManager.initGameRoomConfig(mainFileDir);
         sendMessageToConsole("&aRoom Loading OK!");
         this.getServer().getPluginManager().registerEvents(roomManager,this);
-        if(getConfig().getAll().size() == 0) {
+        if(getConfig().getAll().isEmpty()) {
             this.saveResource("config.yml", true);
             reloadConfig();
         }
@@ -239,26 +240,6 @@ public class BedWarMain extends PluginBase {
 
 
 
-    }
-
-    public static int getUpExp(){
-        return upExp;
-    }
-
-    public static PlayerTopManager getTopManager() {
-        return topManager;
-    }
-
-    public static BedWarMain getBedWarMain() {
-        return bedWarMain;
-    }
-
-    public static MenuRoomManager getMenuRoomManager() {
-        return menuRoomManager;
-    }
-
-    public static PlayerDataManager getDataManager() {
-        return dataManager;
     }
 
     public static void sendMessageToConsole(String msg){
@@ -334,10 +315,10 @@ public class BedWarMain extends PluginBase {
         }
     }
 
-
-    public static RoomManager getRoomManager() {
-        return roomManager;
+    public static void printMessageException(Exception e){
+        sendMessageToConsole("&cERROR - "+e.getLocalizedMessage());
     }
+
 
     public static LinkedHashMap<Position,Block> spawnBlockByPosAndSize(Position position,int size,Block block){
         LinkedHashMap<Position,Block> blocks = new LinkedHashMap<>();

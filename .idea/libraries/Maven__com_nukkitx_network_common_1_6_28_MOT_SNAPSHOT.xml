@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.nukkitx.network:common:1.6.28-MOT-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/nukkitx/network/common/1.6.28-MOT-SNAPSHOT/common-1.6.28-MOT-20231209.115958-2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/nukkitx/network/common/1.6.28-MOT-SNAPSHOT/common-1.6.28-MOT-20231209.115958-2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/nukkitx/network/common/1.6.28-MOT-SNAPSHOT/common-1.6.28-MOT-20231209.115958-2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -7,6 +7,7 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.scheduler.Task;
 import com.google.gson.JsonObject;
+import lombok.Data;
 import net.easecation.ghosty.LevelRecordPack;
 import net.easecation.ghosty.entity.PlaybackNPC;
 import net.easecation.ghosty.playback.LevelPlaybackEngine;
@@ -32,13 +33,11 @@ public class RecordManager {
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒");
 
 
-    private HashMap<GameRoom, LevelRecordEngine> recordEngineHashMap = new HashMap<>();
-    private HashMap<Player, LevelPlaybackEngine> playbackEngineHashMap = new HashMap<>();
-
-    private final Task recordTask;
+    private final HashMap<GameRoom, LevelRecordEngine> recordEngineHashMap = new HashMap<>();
+    private final HashMap<Player, LevelPlaybackEngine> playbackEngineHashMap = new HashMap<>();
 
     public RecordManager() {
-        this.recordTask = new Task() {
+        Task recordTask = new Task() {
             @Override
             public void onRun(int i) {
                 Iterator<Map.Entry<Player, LevelPlaybackEngine>> iterator = playbackEngineHashMap.entrySet().iterator();
@@ -60,7 +59,7 @@ public class RecordManager {
                 }
             }
         };
-        Server.getInstance().getScheduler().scheduleRepeatingTask(BedWarMain.getBedWarMain(), this.recordTask, 20);
+        Server.getInstance().getScheduler().scheduleRepeatingTask(BedWarMain.getBedWarMain(), recordTask, 20);
     }
 
     private String getRecordPath() {
@@ -173,8 +172,10 @@ public class RecordManager {
     }
 
 
+    @Data
     public static class OK {
         private boolean isOK;
+
         private String message;
 
         public OK(boolean isOK, String message) {
@@ -182,21 +183,7 @@ public class RecordManager {
             this.message = message;
         }
 
-        public String getMessage() {
-            return message;
-        }
 
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
-        public void setOK(boolean OK) {
-            isOK = OK;
-        }
-
-        public boolean isOK() {
-            return isOK;
-        }
     }
 
 }

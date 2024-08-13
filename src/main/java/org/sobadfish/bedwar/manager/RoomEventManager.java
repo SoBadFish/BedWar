@@ -1,6 +1,7 @@
 package org.sobadfish.bedwar.manager;
 
 
+import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.room.config.GameRoomEventConfig;
 import org.sobadfish.bedwar.room.event.IGameRoomEvent;
 
@@ -23,7 +24,7 @@ public class RoomEventManager {
 
                 return e.getConstructor(GameRoomEventConfig.GameRoomEventItem.class).newInstance(item);
             } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e1) {
-                e1.printStackTrace();
+                BedWarMain.printMessageException(e1);
             }
         }
         return null;

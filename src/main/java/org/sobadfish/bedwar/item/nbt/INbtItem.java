@@ -13,11 +13,11 @@ public interface INbtItem {
      * 获取物品名称
      * @return  名称
      * */
-    public String getName();
+    String getName();
     /**
      * 玩家点击时触发
      * @param item 使用的哪个物品触发
      * @param player 玩家
      * */
-    public boolean onClick(Item item,Player player);
+    boolean onClick(Item item,Player player);
 }

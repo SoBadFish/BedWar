@@ -5,6 +5,8 @@ import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.TextFormat;
+import lombok.Data;
+import lombok.Getter;
 import org.sobadfish.bedwar.item.ItemIDSunName;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
@@ -18,6 +20,7 @@ import org.sobadfish.bedwar.shop.item.ShopItemInfo;
  * @author SoBadFish
  * 2022/1/6
  */
+@Data
 public class TeamPanelItem extends BasePlayPanelItemInstance{
 
     private Item item;

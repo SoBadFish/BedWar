@@ -1,6 +1,7 @@
 package org.sobadfish.bedwar.world;
 
 import cn.nukkit.block.Block;
+import lombok.Data;
 import org.sobadfish.bedwar.item.ItemInfo;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
 import org.sobadfish.bedwar.player.team.TeamInfo;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  * @author SoBadFish
  * 2022/1/2
  */
-
+@Data
 public class WorldInfo {
 
     private GameRoom room;
@@ -50,13 +51,6 @@ public class WorldInfo {
         return true;
     }
 
-    public ArrayList<Block> getPlaceBlock() {
-        return placeBlock;
-    }
-
-    public ArrayList<ItemInfo> getInfos() {
-        return infos;
-    }
 
     public void setClose(boolean close) {
         isClose = close;
@@ -66,13 +60,7 @@ public class WorldInfo {
         return isClose;
     }
 
-    public void setPlaceBlock(ArrayList<Block> placeBlock) {
-        this.placeBlock = placeBlock;
-    }
 
-    public WorldInfoConfig getConfig() {
-        return config;
-    }
 
     /**
      * 定时任务
@@ -97,7 +85,4 @@ public class WorldInfo {
 
     }
 
-    public GameRoom getRoom() {
-        return room;
-    }
 }

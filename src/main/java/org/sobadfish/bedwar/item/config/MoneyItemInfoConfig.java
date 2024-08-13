@@ -2,6 +2,9 @@ package org.sobadfish.bedwar.item.config;
 
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.TextFormat;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
 import java.util.Map;
@@ -10,10 +13,11 @@ import java.util.Map;
  * @author SoBadFish
  * 2022/1/3
  */
-
+@Data
 public class MoneyItemInfoConfig {
 
     private String name;
+
 
     private String customName;
 
@@ -27,13 +31,7 @@ public class MoneyItemInfoConfig {
         this.item = item;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public double getExp(){
-        return exp;
-    }
 
     public Item getItem() {
         Item item = new Item(this.item.getId(),this.item.getDamage());
@@ -45,27 +43,8 @@ public class MoneyItemInfoConfig {
         return item;
     }
 
-    public void setCustomName(String customName) {
-        this.customName = customName;
-    }
 
-    public void setExp(double exp) {
-        this.exp = exp;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCustomName() {
-        return customName;
-    }
-
-    public static MoneyItemInfoConfig getInstance(Map map){
+    public static MoneyItemInfoConfig getInstance(Map<?,?> map){
         String name = map.containsKey("name")?map.get("name").toString():null;
         String item = map.containsKey("item")?map.get("item").toString():null;
         String customName = map.containsKey("customName")?map.get("customName").toString():name;

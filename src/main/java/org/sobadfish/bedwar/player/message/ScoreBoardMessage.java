@@ -1,12 +1,14 @@
 package org.sobadfish.bedwar.player.message;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 
 /**
  * @author SoBadFish
  * 2022/1/3
  */
-
+@Data
 public class ScoreBoardMessage {
 
     private final String title;
@@ -22,15 +24,5 @@ public class ScoreBoardMessage {
         this.lore = lore;
     }
 
-    public String getTitle() {
-        return title;
-    }
 
-    public ArrayList<String> getLore() {
-        return lore;
-    }
-
-    public void setLore(ArrayList<String> lore) {
-        this.lore = lore;
-    }
 }

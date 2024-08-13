@@ -66,7 +66,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
             RandomJoinManager.newInstance().playerInfos.removeIf(info -> info.cancel || !joinRandomRoom(info));
 
         }catch (Exception e){
-            e.printStackTrace();
+            BedWarMain.printMessageException(e);
         }
     }
     public boolean joinRandomRoom(RandomJoinManager.IPlayerInfo i){
@@ -124,7 +124,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
                     }
                 }
             }
-            if (names.size() == 0) {
+            if (names.isEmpty()) {
                 info.sendForceMessage(BedWarMain.getLanguage().getLanguage("matching-error-room","&c暂时没有合适的房间"));
                 i.cancel = true;
                 return true;
@@ -147,7 +147,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
 
             WorldRoom worldRoom = BedWarMain.getMenuRoomManager().getRoom(i.name);
             ArrayList<GameRoomConfig> roomConfigs = worldRoom.getRoomConfigs();
-            if (roomConfigs.size() > 0) {
+            if (!roomConfigs.isEmpty()) {
                 GameRoomConfig roomConfig = roomConfigs.get(0);
                 if (roomConfigs.size() > 1) {
                     roomConfig = roomConfigs.get(Utils.rand(0, roomConfigs.size() - 1));

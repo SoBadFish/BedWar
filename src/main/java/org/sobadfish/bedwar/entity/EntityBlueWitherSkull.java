@@ -11,6 +11,8 @@ import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.level.particle.SmokeParticle;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.potion.Effect;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.tools.Utils;
 
@@ -27,6 +29,8 @@ public class EntityBlueWitherSkull extends EntityProjectile implements EntityExp
 
     protected boolean canExplode;
 
+    @Getter
+    @Setter
     private PlayerInfo master;
 
     @Override
@@ -104,13 +108,7 @@ public class EntityBlueWitherSkull extends EntityProjectile implements EntityExp
         }
     }
 
-    public void setMaster(PlayerInfo master) {
-        this.master = master;
-    }
 
-    public PlayerInfo getMaster() {
-        return master;
-    }
 
     @Override
     public void onCollideWithEntity(Entity entity) {

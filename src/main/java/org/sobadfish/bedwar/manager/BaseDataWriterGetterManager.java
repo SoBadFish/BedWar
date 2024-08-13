@@ -8,6 +8,7 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +36,7 @@ public class BaseDataWriterGetterManager<T>{
             if(!file.exists()){
                 BedWarMain.getBedWarMain().saveResource(fileName,false);
             }
-            reader = new InputStreamReader(new FileInputStream(file));
+            reader = new InputStreamReader(Files.newInputStream(file.toPath()));
             Object[] data = (Object[]) gson.fromJson(reader, tClass);
             Constructor<?> constructor = baseClass.getConstructor(List.class,File.class);
             if(data != null){
@@ -47,9 +48,9 @@ public class BaseDataWriterGetterManager<T>{
 
         } catch (IOException  e) {
             BedWarMain.sendMessageToConsole(BedWarMain.getLanguage().getLanguage("config-load-error","&c无法读取 [1] 配置文件"));
-            e.printStackTrace();
+            BedWarMain.printMessageException(e);
         } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            e.printStackTrace();
+            BedWarMain.printMessageException(e);
         } finally {
             if(reader !=null){
                 try {
@@ -74,12 +75,12 @@ public class BaseDataWriterGetterManager<T>{
             }
         }
         try {
-            OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file));
+            OutputStreamWriter writer = new OutputStreamWriter(Files.newOutputStream(file.toPath()));
             String json = gson.toJson(dataList);
             writer.write(json,0,json.length());
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            BedWarMain.printMessageException(e);
         }
 
     }

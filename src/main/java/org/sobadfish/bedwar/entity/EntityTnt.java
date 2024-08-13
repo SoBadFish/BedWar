@@ -11,6 +11,8 @@ import cn.nukkit.level.GameRule;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.LevelSoundEventPacket;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.tools.Utils;
 
@@ -66,6 +68,8 @@ public class EntityTnt extends EntityProjectile implements EntityExplosive {
     protected int fuse;
 
 
+    @Getter
+    @Setter
     public PlayerInfo target;
 
     public EntityTnt(FullChunk fullChunk, CompoundTag compoundTag, PlayerInfo playerInfo, int fuse) {
@@ -89,9 +93,6 @@ public class EntityTnt extends EntityProjectile implements EntityExplosive {
     }
 
 
-    public PlayerInfo getTarget() {
-        return target;
-    }
 
 
     @Override

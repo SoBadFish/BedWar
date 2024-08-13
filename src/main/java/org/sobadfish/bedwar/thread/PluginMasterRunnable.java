@@ -71,12 +71,6 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                     FloatTextManager.removeFloatText(floatText);
                     continue;
                 }
-//                    if (player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName())) {
-//                        if (!floatText.player.contains(player.getName())) {
-//                            floatText.player.add(player.getName());
-//                        }
-//
-//                    }
                 if (update > 120) {
                     //每120秒刷新一下...
                     floatText.disPlayers();
@@ -106,7 +100,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
 
 
         }catch (Exception e){
-            e.printStackTrace();
+            BedWarMain.printMessageException(e);
         }
 
         loadTime = System.currentTimeMillis() - t1;

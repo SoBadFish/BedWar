@@ -11,6 +11,8 @@ import cn.nukkit.level.Explosion;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.level.particle.CriticalParticle;
 import cn.nukkit.nbt.tag.CompoundTag;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.tools.Utils;
 
@@ -23,6 +25,8 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
     public static final int NETWORK_ID = 85;
     protected boolean critical;
     protected boolean canExplode;
+    @Getter
+    @Setter
     private PlayerInfo master;
 
     @Override
@@ -59,9 +63,6 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
         this(chunk, nbt, null);
     }
 
-    public void setMaster(PlayerInfo master) {
-        this.master = master;
-    }
 
 
     @Override
@@ -92,12 +93,6 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
         if (this.closed) {
             return false;
         } else {
-            //碰撞就爆炸
-//            if(this.hadCollision || this.age > 1200 || this.isCollided){
-//                this.level.addParticle(new CriticalParticle(this.add((double)(this.getWidth() / 2.0F) + Utils.rand(-100.0D, 100.0D) / 500.0D, (double)(this.getHeight() / 2.0F) + Utils.rand(-100.0D, 100.0D) / 500.0D, (double)(this.getWidth() / 2.0F) + Utils.rand(-100.0D, 100.0D) / 500.0D)));
-//                this.explode();
-//                this.close();
-//            }
             if (!this.hadCollision && this.critical) {
                 this.level.addParticle(new CriticalParticle(this.add((double)(this.getWidth() / 2.0F) + Utils.rand(-100.0D, 100.0D) / 500.0D, (double)(this.getHeight() / 2.0F) + Utils.rand(-100.0D, 100.0D) / 500.0D, (double)(this.getWidth() / 2.0F) + Utils.rand(-100.0D, 100.0D) / 500.0D)));
             } else if (this.onGround) {
@@ -114,10 +109,6 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
 
             return super.onUpdate(currentTick);
         }
-    }
-
-    public PlayerInfo getMaster() {
-        return master;
     }
 
     @Override

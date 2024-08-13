@@ -2,6 +2,7 @@ package org.sobadfish.bedwar.shop.item;
 
 
 import cn.nukkit.utils.Config;
+import lombok.Getter;
 import org.sobadfish.bedwar.shop.config.ShopInfoConfig;
 import org.sobadfish.bedwar.shop.config.TeamShopInfoConfig;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author SoBadFish
  * 2022/1/5
  */
+@Getter
 public class ShopItemInfo {
 
     private final String shopName;
@@ -57,11 +59,4 @@ public class ShopItemInfo {
         return new ShopItemInfo(shopName,shopInfoConfigs);
     }
 
-    public ArrayList<ShopInfoConfig> getShopInfoConfigs() {
-        return shopInfoConfigs;
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
 }

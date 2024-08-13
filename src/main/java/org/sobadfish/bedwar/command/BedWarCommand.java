@@ -105,7 +105,7 @@ public class BedWarCommand extends Command {
                                 name = strings[1];
                             }
                             if(name != null){
-                                if("".equals(name.trim())){
+                                if("".equalsIgnoreCase(name.trim())){
                                     name = null;
                                 }
                             }

@@ -16,11 +16,6 @@ public class TimeEvent extends IGameRoomEvent{
     }
 
     @Override
-    public GameRoomEventConfig.GameRoomEventItem getEventItem() {
-        return item;
-    }
-
-    @Override
     public void onStart(GameRoom room) {
         String[] item = getEventItem().value.toString().split(":");
         if(item[0].equalsIgnoreCase("复活")){

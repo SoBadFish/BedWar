@@ -53,7 +53,7 @@ public class TopRunnable extends ThreadManager.AbstractBedWarRunnable {
             }
             time = System.currentTimeMillis() - t1;
         }catch (Exception e){
-            e.printStackTrace();
+            BedWarMain.printMessageException(e);
         }
     }
 }

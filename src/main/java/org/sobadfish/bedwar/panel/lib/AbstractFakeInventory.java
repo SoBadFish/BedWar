@@ -9,6 +9,7 @@ import cn.nukkit.math.BlockVector3;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.ContainerOpenPacket;
 import cn.nukkit.network.protocol.UpdateBlockPacket;
+import org.sobadfish.bedwar.manager.ThreadManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,7 @@ public abstract class AbstractFakeInventory extends ContainerInventory {
     private static final Map<Player, AbstractFakeInventory> OPEN = new ConcurrentHashMap<>();
 
     final Map<Player, List<BlockVector3>> blockPositions = new HashMap<>();
-    private String title;
+    private final String title;
 
     AbstractFakeInventory(InventoryType type, InventoryHolder holder, String title) {
         super(holder, type);
@@ -67,8 +68,6 @@ public abstract class AbstractFakeInventory extends ContainerInventory {
      * @param who 玩家
      * @return 方块坐标*/
     protected abstract List<BlockVector3> onOpenBlock(Player who);
-
-    private ExecutorService service = Executors.newSingleThreadExecutor();
     @Override
     public void onClose(Player who) {
         super.onClose(who);
@@ -76,7 +75,7 @@ public abstract class AbstractFakeInventory extends ContainerInventory {
         List<BlockVector3> blocks = blockPositions.get(who);
         for (int i = 0, size = blocks.size(); i < size; i++) {
             final int index = i;
-            service.execute(() -> {
+            ThreadManager.SCHEDULED.execute(() -> {
                 Vector3 blockPosition = blocks.get(index).asVector3();
                 UpdateBlockPacket updateBlock = new UpdateBlockPacket();
                 if(IS_PM1E){

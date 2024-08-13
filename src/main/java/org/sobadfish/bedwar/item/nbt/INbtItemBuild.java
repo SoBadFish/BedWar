@@ -14,5 +14,5 @@ public interface INbtItemBuild {
      * 将物品数据编译为Item类
      * Map 为配置文件内容
      * */
-    Item build(Map map);
+    Item build(Map<?,?> map);
 }

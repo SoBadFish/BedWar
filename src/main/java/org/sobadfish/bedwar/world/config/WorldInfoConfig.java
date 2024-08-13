@@ -6,6 +6,7 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
+import lombok.Data;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.MoneyItemInfo;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
@@ -21,10 +22,11 @@ import java.util.Map;
  * @author SoBadFish
  * 2022/1/2
  */
+@Data
 public class WorldInfoConfig {
 
     private String level;
-    /**
+    /*
      * 游戏地图
      * */
 //    private Level gameWorld;
@@ -58,9 +60,6 @@ public class WorldInfoConfig {
         return new WorldInfoConfig(gameWorld,null,new ArrayList<>());
     }
 
-    public ArrayList<ItemInfoConfig> getItemInfos() {
-        return itemInfos;
-    }
 
     public Level getGameWorld() {
         Level l = null;
@@ -73,9 +72,6 @@ public class WorldInfoConfig {
     }
 
 
-    public String getLevel() {
-        return level;
-    }
 
 
     public Position getWaitPosition() {
@@ -161,7 +157,7 @@ public class WorldInfoConfig {
                 return true;
             }
         }catch (Exception e){
-            e.printStackTrace();
+            BedWarMain.printMessageException(e);
         }
         return false;
         //载入地图 删掉之前的地图文件
@@ -206,9 +202,7 @@ public class WorldInfoConfig {
         return position.getFloorX() + ":"+position.getFloorY()+":"+position.getFloorZ()+":"+position.getLevel().getFolderName()+":"+position.yaw;
     }
 
-    public void setItemInfos(ArrayList<ItemInfoConfig> itemInfos) {
-        this.itemInfos = itemInfos;
-    }
+
 
     public static Position getPositionByString(String str){
         String[] pos = str.split(":");

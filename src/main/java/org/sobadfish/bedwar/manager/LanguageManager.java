@@ -3,9 +3,12 @@ package org.sobadfish.bedwar.manager;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
+import lombok.Getter;
+import org.sobadfish.bedwar.BedWarMain;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -18,6 +21,7 @@ public class LanguageManager {
 
     public HashMap<String, String> ini;
 
+    @Getter
     public Config roomDescription;
 
     public String lang;
@@ -37,7 +41,7 @@ public class LanguageManager {
         this.lang = lang;
         BufferedReader br;
         try {
-            InputStream in = new FileInputStream(iniFile);
+            InputStream in = Files.newInputStream(iniFile.toPath());
             br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             Properties props = new Properties();
             props.load(br);
@@ -46,7 +50,7 @@ public class LanguageManager {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            BedWarMain.printMessageException(e);
         }
         //读取 room.yml注释
         InputStream resource = plugin.getResource("description/room-"+lang+".yml");
@@ -59,9 +63,7 @@ public class LanguageManager {
 
     }
 
-    public Config getRoomDescription() {
-        return roomDescription;
-    }
+
 
     public String getLanguage(String key, IniValueData... values) {
         String value = "";
@@ -71,10 +73,8 @@ public class LanguageManager {
     public String getLanguage(String key,String defaultValue,String... values) {
         IniValueData[] iniValueData = new IniValueData[values.length];
         int size = 0;
-        if(values.length > 0) {
-            for(String s: values){
-                iniValueData[size++] = new IniValueData(size, s);
-            }
+        for (String s : values) {
+            iniValueData[size++] = new IniValueData(size, s);
         }
 
         return getLanguage(key,defaultValue, iniValueData);
@@ -85,13 +85,11 @@ public class LanguageManager {
         if(ini != null && ini.containsKey(key)){
             value = ini.get(key);
         }
-        if(value == null || value.length() == 0){
+        if(value == null || value.isEmpty()){
             value = defaultValue;
         }
-        if(values.length > 0){
-            for(IniValueData iv : values){
-                value = value.replace("["+iv.key+"]",iv.value);
-            }
+        for (IniValueData iv : values) {
+            value = value.replace("[" + iv.key + "]", iv.value);
         }
         value = value.replace("[n]","\n");
         return TextFormat.colorize('&',value);

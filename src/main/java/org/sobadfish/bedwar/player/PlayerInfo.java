@@ -24,6 +24,7 @@ import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
+import lombok.Data;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.IronGolem;
 import org.sobadfish.bedwar.event.PlayerGameDeathEvent;
@@ -46,6 +47,7 @@ import java.util.*;
 /**
  * @author SoBadFish
  */
+@Data
 public class PlayerInfo {
 
     public int killCount = 0;
@@ -121,15 +123,7 @@ public class PlayerInfo {
     }
 
 
-    public void setPlayer(EntityHuman player){
-        this.player = player;
-    }
 
-
-    public EntityHuman getPlayer() {
-        return player;
-
-    }
 
     public void setLeave(boolean leave) {
         isLeave = leave;
@@ -150,21 +144,7 @@ public class PlayerInfo {
         return isLeave;
     }
 
-    public void setGameRoom(GameRoom gameRoom) {
-        this.gameRoom = gameRoom;
-    }
 
-    public void setPlayerType(PlayerType playerType) {
-        this.playerType = playerType;
-    }
-
-    public PlayerType getPlayerType() {
-        return playerType;
-    }
-
-    public GameRoom getGameRoom() {
-        return gameRoom;
-    }
 
 
 
@@ -257,69 +237,7 @@ public class PlayerInfo {
         }
     }
 
-    public PlayerInfo getDamageByInfo() {
-        return damageByInfo;
-    }
 
-    public int getKillCount() {
-        return killCount;
-    }
-
-    public int getBedBreakCount() {
-        return bedBreakCount;
-    }
-
-    public int getEndKillCount() {
-        return endKillCount;
-    }
-
-    public LinkedHashMap<Integer, Item> getArmor() {
-        return armor;
-    }
-
-    public int getLoadTime() {
-        return loadTime;
-    }
-
-    public int getSpawnTime() {
-        return spawnTime;
-    }
-
-    public void setCancel(boolean cancel) {
-        this.cancel = cancel;
-    }
-
-    public void setKillCount(int killCount) {
-        this.killCount = killCount;
-    }
-
-    public void setAssists(int assists) {
-        this.assists = assists;
-    }
-
-    public int getAssists() {
-        return assists;
-    }
-
-    public void setArmor(LinkedHashMap<Integer, Item> armor) {
-        this.armor = armor;
-    }
-
-    public void setBedBreakCount(int bedBreakCount) {
-        this.bedBreakCount = bedBreakCount;
-    }
-
-    public void setEndKillCount(int endKillCount) {
-        this.endKillCount = endKillCount;
-    }
-
-    public void setLoadTime(int loadTime) {
-        this.loadTime = loadTime;
-    }
-
-    public void setSpawnTime(int spawnTime) {
-        this.spawnTime = spawnTime;
-    }
 
     /**
      * 发送无前缀信息

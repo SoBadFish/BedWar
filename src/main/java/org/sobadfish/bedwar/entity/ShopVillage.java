@@ -6,6 +6,8 @@ import cn.nukkit.item.Item;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
 import org.sobadfish.bedwar.panel.DisPlayerPanel;
@@ -20,6 +22,8 @@ import org.sobadfish.bedwar.shop.item.ShopItemInfo;
 public class ShopVillage extends EntityCreature {
 
 
+    @Getter
+    @Setter
     private ShopItemInfo infoConfig;
 
     private GameRoomConfig room;
@@ -58,9 +62,6 @@ public class ShopVillage extends EntityCreature {
 
 
 
-    public ShopItemInfo getInfoConfig() {
-        return infoConfig;
-    }
 
     @Override
     public int getNetworkId() {

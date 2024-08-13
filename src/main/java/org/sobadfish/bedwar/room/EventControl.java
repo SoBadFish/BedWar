@@ -1,6 +1,7 @@
 package org.sobadfish.bedwar.room;
 
 
+import lombok.Getter;
 import org.sobadfish.bedwar.manager.RoomEventManager;
 import org.sobadfish.bedwar.room.config.GameRoomEventConfig;
 import org.sobadfish.bedwar.room.event.CustomEvent;
@@ -23,6 +24,7 @@ public class EventControl {
 
     private final GameRoom room;
 
+    @Getter
     public IGameRoomEvent lastEvent;
 
     public IGameRoomEvent thisEvent;
@@ -131,9 +133,6 @@ public class EventControl {
         return eventItems;
     }
 
-    public IGameRoomEvent getLastEvent() {
-        return lastEvent;
-    }
 
     public IGameRoomEvent getNextEvent() {
         if(hasEvent()){

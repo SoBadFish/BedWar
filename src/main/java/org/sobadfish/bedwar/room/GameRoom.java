@@ -15,6 +15,7 @@ import cn.nukkit.math.BlockFace;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
+import lombok.Data;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.FloatBlock;
 import org.sobadfish.bedwar.event.*;
@@ -38,12 +39,13 @@ import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * @author SoBadFish
  * 2022/1/2
  */
-
+@Data
 public class GameRoom {
 
     public int loadTime = -1;
@@ -103,68 +105,7 @@ public class GameRoom {
         //初始化浮空字
     }
 
-    public ArrayList<FloatTextInfo> getFloatTextInfos() {
-        return floatTextInfos;
-    }
-
     private boolean isInit = true;
-
-    public ArrayList<BlockChest> getClickChest() {
-        return clickChest;
-    }
-
-    public GameRoomConfig getRoomConfig() {
-        return roomConfig;
-    }
-
-    public int getLoadTime() {
-        return loadTime;
-    }
-
-    public ArrayList<TeamInfo> getTeamInfos() {
-        return teamInfos;
-    }
-
-    public GameType getType() {
-        return type;
-    }
-
-    public LinkedHashMap<PlayerInfo, Scoreboard> getScoreboards() {
-        return scoreboards;
-    }
-
-    public ShopInfo getShopInfo() {
-        return shopInfo;
-    }
-
-    public WorldInfo getWorldInfo() {
-        return worldInfo;
-    }
-
-    public void setType(GameType type) {
-        this.type = type;
-    }
-
-    public EventControl getEventControl() {
-        return eventControl;
-    }
-
-    public void setClose(boolean close) {
-        this.close = close;
-    }
-
-    /**
-     * 根据名称
-     * */
-    private TeamInfo getTeamInfo(String name){
-        for(PlayerInfo info : playerInfos){
-            if(info.getTeamInfo() != null &&
-                    info.getTeamInfo().getTeamConfig().getName().equalsIgnoreCase(name)){
-                return info.getTeamInfo();
-            }
-        }
-        return null;
-    }
 
 
     private boolean isMax;
@@ -175,7 +116,7 @@ public class GameRoom {
             return;
         }
         //TODO 当房间启动后
-        if(getIPlayerInfos().size() == 0 && !isInit){
+        if(getIPlayerInfos().isEmpty() && !isInit){
             onDisable();
             return;
         }
@@ -189,7 +130,7 @@ public class GameRoom {
                 try {
                     onStart();
                 }catch (Exception e){
-                    e.printStackTrace();
+                    BedWarMain.printMessageException(e);
                     for(PlayerInfo playerInfo: new ArrayList<>(playerInfos)){
                         playerInfo.sendForceMessage(BedWarMain.getLanguage().getLanguage("room-error","房间出现异常 请联系服主/管理员修复"));
                     }
@@ -327,8 +268,8 @@ public class GameRoom {
             }
         }else{
             TeamInfo successInfo = null;
-            ArrayList<TeamInfo> teamInfos = getLiveTeam();
-            if(teamInfos.size() > 0) {
+            List<TeamInfo> teamInfos = getLiveTeam();
+            if(!teamInfos.isEmpty()) {
                 int pl = 0;
                 for (TeamInfo info : teamInfos) {
                     if (pl == 0) {
@@ -413,14 +354,10 @@ public class GameRoom {
     /**
      * 旁观者们
      * */
-    public ArrayList<PlayerInfo> getWatchPlayers(){
-        ArrayList<PlayerInfo> t = new ArrayList<>();
-        for(PlayerInfo playerInfo: playerInfos){
-            if(playerInfo.isWatch()){
-                t.add(playerInfo);
-            }
-        }
-        return t;
+    public List<PlayerInfo> getWatchPlayers(){
+        return playerInfos.stream()
+                .filter(PlayerInfo::isWatch)
+                .collect(Collectors.toList());
     }
 
 
@@ -429,49 +366,33 @@ public class GameRoom {
     /**
      * 离开游戏的玩家们
      * */
-    public ArrayList<PlayerInfo> getLeavePlayers(){
-        ArrayList<PlayerInfo> t = new ArrayList<>();
-        for(PlayerInfo playerInfo: playerInfos){
-            if(playerInfo.isLeave()){
-                t.add(playerInfo);
-            }
-        }
-        return t;
+    public List<PlayerInfo> getLeavePlayers(){
+        return playerInfos.stream()
+                .filter(PlayerInfo::isLeave)
+                .collect(Collectors.toList());
     }
     /**
      * 还在游戏内的存活玩家
      * */
-    public ArrayList<PlayerInfo> getLivePlayers(){
-        ArrayList<PlayerInfo> t = new ArrayList<>();
-        for(PlayerInfo playerInfo: playerInfos){
-            if(playerInfo.isLive()){
-                t.add(playerInfo);
-            }
-        }
-        return t;
+    public List<PlayerInfo> getLivePlayers(){
+        return playerInfos.stream()
+                .filter(PlayerInfo::isLive)
+                .collect(Collectors.toList());
     }
     /**
      * 还在游戏内的玩家
      * */
-    public ArrayList<PlayerInfo> getInRoomPlayers(){
-        ArrayList<PlayerInfo> t = new ArrayList<>();
-        for(PlayerInfo playerInfo: playerInfos){
-            if(playerInfo.isInRoom()){
-                t.add(playerInfo);
-            }
-        }
-        return t;
+    public List<PlayerInfo> getInRoomPlayers(){
+        return playerInfos.stream()
+                .filter(PlayerInfo::isInRoom)
+                .collect(Collectors.toList());
     }
 
 
-    public ArrayList<TeamInfo> getLiveTeam(){
-        ArrayList<TeamInfo> t = new ArrayList<>();
-        for(TeamInfo teamInfo: teamInfos){
-            if(teamInfo.isLoading()){
-                t.add(teamInfo);
-            }
-        }
-        return t;
+    public List<TeamInfo> getLiveTeam(){
+        return teamInfos.stream()
+                .filter(TeamInfo::isLoading)
+                .collect(Collectors.toList());
     }
 
 
@@ -613,7 +534,7 @@ public class GameRoom {
 
         int t =  (int) Math.ceil(playerInfos.size() / (double)getRoomConfig().getTeamConfigs().size());
         PlayerInfo listener;
-        LinkedList<PlayerInfo> noTeam = getNoTeamPlayers();
+        LinkedList<PlayerInfo> noTeam = new LinkedList<>(getNoTeamPlayers());
         // TODO 检测是否一个队伍里有太多的人 拆掉多余的人
         for (TeamInfo manager: teamInfos){
             if(manager.getTeamPlayers().size() > t){
@@ -628,11 +549,11 @@ public class GameRoom {
             TeamInfo teamInfo = teamInfos.get(0);
             noTeam.addAll(teamInfo.getTeamPlayers());
         }
-        while(noTeam.size() > 0){
+        while(!noTeam.isEmpty()){
             for (TeamInfo manager: teamInfos){
-                if(manager.getTeamPlayers().size() == 0
+                if(manager.getTeamPlayers().isEmpty()
                         || (manager.getTeamPlayers().size() < t )){
-                    if(noTeam.size() > 0) {
+                    if(!noTeam.isEmpty()) {
                         listener = noTeam.poll();
                         manager.mjoin(listener);
                     }
@@ -656,14 +577,16 @@ public class GameRoom {
         return infos;
     }
 
-    public LinkedList<PlayerInfo> getNoTeamPlayers(){
-        LinkedList<PlayerInfo> noTeam = new LinkedList<>();
-        for(PlayerInfo playerInfo: playerInfos){
-            if(playerInfo.getTeamInfo() == null){
-                noTeam.add(playerInfo);
-            }
-        }
-        return noTeam;
+    public List<PlayerInfo> getNoTeamPlayers(){
+        return playerInfos.stream()
+                .filter(playerInfo -> playerInfo.getTeamInfo() == null)
+                .collect(Collectors.toList());
+    }
+
+    public List<PlayerInfo> getDeathPlayers(){
+        return playerInfos.stream()
+                .filter(PlayerInfo::isDeath)
+                .collect(Collectors.toList());
     }
 
 
@@ -711,7 +634,7 @@ public class GameRoom {
 
             }
         }
-        if (getIPlayerInfos().size() == 0) {
+        if (getIPlayerInfos().isEmpty()) {
             onDisable();
         }
         return true;
@@ -730,33 +653,20 @@ public class GameRoom {
         return playerInfos;
     }
 
-    public ArrayList<PlayerInfo> getIPlayerInfos() {
-        ArrayList<PlayerInfo> p = new ArrayList<>();
-        for(PlayerInfo info: playerInfos){
-            if(info.getPlayer() instanceof Player){
-                if(!info.isLeave()) {
-                    p.add(info);
-                }
-            }
-        }
-        return p;
+    public List<PlayerInfo> getIPlayerInfos() {
+        return playerInfos.stream()
+                .filter(info -> info.getPlayer() instanceof Player && !info.isLeave())
+                .collect(Collectors.toList());
+
     }
 
     public void sendMessageOnWatch(String msg) {
-        ArrayList<PlayerInfo> watchPlayer = new ArrayList<>();
-        for(PlayerInfo info: playerInfos){
-            if(info.isWatch()){
-                watchPlayer.add(info);
-            }
-        }
-        watchPlayer.forEach(dp -> dp.sendMessage(msg));
+        getWatchPlayers().forEach(dp -> dp.sendMessage(msg));
     }
 
     public void joinWatch(PlayerInfo info) {
         //TODO 欢迎加入观察者大家庭
         if(!playerInfos.contains(info)){
-
-
             info.init();
             info.setGameRoom(this);
             if(info.getPlayer() instanceof Player) {
@@ -872,13 +782,7 @@ public class GameRoom {
      * 仅阵亡玩家观看
      * */
     public void sendMessageOnDeath(String msg){
-        ArrayList<PlayerInfo> deathPlayer = new ArrayList<>();
-        for(PlayerInfo info: playerInfos){
-            if(info.isDeath()){
-                deathPlayer.add(info);
-            }
-        }
-        deathPlayer.forEach(dp -> dp.sendMessage(msg));
+        getDeathPlayers().forEach(dp -> dp.sendMessage(msg));
     }
 
 

@@ -2,6 +2,7 @@ package org.sobadfish.bedwar.room.config;
 
 
 import cn.nukkit.utils.Config;
+import lombok.Data;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.MoneyItemInfo;
 import org.sobadfish.bedwar.item.NbtItemInfo;
@@ -23,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author SoBadFish
  * 2022/1/2
  */
-
+@Data
 public class GameRoomConfig implements Cloneable{
     /**
      * 房间名
@@ -270,137 +271,7 @@ public class GameRoomConfig implements Cloneable{
 
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public int getMaxWaitTime() {
-        return maxWaitTime;
-    }
-
-    public List<TeamConfig> getTeamCfg() {
-        return teamCfg;
-    }
-
-    public WorldInfoConfig getWorldInfo() {
-        return worldInfo;
-    }
-
-    public int getMaxPlayerSize() {
-        return maxPlayerSize;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public int getMinPlayerSize() {
-        return minPlayerSize;
-    }
-
-    public int getWaitTime() {
-        return waitTime;
-    }
-
-    public ArrayList<TeamInfoConfig> getTeamConfigs() {
-        return teamConfigs;
-    }
-
-    public LinkedHashMap<String, ShopItemInfo> getShops() {
-        return shops;
-    }
-
-    public ArrayList<String> getBanCommand() {
-        return banCommand;
-    }
-
-    public ArrayList<String> getDefeatCommand() {
-        return defeatCommand;
-    }
-
-    public ArrayList<String> getGameStartMessage() {
-        return gameStartMessage;
-    }
-
-    public MoneyItemInfo getMoneyItem() {
-        return moneyItem;
-    }
-
-    public ArrayList<String> getQuitRoomCommand() {
-        return quitRoomCommand;
-    }
-
-    public ArrayList<String> getVictoryCommand() {
-        return victoryCommand;
-    }
-
-    public float getFireballKnockBack() {
-        return fireballKnockBack;
-    }
-
-    public float getKillItem() {
-        return killItem;
-    }
-
-    public NbtItemInfo getNbtItemInfo() {
-        return nbtItemInfo;
-    }
-
-    public GameRoomEventConfig getEventConfig() {
-        return eventConfig;
-    }
-
-    public GameRoomEventConfig getEventListConfig() {
-        return eventListConfig;
-    }
-
-    public BedWarMain.UiType getUiType() {
-        return uiType;
-    }
-
-    public int getCallbackY() {
-        return callbackY;
-    }
-
-    public boolean isInventoryUnBreakable() {
-        return inventoryUnBreakable;
-    }
-
-    public int getDeathIcon() {
-        return deathIcon;
-    }
-
-    public int getItemShopEntityId() {
-        return itemShopEntityId;
-    }
-
-    public String getGameRoomMoney() {
-        return gameRoomMoney;
-    }
-
-    public int getMinutesExp() {
-        return minutesExp;
-    }
-
-    public int getTeamShopEntityId() {
-        return teamShopEntityId;
-    }
-
-    public List<FloatTextInfoConfig> getFloatTextInfoConfigs() {
-        return floatTextInfoConfigs;
-    }
-
-    public void setTeamConfigs(ArrayList<TeamInfoConfig> teamConfigs) {
-        this.teamConfigs = teamConfigs;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setTeamCfg(List<TeamConfig> teamCfg) {
-        this.teamCfg = teamCfg;
-    }
 
     public List<String> getTeamNames(){
         List<String> names = new ArrayList<String>();
@@ -411,125 +282,6 @@ public class GameRoomConfig implements Cloneable{
         return names;
     }
 
-    public void setMaxPlayerSize(int maxPlayerSize) {
-        this.maxPlayerSize = maxPlayerSize;
-    }
-
-    public void setMaxWaitTime(int maxWaitTime) {
-        this.maxWaitTime = maxWaitTime;
-    }
-
-    public void setMinPlayerSize(int minPlayerSize) {
-        this.minPlayerSize = minPlayerSize;
-    }
-
-    public void setShops(LinkedHashMap<String, ShopItemInfo> shops) {
-        this.shops = shops;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
-    }
-
-    public void setWaitTime(int waitTime) {
-        this.waitTime = waitTime;
-    }
-
-    public void setCallbackY(int callbackY) {
-        this.callbackY = callbackY;
-    }
-
-    public void setDeathIcon(int deathIcon) {
-        this.deathIcon = deathIcon;
-    }
-
-    public void setAutomaticNextRound(boolean automaticNextRound) {
-        isAutomaticNextRound = automaticNextRound;
-    }
-
-    public void setBanCommand(ArrayList<String> banCommand) {
-        this.banCommand = banCommand;
-    }
-
-    public void setDefeatCommand(ArrayList<String> defeatCommand) {
-        this.defeatCommand = defeatCommand;
-    }
-
-    public void setEnableFood(boolean enableFood) {
-        this.enableFood = enableFood;
-    }
-
-    public void setEventConfig(GameRoomEventConfig eventConfig) {
-        this.eventConfig = eventConfig;
-    }
-
-    public void setEventListConfig(GameRoomEventConfig eventListConfig) {
-        this.eventListConfig = eventListConfig;
-    }
-
-    public void setFireballKnockBack(float fireballKnockBack) {
-        this.fireballKnockBack = fireballKnockBack;
-    }
-
-    public void setGameRoomMoney(String gameRoomMoney) {
-        this.gameRoomMoney = gameRoomMoney;
-    }
-
-    public void setGameStartMessage(ArrayList<String> gameStartMessage) {
-        this.gameStartMessage = gameStartMessage;
-    }
-
-    public void setFloatTextInfoConfigs(List<FloatTextInfoConfig> floatTextInfoConfigs) {
-        this.floatTextInfoConfigs = floatTextInfoConfigs;
-    }
-
-    public void setInventoryUnBreakable(boolean inventoryUnBreakable) {
-        this.inventoryUnBreakable = inventoryUnBreakable;
-    }
-
-    public void setHasWatch(boolean hasWatch) {
-        this.hasWatch = hasWatch;
-    }
-
-    public void setItemShopEntityId(int itemShopEntityId) {
-        this.itemShopEntityId = itemShopEntityId;
-    }
-
-    public void setKillItem(float killItem) {
-        this.killItem = killItem;
-    }
-
-    public void setMinutesExp(int minutesExp) {
-        this.minutesExp = minutesExp;
-    }
-
-    public void setNbtItemInfo(NbtItemInfo nbtItemInfo) {
-        this.nbtItemInfo = nbtItemInfo;
-    }
-
-    public void setQuitRoomCommand(ArrayList<String> quitRoomCommand) {
-        this.quitRoomCommand = quitRoomCommand;
-    }
-
-    public void setTeamShopEntityId(int teamShopEntityId) {
-        this.teamShopEntityId = teamShopEntityId;
-    }
-
-    public void setUiType(BedWarMain.UiType uiType) {
-        this.uiType = uiType;
-    }
-
-    public void setVictoryCommand(ArrayList<String> victoryCommand) {
-        this.victoryCommand = victoryCommand;
-    }
-
-    public boolean isEnableFood() {
-        return enableFood;
-    }
-
-    public void setWorldInfo(WorldInfoConfig worldInfo) {
-        this.worldInfo = worldInfo;
-    }
 
     public static GameRoomConfig createGameRoom(String name, int size, int maxSize){
         GameRoomConfig roomConfig = new GameRoomConfig(name,null,300,120,20,size,maxSize,new LinkedHashMap<>(),new ArrayList<>());
@@ -771,8 +523,7 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.eventListConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/"+BedWarMain.getLanguage().lang+"/roomEventList.yml"));
                 return roomConfig;
             }catch (Exception e){
-                e.printStackTrace();
-                BedWarMain.sendMessageToConsole("Load Error: "+e.getMessage());
+                BedWarMain.printMessageException(e);
 
                 return null;
 
@@ -782,9 +533,6 @@ public class GameRoomConfig implements Cloneable{
         return null;
     }
 
-    public void setMoneyItem(MoneyItemInfo moneyItem) {
-        this.moneyItem = moneyItem;
-    }
 
     public boolean isExp(){
         return "exp".equalsIgnoreCase(gameRoomMoney);
@@ -869,7 +617,7 @@ public class GameRoomConfig implements Cloneable{
         try {
             return (GameRoomConfig) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            BedWarMain.printMessageException(e);
         }
         return null;
     }

@@ -10,6 +10,8 @@ import cn.nukkit.math.NukkitMath;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.tools.Utils;
 import org.sobadfish.bedwar.player.PlayerInfo;
@@ -25,6 +27,8 @@ public abstract class BaseEntityMove extends BaseEntity {
 
     private boolean canAttack = true;
 
+    @Getter
+    @Setter
     private PlayerInfo master;
     public BaseEntityMove(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
@@ -72,13 +76,6 @@ public abstract class BaseEntityMove extends BaseEntity {
         }
     }
 
-    public void setMaster(PlayerInfo master) {
-        this.master = master;
-    }
-
-    public PlayerInfo getMaster() {
-        return master;
-    }
 
     @Override
     public void setFollowTarget(EntityCreature target) {
@@ -358,11 +355,11 @@ public abstract class BaseEntityMove extends BaseEntity {
                         if (this.onGround) {
                             this.motionY = 0.0D;
                         } else if (this.motionY > (double)(-this.getGravity() * 4.0F)) {
-                            if (!(this.level.getBlock(new Vector3((double)NukkitMath.floorDouble(this.x), (double)((int)(this.y + 0.8D)), (double)NukkitMath.floorDouble(this.z))) instanceof BlockLiquid)) {
-                                this.motionY -= (double)(this.getGravity() * 1.0F);
+                            if (!(this.level.getBlock(new Vector3(NukkitMath.floorDouble(this.x), (int)(this.y + 0.8D), NukkitMath.floorDouble(this.z))) instanceof BlockLiquid)) {
+                                this.motionY -= this.getGravity();
                             }
                         } else {
-                            this.motionY -= (double)(this.getGravity() * (float)tickDiff);
+                            this.motionY -= this.getGravity() * (float)tickDiff;
                         }
                     }
 

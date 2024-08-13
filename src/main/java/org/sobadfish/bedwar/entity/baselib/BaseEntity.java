@@ -8,6 +8,9 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.entity.IronGolem;
 
 
@@ -16,6 +19,7 @@ import org.sobadfish.bedwar.entity.IronGolem;
  * @author @Mobplugin
  * 2022/1/8
  */
+
 public abstract class BaseEntity extends EntityCreature {
 
 
@@ -28,6 +32,8 @@ public abstract class BaseEntity extends EntityCreature {
     //锁定生物
     protected EntityCreature followTarget = null;
 
+    @Getter
+    @Setter
     private boolean movement = true;
 
     protected int attackDelay = 0;
@@ -53,19 +59,12 @@ public abstract class BaseEntity extends EntityCreature {
     }
 
 
-    public boolean isMovement() {
-        return this.movement;
-    }
-
 
     public boolean isKnockback() {
         return this.attackTime > 0;
     }
 
 
-    public void setMovement(boolean value) {
-        this.movement = value;
-    }
 
     public double getSpeed() {
         //移动速度

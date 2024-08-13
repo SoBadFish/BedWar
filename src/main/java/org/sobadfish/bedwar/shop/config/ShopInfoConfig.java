@@ -3,6 +3,7 @@ package org.sobadfish.bedwar.shop.config;
 
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.TextFormat;
+import lombok.Getter;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.panel.items.BasePlayPanelItemInstance;
 import org.sobadfish.bedwar.panel.items.DefaultItem;
@@ -17,6 +18,7 @@ import java.util.Map;
  * 2022/1/2
  */
 
+@Getter
 public class ShopInfoConfig {
 
     /**
@@ -44,10 +46,7 @@ public class ShopInfoConfig {
     }
 
 
-    public ShopItemClassify getClassify() {
-        return classify;
-    }
-
+    @Getter
     public static class ShopItemClassify{
 
         public String type;
@@ -56,21 +55,6 @@ public class ShopInfoConfig {
 
         public Item item;
 
-
-
-//        /**
-//         * 武器，盔甲，弓，方块，食物，工具，小道具，药水
-//         * */
-//        WEAPON(Item.get(276),"武器"),
-//        ARMOR(Item.get(311),"盔甲"),
-//        BOW(Item.get(261),"弓"),
-//        BLOCK(Item.get(24,2),"方块"),
-//        FOOD(Item.get(320),"食物"),
-//        TOOLS(Item.get(278),"工具"),
-//        ITEMS(Item.get(46),"小道具"),
-//        EFFECT(Item.get(373),"药水");
-//        private final Item item;
-//        private final String disPlayerName;
 
         public ShopItemClassify(String type){
             this.type = type;
@@ -82,10 +66,7 @@ public class ShopInfoConfig {
             this.item = item;
             this.disPlayerName = disPlayerName;
         }
-//
-        public String getDisPlayerName() {
-            return disPlayerName;
-        }
+
 
         @Override
         public boolean equals(Object o) {
@@ -113,7 +94,4 @@ public class ShopInfoConfig {
         }
     }
 
-    public ArrayList<BasePlayPanelItemInstance> getShopItems() {
-        return shopItems;
-    }
 }

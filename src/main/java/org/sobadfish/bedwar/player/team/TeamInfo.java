@@ -10,6 +10,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.TextFormat;
+import lombok.Data;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.event.PlayerChoseTeamEvent;
 import org.sobadfish.bedwar.event.TeamDefeatEvent;
@@ -24,12 +25,13 @@ import org.sobadfish.bedwar.room.GameRoom;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author SoBadFish
  * 2022/1/2
  */
-
+@Data
 public class TeamInfo {
 
     private TeamInfoConfig teamConfig;
@@ -62,46 +64,12 @@ public class TeamInfo {
 
 
 
-    public ArrayList<TeamEffectInfo> getTeamEffects() {
-        return teamEffects;
-    }
-
-    public boolean isClose() {
-        return close;
-    }
-
-    public boolean isBadExists() {
-        return badExists;
-    }
 
     public boolean isLoading() {
         return !stop;
     }
 
-    public void setClose(boolean close) {
-        this.close = close;
-    }
 
-    public void setBadExists(boolean badExists) {
-        this.badExists = badExists;
-    }
-
-
-    public void setStop(boolean stop) {
-        this.stop = stop;
-    }
-
-    public TeamInfoConfig getTeamConfig() {
-        return teamConfig;
-    }
-
-    public void setTeamConfig(TeamInfoConfig teamConfig) {
-        this.teamConfig = teamConfig;
-    }
-
-    public void setTeamPlayers(ArrayList<PlayerInfo> teamPlayers) {
-        this.teamPlayers = teamPlayers;
-    }
 
     public void sendMessage(String msg){
         teamPlayers.forEach(playerInfo ->
@@ -124,30 +92,22 @@ public class TeamInfo {
 
 
 
-    public ArrayList<PlayerInfo> getTeamPlayers() {
+    public List<PlayerInfo> getTeamPlayers() {
         teamPlayers.removeIf((p)->p.disable);
         return teamPlayers;
     }
 
 
-    public ArrayList<PlayerInfo> getInRoomPlayer(){
-        ArrayList<PlayerInfo> playerInfos = new ArrayList<>();
-        for(PlayerInfo playerInfo: getTeamPlayers()){
-            if(playerInfo.isInRoom()){
-                playerInfos.add(playerInfo);
-            }
-        }
-        return playerInfos;
+    public List<PlayerInfo> getInRoomPlayer(){
+        return getTeamPlayers().stream()
+                .filter(PlayerInfo::isInRoom)
+                .collect(Collectors.toList());
     }
 
-    public ArrayList<PlayerInfo> getLivePlayer(){
-        ArrayList<PlayerInfo> playerInfos = new ArrayList<>();
-        for(PlayerInfo playerInfo: getTeamPlayers()){
-            if(playerInfo.isLive()){
-                playerInfos.add(playerInfo);
-            }
-        }
-        return playerInfos;
+    public List<PlayerInfo> getLivePlayer(){
+        return getTeamPlayers().stream()
+                .filter(PlayerInfo::isLive)
+                .collect(Collectors.toList());
     }
 
 
@@ -248,11 +208,6 @@ public class TeamInfo {
         TeamInfoConfig config = getTeamConfig();
         Position bedPosition = config.getBedPosition();
         if(!bedPosition.getChunk().isLoaded()){
-//            try {
-//                getTeamConfig().getBedPosition().getChunk().load();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
             bedPosition.getLevel().loadChunk(bedPosition.getChunkX(), bedPosition.getChunkZ());
         }
         if(!config.getSpawnPosition().getChunk().isLoaded()){

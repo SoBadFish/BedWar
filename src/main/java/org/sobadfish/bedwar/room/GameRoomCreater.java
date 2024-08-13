@@ -1,6 +1,7 @@
 package org.sobadfish.bedwar.room;
 
 import cn.nukkit.math.BlockFace;
+import lombok.Getter;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
 import org.sobadfish.bedwar.player.PlayerInfo;
@@ -20,6 +21,7 @@ import java.util.LinkedHashMap;
  */
 public class GameRoomCreater {
 
+    @Getter
     private final PlayerInfo creator;
 
     private boolean isCreate;
@@ -429,7 +431,5 @@ public class GameRoomCreater {
         return null;
     }
 
-    public PlayerInfo getCreator() {
-        return creator;
-    }
+
 }

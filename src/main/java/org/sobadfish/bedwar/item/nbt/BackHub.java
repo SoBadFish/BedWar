@@ -34,10 +34,6 @@ public class BackHub implements INbtItem{
 
             public Position lastPosition;
 
-            private double radius = 2.0; // 粒子环绕半径
-
-            private double speed = 0.05; // 粒子运动速度
-
             private double angle = 0.0;
 
             private double ay = 0.0d;
@@ -65,6 +61,8 @@ public class BackHub implements INbtItem{
 
                     Location playerLocation = player.getLocation();
 
+                    // 粒子环绕半径
+                    double radius = 2.0;
                     double x = playerLocation.getX() + radius * Math.cos(angle);
                     double y = playerLocation.getY() + this.ay; // 粒子高度
                     double z = playerLocation.getZ() + radius * Math.sin(angle);
@@ -72,6 +70,8 @@ public class BackHub implements INbtItem{
                     // 创建粒子并显示
                     player.getLevel().addParticleEffect(new Vector3(x, y, z), ParticleEffect.ENCHANTING_TABLE_PARTICLE);
 
+                    // 粒子运动速度
+                    double speed = 0.05;
                     angle += speed;
                     if (angle >= 2 * Math.PI) {
                         angle = 0;
@@ -84,7 +84,7 @@ public class BackHub implements INbtItem{
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        BedWarMain.printMessageException(e);
                         return;
                     }
                 }

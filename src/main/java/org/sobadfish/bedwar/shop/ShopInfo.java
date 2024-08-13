@@ -5,6 +5,8 @@ package org.sobadfish.bedwar.shop;
 
 import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Location;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.entity.ShopVillage;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
@@ -19,6 +21,8 @@ import java.util.Map;
  * @author SoBadFish
  * 2022/1/2
  */
+@Getter
+@Setter
 public class ShopInfo {
 
     private ArrayList<LinkedHashMap<String,String>> configs;
@@ -43,7 +47,4 @@ public class ShopInfo {
 
     }
 
-    public ArrayList<ShopVillage> getShopVillages() {
-        return shopVillages;
-    }
 }

@@ -3,6 +3,7 @@ package org.sobadfish.bedwar.player.team.config;
 
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.BlockColor;
+import lombok.Data;
 
 
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
  * @author SoBadFish
  * 2022/1/2
  */
-
+@Data
 public class TeamConfig {
 
     private String name;
@@ -29,21 +30,7 @@ public class TeamConfig {
         this.rgb = rgb;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public Item getBlockWoolColor() {
-        return blockWoolColor;
-    }
-
-    public BlockColor getRgb() {
-        return rgb;
-    }
-
-    public String getNameColor() {
-        return nameColor;
-    }
 
     public static TeamConfig getInstance(Map<?,?> map){
         String name = map.get("name").toString();

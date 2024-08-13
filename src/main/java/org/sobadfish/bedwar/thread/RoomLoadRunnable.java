@@ -97,7 +97,7 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
                 time.put(room.getRoomConfig().name, System.currentTimeMillis() - t1);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            BedWarMain.printMessageException(e);
         }
 
     }

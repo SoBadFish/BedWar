@@ -1,5 +1,6 @@
 package org.sobadfish.bedwar.manager;
 
+import lombok.Getter;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 
@@ -15,8 +16,10 @@ public class PlayerHasChoseRoomManager {
 
     public boolean cancel = false;
 
+    @Getter
     private final ArrayList<String> strings = new ArrayList<>();
 
+    @Getter
     private final ArrayList<GameRoomConfig> roomName = new ArrayList<>();
 
     public PlayerHasChoseRoomManager(RandomJoinManager.IPlayerInfo info){
@@ -39,13 +42,7 @@ public class PlayerHasChoseRoomManager {
         roomName.add(room);
     }
 
-    public ArrayList<GameRoomConfig> getRoomName() {
-        return roomName;
-    }
 
-    public ArrayList<String> getStrings() {
-        return strings;
-    }
 
     @Override
     public boolean equals(Object obj) {

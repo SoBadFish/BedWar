@@ -1,6 +1,7 @@
 package org.sobadfish.bedwar.player;
 
 import cn.nukkit.Server;
+import lombok.Data;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.event.PlayerGetExpEvent;
 import org.sobadfish.bedwar.event.PlayerLevelChangeEvent;
@@ -8,7 +9,7 @@ import org.sobadfish.bedwar.event.PlayerLevelChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+@Data
 public class PlayerData {
 
     private String name = "";
@@ -41,17 +42,7 @@ public class PlayerData {
         return exp;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getLevel() {
-        return level;
-    }
 
     public void addExp(int exp, String cause){
         addExp(exp,cause,true);
@@ -303,7 +294,7 @@ public class PlayerData {
          * */
         GAME(BedWarMain.getLanguage().getLanguage("type-game","游戏次数"));
 
-        protected String name;
+        private final String name;
 
         DataType(String name){
             this.name = name;

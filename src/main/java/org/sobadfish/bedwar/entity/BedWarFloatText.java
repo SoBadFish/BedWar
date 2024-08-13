@@ -127,9 +127,6 @@ public class BedWarFloatText extends Entity {
                     .replace("%"+config.getName()+"%",config.getCustomName())
                     .replace("%"+config.getName()+"-time%", Utils.formatTime1(((moneyItemInfoConfig.getResetTick() - moneyItemInfoConfig.getTick())) / 20)+"");
         }
-//        if(this.isClosed()){
-//            FloatTextManager.removeFloatText(this);
-//        }
 //        检查是否存活 /
         if(!this.isAlive()){
            this.hasSpawned.clear();

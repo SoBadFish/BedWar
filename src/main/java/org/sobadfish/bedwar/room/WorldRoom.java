@@ -1,6 +1,8 @@
 package org.sobadfish.bedwar.room;
 
 import cn.nukkit.form.element.ElementButtonImageData;
+import lombok.Data;
+import lombok.Getter;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
  * @author SoBadFish
  * 2022/1/12
  */
+@Data
 public class WorldRoom {
 
     private String name;
@@ -21,18 +24,6 @@ public class WorldRoom {
         this.name = name;
         this.roomConfigs = roomConfigs;
         this.imageData = imageData;
-    }
-
-    public ElementButtonImageData getImageData() {
-        return imageData;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public ArrayList<GameRoomConfig> getRoomConfigs() {
-        return roomConfigs;
     }
 
 

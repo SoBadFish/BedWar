@@ -1,10 +1,13 @@
 package org.sobadfish.bedwar.item.team;
 
+import lombok.Getter;
+
 /**
  * @author Sobadfish
  */
 public class TeamUp extends BaseTeamEffect{
 
+    @Getter
     private final int[] delTime;
 
     private final String updateItem;
@@ -23,9 +26,7 @@ public class TeamUp extends BaseTeamEffect{
         return updateItem;
     }
 
-    public int[] getDelTime() {
-        return delTime;
-    }
+
 
     public int getTimeByLevel(){
         if(delTime.length >= level ){

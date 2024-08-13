@@ -19,8 +19,6 @@ public class RoomQuitItem {
     public static ArrayList<Player> clickAgain = new ArrayList<>();
 
 
-    private final ArrayList<Player> clickAgainTeam = new ArrayList<>();
-
     public static int getIndex(){
         return 8;
     }

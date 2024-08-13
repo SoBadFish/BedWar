@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.form.window.FormWindowSimple;
+import lombok.Data;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
 import org.sobadfish.bedwar.panel.from.button.ShopButton;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
  * @author SoBadFish
  * 2022/1/11
  */
+@Data
 public class ShopFrom {
 
     private int id;
@@ -51,74 +53,6 @@ public class ShopFrom {
         return isBreak;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public ArrayList<ShopButton> getShopButtons() {
-        return shopButtons;
-    }
-
-    public GameRoomConfig getRoomConfig() {
-        return roomConfig;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public ShopFrom getLastFrom() {
-        return lastFrom;
-    }
-
-    public ShopItemInfo getShopItemInfo() {
-        return shopItemInfo;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public void setBreak(boolean aBreak) {
-        isBreak = aBreak;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setLastFrom(ShopFrom lastFrom) {
-        this.lastFrom = lastFrom;
-    }
-
-    public void setRoomConfig(GameRoomConfig roomConfig) {
-        this.roomConfig = roomConfig;
-    }
-
-    public void setShopItemInfo(ShopItemInfo shopItemInfo) {
-        this.shopItemInfo = shopItemInfo;
-    }
-
-    public void setShopButtons(ArrayList<ShopButton> shopButtons) {
-        this.shopButtons = shopButtons;
-    }
-
-    public void setShopItemClassify(ShopInfoConfig.ShopItemClassify shopItemClassify) {
-        this.shopItemClassify = shopItemClassify;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-
-    public ShopInfoConfig.ShopItemClassify getShopItemClassify() {
-        return shopItemClassify;
-    }
 
     public void disPlay(String title, boolean isBack){
         setTitle(title);

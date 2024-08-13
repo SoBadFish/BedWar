@@ -100,6 +100,12 @@
             <scope>provided</scope>
 <!--            <systemPath> ${project.basedir}/lib/Ghosty-B20240115-MOT-C1.jar</systemPath>-->
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version>
+            <scope>provided</scope>
+        </dependency>
 
 
     </dependencies>

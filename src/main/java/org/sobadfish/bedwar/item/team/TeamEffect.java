@@ -1,11 +1,15 @@
 package org.sobadfish.bedwar.item.team;
 
 import cn.nukkit.potion.Effect;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author SoBadFish
  * 2022/1/6
  */
+@Setter
+@Getter
 public class TeamEffect extends BaseTeamEffect
 {
 
@@ -16,9 +20,7 @@ public class TeamEffect extends BaseTeamEffect
         this.effect = effect;
     }
 
-    public Effect getEffect() {
-        return effect;
-    }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -30,11 +32,6 @@ public class TeamEffect extends BaseTeamEffect
 
     @Override
     public TeamEffect clone() {
-        try {
-            return (TeamEffect) super.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return (TeamEffect) super.clone();
     }
 }

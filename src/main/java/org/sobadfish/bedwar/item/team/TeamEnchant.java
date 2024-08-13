@@ -1,23 +1,25 @@
 package org.sobadfish.bedwar.item.team;
 
 import cn.nukkit.item.enchantment.Enchantment;
+import lombok.Data;
+import lombok.Getter;
 
 /**
  * @author SoBadFish
  * 2022/1/6
  */
+
+@Getter
 public class TeamEnchant  extends BaseTeamEffect{
 
-    private Enchantment enchantment;
+    private final Enchantment enchantment;
 
     public TeamEnchant(Enchantment enchantment,int maxLevel) {
         super(maxLevel);
         this.enchantment = enchantment;
     }
 
-    public Enchantment getEnchantment() {
-        return enchantment;
-    }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -29,11 +31,6 @@ public class TeamEnchant  extends BaseTeamEffect{
 
     @Override
     public TeamEnchant clone() {
-        try {
-            return (TeamEnchant) super.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return (TeamEnchant) super.clone();
     }
 }

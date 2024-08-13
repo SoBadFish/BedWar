@@ -22,7 +22,7 @@ public class FloatTextInfoConfig {
     }
 
 
-    public static FloatTextInfoConfig build(Map map){
+    public static FloatTextInfoConfig build(Map<?,?> map){
         String name = "";
         String pos = "";
         String text = "";
@@ -38,7 +38,6 @@ public class FloatTextInfoConfig {
         if(pos.equalsIgnoreCase("") || name.equalsIgnoreCase("")){
             return null;
         }
-//        Position position = WorldInfoConfig.getPositionByString(pos);
         return new FloatTextInfoConfig(name,pos,text);
     }
 

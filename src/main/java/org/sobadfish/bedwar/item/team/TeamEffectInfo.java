@@ -1,10 +1,14 @@
 package org.sobadfish.bedwar.item.team;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author SoBadFish
  * 2022/1/6
  */
-
+@Data
 public class TeamEffectInfo {
 
     private final BaseTeamEffect effect;
@@ -24,15 +28,5 @@ public class TeamEffectInfo {
 
 
 
-    public BaseTeamEffect getEffect() {
-        return effect;
-    }
 
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
 }

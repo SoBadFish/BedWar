@@ -34,7 +34,7 @@ import java.util.LinkedHashMap;
  */
 public class BedWarAdminCommand extends Command {
 
-    private LanguageManager language = BedWarMain.getLanguage();
+    private final LanguageManager language = BedWarMain.getLanguage();
 
     public BedWarAdminCommand(String name) {
         super(name);
