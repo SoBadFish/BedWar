@@ -249,10 +249,8 @@ public class DefaultItem extends BasePlayPanelItemInstance {
                     u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
                 }
             }
-            for (Item i : iv) {
-
-                // boolean u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
-                if (u) {
+            if (u) {
+                for (Item i : iv) {
                     if (i instanceof ItemArmor) {
                         CompoundTag compoundTag = i.getNamedTag();
                         if (compoundTag == null) {
@@ -293,13 +291,13 @@ public class DefaultItem extends BasePlayPanelItemInstance {
                             player.getInventory().addItem(i);
                         }
                     }
-                    player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB);
-                } else {
-                    info.sendMessage(errorMessage);
-                    player.getLevel().addSound(player.getPosition(), Sound.MOB_ENDERMEN_PORTAL);
-
                 }
+            } else {
+                info.sendMessage(errorMessage);
+                player.getLevel().addSound(player.getPosition(), Sound.MOB_ENDERMEN_PORTAL);
+
             }
+            player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB);
         }
     }
 
