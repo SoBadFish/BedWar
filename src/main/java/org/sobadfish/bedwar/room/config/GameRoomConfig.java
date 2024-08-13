@@ -677,7 +677,7 @@ public class GameRoomConfig implements Cloneable{
                 GameRoomConfig roomConfig = new GameRoomConfig(name,worldInfoConfig,time,waitTime,maxWaitTime,minPlayerSize,maxPlayerSize,shopMap,teamInfoConfigs);
                 roomConfig.setTeamCfg(teamConfigs);
                 roomConfig.setMoneyItem(itemInfo);
-                roomConfig.knockConfig.enable = room.getBoolean("kb-setting.enable",true);
+                roomConfig.knockConfig.enable = room.getBoolean("kb-setting.enable",false);
                 roomConfig.knockConfig.force = (float) room.getDouble("kb-setting.force",0.4f);
                 roomConfig.knockConfig.speed = (float) room.getDouble("kb-setting.speed",0.5f);
                 roomConfig.knockConfig.motionY = (float) room.getDouble("kb-setting.motionY",0.1f);
