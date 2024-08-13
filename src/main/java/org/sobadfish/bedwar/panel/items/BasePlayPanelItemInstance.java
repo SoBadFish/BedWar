@@ -19,11 +19,11 @@ public abstract class BasePlayPanelItemInstance {
      * @return 数量
      * */
     public abstract int getCount();
-    /**
-     * 游戏内物品
-     * @return 物品
-     * */
-    public abstract Item getItem();
+//    /**
+//     * 游戏内物品
+//     * @return 物品
+//     * */
+//    public abstract Item getItem();
     /**
      * 当玩家触发
      *
@@ -61,6 +61,6 @@ public abstract class BasePlayPanelItemInstance {
 
     @Override
     public String toString() {
-        return getItem()+" count: "+getCount();
+        return " count: "+getCount();
     }
 }

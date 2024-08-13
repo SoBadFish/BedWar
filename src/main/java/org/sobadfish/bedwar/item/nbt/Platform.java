@@ -29,7 +29,7 @@ public class Platform implements INbtItem {
     public boolean onClick(Item item, Player player) {
         PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
 
-        Position pos = info.getPlayer().add(0,-10);
+        Position pos = info.getPlayer().add(0,-12);
         LinkedHashMap<Position,Block> spawn = BedWarMain.spawnBlockByPosAndSize(pos,3,new BlockSlime());
         Utils.spawnBlock( player, spawn,true);
         info.sendMessage(BedWarMain.getLanguage().getLanguage("platform-use-success","&a已生成平台"));

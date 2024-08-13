@@ -2,7 +2,6 @@ package org.sobadfish.bedwar.panel.items;
 
 import cn.nukkit.Player;
 import cn.nukkit.form.element.ElementButton;
-import cn.nukkit.inventory.Inventory;
 import cn.nukkit.item.Item;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
@@ -30,10 +29,7 @@ public class NomalItem extends BasePlayPanelItemInstance{
         return 0;
     }
 
-    @Override
-    public Item getItem() {
-        return null;
-    }
+
 
     @Override
     public void onClick(ChestInventoryPanel inventory, Player player) {

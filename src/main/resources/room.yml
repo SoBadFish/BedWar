@@ -54,6 +54,10 @@ display-floatBlock:
   "2": "diamond"
   "3": "emerald"
 
+enable-item-Equal: false
+
+display-item-name: false
+
 # 游戏kb设置 使用独立的算法
 kb-setting:
   enable: true

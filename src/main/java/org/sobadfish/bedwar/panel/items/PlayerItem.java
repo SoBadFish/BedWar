@@ -27,7 +27,7 @@ public class PlayerItem extends BasePlayPanelItemInstance{
         return 0;
     }
 
-    @Override
+
     public Item getItem() {
         return new Item(397,3);
     }

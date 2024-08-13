@@ -35,7 +35,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
 
     public int count;
 
-    private final Item item;
+    private Item[] item;
 
     public String moneyItem;
 
@@ -47,7 +47,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
         return moneyItem;
     }
 
-    public DefaultItem(Item item,String moneyItem,int count){
+    public DefaultItem(Item[] item,String moneyItem,int count){
         this.item = item;
         this.moneyItem = moneyItem;
         this.count = count;
@@ -102,27 +102,10 @@ public class DefaultItem extends BasePlayPanelItemInstance {
 //        return new DefaultItem(item,moneyName,count);
 //    }
 
-    public static DefaultItem build(Map<?,?> map){
-        String ids = map.get("id").toString();
-        String[] items = ids.split(":");
-        String name = TextFormat.colorize('&',map.get("name").toString());
-        ArrayList<Enchantment> enchantments = new ArrayList<>();
-        if(map.containsKey("ench")) {
-            if (!"".equalsIgnoreCase(map.get("ench").toString())) {
-                for (String es : map.get("ench").toString().split("-")) {
-                    enchantments.add(Enchantment.get(
-                                    Integer.parseInt(es.split(":")[0]))
-                            .setLevel(Integer.parseInt(es.split(":")[1])));
-                }
-            }
-        }
-        if(!map.containsKey("money") || "".equalsIgnoreCase(map.get("money").toString())){
-           return null;
-        }
-        int moneyCount = Integer.parseInt(map.get("money").toString().split("x")[1]);
 
-        String moneyName = map.get("money").toString().split("x")[0];
+    private static Item stringAsItem(String itemStr){
         int count = 1;
+        String[] items = itemStr.split(":");
         Item item;
         try{
             int id = Integer.parseInt(items[0]);
@@ -144,13 +127,6 @@ public class DefaultItem extends BasePlayPanelItemInstance {
         }catch (Exception e){
             Item i = Item.fromString(items[0]);
             if(i.getId() == 0){
-                if(NbtItemManager.NBT_MANAGER.containsKey(ids)){
-                    //TODO 构建NBT物品
-                    INbtItem config = NbtItemManager.NBT_MANAGER.get(ids);
-                    return new NbtDefaultItem(config,moneyName,moneyCount);
-                }
-            }
-            if(i.getId() == 0){
                 return null;
             }
             if(items.length > 1){
@@ -167,20 +143,77 @@ public class DefaultItem extends BasePlayPanelItemInstance {
         if(item.getId() == 0){
             return null;
         }
+        return item;
+
+    }
+
+    public static DefaultItem build(Map<?,?> map){
+        String name = TextFormat.colorize('&',map.get("name").toString());
+        String ids = map.get("id").toString();
+
+        //TODO 优先输出NBT物品
+        if(!map.containsKey("money") || "".equalsIgnoreCase(map.get("money").toString())){
+            return null;
+        }
+        int moneyCount = Integer.parseInt(map.get("money").toString().split("x")[1]);
+
+        String moneyName = map.get("money").toString().split("x")[0];
+
+
+
+
+        ArrayList<Enchantment> enchantments = new ArrayList<>();
+        if(map.containsKey("ench")) {
+            if (!"".equalsIgnoreCase(map.get("ench").toString())) {
+                for (String es : map.get("ench").toString().split("-")) {
+                    enchantments.add(Enchantment.get(
+                                    Integer.parseInt(es.split(":")[0]))
+                            .setLevel(Integer.parseInt(es.split(":")[1])));
+                }
+            }
+        }
+
+        ArrayList<Item> items = new ArrayList<>();
+        for(String itemId: ids.split("&")){
+            if(NbtItemManager.NBT_MANAGER.containsKey(itemId)){
+                //TODO 构建NBT物品
+                INbtItem config = NbtItemManager.NBT_MANAGER.get(ids);
+                return new NbtDefaultItem(config,moneyName,moneyCount);
+            }
+            Item item = stringAsItem(itemId);
+            if(item == null){
+                continue;
+            }
+            items.add(item);
+
+        }
+
+        if(items.isEmpty()){
+            return null;
+        }
+
+
+
         if(!"".equalsIgnoreCase(name)){
-            item.setCustomName(name);
+            for (Item item: items){
+                item.setCustomName(name);
+            }
+
         }
         for(Enchantment enchantment: enchantments){
-            item.addEnchantment(enchantment);
+            for (Item item: items){
+                item.addEnchantment(enchantment);
+            }
+
         }
-        return new DefaultItem(item,moneyName,moneyCount);
+        return new DefaultItem(items.toArray(new Item[0]),moneyName,moneyCount);
     }
 
 
-    @Override
-    public Item getItem() {
-        return item;
-    }
+//    @Override
+//    public Item getItem() {
+//        return item[0];
+//    }
 
     @Override
     public void onClick(ChestInventoryPanel inventory, Player player) {
@@ -200,71 +233,72 @@ public class DefaultItem extends BasePlayPanelItemInstance {
             }
             boolean u = true;
             int rc = (int) oInfo.getExp();
-            String errorMessage = BedWarMain.getLanguage().getLanguage("item-not-enough","[1] 不足",
+            String errorMessage = BedWarMain.getLanguage().getLanguage("item-not-enough", "[1] 不足",
                     oInfo.getCustomName());
 
-            Item i = getItem();
-            if(info.buyArmorId.contains(i.getId())){
-                u = false;
-                errorMessage = BedWarMain.getLanguage().getLanguage("armor-allow-buy","已经购买过此盔甲了");
-            }
-            if(u) {
-                if (room.getRoomConfig().isExp()) {
-                    u = info.reduceExp(count * rc);
-                    errorMessage = BedWarMain.getLanguage().getLanguage("exp-not-enough","经验不足");
+            Item[] iv = item;
+            for (Item i : iv) {
+                if (info.buyArmorId.contains(i.getId())) {
+                    u = false;
+                    errorMessage = BedWarMain.getLanguage().getLanguage("armor-allow-buy", "已经购买过此盔甲了");
+                }
+                if (u) {
+                    if (room.getRoomConfig().isExp()) {
+                        u = info.reduceExp(count * rc);
+                        errorMessage = BedWarMain.getLanguage().getLanguage("exp-not-enough", "经验不足");
+                    } else {
+                        u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
+                    }
+                }
+                // boolean u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
+
+                if (u) {
+                    if (i instanceof ItemArmor) {
+                        CompoundTag compoundTag = i.getNamedTag();
+                        if (compoundTag == null) {
+                            compoundTag = new CompoundTag();
+
+                        }
+                        compoundTag.putString("bd_master", player.getName());
+                        if (room.getRoomConfig().isInventoryUnBreakable()) {
+                            //无限耐久
+                            compoundTag.putByte("Unbreakable", 1);
+                        }
+
+                        i.setNamedTag(compoundTag);
+                        
+                        info.buyArmorId.add(i.getId());
+                        if (i.isHelmet()) {
+                            info.getArmor().put(0, i);
+                            player.getInventory().setArmorItem(0, i);
+                        } else if (i.isChestplate()) {
+                            player.getInventory().setArmorItem(1, i);
+                            info.getArmor().put(1, i);
+                        } else if (i.isLeggings()) {
+                            player.getInventory().setArmorItem(2, i);
+                            info.getArmor().put(2, i);
+                        } else if (i.isBoots()) {
+                            player.getInventory().setArmorItem(3, i);
+                            info.getArmor().put(3, i);
+                        } else {
+                            player.getInventory().addItem(i);
+                        }
+                    } else {
+                        if (i.getId() == 35) {
+                            int c = i.getCount();
+                            Item i2 = info.getTeamInfo().getTeamConfig().getTeamConfig().getBlockWoolColor().clone();
+                            i2.setCount(c);
+                            player.getInventory().addItem(i2);
+                        } else {
+                            player.getInventory().addItem(i);
+                        }
+                    }
+                    player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB);
                 } else {
-                    u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
+                    info.sendMessage(errorMessage);
+                    player.getLevel().addSound(player.getPosition(), Sound.MOB_ENDERMEN_PORTAL);
+
                 }
-            }
-            // boolean u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
-
-            if (u) {
-                if(i instanceof ItemArmor){
-                    CompoundTag compoundTag = i.getNamedTag();
-                    if(compoundTag == null){
-                        compoundTag = new CompoundTag();
-
-                    }
-                    compoundTag.putString("bd_master",player.getName());
-                    if(room.getRoomConfig().isInventoryUnBreakable()){
-                        //无限耐久
-                        compoundTag.putByte("Unbreakable",1);
-                    }
-
-                    i.setNamedTag(compoundTag);
-
-
-                    info.buyArmorId.add(i.getId());
-                    if(i.isHelmet()) {
-                        info.getArmor().put(0,i);
-                        player.getInventory().setArmorItem(0,i);
-                    }else if(i.isChestplate()){
-                        player.getInventory().setArmorItem(1,i);
-                        info.getArmor().put(1,i);
-                    }else if(i.isLeggings()){
-                        player.getInventory().setArmorItem(2,i);
-                        info.getArmor().put(2,i);
-                    }else if(i .isBoots()){
-                        player.getInventory().setArmorItem(3,i);
-                        info.getArmor().put(3,i);
-                    }else{
-                        player.getInventory().addItem(i);
-                    }
-                }else {
-                    if (i.getId() == 35) {
-                        int c =i.getCount();
-                        Item i2 = info.getTeamInfo().getTeamConfig().getTeamConfig().getBlockWoolColor().clone();
-                        i2.setCount(c);
-                        player.getInventory().addItem(i2);
-                    }else {
-                        player.getInventory().addItem(i);
-                    }
-                }
-                player.getLevel().addSound(player.getPosition(),Sound.RANDOM_ORB);
-            } else {
-                info.sendMessage(errorMessage);
-                player.getLevel().addSound(player.getPosition(),Sound.MOB_ENDERMEN_PORTAL);
-
             }
         }
     }
@@ -280,7 +314,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
 
     @Override
     public Item getPanelItem(PlayerInfo info,int index) {
-        Item item = getItem().clone();
+        Item item = this.item[0].clone();
         ArrayList<String> lore = new ArrayList<>();
         if(info.getGameRoom().getRoomConfig().isExp()){
             int rc = 1;
@@ -302,22 +336,22 @@ public class DefaultItem extends BasePlayPanelItemInstance {
     @Override
     public ElementButton getGUIButton(PlayerInfo info) {
         //TODO 如果语言非中文则获取其他名称
-        String itemString = getItem().getName();
+        String itemString = this.item[0].getName();
         if("chs".equalsIgnoreCase(BedWarMain.getLanguage().lang)){
-            itemString = ItemIDSunName.getIDByName(getItem());
+            itemString = ItemIDSunName.getIDByName(this.item[0]);
         }
-        String path = ItemIDSunName.getIDByPath(getItem().getId(),getItem().getDamage());
+        String path = ItemIDSunName.getIDByPath(this.item[0].getId(),this.item[0].getDamage());
         if(path == null){
-            path =ItemIDSunName.getIDByPath(getItem().getId());
+            path =ItemIDSunName.getIDByPath(this.item[0].getId());
         }
         MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
-        String btName = TextFormat.colorize('&',  itemString+" * "+getItem().getCount()+"\n&rPrice: "+oInfo.getCustomName()+"&r *&a "+count);
+        String btName = TextFormat.colorize('&',  itemString+" * "+this.item[0].getCount()+"\n&rPrice: "+oInfo.getCustomName()+"&r *&a "+count);
         if(info.getGameRoom().getRoomConfig().isExp()){
             int rc = 1;
             if(info.getGameRoom().getRoomConfig().moneyItem.containsKey(moneyItem)){
                 rc = (int) oInfo.getExp();
             }
-            btName =TextFormat.colorize('&',  itemString+" * "+getItem().getCount()+"\n&rPrice: Exp * "+count * rc);
+            btName =TextFormat.colorize('&',  itemString+" * "+this.item[0].getCount()+"\n&rPrice: Exp * "+count * rc);
         }
 
         if (path == null){

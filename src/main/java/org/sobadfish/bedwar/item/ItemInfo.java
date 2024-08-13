@@ -4,7 +4,6 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.inventory.PlayerInventory;
 import cn.nukkit.item.Item;
-
 import cn.nukkit.level.Position;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -13,8 +12,9 @@ import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
+import org.sobadfish.bedwar.room.GameRoom;
+import org.sobadfish.bedwar.tools.Utils;
 
-import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -107,7 +107,8 @@ public class ItemInfo {
         return itemInfoConfig;
     }
 
-    public void toUpdate(){
+    public void toUpdate(GameRoom room){
+
         if(resetTick > 0 && tick >= resetTick || resetTick == -1 && tick >= itemInfoConfig.getSpawnTick()){
             tick = 0;
 
@@ -127,8 +128,23 @@ public class ItemInfo {
                     if(canDrop) {
                         Item item = getItemInfoConfig().getMoneyItemInfoConfig().getItem();
                         EntityItem entityItem = getEntityItem(item, position);
+
                         if (entityItem != null) {
-                            entityItem.spawnToAll();
+                            if(room.getRoomConfig().displayItemName){
+                                entityItem.setNameTagAlwaysVisible(true);
+                                entityItem.setNameTagVisible(true);
+                            }
+                            if(room.getRoomConfig().enableItemEqual){
+                                Utils.getAroundPlayers(position,1,true).forEach(player -> {
+                                    EntityItem e2 = getEntityItem(item, player.getPosition());
+                                    if(e2 != null){
+                                        e2.spawnToAll();
+                                    }
+                                });
+                            }else{
+                                entityItem.spawnToAll();
+                            }
+
                         }
                     }
                 }catch (Exception ignore){

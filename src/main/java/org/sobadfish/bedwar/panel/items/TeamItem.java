@@ -49,7 +49,7 @@ public class TeamItem extends BasePlayPanelItemInstance {
         return count;
     }
 
-    @Override
+
     public Item getItem() {
         return panelItem.clone();
     }

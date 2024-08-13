@@ -6,6 +6,7 @@ import cn.nukkit.entity.projectile.EntityEgg;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
+import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
 
@@ -45,7 +46,7 @@ public class BridgingEggEntity extends EntityEgg {
 
     public void placeBlock() {
         if(gameRoom.getType() == GameRoom.GameType.START){
-            Server.getInstance().getScheduler().scheduleTask(() -> {
+            Server.getInstance().getScheduler().scheduleTask(BedWarMain.getBedWarMain(),() -> {
                 for (int xOffset = -1; xOffset < 1; xOffset++) {
                     for (int zOffset = -1; zOffset < 1; zOffset++) {
                         Block block = playerInfo.getTeamInfo().getTeamConfig().getTeamConfig().getBlockWoolColor().clone().getBlock();

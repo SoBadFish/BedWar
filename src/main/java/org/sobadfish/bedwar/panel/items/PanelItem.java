@@ -11,7 +11,6 @@ import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
 import org.sobadfish.bedwar.panel.DisPlayerPanel;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
 import org.sobadfish.bedwar.player.PlayerInfo;
-import org.sobadfish.bedwar.room.GameRoom;
 import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.shop.config.ShopInfoConfig;
 import org.sobadfish.bedwar.shop.item.ShopItemInfo;
@@ -40,7 +39,7 @@ public class PanelItem extends BasePlayPanelItemInstance{
         return 0;
     }
 
-    @Override
+
     public Item getItem() {
         return classify.getItem();
     }
