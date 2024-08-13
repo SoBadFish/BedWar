@@ -74,7 +74,7 @@ public class WorldInfo {
             }
             for (ItemInfo itemInfo : infos) {
                 try {
-                    itemInfo.toUpdate();
+                    itemInfo.toUpdate(room);
                 } catch (Exception e) {
                     return false;
                 }

@@ -563,17 +563,25 @@ public class PlayerInfo {
                 }
                 if(teamInfo.isBadExists() && teamInfo.isLoading()){
 
-//                    lore.add("◎ "+ teamInfo +":&r    &a✔ "+me);
                     lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-exits-bed",
-                            "◎ [1]: &r    &a✔",teamInfo.toString())+" "+me);
+                            "◎ [1]: &r    &a[2] &r[3] {me}",teamInfo.toString(),
+                            teamInfo.getTeamConfig().getTeamConfig().getBedNormal(),
+                            teamInfo.getLivePlayer().size()+""
+                            ).replace("{me}",me));
                 }else if(!teamInfo.isBadExists() && teamInfo.isLoading()){
-//                    lore.add("◎ "+ teamInfo +": &r   &c"+teamInfo.getLivePlayer().size()+" "+me);
+
                     lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-no-bed",
-                            "◎ [1]: &r    &a[2]",teamInfo.toString(),teamInfo.getLivePlayer().size()+"")+" "+me);
+                            "◎ [1]: &r    &a[2] &r[3] {me}",teamInfo.toString(),
+                            teamInfo.getTeamConfig().getTeamConfig().getBedDestroy(),
+                            teamInfo.getLivePlayer().size()+""
+                    ).replace("{me}",me));
                 }else{
-//                    lore.add("◎ "+ teamInfo +": &r   &c✘ "+me);
+
                     lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-team-info-disuse",
-                            "◎ [1]: &r    &c✘",teamInfo.toString())+" "+me);
+                            "◎ [1]: &r    &a[2] &r[3] {me}",teamInfo.toString(),
+                            teamInfo.getTeamConfig().getTeamConfig().getBedDestroy(),
+                            teamInfo.getLivePlayer().size()+""
+                    ).replace("{me}",me));
                 }
             }
             lore.add("      ");
@@ -998,15 +1006,20 @@ public class PlayerInfo {
         isInvisibility = false;
 
 
-        boolean teleport;
-        try {
-            teleport = player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
-        }catch (Exception e){
-            e.printStackTrace();
-            teleport = false;
+        boolean teleport = false;
+        if(teamInfo != null){
+            try {
+                teleport = player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
+            }catch (Exception ignore){
+               // e.printStackTrace();
+                teleport = false;
+            }
         }
         if(!teleport && player instanceof Player) {
-            throw new NullPointerException("无法将玩家传送到队伍出生点");
+            sendMessage("&cRoom error place try again!");
+            cancel();
+            return;
+            //throw new NullPointerException("无法将玩家传送到队伍出生点");
 
         }
         if (getPlayer() instanceof Player) {

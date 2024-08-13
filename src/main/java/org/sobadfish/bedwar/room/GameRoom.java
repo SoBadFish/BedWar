@@ -745,6 +745,7 @@ public class GameRoom {
                         TeamBedBreakEvent event = new TeamBedBreakEvent(info1,info,this,BedWarMain.getBedWarMain());
                         Server.getInstance().getPluginManager().callEvent(event);
                         info.bedBreakCount++;
+
                         sendMessage(BedWarMain.getLanguage().getLanguage("room-bed-break-success",
                                 "[1] &c破坏了 [2] &c的床!",info.toString(),
                                 info1.getTeamConfig().getNameColor() + info1.getTeamConfig().getName()
@@ -798,6 +799,15 @@ public class GameRoom {
         }
     }
 
+    public void sendTitleNoTeam(String msg,TeamInfo teamInfo){
+        for(TeamInfo teamInfo1: teamInfos){
+            if(teamInfo1.equals(teamInfo)){
+                continue;
+            }
+            teamInfo1.sendTitle(msg);
+        }
+    }
+
     public void sendFaceMessage(String msg){
         for(PlayerInfo info: getPlayerInfos()){
             info.sendForceMessage(msg);
@@ -811,6 +821,15 @@ public class GameRoom {
     public void sendSubTitle(String msg){
         for(PlayerInfo info: getPlayerInfos()){
             info.sendSubTitle(msg);
+        }
+    }
+
+    public void sendSubTitleNoTeam(String msg,TeamInfo teamInfo){
+        for(TeamInfo teamInfo1: teamInfos){
+            if(teamInfo1.equals(teamInfo)){
+                continue;
+            }
+            teamInfo1.sendSubTitle(msg);
         }
     }
     public void sendTip(String msg){

@@ -1,13 +1,11 @@
 package org.sobadfish.bedwar.panel.items;
 
 
-import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import lombok.Getter;
 import lombok.Setter;
 import org.sobadfish.bedwar.item.config.NbtItemInfoConfig;
 import org.sobadfish.bedwar.item.nbt.INbtItem;
-import org.sobadfish.bedwar.panel.ChestInventoryPanel;
 
 /**
  * @author SoBadFish
@@ -30,7 +28,7 @@ public class NbtDefaultItem extends DefaultItem{
 
 
 
-    @Override
+
     public Item getItem() {
         return playerItem.getItem();
     }

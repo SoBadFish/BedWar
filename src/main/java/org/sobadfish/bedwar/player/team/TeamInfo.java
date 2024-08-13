@@ -207,13 +207,15 @@ public class TeamInfo {
         //尝试修复床透明的问题
         TeamInfoConfig config = getTeamConfig();
         Position bedPosition = config.getBedPosition();
+        if(bedPosition.getChunk() != null){
+            
         if(!bedPosition.getChunk().isLoaded()){
             bedPosition.getLevel().loadChunk(bedPosition.getChunkX(), bedPosition.getChunkZ());
         }
         if(!config.getSpawnPosition().getChunk().isLoaded()){
             config.getSpawnPosition().getLevel().loadChunk(config.getSpawnPosition().getChunkX(), config.getSpawnPosition().getChunkZ());
         }
-
+        }
         bedPosition.getLevel().setBlock(bedPosition,Block.get(26,0),true,true);
         Position pos2 = bedPosition.getSide(config.getBedFace());
         bedPosition.getLevel().setBlock(pos2,Block.get(26, config.getBedFace().getHorizontalIndex()|8),true,true);
@@ -238,9 +240,14 @@ public class TeamInfo {
 
     public void onBedBreak(PlayerInfo info){
         if(badExists) {
-            room.sendTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-title"
-                    , "[1] &c床被破坏！", this.toString()));
-            room.sendSubTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-sub-title", "&7摧毁者: &r[1]", info.toString()));
+            room.sendTitleNoTeam(BedWarMain.getLanguage().getLanguage("team-bed-break-title"
+                    , "[1] &c床被破坏！", this.toString()),this);
+            room.sendSubTitleNoTeam(BedWarMain.getLanguage().getLanguage("team-bed-break-sub-title", "&7摧毁者: &r[1]", info.toString()),this);
+
+            sendTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-my-title"
+                    , "&c床被破坏了！"));
+            sendSubTitle(BedWarMain.getLanguage().getLanguage("team-bed-break-my-sub-title", "&7你将无法重生!"));
+
             room.addSound(Sound.MOB_ENDERDRAGON_GROWL);
 
             setBadExists(false);

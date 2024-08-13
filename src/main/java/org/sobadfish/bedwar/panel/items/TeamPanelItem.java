@@ -40,7 +40,7 @@ public class TeamPanelItem extends BasePlayPanelItemInstance{
         return 0;
     }
 
-    @Override
+
     public Item getItem() {
         return item;
     }

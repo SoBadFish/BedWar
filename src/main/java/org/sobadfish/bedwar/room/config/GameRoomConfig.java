@@ -109,6 +109,16 @@ public class GameRoomConfig implements Cloneable{
      * */
     public boolean hasWatch = true;
     /**
+     * 是否开启物品均分
+     * */
+    public boolean enableItemEqual = false;
+
+    /**
+     * 显示物品名称
+     * */
+    public boolean displayItemName = false;
+
+    /**
      * 是否启用饥饿
      * */
     public boolean enableFood = false;
@@ -429,7 +439,7 @@ public class GameRoomConfig implements Cloneable{
                 GameRoomConfig roomConfig = new GameRoomConfig(name,worldInfoConfig,time,waitTime,maxWaitTime,minPlayerSize,maxPlayerSize,shopMap,teamInfoConfigs);
                 roomConfig.setTeamCfg(teamConfigs);
                 roomConfig.setMoneyItem(itemInfo);
-                roomConfig.knockConfig.enable = room.getBoolean("kb-setting.enable",true);
+                roomConfig.knockConfig.enable = room.getBoolean("kb-setting.enable",false);
                 roomConfig.knockConfig.force = (float) room.getDouble("kb-setting.force",0.4f);
                 roomConfig.knockConfig.speed = (float) room.getDouble("kb-setting.speed",0.5f);
                 roomConfig.knockConfig.motionY = (float) room.getDouble("kb-setting.motionY",0.1f);
@@ -451,6 +461,8 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.victoryCommand = new ArrayList<>(room.getStringList("victoryCmd"));
                 roomConfig.defeatCommand = new ArrayList<>(room.getStringList("defeatCmd"));
                 roomConfig.minutesExp = room.getInt("minutesExp",25);
+                roomConfig.enableItemEqual = room.getBoolean("enable-item-equal",false);
+                roomConfig.displayItemName = room.getBoolean("display-item-name",false);
                 roomConfig.deathIcon = room.getInt("deathIcon",20);
                 roomConfig.enableFood = room.getBoolean("enable-food",false);
                 roomConfig.fastPlace = room.getBoolean("fast-place",false);
@@ -578,6 +590,8 @@ public class GameRoomConfig implements Cloneable{
         config.set("fast-place",fastPlace);
         config.set("fast-place-count",fastPlaceCount);
         config.set("itemSpawn",itemSpawn);
+        config.set("enable-item-Equal",enableItemEqual);
+        config.set("display-item-name",displayItemName);
         config.set("waitPosition",WorldInfoConfig.positionToString(worldInfo.getWaitPosition()));
         config.set("ban-command",banCommand);
         config.set("QuitRoom",quitRoomCommand);
@@ -603,6 +617,8 @@ public class GameRoomConfig implements Cloneable{
         config.set("floatSpawnPos",pos);
         config.set("auto-display-floattext.enable",enableAutoDisplayFloat);
         config.set("auto-display-floattext.text",autoDisplayFloat);
+        config.set("kb-setting",knockConfig.saveConfig());
+        
 
         config.save();
         //写入注释...

@@ -2,6 +2,10 @@ team:
   - name: "绿队"
     nameColor: "&a"
     blockWoolColor: "35:13"
+    # 床被摧毁显示
+    bed-destroy: "✘"
+    # 床正常状态
+    bed-normal: "✔"
     rgb:
       r: 0
       g: 255
@@ -9,6 +13,10 @@ team:
   - name: "红队"
     nameColor: "&c"
     blockWoolColor: "35:14"
+    # 床被摧毁显示
+    bed-destroy: "✘"
+    # 床正常状态
+    bed-normal: "✔"
     rgb:
       r: 255
       g: 0
@@ -16,6 +24,10 @@ team:
   - name: "蓝队"
     nameColor: "&9"
     blockWoolColor: "35:11"
+    # 床被摧毁显示
+    bed-destroy: "✘"
+    # 床正常状态
+    bed-normal: "✔"
     rgb:
       r: 0
       g: 0
@@ -23,6 +35,10 @@ team:
   - name: "黄队"
     nameColor: "&e"
     blockWoolColor: "35:4"
+    # 床被摧毁显示
+    bed-destroy: "✘"
+    # 床正常状态
+    bed-normal: "✔"
     rgb:
       r: 255
       g: 255

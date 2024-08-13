@@ -4,7 +4,6 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.inventory.PlayerInventory;
 import cn.nukkit.item.Item;
-
 import cn.nukkit.level.Position;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -15,8 +14,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.sobadfish.bedwar.item.config.ItemInfoConfig;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
+import org.sobadfish.bedwar.room.GameRoom;
+import org.sobadfish.bedwar.tools.Utils;
 
-import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -72,13 +72,13 @@ public class ItemInfo {
         return false;
     }
 
-    public static EntityItem getEntityItem(Item item,Position position){
+    public static EntityItem getEntityItem(Item item,Position position, boolean display){
         try{
 
             CompoundTag itemTag = NBTIO.putItemHelper(item);
             itemTag.setName("Item");
             Position position1 = position.add(0.5,0.5,0.5);
-            return new EntityItem(position1.getLevel().getChunk((int)position1.getX() >> 4, (int)position1.getZ() >> 4, true),
+            EntityItem entityItem = new EntityItem(position1.getLevel().getChunk((int)position1.getX() >> 4, (int)position1.getZ() >> 4, true),
                     new CompoundTag().putList(new ListTag<>("Pos")
                             .add(new DoubleTag("", position1.getX()))
                             .add(new DoubleTag("", position1.getY()))
@@ -93,6 +93,13 @@ public class ItemInfo {
                                     .add(new FloatTag("", ThreadLocalRandom.current().nextFloat() * 360.0F))
                                     .add(new FloatTag("", 0.0F)))
                             .putShort("PickupDelay", 10));
+
+            if(display){
+                entityItem.setNameTagAlwaysVisible(true);
+                entityItem.setNameTagVisible(true);
+                entityItem.setNameTag(item.getCustomName());
+            }
+            return entityItem;
         }catch (Exception e){
             return null;
         }
@@ -101,7 +108,8 @@ public class ItemInfo {
     }
 
 
-    public void toUpdate(){
+    public void toUpdate(GameRoom room){
+
         if(resetTick > 0 && tick >= resetTick || resetTick == -1 && tick >= itemInfoConfig.getSpawnTick()){
             tick = 0;
 
@@ -119,10 +127,23 @@ public class ItemInfo {
 
                 try{
                     if(canDrop) {
+                        boolean display = room.getRoomConfig().displayItemName;
                         Item item = getItemInfoConfig().getMoneyItemInfoConfig().getItem();
-                        EntityItem entityItem = getEntityItem(item, position);
+                        EntityItem entityItem = getEntityItem(item, position,display);
+
                         if (entityItem != null) {
-                            entityItem.spawnToAll();
+
+                            if(room.getRoomConfig().enableItemEqual){
+                                Utils.getAroundPlayers(position,1,true).forEach(player -> {
+                                    EntityItem e2 = getEntityItem(item, player.getPosition(),display);
+                                    if(e2 != null){
+                                        e2.spawnToAll();
+                                    }
+                                });
+                            }else{
+                                entityItem.spawnToAll();
+                            }
+
                         }
                     }
                 }catch (Exception ignore){

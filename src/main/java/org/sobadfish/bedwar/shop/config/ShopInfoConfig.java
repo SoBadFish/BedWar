@@ -39,7 +39,11 @@ public class ShopInfoConfig {
         ArrayList<BasePlayPanelItemInstance> arrayList = new ArrayList<>();
         //TODO 构建商店信息
         for(Map<?,?> map1: map){
-            arrayList.add(DefaultItem.build(map1));
+            DefaultItem defaultItem = DefaultItem.build(map1);
+            if(defaultItem == null){
+                continue;
+            }
+            arrayList.add(defaultItem);
         }
         BedWarMain.sendMessageToConsole("&aLoad &2"+classify.disPlayerName+" &rItem: &a"+arrayList.size()+" &r");
         return new ShopInfoConfig(classify,arrayList);
