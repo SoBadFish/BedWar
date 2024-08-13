@@ -25,6 +25,8 @@ import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.IronGolem;
 import org.sobadfish.bedwar.event.PlayerGameDeathEvent;
@@ -47,7 +49,8 @@ import java.util.*;
 /**
  * @author SoBadFish
  */
-@Data
+@Getter
+@Setter
 public class PlayerInfo {
 
     public int killCount = 0;

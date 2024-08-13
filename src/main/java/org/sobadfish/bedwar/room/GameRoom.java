@@ -16,6 +16,8 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.FloatBlock;
 import org.sobadfish.bedwar.event.*;
@@ -45,7 +47,8 @@ import java.util.stream.Collectors;
  * @author SoBadFish
  * 2022/1/2
  */
-@Data
+@Getter
+@Setter
 public class GameRoom {
 
     public int loadTime = -1;

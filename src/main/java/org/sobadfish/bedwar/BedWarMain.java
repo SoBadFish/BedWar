@@ -63,6 +63,7 @@ public class BedWarMain extends PluginBase {
     @Getter
     private static RecordManager recordManager;
 
+
     @Getter
     public static LanguageManager language;
 

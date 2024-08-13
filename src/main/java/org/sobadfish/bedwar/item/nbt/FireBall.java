@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 public class FireBall implements INbtItem{
 
 
-    private LinkedHashMap<PlayerInfo,Long> clickTime = new LinkedHashMap<>();
+    private final LinkedHashMap<PlayerInfo,Long> clickTime = new LinkedHashMap<>();
 
 
     @Override
@@ -34,7 +34,7 @@ public class FireBall implements INbtItem{
         PlayerInfo playerInfo = BedWarMain.getRoomManager().getPlayerInfo(player);
         if(playerInfo != null) {
             try {
-                Class c = Class.forName("net.catrainbow.sakura.SakuraAPI");
+                Class<?> c = Class.forName("net.catrainbow.sakura.SakuraAPI");
                 SakuraAPIAB sakuraAPI = (SakuraAPIAB) c.newInstance();
 //                            net.catrainbow.sakura.SakuraAPIAB sakuraAPI = new net.catrainbow.sakura.SakuraAPI();
                 sakuraAPI.addBypassTime((Player) playerInfo.getPlayer(), "KillAura", 2);
