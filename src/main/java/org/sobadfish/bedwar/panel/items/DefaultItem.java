@@ -237,21 +237,21 @@ public class DefaultItem extends BasePlayPanelItemInstance {
                     oInfo.getCustomName());
 
             Item[] iv = item;
+            if (info.buyArmorId.contains(iv[0].getId())) {
+                u = false;
+                errorMessage = BedWarMain.getLanguage().getLanguage("armor-allow-buy", "已经购买过此盔甲了");
+            }
+            if (u) {
+                if (room.getRoomConfig().isExp()) {
+                    u = info.reduceExp(count * rc);
+                    errorMessage = BedWarMain.getLanguage().getLanguage("exp-not-enough", "经验不足");
+                } else {
+                    u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
+                }
+            }
             for (Item i : iv) {
-                if (info.buyArmorId.contains(i.getId())) {
-                    u = false;
-                    errorMessage = BedWarMain.getLanguage().getLanguage("armor-allow-buy", "已经购买过此盔甲了");
-                }
-                if (u) {
-                    if (room.getRoomConfig().isExp()) {
-                        u = info.reduceExp(count * rc);
-                        errorMessage = BedWarMain.getLanguage().getLanguage("exp-not-enough", "经验不足");
-                    } else {
-                        u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
-                    }
-                }
-                // boolean u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
 
+                // boolean u = ItemInfo.use(room.getRoomConfig().moneyItem.get(moneyItem), player.getInventory(), count);
                 if (u) {
                     if (i instanceof ItemArmor) {
                         CompoundTag compoundTag = i.getNamedTag();
@@ -266,7 +266,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
                         }
 
                         i.setNamedTag(compoundTag);
-                        
+
                         info.buyArmorId.add(i.getId());
                         if (i.isHelmet()) {
                             info.getArmor().put(0, i);
