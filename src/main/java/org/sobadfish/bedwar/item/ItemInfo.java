@@ -75,13 +75,13 @@ public class ItemInfo {
         return false;
     }
 
-    public static EntityItem getEntityItem(Item item,Position position){
+    public static EntityItem getEntityItem(Item item,Position position, boolean display){
         try{
 
             CompoundTag itemTag = NBTIO.putItemHelper(item);
             itemTag.setName("Item");
             Position position1 = position.add(0.5,0.5,0.5);
-            return new EntityItem(position1.getLevel().getChunk((int)position1.getX() >> 4, (int)position1.getZ() >> 4, true),
+            EntityItem entityItem = new EntityItem(position1.getLevel().getChunk((int)position1.getX() >> 4, (int)position1.getZ() >> 4, true),
                     new CompoundTag().putList(new ListTag<>("Pos")
                             .add(new DoubleTag("", position1.getX()))
                             .add(new DoubleTag("", position1.getY()))
@@ -96,6 +96,13 @@ public class ItemInfo {
                                     .add(new FloatTag("", ThreadLocalRandom.current().nextFloat() * 360.0F))
                                     .add(new FloatTag("", 0.0F)))
                             .putShort("PickupDelay", 10));
+
+            if(display){
+                entityItem.setNameTagAlwaysVisible(true);
+                entityItem.setNameTagVisible(true);
+                entityItem.setNameTag(item.getCustomName());
+            }
+            return entityItem;
         }catch (Exception e){
             return null;
         }
@@ -126,17 +133,15 @@ public class ItemInfo {
 
                 try{
                     if(canDrop) {
+                        boolean display = room.getRoomConfig().displayItemName;
                         Item item = getItemInfoConfig().getMoneyItemInfoConfig().getItem();
-                        EntityItem entityItem = getEntityItem(item, position);
+                        EntityItem entityItem = getEntityItem(item, position,display);
 
                         if (entityItem != null) {
-                            if(room.getRoomConfig().displayItemName){
-                                entityItem.setNameTagAlwaysVisible(true);
-                                entityItem.setNameTagVisible(true);
-                            }
+
                             if(room.getRoomConfig().enableItemEqual){
                                 Utils.getAroundPlayers(position,1,true).forEach(player -> {
-                                    EntityItem e2 = getEntityItem(item, player.getPosition());
+                                    EntityItem e2 = getEntityItem(item, player.getPosition(),display);
                                     if(e2 != null){
                                         e2.spawnToAll();
                                     }
