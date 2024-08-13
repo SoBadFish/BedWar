@@ -62,7 +62,7 @@ display-item-name: false
 
 # 游戏kb设置 使用独立的算法
 kb-setting:
-  enable: true
+  enable: false
   force: 0.4
   speed: 0.5
   motionY: 0.1
