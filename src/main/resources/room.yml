@@ -54,8 +54,10 @@ display-floatBlock:
   "2": "diamond"
   "3": "emerald"
 
+# 启用掉落物均分
 enable-item-Equal: false
 
+# 启用掉落物显示
 display-item-name: false
 
 # 游戏kb设置 使用独立的算法
