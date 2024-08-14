@@ -29,8 +29,8 @@ public class NbtDefaultItem extends DefaultItem{
 
 
 
-    public Item getItem() {
-        return playerItem.getItem();
+    public Item[] getItem() {
+        return new Item[]{playerItem.getItem()};
     }
 
 

@@ -9,6 +9,8 @@ import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Sound;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import lombok.Getter;
+import lombok.Setter;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.item.ItemIDSunName;
 import org.sobadfish.bedwar.item.ItemInfo;
@@ -35,17 +37,15 @@ public class DefaultItem extends BasePlayPanelItemInstance {
 
     public int count;
 
+    @Getter
+    @Setter
     private Item[] item;
 
+    @Getter
+    @Setter
     public String moneyItem;
 
-    public void setMoneyItem(String moneyItem) {
-        this.moneyItem = moneyItem;
-    }
 
-    public String getMoneyItem() {
-        return moneyItem;
-    }
 
     public DefaultItem(Item[] item,String moneyItem,int count){
         this.item = item;
@@ -60,47 +60,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
     }
 
 
-//    public static DefaultItem build(Map map){
-//        //TODO 根据配置去构建普通物品
-//        String id = map.get("id").toString();
-//        String name = TextFormat.colorize('&',map.get("name").toString());
-//        ArrayList<Enchantment> enchantments = new ArrayList<>();
-//        if(!"".equalsIgnoreCase(map.get("ench").toString())) {
-//            for (String es : map.get("ench").toString().split("-")) {
-//                enchantments.add(Enchantment.get(
-//                        Integer.parseInt(es.split(":")[0]))
-//                        .setLevel(Integer.parseInt(es.split(":")[1])));
-//            }
-//        }
-//        int count = Integer.parseInt(map.get("money").toString().split("x")[1]);
-//        String moneyName = map.get("money").toString().split("x")[0];
-//        if(NbtItemManager.NBT_MANAGER.containsKey(id)){
-//            //TODO 构建NBT物品
-//            INbtItem config = NbtItemManager.NBT_MANAGER.get(id);
-//            return new NbtDefaultItem(config,moneyName,count);
-//        }
-//        String[] ids = id.split(":");
-//        int i = 0;
-//        int d = 0;
-//        int c = 1;
-//        if(ids.length > 1){
-//            i = Integer.parseInt(ids[0]);
-//            d = Integer.parseInt(ids[1]);
-//            if(ids.length > 2){
-//                c = Integer.parseInt(ids[2]);
-//            }
-//        }else if(ids.length > 0){
-//            i = Integer.parseInt(ids[0]);
-//        }
-//        Item item = Item.get(i,d,c);
-//        if(!"".equalsIgnoreCase(name)){
-//            item.setCustomName(name);
-//        }
-//        for(Enchantment enchantment: enchantments){
-//            item.addEnchantment(enchantment);
-//        }
-//        return new DefaultItem(item,moneyName,count);
-//    }
+
 
 
     private static Item stringAsItem(String itemStr){
@@ -158,9 +118,6 @@ public class DefaultItem extends BasePlayPanelItemInstance {
         int moneyCount = Integer.parseInt(map.get("money").toString().split("x")[1]);
 
         String moneyName = map.get("money").toString().split("x")[0];
-
-
-
 
         ArrayList<Enchantment> enchantments = new ArrayList<>();
         if(map.containsKey("ench")) {
@@ -232,7 +189,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
             String errorMessage = BedWarMain.getLanguage().getLanguage("item-not-enough", "[1] 不足",
                     oInfo.getCustomName());
 
-            Item[] iv = item;
+            Item[] iv = getItem();
             if (info.buyArmorId.contains(iv[0].getId())) {
                 u = false;
                 errorMessage = BedWarMain.getLanguage().getLanguage("armor-allow-buy", "已经购买过此盔甲了");
@@ -308,7 +265,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
 
     @Override
     public Item getPanelItem(PlayerInfo info,int index) {
-        Item item = this.item[0].clone();
+        Item item = getItem()[0];
         ArrayList<String> lore = new ArrayList<>();
         if(info.getGameRoom().getRoomConfig().isExp()){
             int rc = 1;
@@ -330,22 +287,23 @@ public class DefaultItem extends BasePlayPanelItemInstance {
     @Override
     public ElementButton getGuiButton(PlayerInfo info) {
         //TODO 如果语言非中文则获取其他名称
-        String itemString = this.item[0].getName();
+        Item it = getItem()[0];
+        String itemString = it.getName();
         if("chs".equalsIgnoreCase(BedWarMain.getLanguage().lang)){
-            itemString = ItemIDSunName.getPathByItem(this.item[0]);
+            itemString = ItemIDSunName.getPathByItem(it);
         }
-        String path = ItemIDSunName.getPathByItem(this.item[0]);
+        String path = ItemIDSunName.getPathByItem(it);
         if(path == null){
-            path =ItemIDSunName.getPathById(this.item[0].getId());
+            path =ItemIDSunName.getPathById(it.getId());
         }
         MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
-        String btName = TextFormat.colorize('&',  itemString+" * "+this.item[0].getCount()+"\n&rPrice: "+oInfo.getCustomName()+"&r *&a "+count);
+        String btName = TextFormat.colorize('&',  itemString+" * "+it.getCount()+"\n&rPrice: "+oInfo.getCustomName()+"&r *&a "+count);
         if(info.getGameRoom().getRoomConfig().isExp()){
             int rc = 1;
             if(info.getGameRoom().getRoomConfig().moneyItem.containsKey(moneyItem)){
                 rc = (int) oInfo.getExp();
             }
-            btName =TextFormat.colorize('&',  itemString+" * "+this.item[0].getCount()+"\n&rPrice: Exp * "+count * rc);
+            btName =TextFormat.colorize('&',  itemString+" * "+it.getCount()+"\n&rPrice: Exp * "+count * rc);
         }
 
         if (path == null){
