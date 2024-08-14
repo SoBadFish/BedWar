@@ -65,7 +65,7 @@ public class PanelItem extends BasePlayPanelItemInstance{
     }
 
     @Override
-    public ElementButton getGUIButton(PlayerInfo info) {
-        return new ElementButton(TextFormat.colorize('&',classify.getDisPlayerName()),new ElementButtonImageData("path", ItemIDSunName.getIDByPath(classify.getItem().getId(),classify.getItem().getDamage())));
+    public ElementButton getGuiButton(PlayerInfo info) {
+        return new ElementButton(TextFormat.colorize('&',classify.getDisPlayerName()),new ElementButtonImageData("path", ItemIDSunName.getPathByItem(classify.getItem())));
     }
 }

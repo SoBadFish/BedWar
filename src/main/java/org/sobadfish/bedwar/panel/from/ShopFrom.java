@@ -60,7 +60,7 @@ public class ShopFrom {
         FormWindowSimple simple = new FormWindowSimple(title,"");
         PlayerInfo playerInfo = BedWarMain.getRoomManager().getPlayerInfo(player);
         for(ShopButton shopButton:this.shopButtons){
-            simple.addButton(shopButton.getItemInstance().getGUIButton(playerInfo));
+            simple.addButton(shopButton.getItemInstance().getGuiButton(playerInfo));
         }
         if(isBack) {
             ElementButton button2 = new ElementButton("BACK", new ElementButtonImageData("path", "textures/ui/refresh_light"));

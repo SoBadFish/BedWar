@@ -14,6 +14,9 @@ import org.sobadfish.bedwar.player.team.TeamInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Sobadfish
+ */
 public class PlayerItem extends BasePlayPanelItemInstance{
 
     private final PlayerInfo info;
@@ -50,9 +53,9 @@ public class PlayerItem extends BasePlayPanelItemInstance{
         //todo 这里似乎可以画个lore
         List<String> lore = new ArrayList<>();
         lore.add(TextFormat.colorize('&',"&r "));
-        lore.add(TextFormat.colorize('&',"&r&7Health &a"+this.info.getPlayer().getHealth()+" / "+this.info.getPlayer().getMaxHealth()));
+        lore.add(TextFormat.colorize('&',"&r&7❤ &a"+this.info.getPlayer().getHealth()+" / "+this.info.getPlayer().getMaxHealth()));
         lore.add(TextFormat.colorize('&',"&r  "));
-        lore.add(TextFormat.colorize('&',"&r&7Kill &a"+this.info.getKillCount()));
+        lore.add(TextFormat.colorize('&',"&r&7☠ &a"+this.info.getKillCount()));
         lore.add(TextFormat.colorize('&',"&r   "));
         String status = "&aLive";
         if(this.info.getPlayerType() == PlayerInfo.PlayerType.DEATH){
@@ -61,20 +64,18 @@ public class PlayerItem extends BasePlayPanelItemInstance{
         lore.add(TextFormat.colorize('&',"&r&7Status &a"+status));
         item.setLore(lore.toArray(new String[0]));
         item.setNamedTag(item.getNamedTag().putInt("index", index));
-        item.setNamedTag(item.getNamedTag().putString("player", i.getName()));
-
         return item;
     }
 
     @Override
-    public ElementButton getGUIButton(PlayerInfo info) {
+    public ElementButton getGuiButton(PlayerInfo info) {
         TeamInfo t = this.info.getTeamInfo();
-        String img = ItemIDSunName.getIDByPath(14);
+        String img = ItemIDSunName.getPathById(14);
         if(t != null){
             Item i = t.getTeamConfig().getTeamConfig().getBlockWoolColor();
-            img = ItemIDSunName.getIDByPath(i.getId(),i.getDamage());
+            img = ItemIDSunName.getPathByIdAndDamage(i.getId(),i.getDamage());
         }
 
-        return new ElementButton(TextFormat.colorize('&', this.info.toString()+"\n&r❤ &c"+ this.info.getPlayer().getHealth()+" / "+ this.info.getPlayer().getMaxHealth()),new ElementButtonImageData("path",img));
+        return new ElementButton(TextFormat.colorize('&', this.info +"\n&r❤ &c"+ this.info.getPlayer().getHealth()+" / "+ this.info.getPlayer().getMaxHealth()),new ElementButtonImageData("path",img));
     }
 }

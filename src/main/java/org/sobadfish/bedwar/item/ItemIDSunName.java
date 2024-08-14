@@ -3,15 +3,16 @@ package org.sobadfish.bedwar.item;
 
 import cn.nukkit.item.Item;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Winfxk
  * @author Anders233
  *
  */
+
 public enum ItemIDSunName {
     /**
      * 石头
@@ -1958,203 +1959,162 @@ public enum ItemIDSunName {
      * */
     END_CRYSTAL("末影水晶",426,0,"textures/items/end_crystal.png");
 
-    private int ID, Damage;
-    private String Name, Path;
-    private static final HashMap<String, Map<String, Object>> NAME_MAP = new HashMap<>();
-    private static final HashMap<String, Map<String, Object>> ID_MAP = new HashMap<>();
-    private static final HashMap<String, ItemIDSunName> ItemIDSunName_MAP = new HashMap<>();
-    private static final ArrayList<HashMap<String, Object>> All = new ArrayList<>();
+
+
+    private final int id, damage;
+
+    private final String name, path;
+
+    /**
+     * 联合id与damage
+     * */
+    private static class IdDamageKey {
+        private final int id;
+        private final int damage;
+
+        IdDamageKey(int id, int damage) {
+            this.id = id;
+            this.damage = damage;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            IdDamageKey that = (IdDamageKey) o;
+            return id == that.id && damage == that.damage;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id, damage);
+        }
+    }
+
+
+    private static final Map<String, ItemIDSunName> NAME_MAP = new HashMap<>();
+    private static final Map<IdDamageKey, ItemIDSunName> ID_DAMAGE_MAP = new HashMap<>();
+
+    // 静态块，初始化缓存
     static {
-        for (ItemIDSunName item : ItemIDSunName.values()) {
-            HashMap<String, Object> map = new HashMap<String, Object>();
-            map.put("ID", item.ID);
-            map.put("Damage", item.Damage);
-            map.put("Path", item.Path);
-            map.put("Name", item.Name);
-            map.put("item", item);
-            All.add(map);
-            NAME_MAP.put(item.Name, map);
-            ID_MAP.put(item.ID + ":" + item.Damage, map);
-            ItemIDSunName_MAP.put(item.ID + ":" + item.Damage, item);
+        for (ItemIDSunName item : values()) {
+            NAME_MAP.put(item.name, item);
+            ID_DAMAGE_MAP.put(new IdDamageKey(item.id, item.damage), item);
         }
     }
 
     /**
-     * @param Name   物品名称
-     * @param id     物品ID
-     * @param Damage 物品特殊值
-     * @param Path   物品贴图路径
-     */
-    private ItemIDSunName(String Name, int id, int Damage, String Path) {
-        this.ID = id;
-        this.Name = Name;
-        this.Damage = Damage;
-        this.Path = Path;
+     * 根据物品名称获取贴图路径
+     * @param name 物品名称
+     * @return 贴图路径
+     * */
+    public static String getPathByName(String name) {
+        ItemIDSunName item = NAME_MAP.get(name);
+        return item != null ? item.path : null;
+    }
+
+
+
+    /**
+     * 根据物品Id与特殊值获取贴图路径
+     * @param id 物品id
+     * @param damage 物品特殊值
+     *
+     * @return 贴图路径
+     * */
+    public static String getPathByIdAndDamage(int id, int damage) {
+        ItemIDSunName item = ID_DAMAGE_MAP.get(new IdDamageKey(id, damage));
+        return item != null ? item.path : "";
     }
 
     /**
-     * @return 物品贴图路径
-     */
-    public String getPath() {
-        return this.Path;
+     * 根据物品Id获取贴图路径
+     * @param id 物品id
+     *
+     * @return 贴图路径
+     * */
+    public static String getPathById(int id) {
+        return getPathByIdAndDamage(id,0);
     }
 
     /**
-     * @return 物品名称
-     */
-    public String getName() {
-        return this.Name;
+     * 根据物品获取贴图路径
+     * @param item 物品
+     *
+     * @return 贴图路径
+     * */
+    public static String getPathByItem(Item item) {
+        return getPathByIdAndDamage(item.getId(),item.getDamage());
     }
 
     /**
-     * @return 物品特殊值
-     */
+     * 根据物品获取物品中文名
+     * @param item 物品
+     *
+     * @return 物品中文名
+     * */
+    public static String getNameByItem(Item item) {
+        return getNameByIdAndDamage(item.getId(),item.getDamage());
+    }
+
+    /**
+     * 根据物品获取物品中文名
+     * @param id 物品Id
+     *
+     * @return 物品中文名
+     * */
+    public static String getNameById(int id) {
+        return getNameByIdAndDamage(id,0);
+    }
+
+    /**
+     * 根据物品获取物品中文名
+     * @param id 物品id
+     * @param damage 物品特殊值
+     *
+     * @return 物品中文名
+     * */
+    public static String getNameByIdAndDamage(int id,int damage) {
+        ItemIDSunName item = ID_DAMAGE_MAP.get(new IdDamageKey(id, damage));
+        return item != null ? item.name : "未知";
+    }
+
+    public int getId() {
+        return id;
+    }
+
     public int getDamage() {
-        return this.Damage;
+        return damage;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPath() {
+        return path;
     }
 
     /**
-     * @return 物品ID
+     * @param name   物品名称
+     * @param id     物品ID
+     * @param damage 物品特殊值
+     * @param path   物品贴图路径
      */
-    public int getID() {
-        return this.ID;
-    }
-
-    /**
-     * @param ID 物品ID
-     * @return 根据物品ID获取物品贴图路径
-     */
-    public static String getIDByPath(int ID) {
-        return getIDByPath(ID + ":0");
-    }
-
-    /**
-     * @param ID     物品ID
-     * @param Damage 物品特殊值
-     * @return 根据物品ID获取物品贴图路径
-     */
-    public static String getIDByPath(int ID, int Damage) {
-        return getIDByPath(ID + ":" + Damage);
-    }
-
-    /**
-     * @param ID 物品ID（ID：特殊值）
-     * @return 根据物品ID获取物品贴图路径（ID：特殊值）
-     */
-    public static String getIDByPath(String ID) {
-        Map<String, Object> map = ID_MAP.getOrDefault(ID, null);
-        if (map == null || map.getOrDefault("Path", null) == null)
-            return null;
-        return String.valueOf(map.get("Path"));
+    ItemIDSunName(String name, int id, int damage, String path) {
+        this.id = id;
+        this.name = name;
+        this.damage = damage;
+        this.path = path;
     }
 
 
 
-    public static String getIDByName(Item item) {
-        String name = getIDByName(item.getId() + ":" + item.getDamage());
-        if(name == null){
-            if(item.hasCustomName()){
-                return item.getCustomName();
-            }else{
-                return item.getName();
-            }
-        }else{
-            if(item.hasCustomName()) {
-                return item.getCustomName();
-            }
-            return name;
-        }
-    }
 
-    /**
-     * @param ID 物品ID（ID：特殊值）
-     * @return 根据物品ID获取物品名称
-     */
-    public static String getIDByName(String ID) {
-        Map<String, Object> map = ID_MAP.getOrDefault(ID, null);
-        if (map == null || map.getOrDefault("Name", null) == null)
-            return null;
-        return String.valueOf(map.get("Name"));
-    }
 
-    /**
-     * @param Name 物品名称
-     * @return 根据物品名称获取物品ID
-     */
-    public static int getNameByID(String Name) {
-        Map<String, Object> map = NAME_MAP.getOrDefault(Name, null);
-        if (map == null || map.getOrDefault("ID", null) == null)
-            return 0;
-        return Integer.parseInt(String.valueOf(map.get("ID")));
-    }
-
-    /**
-     * @param Name 物品名称
-     * @return 根据物品名称获取物品特殊值
-     */
-    public static int getNameByDamage(String Name) {
-        Map<String, Object> map = NAME_MAP.getOrDefault(Name, null);
-        if (map == null || map.getOrDefault("Damage", null) == null)
-            return 0;
-        return Integer.parseInt(String.valueOf(map.get("Damage")));
-    }
-
-    /**
-     * @param Name 物品名称
-     * @return 根据物品名称获取物品贴图路径
-     */
-    public static String getNameByPath(String Name) {
-        Map<String, Object> map = NAME_MAP.getOrDefault(Name, null);
-        if (map == null || map.getOrDefault("Path", null) == null)
-            return null;
-        return String.valueOf(map.get("Path"));
-    }
-
-    /**
-     * @param ID 物品ID
-     * @return 根据物品ID获取物品枚举对象
-     */
-    public static ItemIDSunName getItem(int ID) {
-        return getItem(ID, 0);
-    }
-
-    /**
-     * @param ID     物品ID
-     * @param Damage 物品特殊值
-     * @return 根据物品ID获取物品枚举对象
-     */
-    public static ItemIDSunName getItem(int ID, int Damage) {
-        return ItemIDSunName_MAP.getOrDefault(ID + ":" + Damage, null);
-    }
-
-    /**
-     * @param Name 物品名称
-     * @return 根据物品ID获取物品枚举对象
-     */
-    public static ItemIDSunName getItem(String Name) {
-        return getItem(getNameByID(Name), getNameByDamage(Name));
-    }
-
-    /**
-     * @param ID（ID：特殊值）/物品名称
-     * @return 尝试解析冰获取物品ID（ID：特殊值）
-     */
-    public static String UnknownToID(String ID) {
-        if (!ID.contains(":")) {
-            if (getNameByPath(ID) != null)
-                return getNameByID(ID) + ":" + getNameByDamage(ID);
-            else if (getIDByPath(ID + ":0") != null)
-                return ID + ":0";
-            else
-                return ID;
-        } else {
-            if (getIDByPath(ID) != null)
-                return ID;
-            else if (getNameByPath(ID) != null)
-                return getNameByID(ID) + ":" + getNameByDamage(ID);
-            else
-                return ID;
-        }
-    }
 
 }

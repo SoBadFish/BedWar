@@ -37,7 +37,6 @@ import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.utils.TextFormat;
 import lombok.Getter;
-import lombok.Setter;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.command.BedWarCommand;
 import org.sobadfish.bedwar.entity.*;
@@ -50,7 +49,6 @@ import org.sobadfish.bedwar.item.nbt.DieBow;
 import org.sobadfish.bedwar.item.nbt.INbtItem;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
-import org.sobadfish.bedwar.panel.DisPlayerPanel;
 import org.sobadfish.bedwar.panel.from.BedWarFrom;
 import org.sobadfish.bedwar.panel.from.ShopFrom;
 import org.sobadfish.bedwar.panel.from.button.BaseIButton;
@@ -82,6 +80,7 @@ public class RoomManager implements Listener {
     public static List<GameRoomConfig> LOCK_GAME = new ArrayList<>();
 
     public LinkedHashMap<String,String> playerJoin = new LinkedHashMap<>();
+
 
     /**
      * 当房间丢失 但是缓存了玩家登入数据的时候
@@ -1071,31 +1070,21 @@ public class RoomManager implements Listener {
                     resetKnock = false;
                 }
                 if (event instanceof EntityDamageByEntityEvent) {
-                    //TODO 免受TNT爆炸伤害
-//                    Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
-//                    if (entity instanceof EntityPrimedTNT) {
-//                        event.setDamage(2);
-//                    }
+                    //TO 免受TNT爆炸伤害
                     Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
-//                    if (entity instanceof EntityPrimedTNT) {
-//                        event.setDamage(room.getRoomConfig().tntDamage);
-//                        resetKnock = false;
-//                        explode = true;
-//                    }
+
                     if(entity instanceof EntityTnt){
                         PlayerInfo target = ((EntityTnt) entity).getTarget();
                         if(target != null){
-                            if(!target.equals(playerInfo) && (target.getTeamInfo() != null && !target.getTeamInfo().equals(playerInfo.getTeamInfo()))){
+                            if(!target.equals(playerInfo) && (target.getTeamInfo() != null
+                                    && !target.getTeamInfo().equals(playerInfo.getTeamInfo()))){
                                 playerInfo.setDamageByInfo(target);
                                 event.setDamage(room.getRoomConfig().tntDamage);
                             }else{
                                 event.setDamage(2f);
                             }
                             explode = true;
-//                            else{
-//                                event.setCancelled();
-//                                return;
-//                            }
+
                         }
                         if(room.getRoomConfig().tntKnockBack > 0){
                             ((EntityDamageByEntityEvent) event).setKnockBack(room.getRoomConfig().tntKnockBack);
@@ -1170,9 +1159,7 @@ public class RoomManager implements Listener {
         Entity d = event.getEntity();
         if(d instanceof EntityFireBall){
             if(entity instanceof Player){
-//                if(((EntityFireBall) d).getMaster() != null && ((EntityFireBall) d).getMaster().equals(new PlayerInfo((EntityHuman) entity))){
-////                    event.setCancelled();
-//                }
+
                 //照样爆炸
                 ((EntityFireBall) d).explode();
             }
@@ -1307,7 +1294,7 @@ public class RoomManager implements Listener {
 
                 if (item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")) {
                     event.setCancelled();
-                    choseteamItem(player, room);
+                    choseTeamItem(player, room);
                     return;
 
                 }
@@ -1337,11 +1324,11 @@ public class RoomManager implements Listener {
 
     }
 
-    private boolean choseteamItem(Player player, GameRoom room) {
+    private void choseTeamItem(Player player, GameRoom room) {
         if(!TeamChoseItem.clickAgain.contains(player)){
             TeamChoseItem.clickAgain.add(player);
             player.sendTip(BedWarMain.getLanguage().getLanguage("chose-click-again","请再点击一次"));
-            return true;
+            return;
         }
         FormWindowSimple simple = new FormWindowSimple(BedWarMain.getLanguage().getLanguage("player-chose-team","请选择队伍"),"");
         for(TeamInfo teamInfoConfig: room.getTeamInfos()){
@@ -1349,11 +1336,10 @@ public class RoomManager implements Listener {
 
             simple.addButton(new ElementButton(TextFormat.colorize('&', teamInfoConfig +" &r"+teamInfoConfig.getTeamPlayers().size()+" / "+(room.getRoomConfig().getMaxPlayerSize() / room.getTeamInfos().size())),
                     new ElementButtonImageData("path",
-                            ItemIDSunName.getIDByPath(wool.getId(),wool.getDamage()))));
+                            ItemIDSunName.getPathByIdAndDamage(wool.getId(),wool.getDamage()))));
         }
         player.showFormWindow(simple,102);
         TeamChoseItem.clickAgain.remove(player);
-        return false;
     }
 
     private void followPlayer(PlayerInfo info,GameRoom room){
@@ -1384,7 +1370,7 @@ public class RoomManager implements Listener {
         List<BaseIButton> list = new ArrayList<>();
         //手机玩家
         for(PlayerInfo i: room.getLivePlayers()){
-            list.add(new BaseIButton(new PlayerItem(i).getGUIButton(info)) {
+            list.add(new BaseIButton(new PlayerItem(i).getGuiButton(info)) {
                 @Override
                 public void onClick(Player player) {
                     player.teleport(i.getPlayer().getLocation());
@@ -1398,8 +1384,10 @@ public class RoomManager implements Listener {
 
     private void disPlayUI(PlayerInfo info,GameRoom room){
         //WIN10 玩家 故障，，，，
-       // DisPlayerPanel playerPanel = new DisPlayerPanel();
-       // playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),BedWarMain.getLanguage().getLanguage("player-from-teleport-player-title","传送玩家"));
+//        DisPlayerPanel playerPanel = new DisPlayerPanel();
+//        playerPanel.displayPlayer(info,
+//                DisPlayerPanel.displayPlayers(room),
+//                BedWarMain.getLanguage().getLanguage("player-from-teleport-player-title","传送玩家"));
 
         disPlayProtect(info, room);
     }
@@ -1453,7 +1441,7 @@ public class RoomManager implements Listener {
                 }
                 if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
                     player.getInventory().setHeldItemSlot(0);
-                    choseteamItem(player, room);
+                    choseTeamItem(player, room);
 
 
                 }

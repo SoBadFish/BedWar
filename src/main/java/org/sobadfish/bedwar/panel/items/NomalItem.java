@@ -48,7 +48,7 @@ public class NomalItem extends BasePlayPanelItemInstance{
     }
 
     @Override
-    public ElementButton getGUIButton(PlayerInfo info) {
+    public ElementButton getGuiButton(PlayerInfo info) {
         return null;
     }
 }

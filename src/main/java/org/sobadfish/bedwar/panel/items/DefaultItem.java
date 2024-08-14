@@ -210,10 +210,6 @@ public class DefaultItem extends BasePlayPanelItemInstance {
     }
 
 
-//    @Override
-//    public Item getItem() {
-//        return item[0];
-//    }
 
     @Override
     public void onClick(ChestInventoryPanel inventory, Player player) {
@@ -332,15 +328,15 @@ public class DefaultItem extends BasePlayPanelItemInstance {
     }
 
     @Override
-    public ElementButton getGUIButton(PlayerInfo info) {
+    public ElementButton getGuiButton(PlayerInfo info) {
         //TODO 如果语言非中文则获取其他名称
         String itemString = this.item[0].getName();
         if("chs".equalsIgnoreCase(BedWarMain.getLanguage().lang)){
-            itemString = ItemIDSunName.getIDByName(this.item[0]);
+            itemString = ItemIDSunName.getPathByItem(this.item[0]);
         }
-        String path = ItemIDSunName.getIDByPath(this.item[0].getId(),this.item[0].getDamage());
+        String path = ItemIDSunName.getPathByItem(this.item[0]);
         if(path == null){
-            path =ItemIDSunName.getIDByPath(this.item[0].getId());
+            path =ItemIDSunName.getPathById(this.item[0].getId());
         }
         MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
         String btName = TextFormat.colorize('&',  itemString+" * "+this.item[0].getCount()+"\n&rPrice: "+oInfo.getCustomName()+"&r *&a "+count);

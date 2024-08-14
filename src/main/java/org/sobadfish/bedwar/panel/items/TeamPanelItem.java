@@ -6,7 +6,7 @@ import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.TextFormat;
 import lombok.Data;
-import lombok.Getter;
+import lombok.EqualsAndHashCode;
 import org.sobadfish.bedwar.item.ItemIDSunName;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
@@ -20,6 +20,7 @@ import org.sobadfish.bedwar.shop.item.ShopItemInfo;
  * @author SoBadFish
  * 2022/1/6
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class TeamPanelItem extends BasePlayPanelItemInstance{
 
@@ -64,7 +65,7 @@ public class TeamPanelItem extends BasePlayPanelItemInstance{
     }
 
     @Override
-    public ElementButton getGUIButton(PlayerInfo info) {
-        return new ElementButton("Team Shop",new ElementButtonImageData("path", ItemIDSunName.getIDByPath(item.getId(),item.getDamage())));
+    public ElementButton getGuiButton(PlayerInfo info) {
+        return new ElementButton("Team Shop",new ElementButtonImageData("path", ItemIDSunName.getPathByIdAndDamage(item.getId(),item.getDamage())));
     }
 }

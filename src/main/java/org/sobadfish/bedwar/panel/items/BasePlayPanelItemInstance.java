@@ -56,7 +56,7 @@ public abstract class BasePlayPanelItemInstance {
      * @return 物品
      *
      * */
-    public abstract ElementButton getGUIButton(PlayerInfo info);
+    public abstract ElementButton getGuiButton(PlayerInfo info);
 
 
     @Override

@@ -224,7 +224,7 @@ public class TeamItem extends BasePlayPanelItemInstance {
     }
 
     @Override
-    public ElementButton getGUIButton(PlayerInfo info) {
+    public ElementButton getGuiButton(PlayerInfo info) {
         int level = getTeamInfoLevel(info);
         level++;
         if (level > effect.getMaxLevel()) {
@@ -252,6 +252,6 @@ public class TeamItem extends BasePlayPanelItemInstance {
         }
         return new ElementButton(TextFormat.colorize('&', txt + "\n&r" + title),
                 new ElementButtonImageData("path",
-                        ItemIDSunName.getIDByPath(getItem().getId(), getItem().getDamage())));
+                        ItemIDSunName.getPathByItem(getItem())));
     }
 }
