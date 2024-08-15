@@ -230,9 +230,9 @@ public class WorldInfoConfig {
 //            }
 //        }
         return new Location(
-                Integer.parseInt(pos[0]),
-                Integer.parseInt(pos[1]),
-                Integer.parseInt(pos[2]),
+                Double.parseDouble(pos[0]),
+                Double.parseDouble(pos[1]),
+                Double.parseDouble(pos[2]),
                 Double.parseDouble(pos[4]),
                 0, level
 
