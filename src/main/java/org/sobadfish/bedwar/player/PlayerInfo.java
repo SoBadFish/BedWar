@@ -24,7 +24,6 @@ import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.sobadfish.bedwar.BedWarMain;
@@ -1013,9 +1012,9 @@ public class PlayerInfo {
         if(teamInfo != null){
             try {
                 teleport = player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
-            }catch (Exception ignore){
+            }catch (Exception e){
+                BedWarMain.printMessageException(e);
                // e.printStackTrace();
-                teleport = false;
             }
         }
         if(!teleport && player instanceof Player) {
