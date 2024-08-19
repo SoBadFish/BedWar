@@ -1,6 +1,5 @@
 package org.sobadfish.bedwar.thread;
 
-import cn.nukkit.Player;
 import cn.nukkit.Server;
 import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.entity.BedWarFloatText;
@@ -35,7 +34,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
         if(isClose){
             color = "&7";
         }
-        StringBuilder s = new StringBuilder(color + "插件主进程  浮空字 &7(" +
+        StringBuilder s = new StringBuilder(color + "Plugin Master  Floating Text &7(" +
                 FloatTextManager.floatTextList.size() + ") &a" + loadTime + " ms\n");
         for(BedWarFloatText floatText:FloatTextManager.floatTextList){
             s.append("&r   - ").append(floatText.name).append(" = ").append(floatText.getNameTag()).append(" &7pos=(")
