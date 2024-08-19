@@ -290,7 +290,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
         Item it = getItem()[0];
         String itemString = it.getName();
         if("chs".equalsIgnoreCase(BedWarMain.getLanguage().lang)){
-            itemString = ItemIDSunName.getPathByItem(it);
+            itemString = ItemIDSunName.getNameByItem(it);
         }
         String path = ItemIDSunName.getPathByItem(it);
         if(path == null){
