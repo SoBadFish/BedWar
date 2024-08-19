@@ -64,10 +64,7 @@ import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.tools.Utils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author SoBadFish
@@ -517,23 +514,35 @@ public class RoomManager implements Listener {
 
     @EventHandler
     public void onEntityExplodeEvent(EntityExplodeEvent event){
+
         Level level = event.getPosition().getLevel();
         GameRoom room = getGameRoomByLevel(level);
         if(room != null) {
             ArrayList<Block> blocks = new ArrayList<>(event.getBlockList());
             for (Block block : event.getBlockList()) {
-                //防爆玻璃
-                if (!room.worldInfo.getPlaceBlock().contains(block) ||
-                block instanceof BlockGlass) {
-                    blocks.remove(block);
 
-                }else{
-                    room.worldInfo.getPlaceBlock().remove(block);
+                if (!room.worldInfo.getPlaceBlock().contains(block)) {
+                    blocks.remove(block);
                 }
+                if(block instanceof BlockGlass){
+                    blocks.remove(block);
+                }
+                List<Block> line = Utils.getBlocksBetweenPositions(event.getPosition(),block);
+                for (Block b2 : line){
+                    if(b2 instanceof BlockGlass){
+                        blocks.remove(block);
+                    }
+                }
+
+            }
+            for (Block block : blocks) {
+                room.worldInfo.getPlaceBlock().remove(block);
             }
             event.setBlockList(blocks);
         }
     }
+
+
     @EventHandler
     public void onPlaceBlock(BlockPlaceEvent event){
         Level level = event.getBlock().level;

@@ -561,6 +561,32 @@ public class Utils {
 //        player.getInventory().removeItem(item);
     }
 
+    /**
+     * 获取路径中的方块
+     * */
+    public static List<Block> getBlocksBetweenPositions(Position pos1, Position pos2) {
+        List<Block> blocks = new ArrayList<>();
+        Level level = pos1.getLevel();
+
+        int minX = Math.min(pos1.getFloorX(), pos2.getFloorX());
+        int maxX = Math.max(pos1.getFloorX(), pos2.getFloorX());
+        int minY = Math.min(pos1.getFloorY(), pos2.getFloorY());
+        int maxY = Math.max(pos1.getFloorY(), pos2.getFloorY());
+        int minZ = Math.min(pos1.getFloorZ(), pos2.getFloorZ());
+        int maxZ = Math.max(pos1.getFloorZ(), pos2.getFloorZ());
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    Block block = level.getBlock(new Vector3(x, y, z));
+                    blocks.add(block);
+                }
+            }
+        }
+
+        return blocks;
+    }
+
 
     /**
      * 在游戏地图生成方块

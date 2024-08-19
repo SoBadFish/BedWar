@@ -139,7 +139,7 @@ public class EntityTnt extends EntityProjectile implements EntityExplosive {
 
     @Override
     public void explode() {
-        EntityExplosionPrimeEvent event = new EntityExplosionPrimeEvent(this, 4);
+        EntityExplosionPrimeEvent event = new EntityExplosionPrimeEvent(this, 3);
         server.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
