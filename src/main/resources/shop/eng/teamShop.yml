@@ -28,7 +28,7 @@ enchants:
 
 trap:
   - id: 0
-    name: "陷阱"
+    name: "trap"
     maxLevel: 1
     disPlay: "69:0"
     money: "diamondx2"
