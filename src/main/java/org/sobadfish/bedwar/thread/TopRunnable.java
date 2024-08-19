@@ -20,7 +20,7 @@ public class TopRunnable extends ThreadManager.AbstractBedWarRunnable {
         if(isClose){
             color = "&7";
         }
-        return color+"排行榜更新 &7("+BedWarMain.getTopManager().topItemInfos.size()+") &a"+time+" ms";
+        return color+"Top update &7("+BedWarMain.getTopManager().topItemInfos.size()+") &a"+time+" ms";
     }
 
     @Override

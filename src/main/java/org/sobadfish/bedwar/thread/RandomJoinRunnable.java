@@ -32,7 +32,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
         if(isClose){
             color = "&7";
         }
-        return color+"匹配玩家线程 &7("+ RandomJoinManager.newInstance().playerInfos.size()+")";
+        return color+"Matchmaking player thread &7("+ RandomJoinManager.newInstance().playerInfos.size()+")";
     }
 
     @Override
