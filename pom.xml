@@ -4,7 +4,7 @@
 
     <groupId>org.sobadfish.bedwar</groupId>
     <artifactId>BedWar</artifactId>
-    <version>2.2.0</version>
+    <version>2.2.1-TEST</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

@@ -92,7 +92,7 @@ deathIcon: "死亡的图标"
 
 display-floatBlock: |-
   资源点展示的浮空字
-  格式: 货币名称:皮肤名称
+  格式: 货币所在位置0是第一个:皮肤名称
 
 resetWorld: "游戏结束后是否重置地图"
 
@@ -129,3 +129,7 @@ tntDamage: "TNT的伤害"
 
 
 tntExplodeTime: "TNT爆炸时间（秒）"
+
+protected-bed: "床初始保护方块"
+protected-bed.enable: "是否开启"
+protected-bed.blockList: "方块列表，从第一层开始"

@@ -92,7 +92,7 @@ deathIcon: "Icon for death"
 
 display-floatBlock: |-
   Floating text display of resource points
-  Format: Currency name:Skin name
+  Format: Currency Location 0 is first:Skin name
 
 resetWorld: "Whether to reset the map after the game ends"
 
@@ -124,3 +124,7 @@ custom.namedtag: |-
 
 
 roomStartMessage: "Message sent to players when the room starts the game"
+
+protected-bed: "Bed initial protection block"
+protected-bed.enable: "Is it enabled?"
+protected-bed.blockList: "List of blocks, starting from the first layer"

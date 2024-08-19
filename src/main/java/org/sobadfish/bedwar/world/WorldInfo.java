@@ -39,7 +39,7 @@ public class WorldInfo {
 
     public boolean onChangeBlock(Block block,boolean isPlace){
         for(TeamInfo info:room.getTeamInfos()){
-            if(block.distance(info.getTeamConfig().getSpawnPosition()) < 3){
+            if(block.distance(info.getTeamConfig().getSpawnPosition()) <= 1){
                 return false;
             }
         }

@@ -27,6 +27,7 @@ import org.sobadfish.bedwar.entity.baselib.BaseEntity;
 import org.sobadfish.bedwar.manager.ThreadManager;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.room.GameRoom;
+import org.sobadfish.bedwar.world.BlockPosition;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -529,6 +530,40 @@ public class Utils {
 
     /**
      * 在游戏地图生成方块
+     * @param room 游戏房间
+     * @param spawn 生成的方块与位置
+     * @param canRemove 是否被移除
+     * */
+    public static void spawnBlock(GameRoom room, List<BlockPosition> spawn, boolean canRemove) {
+        for(BlockPosition block: spawn){
+            if(block.position.getLevelBlock().getId() == 0) {
+                block.position.getLevel().setBlock(block.position, block.block, true, true);
+                if(!room.worldInfo.onChangeBlock(block.position.getLevelBlock(),true)){
+                    block.position.getLevel().setBlock(block.position,new BlockAir());
+                }
+            }
+
+        }
+        if(canRemove){
+            ThreadManager.SCHEDULED.schedule(() -> {
+                for(BlockPosition block: spawn){
+                    if(room == null || room.getType() != GameRoom.GameType.START){
+                        return;
+                    }
+                    if(room.worldInfo.onChangeBlock(block.position.getLevelBlock(),false)){
+                        block.position.getLevel().setBlock(block.position,new BlockAir());
+                    }
+                }
+            },5, TimeUnit.SECONDS);
+        }
+
+
+//        player.getInventory().removeItem(item);
+    }
+
+
+    /**
+     * 在游戏地图生成方块
      * @param player 玩家
      * @param spawn 生成的方块与位置
      * @param canRemove 是否被移除
@@ -540,8 +575,9 @@ public class Utils {
         }
         for(Map.Entry<Position,Block> block: spawn.entrySet()){
             if(block.getKey().getLevelBlock().getId() == 0) {
-                if(info.getGameRoom().worldInfo.onChangeBlock(block.getKey().getLevelBlock(),true)){
-                    block.getKey().getLevel().setBlock(block.getKey(), block.getValue(), true, true);
+                block.getKey().getLevel().setBlock(block.getKey(), block.getValue(), true, true);
+                if(!info.getGameRoom().worldInfo.onChangeBlock(block.getKey().getLevelBlock(),true)){
+                    block.getKey().getLevel().setBlock(block.getKey(),new BlockAir());
                 }
             }
 

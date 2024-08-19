@@ -231,6 +231,11 @@ public class GameRoomConfig implements Cloneable{
     public LinkedHashMap<String, String> floatBlockConfig = new LinkedHashMap<>();
 
     /**
+     * 初始保护床方块
+     * */
+    public ProtectedBedConfig protectedBedConfig = new ProtectedBedConfig();
+
+    /**
      * 自定义的一些文本
      * */
     public boolean enableCustomTag = true;
@@ -513,6 +518,15 @@ public class GameRoomConfig implements Cloneable{
 
 
                 }
+                if(room.exists("protected-bed")){
+                    boolean eb = room.getBoolean("protected-bed.enable",false);
+                    List<String> lists = room.getStringList("protected-bed.blockList");
+                    roomConfig.protectedBedConfig.enable = eb;
+                    roomConfig.protectedBedConfig.blocks = lists;
+                    roomConfig.protectedBedConfig.loadConfig();
+
+                }
+
                 roomConfig.floatBlockConfig = floatBlocks;
 
                 if(room.exists("floatSpawnPos")){
@@ -618,6 +632,7 @@ public class GameRoomConfig implements Cloneable{
         config.set("auto-display-floattext.enable",enableAutoDisplayFloat);
         config.set("auto-display-floattext.text",autoDisplayFloat);
         config.set("kb-setting",knockConfig.saveConfig());
+        config.set("protected-bed",protectedBedConfig.saveConfig());
         
 
         config.save();

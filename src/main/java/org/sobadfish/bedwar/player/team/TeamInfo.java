@@ -1,13 +1,12 @@
 package org.sobadfish.bedwar.player.team;
 
 import cn.nukkit.Server;
-import cn.nukkit.block.Block;
-import cn.nukkit.block.BlockAir;
-import cn.nukkit.block.BlockBed;
+import cn.nukkit.block.*;
 import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.math.BlockFace;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.TextFormat;
 import lombok.Data;
@@ -21,10 +20,9 @@ import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.player.team.config.TeamConfig;
 import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
 import org.sobadfish.bedwar.room.GameRoom;
+import org.sobadfish.bedwar.world.BlockPosition;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +42,11 @@ public class TeamInfo {
 
     public List<Position> placeEnderChest = new ArrayList<>();
 
+    /**
+     * 初始保护方块
+     * */
+    public List<BlockPosition> blockPositions = new ArrayList<>();
+
     //淘汰
 
     private boolean stop;
@@ -54,15 +57,27 @@ public class TeamInfo {
 
     private ArrayList<PlayerInfo> teamPlayers = new ArrayList<>();
 
+
+
     public TeamInfo(GameRoom room,TeamInfoConfig teamConfig){
         this.teamConfig = teamConfig;
         this.room = room;
+        init();
+
     }
 
 
     private final ArrayList<TeamEffectInfo> teamEffects = new ArrayList<>();
 
 
+    public void init(){
+        if(room.getRoomConfig().protectedBedConfig.enable){
+            blockPositions = mathProtectedBlockLocation();
+            BedWarMain.sendMessageToConsole("&eInit Protected Bed Blocks! size: "+blockPositions.size());
+        }
+
+
+    }
 
 
     public boolean isLoading() {
@@ -226,6 +241,56 @@ public class TeamInfo {
         }, 2);
     }
 
+
+    /**
+     * 加载对应方块位置
+     * 最好在 房间初始化的时候加载好
+     * */
+    public List<BlockPosition> mathProtectedBlockLocation() {
+        TeamInfoConfig config = getTeamConfig();
+        List<BlockPosition> positions = new ArrayList<>();
+        Position bedPosition = config.getBedPosition();
+        List<Position> def = Arrays.asList(bedPosition, bedPosition.getSide(config.getBedFace()));
+
+        Set<Position> checkedPositions = new HashSet<>(def);
+        for (Block block : room.getRoomConfig().protectedBedConfig.loadingBlocks) {
+            def = mathAroundPositionByPosition(def, checkedPositions);
+            for (Position pos : def) {
+                if (block instanceof BlockWool) {
+                    positions.add(new BlockPosition(config.getTeamConfig().getBlockWoolColor().getBlock(), pos));
+                } else if (block instanceof BlockGlass) {
+                    BlockGlassStained blockGlass = new BlockGlassStained(config.getTeamConfig().getBlockWoolColor().getDamage());
+                    positions.add(new BlockPosition(blockGlass, pos));
+                } else {
+                    positions.add(new BlockPosition(block, pos));
+                }
+            }
+        }
+
+        return positions;
+    }
+
+    public List<Position> mathAroundPositionByPosition(List<Position> positions, Set<Position> checkedPositions) {
+        List<Position> nPos = new ArrayList<>();
+        BlockFace[] face = new BlockFace[]{BlockFace.UP, BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
+
+        for (Position position : positions) {
+            for (BlockFace blockFace : face) {
+                Position p2 = position.getSide(blockFace);
+                if (p2.getLevelBlock().getId() != 0 || !checkedPositions.add(p2)
+
+                ) {
+                    continue;
+                }
+                if(nPos.contains(position)){
+                    continue;
+                }
+                nPos.add(p2);
+            }
+        }
+        return nPos;
+    }
+
     private void createBedBlockEntity(Position position, TeamConfig config) {
         Block block = position.getLevelBlock();
         if (block instanceof BlockBed) {
@@ -308,4 +373,6 @@ public class TeamInfo {
     public String toString() {
         return TextFormat.colorize('&',getTeamConfig().getNameColor()+getTeamConfig().getName());
     }
+
+
 }

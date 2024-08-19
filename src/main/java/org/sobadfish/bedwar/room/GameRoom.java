@@ -15,7 +15,6 @@ import cn.nukkit.math.BlockFace;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.sobadfish.bedwar.BedWarMain;
@@ -36,6 +35,7 @@ import org.sobadfish.bedwar.room.floattext.FloatTextInfo;
 import org.sobadfish.bedwar.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.bedwar.shop.ShopInfo;
 import org.sobadfish.bedwar.tools.Utils;
+import org.sobadfish.bedwar.world.BlockPosition;
 import org.sobadfish.bedwar.world.WorldInfo;
 import org.sobadfish.bedwar.world.config.WorldInfoConfig;
 
@@ -193,6 +193,16 @@ public class GameRoom {
             //TODO 当房间开始
             for(TeamInfo t:teamInfos){
                 t.placeBed();
+                if(t.blockPositions.size() > 0){
+                    for (BlockPosition blockPosition: t.blockPositions){
+                        if(!blockPosition.position.getChunk().isLoaded()){
+                            blockPosition.position.getLevel().loadChunk(blockPosition.position.getChunkX(), blockPosition.position.getChunkZ());
+                        }
+                    }
+                    Utils.spawnBlock(this,t.blockPositions,false);
+                }
+
+
 
             }
 
@@ -215,7 +225,6 @@ public class GameRoom {
             sendSubTitle(BedWarMain.getLanguage().getLanguage("room-start-game-protect-bed","保护你的床"));
             shopInfo.init(getRoomConfig());
             loadTime =  getRoomConfig().time;
-            worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);
             //生成浮空方块
             for(Map.Entry<String, String> blockName: getRoomConfig().floatBlockConfig.entrySet()){
                 String itemName = getRoomConfig().moneyItem.getNames().get(Integer.parseInt(blockName.getKey()));
@@ -344,6 +353,7 @@ public class GameRoom {
         }else{
             sendTip(BedWarMain.getLanguage().getLanguage("room-waiting","&a等待中"));
         }
+
     }
 
     private void initShopInfo(){

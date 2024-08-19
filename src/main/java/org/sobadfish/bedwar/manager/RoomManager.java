@@ -522,7 +522,9 @@ public class RoomManager implements Listener {
         if(room != null) {
             ArrayList<Block> blocks = new ArrayList<>(event.getBlockList());
             for (Block block : event.getBlockList()) {
-                if (!room.worldInfo.getPlaceBlock().contains(block)) {
+                //防爆玻璃
+                if (!room.worldInfo.getPlaceBlock().contains(block) ||
+                block instanceof BlockGlass) {
                     blocks.remove(block);
 
                 }else{
@@ -1032,13 +1034,7 @@ public class RoomManager implements Listener {
                         resetKnock = false;
                         explode = true;
                     }
-//                    if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
-//                        if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityHuman){
-//                            //TODO 证明是扔火球的玩家
-//                            event.setDamage(2);
-//                            ((EntityDamageByEntityEvent) event).setKnockBack(room.getRoomConfig().fireballKnockBack);
-//                        }
-//                    }
+
                     if(((EntityDamageByEntityEvent) event).getDamager() instanceof EntityLightning){
                         event.setDamage(12);
                         resetKnock = false;

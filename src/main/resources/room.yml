@@ -87,7 +87,12 @@ custom:
     enable: true
     text: "&7[{team}&7] {color}{name} \n&c❤&7 {health}"
 
-#score-board-wait:
-#  -
+# 床保护机制
+protected-bed:
+  enable: false
+  blockList:
+    - "5"
+    - "35"
+    - "20"
 
 
