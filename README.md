@@ -24,7 +24,7 @@
 
 **使用介绍:**  
 
-**DOWNLOAD:** https://ci.lanink.cn/job/BedWar/
+**[DOWNLOAD](https://motci.cn/view/SoBadFish/job/BedWar/)**
 
 **一、插件启动**
 
