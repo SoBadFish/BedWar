@@ -26,7 +26,7 @@ GameMode:
 
 **[DOWNLOAD](https://motci.cn/view/SoBadFish/job/BedWar/)**
 
-**一、Enable**
+**1、Enable**
 
 1. Drag this plugin to the plugins folder
 2. Start the server until the plugin is loaded
@@ -36,9 +36,9 @@ GameMode:
 
 
 
-**二、指令介绍**
+**2、Command**
 
-| 指令                | 介绍                             |
+|Command               | Msg                             |
 | ------------------- | -------------------------------- |
 | /bd reload          | reload config                 |
 | /bd set [name]      | Creating a Custom Room Template           |
@@ -51,13 +51,13 @@ GameMode:
 | /bw quit            | Quit a game room                     |
 | /bws [ask] | Send a message to all players in the game room           |
 
-**三、CONFIG**
+**3、CONFIG**
 
 to see resources
 
 ------
 
-**四、HOW TO CONFIG**
+**4、HOW TO CONFIG**
 
 1. run/bd set name Start Preset Template (Please be careful not to make mistakes, otherwise you can only execute /bd cancel to reset it.)
 
@@ -70,7 +70,7 @@ to see resources
 
 ------
 
-**五、GAME:**
+**5、GAME:**
 
 | ![本地](./img/7.jpg)   | ![本地](./img/8.jpg)   |
 |----------------------|----------------------|
