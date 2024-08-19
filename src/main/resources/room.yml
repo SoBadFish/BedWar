@@ -48,7 +48,7 @@ tntExplodeTime: 5
 
 auto-display-floattext:
   enable: true
-  text: "{item} &r生成点\n剩余时间: &a {time} &r"
+  text: "{item} &rPoint\nTime: &a {time} &r"
 
 display-floatBlock:
   "2": "diamond"
@@ -69,10 +69,11 @@ kb-setting:
 
 roomStartMessage:
   - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
-  - "&f起床战争"
+  - "&fBedWar"
   - "&e"
-  - "&e保护你的床并摧毁敌人的床。收集铜锭，金锭，钻石和绿宝石"
-  - "&e来升级，使自身和队伍变得更强"
+  - "&eProtect your bed and destroy the enemy's beds"
+  - "&eCollect copper ingots, gold ingots, diamonds and emeralds"
+  - "&eTo upgrade, make yourself and your team stronger"
   - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
 
 
