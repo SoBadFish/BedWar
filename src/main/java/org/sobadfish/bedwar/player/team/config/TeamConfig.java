@@ -72,14 +72,14 @@ public class TeamConfig {
 
     public static TeamConfig getInstance(Map<?,?> map){
         String name = map.get("name").toString();
-        String bedD = "";
-        String bedN = "";
+        String bedD = "✘";
+        String bedN = "✔";
 
         if(map.containsKey("bed-destroy")){
-            bedD =   map.get("bed-destroy").toString();
+            bedD = map.get("bed-destroy").toString();
         }
         if(map.containsKey("bed-normal")){
-            bedN =   map.get("bed-normal").toString();
+            bedN = map.get("bed-normal").toString();
         }
 
 //        String bedN = map.get("bed-normal").toString();
