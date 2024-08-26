@@ -1,44 +1,55 @@
 package org.sobadfish.bedwar.entity;
 
-
 import cn.nukkit.entity.EntityCreature;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
-
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.bedwar.entity.baselib.BaseEntityMove;
 import org.sobadfish.bedwar.player.PlayerInfo;
 
-
-
 /**
- * @author SoBadFish
- * 2022/1/10
+ * @author Sobadfish
+ * @date 2024/8/26
  */
-public class IronGolem extends BaseEntityMove {
-    public static final int NETWORK_ID = 20;
+public class Silverfish extends BaseEntityMove {
+    public static final int NETWORK_ID = 39;
 
-    public IronGolem(FullChunk chunk, CompoundTag nbt) {
-        super(chunk, nbt);
-    }
 
-    public IronGolem(PlayerInfo master,FullChunk chunk, CompoundTag nbt) {
+    public Silverfish(PlayerInfo master, FullChunk chunk, CompoundTag nbt) {
         super(master,chunk, nbt);
     }
 
     @Override
-    public float getGravity() {
-        return 2.0F;
+    public int getNetworkId() {
+        return 39;
     }
 
+    @Override
+    public float getWidth() {
+        return 0.4F;
+    }
 
     @Override
-    protected void initEntity() {
-        this.setMaxHealth(30);
-        super.initEntity();
+    public float getHeight() {
+        return 0.3F;
+    }
 
+    @Override
+    public double getSpeed() {
+        return 1.4D;
+    }
+
+    @Override
+    public void onUpdate() {
+
+    }
+
+    @Override
+    public void initEntity() {
+        this.setMaxHealth(8);
+        super.initEntity();
 
     }
 
@@ -47,8 +58,13 @@ public class IronGolem extends BaseEntityMove {
         return TextFormat.colorize('&',getMaster().toString());
     }
 
+
+    public Silverfish(FullChunk chunk, CompoundTag nbt) {
+        super(chunk, nbt);
+    }
+
     @Override
-    public boolean onUpdate(int currentTick) {
+    public boolean onUpdate(int currentTick)  {
         boolean b =  super.onUpdate(currentTick);
         if(b) {
             if (followTarget != null) {
@@ -68,53 +84,31 @@ public class IronGolem extends BaseEntityMove {
     }
 
     @Override
-    public int getNetworkId() {
-        return 20;
-    }
-
-    @Override
-    public float getWidth() {
-        return 1.4F;
-    }
-
-    @Override
-    public float getHeight() {
-        return 2.7F;
-    }
-
-    @Override
-    public double getSpeed() {
-        return 0.8D;
-    }
-
-    @Override
-    public void saveNBT() {
-
-    }
-
-    @Override
-    public void onUpdate() {}
-
-
-    @Override
-    public void onAttack(EntityDamageEvent entity) {
-        if(entity instanceof EntityDamageByEntityEvent){
-            ((EntityDamageByEntityEvent) entity).setKnockBack(0.1f);
-        }
+    public float getDamage() {
+        return 1.0f;
     }
 
     @Override
     public void attackEntity(EntityCreature player) {
         if (this.attackDelay > 23 && this.distanceSquared(player) < 4.0D) {
             this.attackDelay = 0;
-            player.attack(new EntityDamageByEntityEvent(this, player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, getDamage(),0.8f));
+            player.attack(new EntityDamageByEntityEvent(this, player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, getDamage(),0.2f));
 
         }
     }
 
 
     @Override
+    public void onAttack(EntityDamageEvent entity) {
+
+    }
+
+
+
+    @Override
     public void onClose() {
 
     }
+
+
 }

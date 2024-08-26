@@ -26,6 +26,8 @@ public class NbtItemManager {
         NBT_MANAGER.put("string-item",new StringItem());
         NBT_MANAGER.put("compass-item",new PointPlayer());
         NBT_MANAGER.put("guard-item",new SpawnMob());
+        NBT_MANAGER.put("silverfish-item",new SpawnSilverfish());
+        NBT_MANAGER.put("defense-tower-item",new DefenseTowerItem());
 
         NBT_MANAGER.put("fire-ball-item",new FireBall());
         NBT_MANAGER.put("egg-item",new BridgingEgg());

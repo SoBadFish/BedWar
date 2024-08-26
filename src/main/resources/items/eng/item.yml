@@ -53,6 +53,14 @@ nbtItem:
     customName: "&eDie bow"
     lore: []
     item: "261:0"
+  defense-tower-item:
+    customName: "&ecastle"
+    lore: [ ]
+    item: "54:0"
+  silverfish-item:
+    customName: "&eSpawn silverfish"
+    lore: [ ]
+    item: "332:0"
   egg-item:
     customName: "&ebridge egg"
     lore: []

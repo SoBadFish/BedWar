@@ -46,6 +46,7 @@ import org.sobadfish.bedwar.item.button.RoomQuitItem;
 import org.sobadfish.bedwar.item.button.TeamChoseItem;
 import org.sobadfish.bedwar.item.config.MoneyItemInfoConfig;
 import org.sobadfish.bedwar.item.nbt.DieBow;
+import org.sobadfish.bedwar.item.nbt.IDropItem;
 import org.sobadfish.bedwar.item.nbt.INbtItem;
 import org.sobadfish.bedwar.panel.ChestInventoryPanel;
 import org.sobadfish.bedwar.panel.DisPlayWindowsFrom;
@@ -64,7 +65,10 @@ import org.sobadfish.bedwar.room.config.GameRoomConfig;
 import org.sobadfish.bedwar.tools.Utils;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author SoBadFish
@@ -742,6 +746,7 @@ public class RoomManager implements Listener {
 
 
 
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
         //TODO 断线重连 上线
@@ -1164,9 +1169,15 @@ public class RoomManager implements Listener {
         Entity d = event.getEntity();
         if(d instanceof EntityFireBall){
             if(entity instanceof Player){
-
                 //照样爆炸
                 ((EntityFireBall) d).explode();
+            }
+
+        }
+        if(d instanceof BedWarEntitySnowBall){
+            IDropItem item = ((BedWarEntitySnowBall) d).getUsedItem();
+            if(item != null){
+                item.onRun(((BedWarEntitySnowBall) d).getMaster());
             }
 
         }

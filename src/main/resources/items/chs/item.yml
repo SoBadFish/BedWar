@@ -45,6 +45,14 @@ nbtItem:
     customName: "&e生成护卫"
     lore: []
     item: "383:10"
+  silverfish-item:
+    customName: "&e生成蠹虫"
+    lore: [ ]
+    item: "332:0"
+  defense-tower-item:
+    customName: "&e生成城堡"
+    lore: [ ]
+    item: "54:0"
   fire-ball-item:
     customName: "&e火球"
     lore: []
