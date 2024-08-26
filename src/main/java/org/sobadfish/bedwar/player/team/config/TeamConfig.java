@@ -82,7 +82,6 @@ public class TeamConfig {
             bedN = map.get("bed-normal").toString();
         }
 
-//        String bedN = map.get("bed-normal").toString();
         String nameColor = map.get("nameColor").toString();
         Map<?,?> m = (Map<?,?>) map.get("rgb");
         int r = Integer.parseInt(m.get("r").toString());
