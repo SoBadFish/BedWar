@@ -20,7 +20,7 @@ import java.util.List;
 public class DefenseTowerItem implements INbtItem {
     @Override
     public String getName() {
-        return "defense-tower";
+        return "defense-tower-item";
     }
 
 

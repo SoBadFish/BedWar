@@ -134,7 +134,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
         for(String itemId: ids.split("&")){
             if(NbtItemManager.NBT_MANAGER.containsKey(itemId)){
                 //TODO 构建NBT物品
-                INbtItem config = NbtItemManager.NBT_MANAGER.get(ids);
+                INbtItem config = NbtItemManager.NBT_MANAGER.get(itemId);
                 return new NbtDefaultItem(config,moneyName,moneyCount);
             }
             Item item = stringAsItem(itemId);

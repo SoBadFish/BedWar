@@ -69,9 +69,12 @@ public class DisPlayWindowsFrom {
                 continue;
             }
             if(panelItemInstance instanceof NbtDefaultItem){
-                ((NbtDefaultItem) panelItemInstance).setPlayerItem(
-                        roomConfig.getNbtItemInfo()
-                                .items.get(((NbtDefaultItem) panelItemInstance).item.getName()));
+                if(roomConfig.getNbtItemInfo().items.containsKey(((NbtDefaultItem) panelItemInstance).item.getName())){
+                    ((NbtDefaultItem) panelItemInstance).setPlayerItem(
+                            roomConfig.getNbtItemInfo()
+                                    .items.get(((NbtDefaultItem) panelItemInstance).item.getName()));
+                }
+
             }
             shopButtons.add(new ShopButton(panelItemInstance));
         }
