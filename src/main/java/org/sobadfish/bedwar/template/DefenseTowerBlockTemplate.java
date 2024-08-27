@@ -73,7 +73,7 @@ public class DefenseTowerBlockTemplate implements IBlockTemplate{
                 if(i == 2){
                     blockVector3s.add(new BlockVector3(new BlockWool(),nl.add(0,1)));
                     blockVector3s.add(new BlockVector3(new BlockWool(),nr.add(0,-1)));
-                    blockVector3s.add(new BlockVector3(new BlockWool(),nr.add(0,-1)));
+                    blockVector3s.add(new BlockVector3(new BlockWool(),nr.add(0,1)));
                     blockVector3s.add(new BlockVector3(new BlockWool(),nl.add(0,-1)));
                 }
             }
