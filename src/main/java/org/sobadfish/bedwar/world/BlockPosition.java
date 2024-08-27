@@ -28,6 +28,13 @@ public class BlockPosition {
     }
 
 
+    @Override
+    public String toString() {
+        return "BlockPosition{" +
+                "block=" + block +
+                ", position=" + position +
+                '}';
+    }
 
     public Position getPosition() {
         return position;

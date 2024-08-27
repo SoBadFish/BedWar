@@ -30,7 +30,7 @@ public class DefenseTowerItem implements INbtItem {
         cl.setCount(1);
         PlayerInfo info = BedWarMain.getRoomManager().getPlayerInfo(player);
         if(info != null && info.getGameRoom() != null){
-            Position pos = info.getPlayer();
+            Position pos = info.getPlayer().getPosition();
             List<BlockPosition> blocks = BlockTemplateControl.loadBlockTemplateByName(getName(),pos,info);
             for(TeamInfo teamInfo: info.getGameRoom().getTeamInfos()){
                 if(teamInfo.getTeamConfig().getSpawnPosition().distance(pos) < 5){

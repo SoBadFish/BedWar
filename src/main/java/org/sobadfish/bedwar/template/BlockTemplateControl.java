@@ -2,6 +2,7 @@ package org.sobadfish.bedwar.template;
 
 import cn.nukkit.block.BlockWool;
 import cn.nukkit.level.Position;
+import org.sobadfish.bedwar.BedWarMain;
 import org.sobadfish.bedwar.player.PlayerInfo;
 import org.sobadfish.bedwar.world.BlockPosition;
 import org.sobadfish.bedwar.world.BlockVector3;
@@ -56,6 +57,7 @@ public class BlockTemplateControl {
                     data.add(pos.asPosition(position));
                 }
             } catch (InstantiationException | IllegalAccessException e) {
+                BedWarMain.printMessageException(e);
                 return data;
             }
         }

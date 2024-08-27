@@ -20,6 +20,14 @@ public class BlockVector3 {
         this.position = position;
     }
 
+    @Override
+    public String toString() {
+        return "BlockVector3{" +
+                "block=" + block +
+                ", position=" + position +
+                '}';
+    }
+
     public Block getBlock() {
         return block;
     }
@@ -29,8 +37,10 @@ public class BlockVector3 {
     }
 
     public BlockPosition asPosition(Position position){
-        position.add(this.position.x, this.position.y, this.position.z);
-        return new BlockPosition(block,position);
+        Position p2 = new Position(position.getX() + this.position.x,
+                position.getY() + this.position.y,
+                position.getZ() + this.position.z,position.level);
+        return new BlockPosition(block,p2);
     }
 
     public Vector3 getPosition() {

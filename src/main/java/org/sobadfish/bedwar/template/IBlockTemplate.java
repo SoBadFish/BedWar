@@ -14,7 +14,7 @@ public interface IBlockTemplate {
 
     /**
      * 获取方块位置
-     * @param face 放置朝向
+     * @param info 放置朝向
      * @return 仅计算0,0,0
      * */
     List<BlockVector3> getSpawnBlocks(PlayerInfo info);

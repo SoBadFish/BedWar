@@ -29,23 +29,25 @@ public class DefenseTowerBlockTemplate implements IBlockTemplate{
         BlockFace[] face = new BlockFace[]{BlockFace.SOUTH,BlockFace.NORTH,BlockFace.EAST,BlockFace.WEST};
         for(;y < height;y++){
             for(BlockFace f: face){
-                if(f == pf){
-                    Vector3 tz =  v3.add(0,y).getSide(f);
-                    //梯子
-                    blockVector3s.add(new BlockVector3(new BlockLadder(f.getIndex()),tz));
-                }
+
+
+                Vector3 ff = v3.add(0,y).getSide(f,2);
+                Vector3 fleft = ff.getSide(f.rotateYCCW());
+                Vector3 fright = ff.getSide(f.rotateY());
+                blockVector3s.add(new BlockVector3(new BlockWool(),fleft));
+                blockVector3s.add(new BlockVector3(new BlockWool(),fright));
                 if(f == pf.rotateY().rotateY()){
                     if(y == 1 || y == 2){
                         //留门
                         continue;
                     }
                 }
-                Vector3 ff = v3.add(0,y).getSide(f,2);
-                Vector3 fleft = ff.getSide(f.rotateYCCW());
-                Vector3 fright = ff.getSide(f.rotateY());
                 blockVector3s.add(new BlockVector3(new BlockWool(),ff));
-                blockVector3s.add(new BlockVector3(new BlockWool(),fleft));
-                blockVector3s.add(new BlockVector3(new BlockWool(),fright));
+                if(f == pf){
+                    Vector3 tz =  v3.add(0,y).getSide(f);
+                    //梯子
+                    blockVector3s.add(new BlockVector3(new BlockLadder(f.rotateY().rotateY().getIndex()),tz));
+                }
 
             }
         }
@@ -53,7 +55,7 @@ public class DefenseTowerBlockTemplate implements IBlockTemplate{
 
         //生成平台
         for(BlockFace f: face) {
-            Vector3 fn = v3.add(0, y).getSide(f, 2);
+            Vector3 fn = v3.add(0, y-1).getSide(f, 2);
             Vector3 fleft = fn.getSide(f.rotateYCCW(),2);
             Vector3 fright = fn.getSide(f.rotateY(),2);
             blockVector3s.add(new BlockVector3(new BlockWool(),fleft));
@@ -72,13 +74,16 @@ public class DefenseTowerBlockTemplate implements IBlockTemplate{
                 Vector3 nl = fn.getSide(left,i);
                 Vector3 nr = fn.getSide(right,i);
                 blockVector3s.add(new BlockVector3(new BlockWool(),nl));
-                blockVector3s.add(new BlockVector3(new BlockWool(),nl));
+                blockVector3s.add(new BlockVector3(new BlockWool(),nr));
                 if(i == 2){
                     blockVector3s.add(new BlockVector3(new BlockWool(),nl.add(0,1)));
                     blockVector3s.add(new BlockVector3(new BlockWool(),nr.add(0,-1)));
+                    blockVector3s.add(new BlockVector3(new BlockWool(),nr.add(0,1)));
+                    blockVector3s.add(new BlockVector3(new BlockWool(),nl.add(0,-1)));
                 }
             }
         }
+
 
         return blockVector3s;
     }
