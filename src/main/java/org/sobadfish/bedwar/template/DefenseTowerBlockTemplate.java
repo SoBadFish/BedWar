@@ -29,8 +29,6 @@ public class DefenseTowerBlockTemplate implements IBlockTemplate{
         BlockFace[] face = new BlockFace[]{BlockFace.SOUTH,BlockFace.NORTH,BlockFace.EAST,BlockFace.WEST};
         for(;y < height;y++){
             for(BlockFace f: face){
-
-
                 Vector3 ff = v3.add(0,y).getSide(f,2);
                 Vector3 fleft = ff.getSide(f.rotateYCCW());
                 Vector3 fright = ff.getSide(f.rotateY());
@@ -48,11 +46,8 @@ public class DefenseTowerBlockTemplate implements IBlockTemplate{
                     //梯子
                     blockVector3s.add(new BlockVector3(new BlockLadder(f.rotateY().rotateY().getIndex()),tz));
                 }
-
             }
         }
-
-
         //生成平台
         for(BlockFace f: face) {
             Vector3 fn = v3.add(0, y-1).getSide(f, 2);
@@ -78,7 +73,7 @@ public class DefenseTowerBlockTemplate implements IBlockTemplate{
                 if(i == 2){
                     blockVector3s.add(new BlockVector3(new BlockWool(),nl.add(0,1)));
                     blockVector3s.add(new BlockVector3(new BlockWool(),nr.add(0,-1)));
-                    blockVector3s.add(new BlockVector3(new BlockWool(),nr.add(0,1)));
+                    blockVector3s.add(new BlockVector3(new BlockWool(),nr.add(0,-1)));
                     blockVector3s.add(new BlockVector3(new BlockWool(),nl.add(0,-1)));
                 }
             }
