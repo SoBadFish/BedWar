@@ -206,6 +206,14 @@ tools:
     name: ""
     ench: ""
     money: "copperx10"
+  - id: "silverfish-item"
+    name: ""
+    ench: ""
+    money: "copperx40"
+  - id: "defense-tower-item"
+    name: ""
+    ench: ""
+    money: "copperx24"
 
 items:
   - id: "46:0"
