@@ -13,7 +13,7 @@ public class TipVariable extends BaseVariable {
     }
 
     public static void init() {
-        Api.registerVariables("Bedwar",TipVariable.class);
+        Api.registerVariables("bedwar_"+BedWarMain.getBedWarMain().getDescription().getVersion(),TipVariable.class);
     }
 
     @Override
