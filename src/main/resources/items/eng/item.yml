@@ -54,7 +54,7 @@ nbtItem:
     lore: []
     item: "261:0"
   defense-tower-item:
-    customName: "&ecastle"
+    customName: "&eCompact Defense Tower"
     lore: [ ]
     item: "54:0"
   silverfish-item:

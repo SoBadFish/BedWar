@@ -50,7 +50,7 @@ nbtItem:
     lore: [ ]
     item: "332:0"
   defense-tower-item:
-    customName: "&e生成城堡"
+    customName: "&e紧凑型防御塔"
     lore: [ ]
     item: "54:0"
   fire-ball-item:

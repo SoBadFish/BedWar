@@ -108,7 +108,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
     }
 
     public static DefaultItem build(Map<?,?> map){
-        String name = TextFormat.colorize('&',map.get("name").toString());
+        String name = map.get("name").toString();
         String ids = map.get("id").toString();
 
         //TODO 优先输出NBT物品
@@ -153,7 +153,7 @@ public class DefaultItem extends BasePlayPanelItemInstance {
 
         if(!"".equalsIgnoreCase(name)){
             for (Item item: items){
-                item.setCustomName(name);
+                item.setCustomName(TextFormat.colorize('&',"&r"+name));
             }
 
         }
