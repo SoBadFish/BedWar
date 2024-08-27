@@ -90,7 +90,7 @@ public class Silverfish extends BaseEntityMove {
 
     @Override
     public void attackEntity(EntityCreature player) {
-        if (this.attackDelay > 23 && this.distanceSquared(player) < 4.0D) {
+        if (this.attackDelay > 23 && this.distanceSquared(player) < 8.0D) {
             this.attackDelay = 0;
             player.attack(new EntityDamageByEntityEvent(this, player, EntityDamageEvent.DamageCause.ENTITY_ATTACK, getDamage(),0.2f));
 

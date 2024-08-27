@@ -175,7 +175,7 @@ public class BedWarMain extends PluginBase {
         ThreadManager.init();
 
         //注册模板方块列表
-        BlockTemplateControl.registerBlockTemplate("defense-tower", DefenseTowerBlockTemplate.class);
+        BlockTemplateControl.registerBlockTemplate("defense-tower-item", DefenseTowerBlockTemplate.class);
 
 
 

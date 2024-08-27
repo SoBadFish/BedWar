@@ -33,18 +33,17 @@ public class DefenseTowerItem implements INbtItem {
             Position pos = info.getPlayer();
             List<BlockPosition> blocks = BlockTemplateControl.loadBlockTemplateByName(getName(),pos,info);
             for(TeamInfo teamInfo: info.getGameRoom().getTeamInfos()){
-                if(teamInfo.getTeamConfig().getSpawnPosition().distance(pos) < 10){
+                if(teamInfo.getTeamConfig().getSpawnPosition().distance(pos) < 5){
                     info.sendMessage(BedWarMain.getLanguage().getLanguage("defense-tower-use-error","&c当前位置无法生成"));
-                    return false;
+                    return true;
                 }
             }
 
             Utils.spawnBlock(info.getGameRoom(), blocks,false);
             info.sendMessage(BedWarMain.getLanguage().getLanguage("defense-tower-use-success","&a你生成了一座城堡"));
             player.getInventory().removeItem(cl);
-            return true;
         }
-        return false;
+        return true;
 
 
     }
