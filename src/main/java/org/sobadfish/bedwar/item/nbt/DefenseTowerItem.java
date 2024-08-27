@@ -40,7 +40,7 @@ public class DefenseTowerItem implements INbtItem {
             }
 
             Utils.spawnBlock(info.getGameRoom(), blocks,false);
-            info.sendMessage(BedWarMain.getLanguage().getLanguage("defense-tower-use-success","&a你生成了一座城堡"));
+            info.sendMessage(BedWarMain.getLanguage().getLanguage("defense-tower-use-success","&a紧凑型防御塔生成成功"));
             player.getInventory().removeItem(cl);
         }
         return true;
