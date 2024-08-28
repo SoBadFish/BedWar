@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * 本类引用 SupermeMortal 的 FakeInventories 插件
@@ -75,7 +73,7 @@ public abstract class AbstractFakeInventory extends ContainerInventory {
         List<BlockVector3> blocks = blockPositions.get(who);
         for (int i = 0, size = blocks.size(); i < size; i++) {
             final int index = i;
-            ThreadManager.SCHEDULED.execute(() -> {
+            ThreadManager.executorService.execute(() -> {
                 Vector3 blockPosition = blocks.get(index).asVector3();
                 UpdateBlockPacket updateBlock = new UpdateBlockPacket();
                 if(IS_PM1E){
