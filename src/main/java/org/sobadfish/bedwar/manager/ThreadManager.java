@@ -16,6 +16,9 @@ import java.util.concurrent.*;
  */
 public class ThreadManager {
 
+    //单纯的线程池
+    public static ExecutorService executorService = Executors.newCachedThreadPool();
+
     public static ScheduledExecutorService TIMER =  Executors.newSingleThreadScheduledExecutor();
 
 
@@ -25,7 +28,9 @@ public class ThreadManager {
     private final static Integer CORE_POOLSIZE = 5;
 
 
-    public static final ScheduledThreadPoolExecutor SCHEDULED = new ScheduledThreadPoolExecutor(CORE_POOLSIZE,new ThreadPoolExecutor.AbortPolicy());
+
+
+    public static final ScheduledThreadPoolExecutor SCHEDULED = (ScheduledThreadPoolExecutor) Executors.newSingleThreadScheduledExecutor();
 
 
     public static void cancel(AbstractBedWarRunnable r) {

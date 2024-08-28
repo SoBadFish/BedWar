@@ -637,7 +637,7 @@ public class RoomManager implements Listener {
      * @param block 方块
      * */
     public void facePlaceBlock(BlockFace face,Block last,Block block,GameRoom room,int size){
-        ThreadManager.SCHEDULED.execute(() -> {
+        ThreadManager.executorService.execute(() -> {
             for(int i = 1; i <= size; i++){
                 try {
                     Thread.sleep(100);
