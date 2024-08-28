@@ -67,7 +67,7 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
 
     @Override
     protected double getDamage() {
-        return 2;
+        return 1;
     }
 
     public EntityFireBall(FullChunk chunk, CompoundTag nbt, Entity shootingEntity) {
@@ -113,6 +113,7 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
 
     @Override
     public boolean attack(EntityDamageEvent source) {
+        source.setDamage(2f);
         if (source instanceof EntityDamageByEntityEvent && ((EntityDamageByEntityEvent)source).getDamager() instanceof Player) {
             this.setMotion(((EntityDamageByEntityEvent)source).getDamager().getLocation().getDirectionVector());
         }
@@ -122,10 +123,10 @@ public class EntityFireBall extends EntityProjectile implements EntityExplosive 
 
     @Override
     public void explode() {
-        EntityExplosionPrimeEvent event = new EntityExplosionPrimeEvent(this, 1);
+        EntityExplosionPrimeEvent event = new EntityExplosionPrimeEvent(this, 1.1);
         this.server.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            Explosion explosion = new Explosion(this, 1.5, master.getPlayer());
+            Explosion explosion = new Explosion(this, 1.2, master.getPlayer());
 
             if (event.isBlockBreaking()) {
                 explosion.explodeA();

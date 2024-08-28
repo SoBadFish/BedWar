@@ -8,10 +8,9 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.sobadfish.bedwar.entity.IronGolem;
+import org.sobadfish.bedwar.entity.DamageEntity;
 
 
 /**
@@ -88,7 +87,7 @@ public abstract class BaseEntity extends EntityCreature {
 
 
     public boolean targetOption(EntityCreature creature, double distance) {
-        if (!(this instanceof IronGolem)) {
+        if (!(this instanceof DamageEntity)) {
             return true;
         } else if (creature instanceof Player ) {
             return creature.closed  || !creature.isAlive()  || !(distance <= 80.0D) ||
@@ -107,10 +106,10 @@ public abstract class BaseEntity extends EntityCreature {
             this.close();
         }
 
-        if (this instanceof IronGolem && this.attackDelay < 1000) {
+        if ((this instanceof DamageEntity) && this.attackDelay < 1000) {
             ++this.attackDelay;
         }
-        if (this instanceof IronGolem && this.damageDelay < 1000) {
+        if (this instanceof DamageEntity && this.damageDelay < 1000) {
             ++this.damageDelay;
         }
         onUpdate();

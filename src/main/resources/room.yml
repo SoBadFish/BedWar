@@ -1,8 +1,8 @@
 world: ""
 roomMoney: "default"
 gameTime: 1200
-fireballKnockBack: 0.6
-tntKnockBack: 0.6
+fireballKnockBack: 1.8
+tntKnockBack: 1.8
 callbackY: 17
 hasWatch: true
 killItem: 0.5
@@ -41,7 +41,7 @@ deathIcon: 20
 floatSpawnPos: []
 
 # TNT的伤害
-tntDamage: 8
+tntDamage: 5
 
 # TNT爆炸时间（秒）
 tntExplodeTime: 5

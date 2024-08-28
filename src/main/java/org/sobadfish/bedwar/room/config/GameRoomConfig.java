@@ -92,12 +92,12 @@ public class GameRoomConfig implements Cloneable{
     /**
      * 自定义火球击退距离
      * */
-    public float fireballKnockBack = 0.6f;
+    public float fireballKnockBack = 1.8f;
 
     /**
      * 自定义TNT击退距离
      * */
-    public float tntKnockBack = 0.6f;
+    public float tntKnockBack = 1.8f;
 
     /**
      * 获取击杀玩家的物品 (50%)
@@ -252,7 +252,7 @@ public class GameRoomConfig implements Cloneable{
     /**
      * TNT伤害
      * */
-    public int tntDamage = 8;
+    public int tntDamage = 5;
 
     /**
      * TNT爆炸时间
@@ -458,8 +458,8 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.itemShopEntityId = room.getInt("entity.item",15);
                 roomConfig.callbackY = room.getInt("callbackY",17);
                 roomConfig.inventoryUnBreakable = room.getBoolean("inventory-unbreakable",true);
-                roomConfig.fireballKnockBack = (float) room.getDouble("fireballKnockBack",0.6f);
-                roomConfig.tntKnockBack = (float) room.getDouble("tntKnockBack",0.6f);
+                roomConfig.fireballKnockBack = (float) room.getDouble("fireballKnockBack",1.8f);
+                roomConfig.tntKnockBack = (float) room.getDouble("tntKnockBack",1.8f);
                 roomConfig.banCommand = new ArrayList<>(room.getStringList("ban-command"));
                 roomConfig.isAutomaticNextRound = room.getBoolean("AutomaticNextRound",true);
                 roomConfig.quitRoomCommand = new ArrayList<>(room.getStringList("QuitRoom"));
@@ -472,7 +472,7 @@ public class GameRoomConfig implements Cloneable{
                 roomConfig.enableFood = room.getBoolean("enable-food",false);
                 roomConfig.fastPlace = room.getBoolean("fast-place",false);
                 roomConfig.fastPlaceCount = room.getInt("fast-place-count",5);
-                roomConfig.tntDamage = room.getInt("tntDamage",8);
+                roomConfig.tntDamage = room.getInt("tntDamage",5);
                 roomConfig.tntExplodeTime = room.getInt("tntExplodeTime",5);
                 roomConfig.enableCustomTag = room.getBoolean("custom.namedtag.enable",true);
                 roomConfig.customNamedTag = room.getString("custom.namedtag.text","&7[{team}&7] {color}{name} \n&c❤&7 {health}");

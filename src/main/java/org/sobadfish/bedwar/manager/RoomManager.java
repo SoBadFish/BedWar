@@ -639,11 +639,7 @@ public class RoomManager implements Listener {
     public void facePlaceBlock(BlockFace face,Block last,Block block,GameRoom room,int size){
         ThreadManager.executorService.execute(() -> {
             for(int i = 1; i <= size; i++){
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    BedWarMain.printMessageException(e);
-                }
+
                 Position pos = last.getSide(face,i);
                 if(pos.level.getBlock(pos).getId() == 0){
                     Block place = Block.get(block.getId(),block.getDamage(),last.getSide(face,i));
@@ -651,6 +647,11 @@ public class RoomManager implements Listener {
                     if(room != null){
                         room.worldInfo.onChangeBlock(place, true);
                     }
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    BedWarMain.printMessageException(e);
                 }
             }
         });
@@ -1072,7 +1073,7 @@ public class RoomManager implements Listener {
 
                         }
                         if(damagers instanceof EntityFireBall){
-                            event.setDamage(2);
+                            event.setDamage(1);
                             explode = true;
                         }
 

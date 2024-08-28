@@ -17,7 +17,7 @@ import org.sobadfish.bedwar.player.PlayerInfo;
  * @author SoBadFish
  * 2022/1/10
  */
-public class IronGolem extends BaseEntityMove {
+public class IronGolem extends BaseEntityMove implements DamageEntity {
     public static final int NETWORK_ID = 20;
 
     public IronGolem(FullChunk chunk, CompoundTag nbt) {

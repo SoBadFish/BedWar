@@ -13,7 +13,7 @@ import org.sobadfish.bedwar.player.PlayerInfo;
  * @author Sobadfish
  * @date 2024/8/26
  */
-public class Silverfish extends BaseEntityMove {
+public class Silverfish extends BaseEntityMove implements DamageEntity {
     public static final int NETWORK_ID = 39;
 
 
@@ -100,7 +100,9 @@ public class Silverfish extends BaseEntityMove {
 
     @Override
     public void onAttack(EntityDamageEvent entity) {
-
+        if(entity instanceof EntityDamageByEntityEvent){
+            ((EntityDamageByEntityEvent) entity).setKnockBack(1.1f);
+        }
     }
 
 

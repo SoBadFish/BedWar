@@ -122,6 +122,7 @@ public class EntityTnt extends EntityProjectile implements EntityExplosive {
 
     @Override
     public boolean attack(EntityDamageEvent source) {
+        source.setDamage(2f);
         return source.getCause() == EntityDamageEvent.DamageCause.VOID && super.attack(source);
     }
 
@@ -139,7 +140,7 @@ public class EntityTnt extends EntityProjectile implements EntityExplosive {
 
     @Override
     public void explode() {
-        EntityExplosionPrimeEvent event = new EntityExplosionPrimeEvent(this, 3);
+        EntityExplosionPrimeEvent event = new EntityExplosionPrimeEvent(this, 1.5);
         server.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
