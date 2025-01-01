@@ -1434,7 +1434,7 @@ public class RoomManager implements Listener {
                     return;
                 }
                 Item item = event.getItem();
-                if (item.hasCompoundTag() && (item.getNamedTag().getBoolean("quitItem") || item.hasCompoundTag()
+                if (item.hasCompoundTag() && (item.getNamedTag().getBoolean("quitItem")
                         || item.getNamedTag().getBoolean("choseTeam") || item.getNamedTag().getBoolean("follow"))) {
                     event.setCancelled();
                 }
