@@ -587,7 +587,12 @@ public class PlayerInfo {
                 }
             }
             lore.add("      ");
-            lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-kill","击杀数: &a[1]",killCount+""));
+            String ld1 = BedWarMain.getLanguage().getLanguage("scoreboard-line-kill","击杀数: &a[1]",killCount+"",endKillCount+"");
+            if(!ld1.isEmpty()){
+                lore.add(ld1);
+            }
+
+
             lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-assists","助攻数: &a[1]",assists+""));
 //            lore.add("破坏床数: &a"+bedBreakCount);
             lore.add(BedWarMain.getLanguage().getLanguage("scoreboard-line-break-bed","破坏床: &a[1]",bedBreakCount+""));

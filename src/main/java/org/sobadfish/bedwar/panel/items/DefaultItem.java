@@ -291,11 +291,17 @@ public class DefaultItem extends BasePlayPanelItemInstance {
         String itemString = it.getName();
         if("chs".equalsIgnoreCase(BedWarMain.getLanguage().lang)){
             itemString = ItemIDSunName.getNameByItem(it);
+        }else{
+            itemString = it.getName();
+        }
+        if("未知".equalsIgnoreCase(itemString)){
+            itemString = it.getName();
         }
         String path = ItemIDSunName.getPathByItem(it);
         if(path == null){
             path =ItemIDSunName.getPathById(it.getId());
         }
+
         MoneyItemInfoConfig oInfo = info.getGameRoom().getRoomConfig().moneyItem.get(moneyItem);
         String btName = TextFormat.colorize('&',  itemString+" * "+it.getCount()+"\n&rPrice: "+oInfo.getCustomName()+"&r *&a "+count);
         if(info.getGameRoom().getRoomConfig().isExp()){
