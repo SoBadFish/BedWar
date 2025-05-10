@@ -70,12 +70,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                     FloatTextManager.removeFloatText(floatText);
                     continue;
                 }
-//                    if (player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName())) {
-//                        if (!floatText.player.contains(player.getName())) {
-//                            floatText.player.add(player.getName());
-//                        }
-//
-//                    }
+
                 if (update > 120) {
                     //每120秒刷新一下...
                     floatText.disPlayers();
@@ -98,11 +93,6 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
             } catch (Exception e) {
                 BedWarMain.sendMessageToConsole("&c释放房间出现了一个小问题，导致无法正常释放,已将这个房间暂时锁定");
             }
-
-
-
-
-
 
         }catch (Exception e){
             e.printStackTrace();

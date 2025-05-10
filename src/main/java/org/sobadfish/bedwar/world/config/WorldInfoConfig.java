@@ -143,11 +143,10 @@ public class WorldInfoConfig {
             if (files != null && files.length > 0) {
                 //扔到主线程
                 if(!isInit) {
-//                    Server.getInstance().getScheduler().scheduleTask(BedWarMain.getBedWarMain(), () -> {
-                        if (Server.getInstance().isLevelLoaded(targetLevelName)) {
-                            Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(targetLevelName), true);
-                        }
-//                    });
+                    if (Server.getInstance().isLevelLoaded(targetLevelName)) {
+                        Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(targetLevelName), true);
+                    }
+
                 }
                 Utils.toDelete(f2);
                 if (!f2.exists()) {
