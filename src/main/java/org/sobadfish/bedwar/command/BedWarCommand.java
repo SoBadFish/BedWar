@@ -83,8 +83,7 @@ public class BedWarCommand extends Command {
                             GameRoom room = player.getGameRoom();
                             if (room.quitPlayerInfo(player,true)) {
                                 playerInfo.sendForceMessage(language.getLanguage("command-player-quit-room","&a你成功离开房间: &r[1]",room.getRoomConfig().getName()));
-
-                                room.getRoomConfig().quitRoomCommand.forEach(cmd-> Server.getInstance().dispatchCommand(commandSender,cmd));
+                                // quitRoomCommand is already executed in PlayerQuitRoomEvent listener (RoomManager.java)
                             }
                         }
                         break;
